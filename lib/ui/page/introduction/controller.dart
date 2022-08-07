@@ -84,7 +84,7 @@ class IntroductionController extends GetxController {
       context: router.context!,
       scenario: [
         BackgroundLine('location/guild.jpg'),
-        CharacterLine('arda.png'),
+        CharacterLine('Arda.png'),
         DialogueLine(
           'Добрый день!',
           by: 'Мастер',
@@ -138,7 +138,7 @@ class IntroductionController extends GetxController {
       context: router.context!,
       scenario: [
         BackgroundLine('location/guild.jpg'),
-        CharacterLine('arda.png'),
+        CharacterLine('Arda.png'),
         DialogueLine(
           'Всё отлично, благодарю за анкетку.',
           by: 'Мастер',
@@ -149,7 +149,7 @@ class IntroductionController extends GetxController {
           by: 'Мастер',
           voice: 'intro/32.m4a',
         ),
-        HideCharacterLine('arda.png'),
+        HideCharacterLine('Arda.png'),
         DialogueLine(
           'Ты ждёшь пару минут, пока гильдмастер заполняет бумаги.',
         ),
@@ -159,7 +159,7 @@ class IntroductionController extends GetxController {
         DialogueLine(
           'Гильдмастер достаёт ноутбук, на котором увлечённо что-то делает около минуты.',
         ),
-        CharacterLine('arda.png'),
+        CharacterLine('Arda.png'),
         DialogueLine(
           'Готово!',
           by: 'Мастер',
@@ -210,7 +210,7 @@ class IntroductionController extends GetxController {
           by: 'Мастер',
           voice: 'intro/18.m4a',
         ),
-        HideCharacterLine('arda.png'),
+        HideCharacterLine('Arda.png'),
         BackgroundLine('location/town.jpg'),
         DialogueLine(
           'Пока вы идёте, ты замечаешь вокруг множество незнакомых взглядов на себе.',
@@ -222,7 +222,7 @@ class IntroductionController extends GetxController {
           '...хотя, возможно, они приветствовали и не тебя, а гильдмастера, но эти мысли пришли уже позже.',
         ),
         BackgroundLine('room/renovation.jpg'),
-        CharacterLine('arda.png'),
+        CharacterLine('Arda.png'),
         DialogueLine(
           'Н-да, удачи тебе тут жить, конечно!',
           by: 'Мастер',
@@ -283,7 +283,7 @@ class IntroductionController extends GetxController {
           by: 'Мастер',
           voice: 'intro/30.m4a',
         ),
-        HideCharacterLine('arda.png')
+        HideCharacterLine('Arda.png')
       ],
     );
     await Future.delayed(200.milliseconds);
