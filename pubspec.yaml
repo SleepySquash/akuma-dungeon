@@ -21,6 +21,7 @@ dependencies:
   hive_flutter: ^1.1.0
   hive: ^2.1.0
   js: ^0.6.4
+  mutex: ^3.0.0
   novel:
     path: ../novel
     # git:
@@ -49,5 +50,5 @@ flutter:
     - assets/font/
     - assets/l10n/
     - assets/music/
-    - assets/monster/
+    - assets/monster/slime/
     - assets/voice/intro/

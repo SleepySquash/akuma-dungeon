@@ -58,6 +58,13 @@ class IntroductionController extends GetxController {
     super.onReady();
   }
 
+  @override
+  void onClose() {
+    _player.stop();
+    _player.release();
+    super.onClose();
+  }
+
   void accept() {
     if (name.text.isNotEmpty) {
       stage.value = IntroductionStage.novel;

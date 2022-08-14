@@ -69,8 +69,6 @@ abstract class HiveBaseProvider<T> extends DisposableInterface {
         _box = await Hive.openBox<T>(boxName);
       } catch (e) {
         await Future.delayed(Duration.zero);
-        // TODO: This will throw if database scheme has changed.
-        //       We should perform explicit migrations here.
         await Hive.deleteBoxFromDisk(boxName);
         _box = await Hive.openBox<T>(boxName);
       }

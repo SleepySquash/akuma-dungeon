@@ -55,7 +55,7 @@ class NotificationOverlayController extends GetxController {
           break;
 
         case OperationKind.updated:
-          // TODO: Handle this case.
+          // No-op.
           break;
       }
     });

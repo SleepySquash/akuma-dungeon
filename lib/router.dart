@@ -24,12 +24,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'domain/model/player.dart';
+import 'domain/repository/character.dart';
+import 'domain/repository/item.dart';
 import 'domain/repository/settings.dart';
 import 'domain/service/auth.dart';
+import 'domain/service/character.dart';
+import 'domain/service/item.dart';
 import 'provider/hive/application_settings.dart';
+import 'provider/hive/character.dart';
+import 'provider/hive/item.dart';
+import 'store/character.dart';
+import 'store/item.dart';
 import 'store/settings.dart';
 import 'ui/page/auth/view.dart';
-import 'ui/page/home/router.dart';
+import 'ui/page/home/page/dungeon/controller.dart';
 import 'ui/page/home/view.dart';
 import 'ui/page/introduction/view.dart';
 import 'ui/widget/context_menu/overlay.dart';
@@ -246,6 +254,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
 
             await Future.wait([
               deps.put(PlayerHiveProvider()).init(),
+              deps.put(ItemHiveProvider()).init(),
+              deps.put(CharacterHiveProvider()).init(),
               deps.put(ApplicationSettingsHiveProvider()).init(),
             ]);
 
@@ -257,6 +267,15 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             // Should be initialized before any [L10n]-dependant entities as
             // it sets the stored [Language] from the [SettingsRepository].
             await deps.put(SettingsWorker(settingsRepository)).init();
+
+            AbstractItemRepository itemRepository =
+                deps.put<AbstractItemRepository>(ItemRepository(Get.find()));
+            deps.put(ItemService(itemRepository));
+
+            AbstractCharacterRepository characterRepository =
+                deps.put<AbstractCharacterRepository>(
+                    CharacterRepository(Get.find()));
+            deps.put(CharacterService(characterRepository));
 
             AbstractPlayerRepository playerRepository =
                 deps.put<AbstractPlayerRepository>(
@@ -326,5 +345,8 @@ extension RouteLinks on RouterState {
   void introduction() => go(Routes.introduction);
 
   /// Changes router location to the [Routes.dungeon] page.
-  void dungeon() => go(Routes.dungeon);
+  void dungeon(DungeonSettings settings) {
+    go(Routes.dungeon);
+    arguments = settings;
+  }
 }

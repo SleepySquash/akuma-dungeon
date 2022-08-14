@@ -24,4 +24,6 @@ class ModelTypeId {
   static const player = 2;
   static const race = 3;
   static const gender = 4;
+  static const item = 5;
+  static const character = 6;
 }

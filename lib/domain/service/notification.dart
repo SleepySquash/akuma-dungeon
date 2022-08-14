@@ -80,7 +80,6 @@ class NotificationService extends DisposableInterface {
     }
   }
 
-  // TODO: Implement icons and attachments on non-web platforms.
   /// Shows a notification with a [title] and an optional [body] and [icon].
   ///
   /// Use [payload] to embed information into the notification.

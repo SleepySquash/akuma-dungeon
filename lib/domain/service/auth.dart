@@ -19,7 +19,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 
 import '../model/credentials.dart';
-import '/provider/hive/session.dart';
+import '../../provider/hive/credentials.dart';
 import '/router.dart';
 
 /// Authentication service exposing [credentials] of the authenticated session.
@@ -40,8 +40,8 @@ class AuthService extends GetxService {
   /// [Credentials] of this [AuthService].
   final Rx<Credentials?> credentials = Rx(null);
 
-  /// [SessionHiveProvider] storing the [Credentials].
-  final SessionHiveProvider _sessionProvider;
+  /// [CredentialsHiveProvider] storing the [Credentials].
+  final CredentialsHiveProvider _sessionProvider;
 
   /// Initializes this service.
   ///

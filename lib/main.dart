@@ -28,7 +28,7 @@ import 'package:universal_io/io.dart';
 import 'domain/service/auth.dart';
 import 'domain/service/notification.dart';
 import 'l10n/l10n.dart';
-import 'provider/hive/session.dart';
+import 'provider/hive/credentials.dart';
 import 'router.dart';
 import 'theme.dart';
 import 'util/web/web.dart';
@@ -79,11 +79,11 @@ class App extends StatelessWidget {
   }
 }
 
-/// Initializes a [Hive] storage and registers a [SessionDataHiveProvider] in
+/// Initializes a [Hive] storage and registers a [CredentialsHiveProvider] in
 /// the [Get]'s context.
 Future<void> _initHive() async {
   await Hive.initFlutter('hive');
-  await Get.put(SessionHiveProvider()).init();
+  await Get.put(CredentialsHiveProvider()).init();
 }
 
 /// Extension adding an ability to clean [Hive].

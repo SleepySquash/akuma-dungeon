@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/ui/page/home/page/dungeon/controller.dart';
 import 'package:flutter/material.dart';
 
 import '/router.dart';
@@ -56,11 +57,23 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
           child: SettingsView(),
         ));
       } else if (route == Routes.dungeon) {
-        pages.add(const MaterialPage(
-          key: ValueKey('DungeonPage'),
-          name: Routes.dungeon,
-          child: DungeonView(),
-        ));
+        if (_state.arguments is! DungeonSettings) {
+          pages.add(MaterialPage(
+            child: Scaffold(
+              appBar: AppBar(title: const Text('Error')),
+              body: Center(
+                child: Text(
+                    '${_state.arguments} is not a subtype of DungeonSettings, as it must be'),
+              ),
+            ),
+          ));
+        } else {
+          pages.add(MaterialPage(
+            key: const ValueKey('DungeonPage'),
+            name: Routes.dungeon,
+            child: DungeonView(settings: _state.arguments as DungeonSettings),
+          ));
+        }
       }
     }
 
@@ -79,14 +92,17 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      pages: _pages,
-      onPopPage: (route, result) {
-        _state.pop(route);
-        notifyListeners();
-        return route.didPop(result);
-      },
+    return HeroControllerScope(
+      controller: HeroController(),
+      child: Navigator(
+        key: navigatorKey,
+        pages: _pages,
+        onPopPage: (route, result) {
+          _state.pop(route);
+          notifyListeners();
+          return route.didPop(result);
+        },
+      ),
     );
   }
 

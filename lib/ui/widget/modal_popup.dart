@@ -1,3 +1,19 @@
+// Copyright © 2022 NIKITA ISAENKO, <https://github.com/SleepySquash>
+//
+// This program is free software: you can redistribute it and/or modify it under
+// the terms of the GNU Affero General Public License v3.0 as published by the
+// Free Software Foundation, either version 3 of the License, or (at your
+// option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+// FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License v3.0 for
+// more details.
+//
+// You should have received a copy of the GNU Affero General Public License v3.0
+// along with this program. If not, see
+// <https://www.gnu.org/licenses/agpl-3.0.html>.
+
 import 'package:flutter/cupertino.dart' show kCupertinoModalBarrierColor;
 import 'package:flutter/material.dart';
 
@@ -13,6 +29,7 @@ abstract class ModalPopup {
     required Widget child,
     BoxConstraints desktopConstraints = const BoxConstraints(maxWidth: 300),
     BoxConstraints modalConstraints = const BoxConstraints(maxWidth: 420),
+    bool isDismissible = true,
   }) {
     if (context.isMobile) {
       return showModalBottomSheet(
@@ -20,6 +37,8 @@ abstract class ModalPopup {
         barrierColor: kCupertinoModalBarrierColor,
         isScrollControlled: true,
         backgroundColor: Colors.white,
+        isDismissible: isDismissible,
+        enableDrag: isDismissible,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(8),
@@ -32,17 +51,19 @@ abstract class ModalPopup {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const SizedBox(height: 12),
-                Center(
-                  child: Container(
-                    width: 60,
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFCCCCCC),
-                      borderRadius: BorderRadius.circular(12),
+                if (isDismissible) ...[
+                  Center(
+                    child: Container(
+                      width: 60,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFCCCCCC),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
+                  const SizedBox(height: 12),
+                ],
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
@@ -62,6 +83,7 @@ abstract class ModalPopup {
       return showDialog(
         context: context,
         barrierColor: kCupertinoModalBarrierColor,
+        barrierDismissible: isDismissible,
         builder: (context) {
           return Center(
             child: Container(
@@ -77,15 +99,16 @@ abstract class ModalPopup {
                   Row(
                     children: [
                       const Spacer(),
-                      InkResponse(
-                        onTap: Navigator.of(context).pop,
-                        radius: 11,
-                        child: const Icon(
-                          Icons.close,
-                          size: 16,
-                          color: Color(0xBB818181),
+                      if (isDismissible)
+                        InkResponse(
+                          onTap: Navigator.of(context).pop,
+                          radius: 11,
+                          child: const Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Color(0xBB818181),
+                          ),
                         ),
-                      ),
                       const SizedBox(width: 10),
                     ],
                   ),

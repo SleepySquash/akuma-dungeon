@@ -19,7 +19,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/theme.dart';
 import 'overlay.dart';
 
 /// Styled context menu of [actions].
