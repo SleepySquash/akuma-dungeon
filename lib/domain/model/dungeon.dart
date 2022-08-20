@@ -99,6 +99,7 @@ class InfiniteDungeon extends DungeonSettings {
         },
       );
     } else {
+      boss = true;
       stage = DungeonStage(
         name: 'Поля ($floor-й этаж)',
         background: 'fields',
@@ -109,8 +110,6 @@ class InfiniteDungeon extends DungeonSettings {
         ],
       );
     }
-
-    boss = true;
 
     return stage;
   }
