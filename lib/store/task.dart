@@ -19,21 +19,28 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '/domain/model/progression.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/task.dart';
+import '/provider/hive/progression.dart';
 import '/provider/hive/task.dart';
 import '/util/obs/obs.dart';
 
 class TaskRepository extends DisposableInterface
     implements AbstractTaskRepository {
-  TaskRepository(this._taskHive);
+  TaskRepository(this._taskHive, this._progressHive);
 
   @override
   late final RxObsMap<String, Rx<MyTask>> tasks;
 
+  @override
+  late final Rx<GameProgression> progression;
+
   final TaskHiveProvider _taskHive;
+  final ProgressionHiveProvider _progressHive;
 
   StreamIterator<BoxEvent>? _localSubscription;
+  StreamIterator<BoxEvent>? _progressSubscription;
 
   @override
   void onInit() {
@@ -41,7 +48,10 @@ class TaskRepository extends DisposableInterface
       Map.fromEntries(_taskHive.items.map((e) => MapEntry(e.task.id, Rx(e)))),
     );
 
+    progression = Rx(_progressHive.get() ?? GameProgression());
+
     _initLocalSubscription();
+    _initProgressSubscription();
 
     super.onInit();
   }
@@ -49,6 +59,7 @@ class TaskRepository extends DisposableInterface
   @override
   void onClose() {
     _localSubscription?.cancel();
+    _progressSubscription?.cancel();
     super.onClose();
   }
 
@@ -60,6 +71,14 @@ class TaskRepository extends DisposableInterface
 
   @override
   void cancel(Task task) => _taskHive.remove(task.id);
+
+  @override
+  void progress() {
+    GameProgression progression = _progressHive.get() ?? GameProgression();
+    progression.level++;
+
+    _progressHive.set(progression);
+  }
 
   Future<void> _initLocalSubscription() async {
     _localSubscription = StreamIterator(_taskHive.boxEvents);
@@ -75,6 +94,19 @@ class TaskRepository extends DisposableInterface
           task.value = e.value;
           task.refresh();
         }
+      }
+    }
+  }
+
+  Future<void> _initProgressSubscription() async {
+    _progressSubscription = StreamIterator(_progressHive.boxEvents);
+    while (await _progressSubscription!.moveNext()) {
+      BoxEvent e = _progressSubscription!.current;
+      if (e.deleted) {
+        // No-op.
+      } else {
+        progression.value = e.value;
+        progression.refresh();
       }
     }
   }

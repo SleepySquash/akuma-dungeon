@@ -162,13 +162,12 @@ class DungeonController extends GetxController {
     }
     _conditions.clear();
 
-    int index =
-        (stage.value == null ? -1 : settings.stages.indexOf(stage.value!)) + 1;
+    stage.value?.onPass?.call();
+    stage.value = settings.next();
 
-    if (index >= settings.stages.length) {
+    if (stage.value == null) {
       _winGame();
     } else {
-      stage.value = settings.stages[index];
       slayedEnemies.value = 0;
       _stageStartedAt = DateTime.now();
 

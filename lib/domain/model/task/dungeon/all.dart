@@ -55,7 +55,7 @@ class SlimeFieldsDungeonTask extends Task {
   @override
   List<TaskStep> get steps => [
         DungeonStep(
-          DungeonSettings(
+          Dungeon(
             stages: [
               DungeonStage(
                 background: 'fields',
@@ -92,7 +92,7 @@ class SlimeForestDungeonTask extends Task {
   @override
   List<TaskStep> get steps => [
         DungeonStep(
-          DungeonSettings(
+          Dungeon(
             stages: [
               DungeonStage(
                 background: 'forest',
@@ -129,7 +129,7 @@ class SlimeSwampDungeonTask extends Task {
   @override
   List<TaskStep> get steps => [
         DungeonStep(
-          DungeonSettings(
+          Dungeon(
             stages: [
               DungeonStage(
                 background: 'swamp',
@@ -178,7 +178,7 @@ class RestaurantDungeonTask extends Task {
           DialogueLine('Wowwwww!!'),
         ]),
         DungeonStep(
-          DungeonSettings(
+          Dungeon(
             stages: [
               DungeonStage(
                 background: 'swamp',

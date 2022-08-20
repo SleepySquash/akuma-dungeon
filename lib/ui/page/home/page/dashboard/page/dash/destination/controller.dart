@@ -1,3 +1,4 @@
+import 'package:akuma/domain/model/progression.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/task.dart';
@@ -11,6 +12,9 @@ class DestinationController extends GetxController {
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskService.tasks;
 
+  Rx<GameProgression> get progression => _taskService.progression;
+
   void accept(Task task) => _taskService.accept(task);
   Future<void> execute(MyTask task) => _taskService.execute(task);
+  void progress() => _taskService.progress();
 }

@@ -14,7 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/dungeon.dart';
 import 'package:akuma/domain/model/task.dart';
+import 'package:akuma/router.dart';
 import 'package:akuma/util/message_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +40,26 @@ class DestinationView extends StatelessWidget {
             return ListView(
               shrinkWrap: true,
               children: [
+                const ListTile(title: Text('Путь к Богине')),
+                ListTile(
+                  leading: const Icon(Icons.fort),
+                  title: const Text('Путь к Богине'),
+                  subtitle:
+                      const Text('Хватит обороняться, напади на монстров!'),
+                  trailing: Obx(() {
+                    return Text('${c.progression.value.level}-й этаж');
+                  }),
+                  onTap: () {
+                    router.dungeon(
+                      InfiniteDungeon(
+                        floor: c.progression.value.level,
+                        onProgress: c.progress,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  },
+                ),
+                const Divider(),
                 const ListTile(title: Text('Ежедневные задания')),
                 const ListTile(
                   leading: Icon(Icons.park),
@@ -73,14 +95,7 @@ class DestinationView extends StatelessWidget {
                     },
                   );
                 }),
-                // const Divider(),
-                // const ListTile(title: Text('Башня Богини')),
-                // const ListTile(
-                //   leading: Icon(Icons.fort),
-                //   title: Text('Башня Богини'),
-                //   subtitle: Text('Хватит обороняться, напади на монстров!'),
-                //   trailing: Text('0-й этаж'),
-                // ),
+
                 // const Divider(),
                 // const ListTile(title: Text('Артефакты')),
                 // const ListTile(

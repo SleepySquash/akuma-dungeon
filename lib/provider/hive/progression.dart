@@ -14,18 +14,27 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-/// Type ID's of all [Hive] models just to keep them in one place.
-///
-/// They should not change with time to not break on already stored data by
-/// previous versions of application. Add new entries to the end.
-class ModelTypeId {
-  static const credentials = 0;
-  static const applicationSettings = 1;
-  static const player = 2;
-  static const race = 3;
-  static const gender = 4;
-  static const item = 5;
-  static const character = 6;
-  static const task = 7;
-  static const gameProgression = 8;
+import 'package:hive_flutter/adapters.dart';
+
+import '/domain/model/progression.dart';
+import 'base.dart';
+
+/// [Hive] storage for a [Player].
+class ProgressionHiveProvider extends HiveBaseProvider<GameProgression> {
+  @override
+  Stream<BoxEvent> get boxEvents => box.watch(key: 0);
+
+  @override
+  String get boxName => 'progression';
+
+  @override
+  void registerAdapters() {
+    Hive.maybeRegisterAdapter(GameProgressionAdapter());
+  }
+
+  /// Returns the stored [GameProgression] from the [Hive].
+  GameProgression? get() => getSafe(0);
+
+  /// Stores the provided [GameProgression] to the [Hive].
+  Future<void> set(GameProgression progression) => putSafe(0, progression);
 }

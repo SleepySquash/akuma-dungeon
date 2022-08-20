@@ -1,12 +1,13 @@
-import 'package:akuma/domain/repository/task.dart';
-import 'package:akuma/domain/service/item.dart';
-import 'package:akuma/domain/service/player.dart';
-import 'package:akuma/router.dart';
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
-import '/util/obs/obs.dart';
 
+import '/domain/model/progression.dart';
 import '/domain/model/task.dart';
+import '/domain/repository/task.dart';
+import '/domain/service/item.dart';
+import '/domain/service/player.dart';
+import '/router.dart';
+import '/util/obs/obs.dart';
 
 class TaskService extends DisposableInterface {
   TaskService(
@@ -23,6 +24,7 @@ class TaskService extends DisposableInterface {
   final ItemService _itemService;
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskRepository.tasks;
+  Rx<GameProgression> get progression => _taskRepository.progression;
 
   @override
   void onInit() {
@@ -73,4 +75,6 @@ class TaskService extends DisposableInterface {
       }
     }
   }
+
+  void progress() => _taskRepository.progress();
 }

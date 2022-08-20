@@ -39,7 +39,7 @@ class IntroductionTask extends Task {
           DialogueLine('Yay!'),
         ]),
         DungeonStep(
-          DungeonSettings(
+          Dungeon(
             stages: [
               DungeonStage(
                 background: 'fields',
