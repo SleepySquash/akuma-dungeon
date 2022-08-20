@@ -18,8 +18,8 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:uuid/uuid.dart';
 
+import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
 import '/domain/model/player.dart';
 import '/domain/service/player.dart';
@@ -28,10 +28,16 @@ import '/ui/widget/modal_popup.dart';
 import 'component/result.dart';
 
 class DungeonController extends GetxController {
-  DungeonController(this._playerService, {required this.settings});
+  DungeonController(
+    this._playerService, {
+    required this.settings,
+    this.onClear,
+  });
 
   /// [DungeonSettings] controlling this [DungeonController].
   final DungeonSettings settings;
+
+  final void Function()? onClear;
 
   /// Indicator whether the game has ended.
   final RxBool gameEnded = RxBool(false);
@@ -40,7 +46,7 @@ class DungeonController extends GetxController {
   final Rx<DungeonStage?> stage = Rx(null);
 
   /// Current [Enemy] to slay.
-  final Rx<AliveEnemy?> enemy = Rx(null);
+  final Rx<MyEnemy?> enemy = Rx(null);
 
   /// Count of the slayed [Enemy]ies throughout the current [stage].
   final RxInt slayedEnemies = RxInt(0);
@@ -120,7 +126,7 @@ class DungeonController extends GetxController {
 
   void _nextEnemy() {
     Enemy? next = stage.value?.enemies.sample(1).first;
-    enemy.value = next == null ? null : AliveEnemy(next);
+    enemy.value = next == null ? null : MyEnemy(next);
 
     if (next != null) {
       _enemyTimer?.cancel();
@@ -189,14 +195,16 @@ class DungeonController extends GetxController {
     return met;
   }
 
-  void _winGame() {
+  Future<void> _winGame() async {
     if (!gameEnded.value) {
       gameEnded.value = true;
-      ModalPopup.show(
+      await ModalPopup.show(
         context: router.context!,
         isDismissible: false,
         child: const ResultModal(true),
       );
+
+      onClear?.call();
     }
   }
 
@@ -210,54 +218,4 @@ class DungeonController extends GetxController {
       );
     }
   }
-}
-
-class DungeonStage {
-  const DungeonStage({
-    this.name,
-    required this.enemies,
-    this.conditions = const [],
-    this.background,
-  });
-
-  final String? name;
-  final List<Enemy> enemies;
-  final List<NextStageCondition> conditions;
-  final String? background;
-}
-
-class DungeonSettings {
-  const DungeonSettings({
-    required this.stages,
-    this.background,
-  });
-
-  final List<DungeonStage> stages;
-  final String? background;
-}
-
-class AliveEnemy {
-  AliveEnemy(this.enemy) : hp = RxInt(enemy.hp);
-
-  final String key = const Uuid().v4();
-  final Enemy enemy;
-  final RxInt hp;
-
-  bool get isDead => hp.value <= 0;
-
-  void hit([int amount = 1]) {
-    hp.value -= amount;
-  }
-}
-
-abstract class NextStageCondition {}
-
-class SlayedStageCondition implements NextStageCondition {
-  const SlayedStageCondition(this.amount);
-  final int amount;
-}
-
-class TimerStageCondition implements NextStageCondition {
-  const TimerStageCondition(this.duration);
-  final Duration duration;
 }

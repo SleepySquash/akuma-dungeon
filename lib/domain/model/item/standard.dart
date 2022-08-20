@@ -19,48 +19,165 @@ import '/domain/model/item.dart';
 abstract class StandardItems {
   static List<Item> get all => [
         ...consumable,
+        ...weapon,
       ];
 
   static List<Item> get consumable => [
-        CupcakeItem(),
-        DonutItem(),
-        CakeItem(),
-        IcecreamItem(),
-        WaterBottleItem(),
+        AppleGreenItem(),
+        AppleRedItem(),
+        BananaItem(),
+        BeefItem(),
+        ChickenItem(),
+        RedPotionSmallItem(),
+        RedPotionMediumItem(),
+        RedPotionBigItem(),
+      ];
+
+  static List<Item> get weapon => [
+        BronzeDaggerItem(),
+        IronDaggerItem(),
+        PracticeOakSwordItem(),
+        PracticeWillowSwordItem(),
+        BronzeSwordItem(),
       ];
 }
 
-class CupcakeItem extends Item with Eatable {
-  CupcakeItem([super.count = 1]);
+class AppleGreenItem extends Consumable with Eatable {
+  AppleGreenItem([super.count = 1]);
+
+  @override
+  String get id => 'apple_green';
+
+  @override
+  int get hp => 1;
+}
+
+class AppleRedItem extends Consumable with Eatable {
+  AppleRedItem([super.count = 1]);
+
+  @override
+  String get id => 'apple_red';
+
+  @override
+  int get hp => 1;
+}
+
+class BananaItem extends Consumable with Eatable {
+  BananaItem([super.count = 1]);
+
+  @override
+  String get id => 'banana';
+
+  @override
+  int get hp => 1;
+}
+
+class BeefItem extends Consumable with Eatable {
+  BeefItem([super.count = 1]);
+
+  @override
+  String get id => 'beef';
+
+  @override
+  int get hp => 5;
+}
+
+class ChickenItem extends Consumable with Eatable {
+  ChickenItem([super.count = 1]);
+
+  @override
+  String get id => 'chicken';
+
+  @override
+  int get hp => 4;
+}
+
+class CarrotItem extends Consumable with Eatable {
+  CarrotItem([super.count = 1]);
+
+  @override
+  String get id => 'carrot';
+
+  @override
+  int get hp => 1;
+}
+
+class RedPotionSmallItem extends Consumable with Drinkable {
+  RedPotionSmallItem([super.count = 1]);
+
+  @override
+  String get id => 'potion_red_small';
 
   @override
   int get hp => 10;
 }
 
-class DonutItem extends Item with Eatable {
-  DonutItem([super.count = 1]);
+class RedPotionMediumItem extends Consumable with Drinkable {
+  RedPotionMediumItem([super.count = 1]);
 
   @override
-  int get hp => 10;
-}
-
-class CakeItem extends Item with Eatable {
-  CakeItem([super.count = 1]);
+  String get id => 'potion_red_medium';
 
   @override
   int get hp => 50;
 }
 
-class IcecreamItem extends Item with Eatable, Drinkable {
-  IcecreamItem([super.count = 1]);
+class RedPotionBigItem extends Consumable with Drinkable {
+  RedPotionBigItem([super.count = 1]);
 
   @override
-  int get hp => 10;
+  String get id => 'potion_red_big';
+
+  @override
+  int get hp => 150;
 }
 
-class WaterBottleItem extends Item with Drinkable {
-  WaterBottleItem([super.count = 1]);
+class BronzeDaggerItem extends Item with Equipable, Weapon, Dagger {
+  BronzeDaggerItem([super.count = 1]);
 
   @override
-  int get hp => 40;
+  String get id => 'dagger_bronze';
+
+  @override
+  int get damage => 10;
+}
+
+class IronDaggerItem extends Item with Equipable, Weapon, Dagger {
+  IronDaggerItem([super.count = 1]);
+
+  @override
+  String get id => 'dagger_iron';
+
+  @override
+  int get damage => 50;
+}
+
+class PracticeOakSwordItem extends Item with Equipable, Weapon, Sword {
+  PracticeOakSwordItem([super.count = 1]);
+
+  @override
+  String get id => 'sword_practice_oak';
+
+  @override
+  int get damage => 1;
+}
+
+class PracticeWillowSwordItem extends Item with Equipable, Weapon, Sword {
+  PracticeWillowSwordItem([super.count = 1]);
+
+  @override
+  String get id => 'sword_practice_willow';
+
+  @override
+  int get damage => 2;
+}
+
+class BronzeSwordItem extends Item with Equipable, Weapon, Sword {
+  BronzeSwordItem([super.count = 1]);
+
+  @override
+  String get id => 'sword_bronze';
+
+  @override
+  int get damage => 10;
 }

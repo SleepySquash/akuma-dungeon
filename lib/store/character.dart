@@ -29,7 +29,7 @@ class CharacterRepository extends DisposableInterface
   CharacterRepository(this._characterHive);
 
   @override
-  late final RxObsMap<String, RxCharacter> characters;
+  late final RxObsMap<String, MyCharacter> characters;
 
   final CharacterHiveProvider _characterHive;
 
@@ -54,11 +54,12 @@ class CharacterRepository extends DisposableInterface
   }
 
   @override
-  void add(RxCharacter character) => _characterHive.put(character);
+  void add(MyCharacter character) => _characterHive.put(character);
 
   @override
   void remove(String id) => _characterHive.remove(id);
 
+  @override
   bool contains(String id) => _characterHive.contains(id);
 
   Future<void> _initLocalSubscription() async {

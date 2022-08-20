@@ -1,7 +1,7 @@
 name: akuma
 description: Rogue-like dungeon clicker game.
 publish_to: 'none'
-version: 1.0.0+1
+version: 0.1.0-alpha.1
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
@@ -48,7 +48,13 @@ flutter:
     - assets/background/room/
     - assets/character/
     - assets/font/
+    - assets/item/consumable/
+    - assets/item/equipable/
+    - assets/item/misc/
+    - assets/item/resource/
+    - assets/item/skill/
+    - assets/item/weapon/
     - assets/l10n/
-    - assets/music/
     - assets/monster/slime/
+    - assets/music/
     - assets/voice/intro/

@@ -29,7 +29,7 @@ class PartyController extends GetxController {
   final CharacterService _characterService;
 
   Rx<Player?> get player => _playerService.player;
-  RxObsMap<String, RxCharacter> get characters => _characterService.characters;
+  RxObsMap<String, MyCharacter> get characters => _characterService.characters;
 
   bool contains(String id) => _characterService.contains(id);
 }

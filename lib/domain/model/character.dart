@@ -52,8 +52,8 @@ abstract class Character {
   List<Skill> get skills => [];
 }
 
-class RxCharacter {
-  RxCharacter({
+class MyCharacter {
+  MyCharacter({
     required this.character,
     this.artifacts = const [],
     List<Skill>? skills,

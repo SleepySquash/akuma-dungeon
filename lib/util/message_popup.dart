@@ -41,24 +41,31 @@ class MessagePopup {
   /// Shows an alert popup with [title], [description] and `yes`/`no` buttons
   /// that returns `true`, `false` or `null` based on the button that was
   /// pressed.
-  static Future<bool?> alert(String title, {String? description}) => showDialog(
-        context: router.context!,
-        builder: (context) => AlertDialog(
-          key: const Key('AlertDialog'),
-          title: Text(title),
-          content: description == null ? null : Text(description),
-          actions: [
-            TextButton(
-              key: const Key('AlertNoButton'),
-              child: Text('label_are_you_sure_no'.l10n),
-              onPressed: () => Navigator.pop(context, false),
-            ),
-            TextButton(
-              key: const Key('AlertYesButton'),
-              child: Text('label_are_you_sure_yes'.l10n),
-              onPressed: () => Navigator.pop(context, true),
-            ),
-          ],
-        ),
-      );
+  static Future<bool?> alert(String title, {String? description}) {
+    return showDialog(
+      context: router.context!,
+      builder: (context) => AlertDialog(
+        key: const Key('AlertDialog'),
+        title: Text(title),
+        content: description == null ? null : Text(description),
+        actions: [
+          TextButton(
+            key: const Key('AlertNoButton'),
+            child: Text('label_are_you_sure_no'.l10n),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+          TextButton(
+            key: const Key('AlertYesButton'),
+            child: Text('label_are_you_sure_yes'.l10n),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void snackbar(String content) {
+    ScaffoldMessenger.of(router.context!)
+        .showSnackBar(SnackBar(content: Text(content)));
+  }
 }

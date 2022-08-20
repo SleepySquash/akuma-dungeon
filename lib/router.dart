@@ -23,19 +23,27 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'domain/model/dungeon.dart';
 import 'domain/model/player.dart';
 import 'domain/repository/character.dart';
+import 'domain/repository/flag.dart';
 import 'domain/repository/item.dart';
 import 'domain/repository/settings.dart';
+import 'domain/repository/task.dart';
 import 'domain/service/auth.dart';
 import 'domain/service/character.dart';
 import 'domain/service/item.dart';
+import 'domain/service/task.dart';
 import 'provider/hive/application_settings.dart';
 import 'provider/hive/character.dart';
+import 'provider/hive/flag.dart';
 import 'provider/hive/item.dart';
+import 'provider/hive/task.dart';
 import 'store/character.dart';
+import 'store/flag.dart';
 import 'store/item.dart';
 import 'store/settings.dart';
+import 'store/task.dart';
 import 'ui/page/auth/view.dart';
 import 'ui/page/home/page/dungeon/controller.dart';
 import 'ui/page/home/view.dart';
@@ -43,6 +51,7 @@ import 'ui/page/introduction/view.dart';
 import 'ui/widget/context_menu/overlay.dart';
 import 'ui/widget/notification/view.dart';
 import 'ui/worker/settings.dart';
+import 'ui/worker/task.dart';
 import 'util/scoped_dependencies.dart';
 
 /// Application's global router state.
@@ -92,7 +101,7 @@ class RouterState extends ChangeNotifier {
   final RxnString prefix = RxnString(null);
 
   /// Dynamic arguments of this [RouterState].
-  dynamic arguments;
+  Map<String, dynamic>? arguments;
 
   /// Auth service used to determine the auth status.
   final AuthService _auth;
@@ -257,6 +266,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
               deps.put(ItemHiveProvider()).init(),
               deps.put(CharacterHiveProvider()).init(),
               deps.put(ApplicationSettingsHiveProvider()).init(),
+              deps.put(FlagHiveProvider()).init(),
+              deps.put(TaskHiveProvider()).init(),
             ]);
 
             AbstractSettingsRepository settingsRepository =
@@ -268,9 +279,11 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             // it sets the stored [Language] from the [SettingsRepository].
             await deps.put(SettingsWorker(settingsRepository)).init();
 
+            deps.put<AbstractFlagRepository>(FlagRepository(Get.find()));
+
             AbstractItemRepository itemRepository =
                 deps.put<AbstractItemRepository>(ItemRepository(Get.find()));
-            deps.put(ItemService(itemRepository));
+            ItemService itemService = deps.put(ItemService(itemRepository));
 
             AbstractCharacterRepository characterRepository =
                 deps.put<AbstractCharacterRepository>(
@@ -281,10 +294,23 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
                 deps.put<AbstractPlayerRepository>(
               PlayerRepository(
                 Get.find(),
-                initial: _state.arguments is Player ? _state.arguments : null,
+                initial: _state.arguments?['args'] as Player?,
               ),
             );
-            deps.put(PlayerService(playerRepository));
+            PlayerService playerService =
+                deps.put(PlayerService(playerRepository));
+
+            AbstractTaskRepository taskRepository =
+                deps.put<AbstractTaskRepository>(TaskRepository(Get.find()));
+            TaskService taskService = deps.put(
+              TaskService(
+                taskRepository,
+                playerService,
+                itemService,
+              ),
+            );
+
+            deps.put(TaskWorker(taskService, Get.find()));
 
             return deps;
           },
@@ -335,7 +361,7 @@ extension RouteLinks on RouterState {
   /// Changes router location to the [Routes.home] page.
   void home({Player? player}) {
     go(Routes.home);
-    arguments = player;
+    arguments = {'args': player};
   }
 
   /// Changes router location to the [Routes.settings] page.
@@ -345,8 +371,8 @@ extension RouteLinks on RouterState {
   void introduction() => go(Routes.introduction);
 
   /// Changes router location to the [Routes.dungeon] page.
-  void dungeon(DungeonSettings settings) {
+  void dungeon(DungeonSettings settings, {void Function()? onClear}) {
     go(Routes.dungeon);
-    arguments = settings;
+    arguments = {'args': settings, 'onClear': onClear};
   }
 }

@@ -40,3 +40,49 @@ class WidgetButton extends StatelessWidget {
     );
   }
 }
+
+class PreciseButton extends StatefulWidget {
+  const PreciseButton({
+    Key? key,
+    required this.child,
+    this.onPressed,
+  }) : super(key: key);
+
+  final Widget child;
+  final void Function()? onPressed;
+
+  @override
+  State<PreciseButton> createState() => _PreciseButtonState();
+}
+
+class _PreciseButtonState extends State<PreciseButton> {
+  int _fingers = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      opaque: false,
+      cursor: SystemMouseCursors.click,
+      child: Listener(
+        onPointerDown: (d) {
+          widget.onPressed?.call();
+          // ++_fingers;
+
+          // if (_fingers == 1) {
+          //   widget.onPressed?.call();
+          // }
+        },
+        // onPointerUp: (d) {
+        //   --_fingers;
+        //   if (_fingers < 0) {
+        //     _fingers = 0;
+        //   }
+        // },
+        child: Container(
+          color: Colors.transparent,
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}

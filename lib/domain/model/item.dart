@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'rarity.dart';
+
 /// Entity in the [Player]'s inventory.
 abstract class Item {
   Item(this.count);
@@ -30,6 +32,9 @@ abstract class Item {
   /// Description of this [Item].
   String? get description => null;
 
+  /// [Rarity] this [Item] has.
+  Rarity get rarity => Rarity.common;
+
   /// Amount of this [Item].
   int count;
 }
@@ -38,11 +43,26 @@ mixin Artifact on Item {}
 
 /// [Item] equipable by the [Player].
 mixin Equipable on Item {}
-mixin Head on Equipable {}
-mixin Armor on Equipable {}
-mixin Shoes on Equipable {}
-mixin Weapon on Equipable {}
-mixin Shield on Equipable {}
+
+mixin Head on Equipable {
+  int get defense => 1;
+}
+
+mixin Armor on Equipable {
+  int get defense => 1;
+}
+
+mixin Shoes on Equipable {
+  int get defense => 1;
+}
+
+mixin Weapon on Equipable {
+  int get damage => 1;
+}
+
+mixin Shield on Equipable {
+  int get defense => 1;
+}
 
 mixin Sword on Weapon {}
 mixin Bow on Weapon {}
@@ -50,17 +70,23 @@ mixin Catalyst on Weapon {}
 mixin BigSword on Weapon {}
 mixin Dagger on Weapon {}
 
-mixin Consumable on Item {}
+abstract class Consumable extends Item {
+  Consumable(super.count);
+
+  @override
+  String get asset => 'consumable/$id';
+}
+
 mixin Giftable on Item {}
 
 /// [Item] edible by the [Player].
-mixin Eatable implements Consumable {
+mixin Eatable on Consumable {
   /// Hunger satisfied by consuming this [Item].
   int get hp => 0;
 }
 
 /// [Item] drinkable by the [Player].
-mixin Drinkable implements Consumable {
+mixin Drinkable on Consumable {
   /// Health restored by consuming this [Item].
   int get hp => 0;
 }

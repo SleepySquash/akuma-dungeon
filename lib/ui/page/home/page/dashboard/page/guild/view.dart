@@ -14,12 +14,12 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/ui/page/home/page/dashboard/page/guild/component/tasks.dart';
-import 'package:akuma/ui/widget/modal_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
+import 'task/view.dart';
 
 class GuildView extends StatelessWidget {
   const GuildView({Key? key}) : super(key: key);
@@ -50,16 +50,13 @@ class GuildView extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        ModalPopup.show(
+                      onPressed: () async {
+                        await ModalPopup.show(
                           context: context,
-                          desktopConstraints:
-                              const BoxConstraints(maxWidth: 600),
-                          modalConstraints: const BoxConstraints(maxWidth: 600),
-                          child: const TasksModal(),
+                          child: const TaskView(),
                         );
                       },
-                      child: const Text('Take a task'),
+                      child: const Text('Задания'),
                     ),
                   ],
                 ),

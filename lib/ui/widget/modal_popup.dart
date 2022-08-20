@@ -27,8 +27,7 @@ abstract class ModalPopup {
   static Future<T?> show<T>({
     required BuildContext context,
     required Widget child,
-    BoxConstraints desktopConstraints = const BoxConstraints(maxWidth: 300),
-    BoxConstraints modalConstraints = const BoxConstraints(maxWidth: 420),
+    double? maxWidth = 600,
     bool isDismissible = true,
   }) {
     if (context.isMobile) {
@@ -67,10 +66,7 @@ abstract class ModalPopup {
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 360),
-                      child: child,
-                    ),
+                    child: child,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -87,7 +83,8 @@ abstract class ModalPopup {
         builder: (context) {
           return Center(
             child: Container(
-              constraints: modalConstraints,
+              constraints:
+                  BoxConstraints(maxWidth: maxWidth ?? double.infinity),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -112,12 +109,7 @@ abstract class ModalPopup {
                       const SizedBox(width: 10),
                     ],
                   ),
-                  Flexible(
-                    child: ConstrainedBox(
-                      constraints: desktopConstraints,
-                      child: child,
-                    ),
-                  ),
+                  Flexible(child: child),
                 ],
               ),
             ),

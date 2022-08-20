@@ -14,14 +14,14 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/enemy/fields.dart';
-import 'package:akuma/ui/page/home/page/dungeon/controller.dart';
-import 'package:akuma/ui/widget/dummy_character.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/router.dart';
+import '/ui/widget/dummy_character.dart';
+import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
+import 'destination/view.dart';
 
 class DashView extends StatelessWidget {
   const DashView({Key? key}) : super(key: key);
@@ -66,44 +66,51 @@ class DashView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ElevatedButton(
-                            onPressed: () => router.dungeon(
-                              DungeonSettings(
-                                stages: [
-                                  DungeonStage(
-                                    name: 'Fields',
-                                    enemies: FieldsEnemies.enemies,
-                                    background: 'fields',
-                                    conditions: [
-                                      const SlayedStageCondition(10),
-                                    ],
-                                  ),
-                                  DungeonStage(
-                                    name: 'Forest',
-                                    enemies: FieldsEnemies.enemies,
-                                    background: 'forest',
-                                    conditions: [
-                                      const SlayedStageCondition(10),
-                                      TimerStageCondition(120.seconds),
-                                    ],
-                                  ),
-                                  DungeonStage(
-                                    name: 'Swarm - Boss Battle',
-                                    enemies: [RedLongSlimeEnemy()],
-                                    background: 'swarm',
-                                    conditions: [
-                                      const SlayedStageCondition(1),
-                                      TimerStageCondition(60.seconds),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            onPressed: () async {
+                              await ModalPopup.show(
+                                context: context,
+                                maxWidth: 600,
+                                child: const DestinationView(),
+                              );
+
+                              // return router.dungeon(
+                              //   DungeonSettings(
+                              //     stages: [
+                              //       DungeonStage(
+                              //         name: 'Fields',
+                              //         enemies: FieldsEnemies.enemies,
+                              //         background: 'fields',
+                              //         conditions: [
+                              //           const SlayedStageCondition(10),
+                              //         ],
+                              //       ),
+                              //       DungeonStage(
+                              //         name: 'Forest',
+                              //         enemies: FieldsEnemies.enemies,
+                              //         background: 'forest',
+                              //         conditions: [
+                              //           const SlayedStageCondition(10),
+                              //           TimerStageCondition(120.seconds),
+                              //         ],
+                              //       ),
+                              //       DungeonStage(
+                              //         name: 'Swamp - Boss Battle',
+                              //         enemies: [RedLongSlimeEnemy()],
+                              //         background: 'swamp',
+                              //         conditions: [
+                              //           const SlayedStageCondition(1),
+                              //           TimerStageCondition(60.seconds),
+                              //         ],
+                              //       ),
+                              //     ],
+                              //   ),
+                              // );
+                            },
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: const [
                                 SizedBox(height: 8),
-                                Text('Enter the dungeon'),
-                                Text('(F - 01 - fields)'),
+                                Text('Путешествия!'),
                                 SizedBox(height: 8),
                               ],
                             ),

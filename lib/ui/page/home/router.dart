@@ -14,9 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/ui/page/home/page/dungeon/controller.dart';
 import 'package:flutter/material.dart';
 
+import '/domain/model/dungeon.dart';
 import '/router.dart';
 import 'page/dashboard/view.dart';
 import 'page/dungeon/view.dart';
@@ -57,7 +57,12 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
           child: SettingsView(),
         ));
       } else if (route == Routes.dungeon) {
-        if (_state.arguments is! DungeonSettings) {
+        DungeonSettings? settings =
+            _state.arguments?['args'] as DungeonSettings?;
+        void Function()? onClear =
+            _state.arguments?['onClear'] as void Function()?;
+
+        if (settings == null) {
           pages.add(MaterialPage(
             child: Scaffold(
               appBar: AppBar(title: const Text('Error')),
@@ -71,7 +76,7 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
           pages.add(MaterialPage(
             key: const ValueKey('DungeonPage'),
             name: Routes.dungeon,
-            child: DungeonView(settings: _state.arguments as DungeonSettings),
+            child: DungeonView(settings: settings, onClear: onClear),
           ));
         }
       }

@@ -26,4 +26,5 @@ class ModelTypeId {
   static const gender = 4;
   static const item = 5;
   static const character = 6;
+  static const task = 7;
 }

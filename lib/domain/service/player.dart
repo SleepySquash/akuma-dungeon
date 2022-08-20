@@ -29,4 +29,5 @@ class PlayerService extends GetxService {
   void set(Player player) => _playerRepository.set(player);
   void addExperience(int amount) => _playerRepository.addExperience(amount);
   void addMoney(int amount) => _playerRepository.addMoney(amount);
+  void addRank(int amount) => _playerRepository.addRank(amount);
 }

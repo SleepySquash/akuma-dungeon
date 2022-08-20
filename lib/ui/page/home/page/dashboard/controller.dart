@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/service/task.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +27,12 @@ enum MainTab {
 }
 
 class DashboardController extends GetxController {
+  DashboardController(this._taskService);
+
   final PageController pageController = PageController();
   final Rx<MainTab> selected = Rx(MainTab.dash);
+
+  final TaskService _taskService;
+
+  RxInt get completedTasks => _taskService.completedTasks;
 }

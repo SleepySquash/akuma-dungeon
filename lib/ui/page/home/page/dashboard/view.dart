@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,7 +33,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DashboardController(),
+      init: DashboardController(Get.find()),
       builder: (DashboardController c) {
         return Stack(
           children: [
@@ -75,10 +76,36 @@ class DashboardView extends StatelessWidget {
                                       );
 
                                     case MainTab.guild:
-                                      return const NavigationRailDestination(
-                                        selectedIcon: Icon(Icons.church),
-                                        icon: Icon(Icons.church_outlined),
-                                        label: Text('Guild'),
+                                      return NavigationRailDestination(
+                                        selectedIcon: Obx(() {
+                                          return Badge(
+                                            showBadge:
+                                                c.completedTasks.value != 0,
+                                            badgeContent: Text(
+                                              '${c.completedTasks.value}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            child: const Icon(Icons.church),
+                                          );
+                                        }),
+                                        icon: Obx(() {
+                                          return Badge(
+                                            showBadge:
+                                                c.completedTasks.value != 0,
+                                            badgeContent: Text(
+                                              '${c.completedTasks.value}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            child: const Icon(
+                                              Icons.church_outlined,
+                                            ),
+                                          );
+                                        }),
+                                        label: const Text('Guild'),
                                       );
 
                                     case MainTab.store:
@@ -158,9 +185,33 @@ class DashboardView extends StatelessWidget {
                                 );
 
                               case MainTab.guild:
-                                return const NavigationDestination(
-                                  selectedIcon: Icon(Icons.church),
-                                  icon: Icon(Icons.church_outlined),
+                                return NavigationDestination(
+                                  selectedIcon: Obx(() {
+                                    return Badge(
+                                      showBadge: c.completedTasks.value != 0,
+                                      badgeContent: Text(
+                                        '${c.completedTasks.value}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      child: const Icon(Icons.church),
+                                    );
+                                  }),
+                                  icon: Obx(() {
+                                    return Badge(
+                                      showBadge: c.completedTasks.value != 0,
+                                      badgeContent: Text(
+                                        '${c.completedTasks.value}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      child: const Icon(
+                                        Icons.church_outlined,
+                                      ),
+                                    );
+                                  }),
                                   label: 'Guild',
                                 );
 

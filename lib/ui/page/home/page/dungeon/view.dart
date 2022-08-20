@@ -14,25 +14,36 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/enemy.dart';
-import 'package:akuma/ui/page/home/page/dungeon/component/menu.dart';
-import 'package:akuma/ui/widget/button.dart';
-import 'package:akuma/ui/widget/dummy_character.dart';
-import 'package:akuma/ui/widget/modal_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/dungeon.dart';
+import '/domain/model/enemy.dart';
+import '/ui/page/home/page/dungeon/component/menu.dart';
+import '/ui/widget/button.dart';
+import '/ui/widget/dummy_character.dart';
+import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class DungeonView extends StatelessWidget {
-  const DungeonView({Key? key, required this.settings}) : super(key: key);
+  const DungeonView({
+    Key? key,
+    required this.settings,
+    this.onClear,
+  }) : super(key: key);
 
   final DungeonSettings settings;
+
+  final void Function()? onClear;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DungeonController(Get.find(), settings: settings),
+      init: DungeonController(
+        Get.find(),
+        settings: settings,
+        onClear: onClear,
+      ),
       builder: (DungeonController c) {
         return Stack(
           fit: StackFit.expand,
@@ -89,7 +100,7 @@ class DungeonView extends StatelessWidget {
 
   Widget _enemy(DungeonController c) {
     return Obx(() {
-      AliveEnemy? enemy = c.enemy.value;
+      MyEnemy? enemy = c.enemy.value;
       return AnimatedSwitcher(
         duration: 600.milliseconds,
         switchInCurve: Curves.easeOutQuad,
@@ -97,7 +108,7 @@ class DungeonView extends StatelessWidget {
         transitionBuilder: (child, animation) =>
             ScaleTransition(scale: animation, child: child),
         child: enemy != null
-            ? WidgetButton(
+            ? PreciseButton(
                 key: Key(enemy.key),
                 onPressed: c.hitEnemy,
                 child: ConstrainedBox(
@@ -126,7 +137,7 @@ class DungeonView extends StatelessWidget {
       return ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Obx(() {
-          AliveEnemy? enemy = c.enemy.value;
+          MyEnemy? enemy = c.enemy.value;
           if (enemy != null) {
             return Column(
               mainAxisSize: MainAxisSize.min,

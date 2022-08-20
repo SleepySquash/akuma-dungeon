@@ -25,10 +25,10 @@ class CharacterService extends GetxService {
 
   final AbstractCharacterRepository _characterRepository;
 
-  RxObsMap<String, RxCharacter> get characters =>
+  RxObsMap<String, MyCharacter> get characters =>
       _characterRepository.characters;
 
-  void add(RxCharacter character) => _characterRepository.add(character);
+  void add(MyCharacter character) => _characterRepository.add(character);
   void remove(String id) => _characterRepository.remove(id);
   bool contains(String id) => _characterRepository.contains(id);
 }

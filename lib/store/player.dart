@@ -76,6 +76,15 @@ class PlayerRepository extends DisposableInterface
     }
   }
 
+  @override
+  void addRank(int amount) {
+    Player? player = _playerLocal.get();
+    if (player != null) {
+      player.rank += amount;
+      _playerLocal.set(player);
+    }
+  }
+
   void _initLocalSubscription() async {
     _localSubscription = StreamIterator(_playerLocal.boxEvents);
     while (await _localSubscription!.moveNext()) {

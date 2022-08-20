@@ -14,6 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
+
 /// Entity dealing damage to the [Player].
 abstract class Enemy {
   Enemy();
@@ -38,4 +41,18 @@ abstract class Enemy {
 
   double get damage => 0.05;
   Duration get interval => const Duration(seconds: 1);
+}
+
+class MyEnemy {
+  MyEnemy(this.enemy) : hp = RxInt(enemy.hp);
+
+  final String key = const Uuid().v4();
+  final Enemy enemy;
+  final RxInt hp;
+
+  bool get isDead => hp.value <= 0;
+
+  void hit([int amount = 1]) {
+    hp.value -= amount;
+  }
 }

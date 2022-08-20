@@ -14,12 +14,14 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/gender.dart';
-import 'package:akuma/domain/model/item.dart';
-import 'package:akuma/domain/model/race.dart';
-import 'package:akuma/domain/model_type_id.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../model_type_id.dart';
+import 'character.dart';
+import 'gender.dart';
+import 'item.dart';
+import 'race.dart';
+import 'rank.dart';
 
 part 'player.g.dart';
 
@@ -30,6 +32,7 @@ class Player {
     this.race = Race.ningen,
     this.gender = Gender.female,
     this.exp = 0,
+    this.rank = 0,
     this.money = 0,
     this.hp = 10,
     this.mp = 10,
@@ -50,17 +53,20 @@ class Player {
   int exp;
 
   @HiveField(4)
-  int money;
+  int rank;
 
   @HiveField(5)
-  int hp;
+  int money;
 
   @HiveField(6)
-  int mp;
+  int hp;
 
   @HiveField(7)
-  List<Item> equipped;
+  int mp;
 
   @HiveField(8)
+  List<Item> equipped;
+
+  @HiveField(9)
   List<Character> party;
 }

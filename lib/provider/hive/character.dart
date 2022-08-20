@@ -21,52 +21,52 @@ import '/domain/model/character/all.dart';
 import '/domain/model/character.dart';
 import 'base.dart';
 
-/// [Hive] storage for the [RxCharacter]s.
-class CharacterHiveProvider extends HiveBaseProvider<RxCharacter> {
+/// [Hive] storage for the [MyCharacter]s.
+class CharacterHiveProvider extends HiveBaseProvider<MyCharacter> {
   @override
   Stream<BoxEvent> get boxEvents => box.watch();
 
   @override
   String get boxName => 'character';
 
-  /// Returns the list of [RxCharacter]s from the [Hive].
-  Iterable<RxCharacter> get items => valuesSafe;
+  /// Returns the list of [MyCharacter]s from the [Hive].
+  Iterable<MyCharacter> get items => valuesSafe;
 
   @override
   void registerAdapters() {
-    Hive.maybeRegisterAdapter(RxCharacterAdapter());
+    Hive.maybeRegisterAdapter(MyCharacterAdapter());
   }
 
-  /// Puts the provided [RxCharacter] to the [Hive].
-  Future<void> put(RxCharacter character) =>
+  /// Puts the provided [MyCharacter] to the [Hive].
+  Future<void> put(MyCharacter character) =>
       putSafe(character.character.id, character);
 
-  /// Returns the stored [RxCharacter] from the [Hive].
-  RxCharacter? get(String id) => getSafe(id);
+  /// Returns the stored [MyCharacter] from the [Hive].
+  MyCharacter? get(String id) => getSafe(id);
 
-  /// Indicates whether the provided [RxCharacter] is stored in the [Hive].
+  /// Indicates whether the provided [MyCharacter] is stored in the [Hive].
   bool contains(String id) => box.containsKey(id);
 
-  /// Removes the stored [RxCharacter] from the [Hive].
+  /// Removes the stored [MyCharacter] from the [Hive].
   Future<void> remove(String id) => deleteSafe(id);
 }
 
-class RxCharacterAdapter extends TypeAdapter<RxCharacter> {
+class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
   @override
   final typeId = ModelTypeId.character;
 
   @override
-  RxCharacter read(BinaryReader reader) {
+  MyCharacter read(BinaryReader reader) {
     final id = reader.read() as String;
     final affinity = reader.read() as int;
-    return RxCharacter(
+    return MyCharacter(
       character: Characters.get(id),
       affinity: affinity,
     );
   }
 
   @override
-  void write(BinaryWriter writer, RxCharacter obj) {
+  void write(BinaryWriter writer, MyCharacter obj) {
     writer.write(obj.character.id);
     writer.write(obj.affinity);
   }

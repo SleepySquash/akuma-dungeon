@@ -24,4 +24,5 @@ abstract class AbstractPlayerRepository {
   void set(Player player);
   void addExperience(int amount);
   void addMoney(int amount);
+  void addRank(int amount);
 }

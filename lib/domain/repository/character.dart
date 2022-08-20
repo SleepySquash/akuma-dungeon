@@ -19,9 +19,9 @@ import '/util/obs/obs.dart';
 import '/domain/model/character.dart';
 
 abstract class AbstractCharacterRepository {
-  RxObsMap<String, RxCharacter> get characters;
+  RxObsMap<String, MyCharacter> get characters;
 
-  void add(RxCharacter character);
+  void add(MyCharacter character);
   void remove(String character);
   bool contains(String character);
 }
