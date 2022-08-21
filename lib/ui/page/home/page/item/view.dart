@@ -16,6 +16,7 @@
 
 import 'dart:ui';
 
+import 'package:akuma/domain/model/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,50 +24,36 @@ import '/domain/model/character.dart';
 import '/ui/widget/backdrop.dart';
 import 'controller.dart';
 
-class CharacterView extends StatefulWidget {
-  const CharacterView({
-    Key? key,
-    this.bounds,
-    required this.character,
-  }) : super(key: key);
+class ItemView extends StatefulWidget {
+  const ItemView({Key? key, required this.item}) : super(key: key);
 
-  final Rect? bounds;
-  final Character character;
+  final MyItem item;
 
-  /// Displays a dialog with the provided [character] above the current contents.
+  /// Displays a dialog with the provided [character] above the current
+  /// contents.
   static void show<T extends Object?>({
     required BuildContext context,
-    required Character character,
-    Rect? bounds,
+    required MyItem item,
   }) {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
         barrierDismissible: true,
         pageBuilder: (BuildContext context, _, __) {
-          return CharacterView(character: character);
+          return ItemView(item: item);
         },
       ),
     );
   }
 
   @override
-  State<CharacterView> createState() => _CharacterViewState();
+  State<ItemView> createState() => _ItemViewState();
 }
 
-class _CharacterViewState extends State<CharacterView>
+class _ItemViewState extends State<ItemView>
     with SingleTickerProviderStateMixin {
   /// [AnimationController] controlling the opening and closing animation.
   late final AnimationController _fading;
-
-  /// Pops this [CharacterView] route off the [Navigator].
-  void Function()? _pop;
-
-  /// [Rect] of an [Object] to animate this [CharacterView] from/to.
-  late Rect _bounds;
-
-  /// Discard the first [LayoutBuilder] frame since no widget is drawn yet.
-  bool _firstLayout = true;
 
   @override
   void initState() {
@@ -78,7 +65,7 @@ class _CharacterViewState extends State<CharacterView>
         (status) {
           switch (status) {
             case AnimationStatus.reverse:
-              _pop?.call();
+              Navigator.of(context).pop();
               break;
 
             case AnimationStatus.dismissed:
@@ -91,87 +78,65 @@ class _CharacterViewState extends State<CharacterView>
       )
       ..forward();
 
-    _bounds = _calculatePosition() ?? Rect.zero;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (_firstLayout) {
-          _pop = Navigator.of(context).pop;
-          _firstLayout = false;
-        }
+    var fade = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _fading,
+      curve: const Interval(0, 0.3, curve: Curves.ease),
+    ));
 
-        var curved = CurvedAnimation(
-          parent: _fading,
-          curve: Curves.ease,
-          reverseCurve: Curves.ease,
-        );
-
-        var fade = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-          parent: _fading,
-          curve: const Interval(0, 0.3, curve: Curves.ease),
-        ));
-
-        RelativeRectTween tween() => RelativeRectTween(
-              begin: RelativeRect.fromSize(_bounds, constraints.biggest),
-              end: RelativeRect.fill,
-            );
-
-        return GetBuilder(
-          init: CharacterController(),
-          builder: (CharacterController c) {
-            return Stack(
-              fit: StackFit.expand,
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    if (c.screen.value == null) {
-                      _dismiss();
-                    } else {
-                      c.screen.value = null;
-                    }
-                  },
-                  child: AnimatedBuilder(
-                    animation: _fading,
-                    builder: (context, child) => ConditionalBackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: 0.01 + 15 * _fading.value,
-                        sigmaY: 0.01 + 15 * _fading.value,
-                      ),
-                      child: Container(),
+    return GetBuilder(
+      init: ItemController(),
+      builder: (ItemController c) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: () {
+                if (c.screen.value == null) {
+                  _dismiss();
+                } else {
+                  c.screen.value = null;
+                }
+              },
+              child: AnimatedBuilder(
+                animation: _fading,
+                builder: (context, child) => ConditionalBackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 0.01 + 15 * _fading.value,
+                    sigmaY: 0.01 + 15 * _fading.value,
+                  ),
+                  child: Container(),
+                ),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _fading,
+              builder: (context, child) {
+                return FadeTransition(
+                  opacity: fade,
+                  child: Hero(
+                    tag: widget.item.id,
+                    child: Image.asset(
+                      'assets/item/${widget.item.item.asset}.png',
                     ),
                   ),
-                ),
-                AnimatedBuilder(
-                  animation: _fading,
-                  builder: (context, child) {
-                    return FadeTransition(
-                      opacity: fade,
-                      child: Hero(
-                        tag: widget.character.id,
-                        child: Image.asset(
-                          'assets/character/${widget.character.asset}.png',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                ..._buildInterface(c),
-              ],
-            );
-          },
+                );
+              },
+            ),
+            ..._buildInterface(c),
+          ],
         );
       },
     );
   }
 
-  List<Widget> _buildInterface(CharacterController c) {
-    Widget screen(CharacterViewScreen? current) {
+  List<Widget> _buildInterface(ItemController c) {
+    Widget screen(ItemViewScreen? current) {
       return Container();
       // switch (current) {
       //   case NekoViewScreen.request:
@@ -239,26 +204,5 @@ class _CharacterViewState extends State<CharacterView>
   }
 
   /// Starts a dismiss animation.
-  void _dismiss() {
-    _bounds = _calculatePosition() ?? _bounds;
-    _fading.reverse();
-  }
-
-  /// Returns a [Rect] of an [Object] identified by the provided initial
-  /// [GlobalKey].
-  Rect? _calculatePosition() => widget.bounds;
-}
-
-extension GlobalKeyExtension on GlobalKey {
-  Rect? get globalPaintBounds {
-    final renderObject = currentContext?.findRenderObject();
-    final matrix = renderObject?.getTransformTo(null);
-
-    if (matrix != null && renderObject?.paintBounds != null) {
-      final rect = MatrixUtils.transformRect(matrix, renderObject!.paintBounds);
-      return rect;
-    } else {
-      return null;
-    }
-  }
+  void _dismiss() => _fading.reverse();
 }

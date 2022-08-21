@@ -28,7 +28,12 @@ class CharacterService extends GetxService {
   RxObsMap<String, MyCharacter> get characters =>
       _characterRepository.characters;
 
-  void add(MyCharacter character) => _characterRepository.add(character);
+  void add(Character character) {
+    if (!contains(character.id)) {
+      _characterRepository.add(MyCharacter(character: character));
+    }
+  }
+
   void remove(String id) => _characterRepository.remove(id);
   bool contains(String id) => _characterRepository.contains(id);
 }

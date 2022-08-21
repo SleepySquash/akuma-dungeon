@@ -14,7 +14,10 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/service/gacha.dart';
+import 'package:akuma/ui/page/home/page/dashboard/page/store/gacha/view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
 import '/ui/widget/backdrop.dart';
@@ -29,7 +32,7 @@ class StoreView extends StatelessWidget {
       init: StoreController(Get.find(), Get.find()),
       builder: (StoreController c) {
         return DefaultTabController(
-          length: 5,
+          length: 4,
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: PreferredSize(
@@ -42,11 +45,11 @@ class StoreView extends StatelessWidget {
                     unselectedLabelColor: Colors.black54,
                     labelColor: Colors.black,
                     tabs: [
-                      Tab(
-                        text: 'Featured',
-                        icon: Icon(Icons.star),
-                        iconMargin: EdgeInsets.zero,
-                      ),
+                      // Tab(
+                      //   text: 'Featured',
+                      //   icon: Icon(Icons.star),
+                      //   iconMargin: EdgeInsets.zero,
+                      // ),
                       Tab(
                         text: 'Event',
                         icon: Icon(Icons.event),
@@ -75,11 +78,11 @@ class StoreView extends StatelessWidget {
             body: SafeArea(
               child: TabBarView(
                 children: [
-                  _featured(c),
-                  _event(c),
-                  _standard(c),
-                  _equipment(c),
-                  _items(c),
+                  // _featured(c, context),
+                  _event(c, context),
+                  _standard(c, context),
+                  _equipment(c, context),
+                  _items(c, context),
                 ],
               ),
             ),
@@ -89,23 +92,307 @@ class StoreView extends StatelessWidget {
     );
   }
 
-  Widget _featured(StoreController c) {
-    return const Text('Featured');
+  Widget _featured(StoreController c, BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: _tripleLayout(
+        child1: Text('1'),
+        child2: Text('2'),
+        child3: Text('3'),
+      ),
+    );
   }
 
-  Widget _event(StoreController c) {
-    return const Text('Event');
+  Widget _event(StoreController c, BuildContext context) {
+    return Stack(
+      children: [
+        Obx(() {
+          Widget child;
+
+          if (c.eventTab.value) {
+            child = Container(
+              key: const Key('EventCharacterBanner'),
+              width: double.infinity,
+              height: double.infinity,
+              margin: const EdgeInsets.all(16),
+              color: Colors.blue,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Image.asset('assets/item/weapon/sword_iron.png'),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: const [
+                        ListTile(title: Text('+ 10 ещё!')),
+                        ListTile(
+                          title:
+                              Text('Каждое 80-е оружие - гарантированно SSR'),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          } else {
+            child = Container(
+              key: const Key('EventWeaponBanner'),
+              width: double.infinity,
+              height: double.infinity,
+              margin: const EdgeInsets.all(16),
+              color: Colors.blue,
+              child: Row(
+                children: [
+                  Expanded(child: Image.asset('assets/character/Arda.png')),
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: const [
+                        ListTile(title: Text('+ 10 ещё!')),
+                        ListTile(
+                          title:
+                              Text('Каждый 80-й персонаж - гарантированно SSR'),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          }
+
+          return AnimatedSwitcher(
+            duration: 600.milliseconds,
+            switchInCurve: Curves.easeOutQuad,
+            switchOutCurve: Curves.easeInQuad,
+            transitionBuilder: (child, animation) => SlideTransition(
+              position: Tween(begin: const Offset(0, -0.2), end: Offset.zero)
+                  .animate(animation),
+              child: FadeTransition(opacity: animation, child: child),
+            ),
+            child: child,
+          );
+        }),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8, right: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Transform.translate(
+                        offset: const Offset(0, 0),
+                        child: Image.asset('assets/item/misc/card_heart.png'),
+                      ),
+                      const SizedBox(width: 0),
+                      const Text('20', style: TextStyle(fontSize: 18)),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 0, 12, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Transform.translate(
+                        offset: const Offset(0, -1),
+                        child: Image.asset('assets/item/resource/ruby_2.png'),
+                      ),
+                      const SizedBox(width: 4),
+                      const Text(
+                        '1600',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 64),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(() {
+                  return _tab(
+                    onTap: () => c.eventTab.value = false,
+                    selected: c.eventTab.isFalse,
+                    child: const Text('Character'),
+                  );
+                }),
+                const SizedBox(height: 10),
+                Obx(() {
+                  return _tab(
+                    onTap: () => c.eventTab.value = true,
+                    selected: c.eventTab.isTrue,
+                    child: const Text('Weapon'),
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32, right: 32),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (context) => GachaView(
+                        type: c.eventTab.isTrue
+                            ? GachaType.weapon
+                            : GachaType.character,
+                        amount: 10,
+                      ),
+                    );
+                  },
+                  child: const Text('Крутить x10'),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () async {
+                    await showDialog(
+                      context: context,
+                      useSafeArea: false,
+                      useRootNavigator: true,
+                      barrierDismissible: false,
+                      builder: (context) => GachaView(
+                        type: c.eventTab.isTrue
+                            ? GachaType.weapon
+                            : GachaType.character,
+                        amount: 1,
+                      ),
+                    );
+                  },
+                  child: const Text('Крутить x1'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  Widget _standard(StoreController c) {
+  Widget _standard(StoreController c, BuildContext context) {
     return const Text('Standard');
   }
 
-  Widget _equipment(StoreController c) {
+  Widget _equipment(StoreController c, BuildContext context) {
     return const Text('Equipment');
   }
 
-  Widget _items(StoreController c) {
+  Widget _items(StoreController c, BuildContext context) {
     return const Text('Items');
+  }
+
+  Widget _tripleLayout({
+    Widget? child1,
+    Widget? child2,
+    Widget? child3,
+  }) {
+    return LayoutBuilder(builder: (context, constraints) {
+      Widget _container(Widget? child) {
+        return Container(
+          width: double.infinity,
+          height: double.infinity,
+          margin: const EdgeInsets.all(8.0),
+          color: Colors.blue,
+          child: child,
+        );
+      }
+
+      if (constraints.maxWidth < 600) {
+        return Column(
+          children: [
+            Expanded(flex: 2, child: _container(child1)),
+            Expanded(
+              flex: 1,
+              child: Row(
+                children: [
+                  Expanded(flex: 2, child: _container(child2)),
+                  Expanded(flex: 1, child: _container(child3)),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+
+      return Row(
+        children: [
+          Expanded(flex: 2, child: _container(child1)),
+          Expanded(
+            flex: 1,
+            child: Column(
+              children: [
+                Expanded(flex: 2, child: _container(child2)),
+                Expanded(flex: 1, child: _container(child3)),
+              ],
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _tab({
+    required Widget child,
+    final void Function()? onTap,
+    bool selected = false,
+  }) {
+    return Material(
+      type: MaterialType.card,
+      elevation: 4,
+      shadowColor: Colors.black,
+      color: selected ? Colors.blue : Colors.white,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          bottomLeft: Radius.circular(10),
+        ),
+        child: SizedBox(
+          width: 128,
+          height: 40,
+          child: DefaultTextStyle.merge(
+            style: TextStyle(color: selected ? Colors.white : null),
+            child: Center(child: child),
+          ),
+        ),
+      ),
+    );
   }
 }

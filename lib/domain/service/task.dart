@@ -76,5 +76,5 @@ class TaskService extends DisposableInterface {
     }
   }
 
-  void progress() => _taskRepository.progress();
+  void progress(int to) => _taskRepository.progress(to);
 }

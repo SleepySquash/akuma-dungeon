@@ -16,18 +16,10 @@
 
 import 'package:get/get.dart';
 
-import '/util/obs/obs.dart';
+enum ItemViewScreen {
+  noop,
+}
 
-import '/domain/model/progression.dart';
-import '/domain/model/task.dart';
-
-abstract class AbstractTaskRepository {
-  RxObsMap<String, Rx<MyTask>> get tasks;
-  Rx<GameProgression> get progression;
-
-  void accept(Task task);
-  void update(MyTask task);
-  void cancel(Task task);
-
-  void progress(int to);
+class ItemController extends GetxController {
+  Rx<ItemViewScreen?> screen = Rx(null);
 }

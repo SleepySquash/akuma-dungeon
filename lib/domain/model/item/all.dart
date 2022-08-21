@@ -17,9 +17,18 @@
 import '/domain/model/item.dart';
 import 'standard.dart';
 
+// TODO: Make generator generating `Map`: `{'id': Item()}`.
 abstract class Items {
   static List<Item> get all => [
         ...StandardItems.all,
+      ];
+
+  static List<Item> get consumable => [
+        ...StandardItems.consumable,
+      ];
+
+  static List<Item> get weapon => [
+        ...StandardItems.weapon,
       ];
 
   static Item get(String id) => all.firstWhere((e) => e.id == id);

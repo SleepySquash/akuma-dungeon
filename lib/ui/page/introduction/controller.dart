@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
@@ -47,13 +48,20 @@ class IntroductionController extends GetxController {
 
   @override
   void onReady() {
-    _player.play(
-      AssetSource('music/MOSAICWAV_she_already_gone.mp3'),
-      volume: 0.4,
-    );
-    _player.setReleaseMode(ReleaseMode.loop);
+    if (kDebugMode) {
+      name.text = 'Test';
+      race.value = Race.usagi;
+      gender.value = Gender.female;
+      _register();
+    } else {
+      _player.play(
+        AssetSource('music/MOSAICWAV_she_already_gone.mp3'),
+        volume: 0.4,
+      );
+      _player.setReleaseMode(ReleaseMode.loop);
 
-    _novel();
+      _novel();
+    }
 
     super.onReady();
   }

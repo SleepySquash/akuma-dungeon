@@ -16,13 +16,13 @@
 
 import 'dart:math';
 
-import 'package:akuma/ui/page/home/page/dashboard/page/party/character/view.dart';
 import 'package:flutter/material.dart' hide Characters;
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/character/all.dart';
 import '/domain/model/rarity.dart';
+import '/ui/page/home/page/character/view.dart';
 import '/ui/widget/backdrop.dart';
 import '/util/extensions.dart';
 import 'controller.dart';
@@ -58,8 +58,19 @@ class PartyView extends StatelessWidget {
 
   Widget _top(PartyController c) {
     return LayoutBuilder(builder: (context, constraints) {
+      double maxWidth = 900;
+
+      double? width, height;
+      if (MediaQuery.of(context).size.width <
+          MediaQuery.of(context).size.height) {
+        width = min(constraints.maxWidth, 900) / 5;
+      } else {
+        height = MediaQuery.of(context).size.height / 4;
+        maxWidth = height * 0.7 * 5;
+      }
+
       return ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 900),
+        constraints: BoxConstraints(maxWidth: maxWidth),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(5, (i) {
@@ -69,7 +80,8 @@ class PartyView extends StatelessWidget {
             }
 
             return SizedBox(
-              width: min(constraints.maxWidth, 900) / 5,
+              width: width,
+              height: height,
               child: AspectRatio(
                 aspectRatio: 0.7,
                 child: Container(
@@ -114,7 +126,7 @@ class PartyView extends StatelessWidget {
             child: Wrap(
               alignment: WrapAlignment.center,
               children: filter.map((e) {
-                bool owned = c.contains(e.id);
+                MyCharacter? owned = c.characters[e.id];
                 return SizedBox(
                   width: constraints.maxWidth > 500
                       ? (500 / 3)
@@ -136,17 +148,21 @@ class PartyView extends StatelessWidget {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: () =>
-                            CharacterView.show(context: context, character: e),
+                        onTap: () => CharacterView.show(
+                          context: context,
+                          myCharacter: owned,
+                          character: e,
+                        ),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
                             Hero(
                               tag: e.id,
                               child: Image.asset(
-                                  'assets/character/${e.asset}.png'),
+                                'assets/character/${e.asset}.png',
+                              ),
                             ),
-                            if (!owned) ...[
+                            if (owned == null) ...[
                               Container(
                                 decoration: BoxDecoration(
                                   color: Colors.black.withOpacity(0.5),

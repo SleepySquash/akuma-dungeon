@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_local_notifications: ^10.0.0-dev.18
+  flutter_staggered_grid_view: ^0.6.2
   get: ^4.6.5
   google_fonts: ^3.0.1
   hive_flutter: ^1.1.0
@@ -46,6 +47,7 @@ flutter:
     - assets/background/dungeon/
     - assets/background/location/
     - assets/background/room/
+    - assets/background/misc/
     - assets/character/
     - assets/font/
     - assets/item/consumable/

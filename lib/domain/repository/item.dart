@@ -14,13 +14,16 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:get/get.dart';
+
 import '/util/obs/obs.dart';
 
 import '/domain/model/item.dart';
 
 abstract class AbstractItemRepository {
-  RxObsMap<String, Item> get items;
+  RxObsMap<String, Rx<MyItem>> get items;
 
   void add(Item item);
+  void update(MyItem item);
   void remove(Item item);
 }

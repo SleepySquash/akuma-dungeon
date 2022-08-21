@@ -155,7 +155,7 @@ class RestaurantDungeonTask extends Task {
   String get name => 'Помощь на кухне';
 
   @override
-  String? get description => 'Ресторану нужна смешна нарезка продуктов';
+  String? get description => 'Ресторану нужна смешная нарезка продуктов';
 
   @override
   IconData get icon => Icons.restaurant;

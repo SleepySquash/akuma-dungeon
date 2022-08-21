@@ -29,7 +29,7 @@ class ItemRepository extends DisposableInterface
   ItemRepository(this._itemHive);
 
   @override
-  late final RxObsMap<String, Item> items;
+  late final RxObsMap<String, Rx<MyItem>> items;
 
   final ItemHiveProvider _itemHive;
 
@@ -38,7 +38,7 @@ class ItemRepository extends DisposableInterface
   @override
   void onInit() {
     items = RxObsMap(
-      Map.fromEntries(_itemHive.items.map((e) => MapEntry(e.id, e))),
+      Map.fromEntries(_itemHive.items.map((e) => MapEntry(e.id, Rx(e)))),
     );
 
     _initLocalSubscription();
@@ -53,19 +53,28 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void add(Item item) async {
-    Item? existing = _itemHive.get(item.id);
+  void add(Item item) {
+    MyItem? existing = _itemHive.get(item.id);
     if (existing != null) {
       existing.count += item.count;
       _itemHive.put(existing);
     } else {
-      _itemHive.put(item);
+      if (item is Weapon) {
+        _itemHive.put(MyWeapon(item));
+      } else if (item is Equipable) {
+        _itemHive.put(MyEquipable(item));
+      } else {
+        _itemHive.put(MyItem(item));
+      }
     }
   }
 
   @override
+  void update(MyItem item) => _itemHive.put(item);
+
+  @override
   void remove(Item item, [int? count]) {
-    Item? existing = _itemHive.get(item.id);
+    MyItem? existing = _itemHive.get(item.id);
     if (existing != null) {
       existing.count -= count ?? existing.count;
       if (existing.count <= 0) {
@@ -83,7 +92,13 @@ class ItemRepository extends DisposableInterface
       if (e.deleted) {
         items.remove(e.key);
       } else {
-        items[e.key] = e.value;
+        Rx<MyItem>? item = items[e.key];
+        if (item == null) {
+          items[e.key] = Rx(e.value);
+        } else {
+          item.value = e.value;
+          item.refresh();
+        }
       }
     }
   }

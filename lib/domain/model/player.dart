@@ -69,4 +69,6 @@ class Player {
 
   @HiveField(9)
   List<Character> party;
+
+  int get level => exp ~/ 1000 + 1;
 }

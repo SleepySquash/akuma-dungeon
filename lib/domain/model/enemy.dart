@@ -44,13 +44,22 @@ abstract class Enemy {
 }
 
 class MyEnemy {
-  MyEnemy(this.enemy) : hp = RxInt(enemy.hp);
+  MyEnemy(this.enemy, {this.multiplier = 1})
+      : hp = RxInt((enemy.hp * multiplier).toInt());
 
   final String key = const Uuid().v4();
+  final double multiplier;
+
   final Enemy enemy;
+
   final RxInt hp;
 
   bool get isDead => hp.value <= 0;
+
+  double get damage => enemy.damage * multiplier;
+  int get money => (enemy.money * multiplier).toInt();
+  int get exp => (enemy.exp * multiplier).toInt();
+  int get maxHp => (enemy.hp * multiplier).toInt();
 
   void hit([int amount = 1]) {
     hp.value -= amount;

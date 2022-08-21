@@ -49,6 +49,9 @@ class AppleGreenItem extends Consumable with Eatable {
   String get id => 'apple_green';
 
   @override
+  String get name => 'Зелёное яблоко';
+
+  @override
   int get hp => 1;
 }
 
@@ -57,6 +60,9 @@ class AppleRedItem extends Consumable with Eatable {
 
   @override
   String get id => 'apple_red';
+
+  @override
+  String get name => 'Яблоко';
 
   @override
   int get hp => 1;
@@ -69,6 +75,9 @@ class BananaItem extends Consumable with Eatable {
   String get id => 'banana';
 
   @override
+  String get name => 'Банан';
+
+  @override
   int get hp => 1;
 }
 
@@ -77,6 +86,9 @@ class BeefItem extends Consumable with Eatable {
 
   @override
   String get id => 'beef';
+
+  @override
+  String get name => 'Стейк';
 
   @override
   int get hp => 5;
@@ -89,6 +101,9 @@ class ChickenItem extends Consumable with Eatable {
   String get id => 'chicken';
 
   @override
+  String get name => 'Курочка';
+
+  @override
   int get hp => 4;
 }
 
@@ -97,6 +112,9 @@ class CarrotItem extends Consumable with Eatable {
 
   @override
   String get id => 'carrot';
+
+  @override
+  String get name => 'Морковка';
 
   @override
   int get hp => 1;
@@ -109,6 +127,9 @@ class RedPotionSmallItem extends Consumable with Drinkable {
   String get id => 'potion_red_small';
 
   @override
+  String get name => 'Малое зелье лечения';
+
+  @override
   int get hp => 10;
 }
 
@@ -117,6 +138,9 @@ class RedPotionMediumItem extends Consumable with Drinkable {
 
   @override
   String get id => 'potion_red_medium';
+
+  @override
+  String get name => 'Среднее зелье лечения';
 
   @override
   int get hp => 50;
@@ -129,54 +153,72 @@ class RedPotionBigItem extends Consumable with Drinkable {
   String get id => 'potion_red_big';
 
   @override
+  String get name => 'Большое зелье лечения';
+
+  @override
   int get hp => 150;
 }
 
-class BronzeDaggerItem extends Item with Equipable, Weapon, Dagger {
+class BronzeDaggerItem extends Weapon with Dagger {
   BronzeDaggerItem([super.count = 1]);
 
   @override
   String get id => 'dagger_bronze';
 
   @override
+  String get name => 'Бронзовый клинок';
+
+  @override
   int get damage => 10;
 }
 
-class IronDaggerItem extends Item with Equipable, Weapon, Dagger {
+class IronDaggerItem extends Weapon with Dagger {
   IronDaggerItem([super.count = 1]);
 
   @override
   String get id => 'dagger_iron';
 
   @override
+  String get name => 'Железный клинок';
+
+  @override
   int get damage => 50;
 }
 
-class PracticeOakSwordItem extends Item with Equipable, Weapon, Sword {
+class PracticeOakSwordItem extends Weapon with Sword {
   PracticeOakSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_practice_oak';
 
   @override
+  String get name => 'Деревянный меч';
+
+  @override
   int get damage => 1;
 }
 
-class PracticeWillowSwordItem extends Item with Equipable, Weapon, Sword {
+class PracticeWillowSwordItem extends Weapon with Sword {
   PracticeWillowSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_practice_willow';
 
   @override
+  String get name => 'Деревянный меч из ивы';
+
+  @override
   int get damage => 2;
 }
 
-class BronzeSwordItem extends Item with Equipable, Weapon, Sword {
+class BronzeSwordItem extends Weapon with Sword {
   BronzeSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_bronze';
+
+  @override
+  String get name => 'Бронзовый меч';
 
   @override
   int get damage => 10;

@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:uuid/uuid.dart';
+
 import 'rarity.dart';
 
 /// Entity in the [Player]'s inventory.
@@ -35,33 +37,40 @@ abstract class Item {
   /// [Rarity] this [Item] has.
   Rarity get rarity => Rarity.common;
 
+  /// Maximum amount this [Item] can contain.
+  int? get max => null;
+
   /// Amount of this [Item].
-  int count;
+  final int count;
 }
 
 mixin Artifact on Item {}
 
 /// [Item] equipable by the [Player].
-mixin Equipable on Item {}
+abstract class Equipable extends Item {
+  Equipable(super.count);
 
-mixin Head on Equipable {
+  @override
+  String get asset => 'equipable/$id';
+
   int get defense => 1;
 }
 
-mixin Armor on Equipable {
-  int get defense => 1;
-}
+mixin Head on Equipable {}
 
-mixin Shoes on Equipable {
-  int get defense => 1;
-}
+mixin Armor on Equipable {}
 
-mixin Weapon on Equipable {
+mixin Shoes on Equipable {}
+
+mixin Shield on Equipable {}
+
+abstract class Weapon extends Item {
+  Weapon(super.count);
+
+  @override
+  String get asset => 'weapon/$id';
+
   int get damage => 1;
-}
-
-mixin Shield on Equipable {
-  int get defense => 1;
 }
 
 mixin Sword on Weapon {}
@@ -89,4 +98,36 @@ mixin Eatable on Consumable {
 mixin Drinkable on Consumable {
   /// Health restored by consuming this [Item].
   int get hp => 0;
+}
+
+class MyItem {
+  MyItem(
+    this.item, {
+    int? count,
+  }) : count = count ?? item.count;
+
+  final String id = const Uuid().v4();
+  final Item item;
+
+  int count;
+}
+
+class MyEquipable extends MyItem {
+  MyEquipable(
+    Equipable equipable, {
+    int? defense,
+  })  : defense = defense ?? equipable.defense,
+        super(equipable, count: 1);
+
+  int defense;
+}
+
+class MyWeapon extends MyItem {
+  MyWeapon(
+    Weapon weapon, {
+    int? damage,
+  })  : damage = damage ?? weapon.damage,
+        super(weapon, count: 1);
+
+  int damage;
 }
