@@ -73,9 +73,9 @@ class TaskRepository extends DisposableInterface
   void cancel(Task task) => _taskHive.remove(task.id);
 
   @override
-  void progress() {
+  void progress(int to) {
     GameProgression progression = _progressHive.get() ?? GameProgression();
-    progression.level++;
+    progression.level = to;
 
     _progressHive.set(progression);
   }

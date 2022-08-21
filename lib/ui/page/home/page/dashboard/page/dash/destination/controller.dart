@@ -16,5 +16,5 @@ class DestinationController extends GetxController {
 
   void accept(Task task) => _taskService.accept(task);
   Future<void> execute(MyTask task) => _taskService.execute(task);
-  void progress() => _taskService.progress();
+  void progress(int to) => _taskService.progress(to);
 }

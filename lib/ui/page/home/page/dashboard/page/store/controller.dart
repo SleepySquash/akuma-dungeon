@@ -23,6 +23,8 @@ import '/domain/service/player.dart';
 class StoreController extends GetxController {
   StoreController(this._playerService, this._itemService);
 
+  final RxBool eventTab = RxBool(false);
+
   final PlayerService _playerService;
   final ItemService _itemService;
 

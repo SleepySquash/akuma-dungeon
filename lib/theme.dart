@@ -57,3 +57,35 @@ class Themes {
     );
   }
 }
+
+/// Shadow cast by a box that allows to customize its [blurStyle].
+class CustomBoxShadow extends BoxShadow {
+  const CustomBoxShadow({
+    Color color = const Color(0xFF000000),
+    Offset offset = Offset.zero,
+    double blurRadius = 0.0,
+    BlurStyle blurStyle = BlurStyle.normal,
+  })  : _blurStyle = blurStyle,
+        super(
+          color: color,
+          offset: offset,
+          blurRadius: blurRadius,
+        );
+
+  /// Style to use for blur in [MaskFilter] object.
+  final BlurStyle _blurStyle;
+
+  @override
+  Paint toPaint() {
+    final Paint result = Paint()
+      ..color = color
+      ..maskFilter = MaskFilter.blur(_blurStyle, blurSigma);
+    assert(() {
+      if (debugDisableShadows) {
+        result.maskFilter = null;
+      }
+      return true;
+    }());
+    return result;
+  }
+}

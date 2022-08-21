@@ -85,10 +85,12 @@ class TaskWorker extends DisposableInterface {
   }
 
   void _addWorker(Rx<MyTask> task) {
+    bool completed = false;
     _workers[task.value.task.id] = ever(
       task,
       (MyTask task) {
-        if (task.isCompleted) {
+        if (!completed && task.isCompleted) {
+          completed = task.isCompleted;
           _notificationService.notify(
             LocalNotification(
               title: 'Task can be completed!',

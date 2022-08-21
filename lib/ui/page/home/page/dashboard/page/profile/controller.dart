@@ -16,15 +16,35 @@
 
 import 'package:get/get.dart';
 
+import '/domain/model/item.dart';
 import '/domain/model/player.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
+import '/util/obs/obs.dart';
+
+enum ProfileTab {
+  attributes,
+  inventory,
+  constellation,
+  skills,
+}
 
 class ProfileController extends GetxController {
   ProfileController(this._playerService, this._itemService);
+
+  final Rx<ProfileTab> tab = Rx(ProfileTab.attributes);
 
   final PlayerService _playerService;
   final ItemService _itemService;
 
   Rx<Player?> get player => _playerService.player;
+  RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
+}
+
+enum InventoryCategory {
+  weapon,
+  equip,
+  artifact,
+  food,
+  stuff,
 }

@@ -125,12 +125,19 @@ class DungeonController extends GetxController {
   }
 
   void _nextEnemy() {
-    Enemy? next = stage.value?.enemies.sample(1).first;
-    enemy.value = next == null ? null : MyEnemy(next);
+    Enemy? sample = stage.value?.enemies.sample(1).first;
+    MyEnemy? next = sample == null
+        ? null
+        : MyEnemy(
+            sample,
+            multiplier: stage.value?.multiplier ?? 1,
+          );
+
+    enemy.value = next;
 
     if (next != null) {
       _enemyTimer?.cancel();
-      _enemyTimer = Timer.periodic(next.interval, (t) {
+      _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
         if (!gameEnded.value) {
           _hitPlayer(next.damage);
         }
@@ -142,8 +149,8 @@ class DungeonController extends GetxController {
     _enemyTimer?.cancel();
     _enemyTimer = null;
 
-    _playerService.addExperience(enemy.value!.enemy.exp);
-    _playerService.addMoney(enemy.value!.enemy.money);
+    _playerService.addExperience(enemy.value!.exp);
+    _playerService.addMoney(enemy.value!.money);
     enemy.value = null;
     ++slayedEnemies.value;
 

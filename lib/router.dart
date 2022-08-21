@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:akuma/domain/repository/player.dart';
+import 'package:akuma/domain/service/gacha.dart';
 import 'package:akuma/domain/service/player.dart';
 import 'package:akuma/provider/hive/player.dart';
 import 'package:akuma/store/player.dart';
@@ -290,7 +291,10 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             AbstractCharacterRepository characterRepository =
                 deps.put<AbstractCharacterRepository>(
                     CharacterRepository(Get.find()));
-            deps.put(CharacterService(characterRepository));
+            CharacterService characterService =
+                deps.put(CharacterService(characterRepository));
+
+            deps.put(GachaService(itemService, characterService));
 
             AbstractPlayerRepository playerRepository =
                 deps.put<AbstractPlayerRepository>(
