@@ -107,8 +107,9 @@ class InfiniteDungeon extends DungeonSettings {
   }
 
   Dungeon _next(int floor, [double multiplier = 1]) {
+    print('multiplier is $multiplier');
     if (floor >= 6) {
-      return _next(floor % 6, multiplier * 2);
+      return _next(floor % 6, multiplier * 4 * (floor ~/ 6));
     }
 
     if (floor >= 4) {
@@ -119,14 +120,14 @@ class InfiniteDungeon extends DungeonSettings {
             background: 'swamp',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
-            multiplier: 3,
+            multiplier: multiplier * 2,
           ),
           DungeonStage(
             name: 'Болото - Босс Битва',
             background: 'swamp',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
-            multiplier: 3,
+            multiplier: multiplier * 2,
           ),
         ],
       );
@@ -138,14 +139,14 @@ class InfiniteDungeon extends DungeonSettings {
             background: 'forest',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
-            multiplier: 1.5,
+            multiplier: multiplier * 1.5,
           ),
           DungeonStage(
             name: 'Лес - Босс Битва',
             background: 'forest',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
-            multiplier: 1.5,
+            multiplier: multiplier * 1.5,
           ),
         ],
       );
@@ -158,12 +159,14 @@ class InfiniteDungeon extends DungeonSettings {
           background: 'fields',
           enemies: FieldsEnemies.enemies,
           conditions: _conditions,
+          multiplier: multiplier,
         ),
         DungeonStage(
           name: 'Поля - Босс Битва',
           background: 'fields',
           enemies: FieldsEnemies.unique,
           conditions: _bossConditions,
+          multiplier: multiplier,
         ),
       ],
     );

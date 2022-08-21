@@ -14,22 +14,18 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'dart:math';
-
 import 'package:akuma/domain/model/item.dart';
-import 'package:akuma/domain/model/rank.dart';
-import 'package:akuma/domain/model/rarity.dart';
-import 'package:akuma/theme.dart';
-import 'package:akuma/ui/page/home/page/character/view.dart';
-import 'package:akuma/ui/page/home/page/item/view.dart';
-import 'package:akuma/ui/widget/backdrop.dart';
-import 'package:akuma/ui/widget/button.dart';
-import 'package:akuma/util/platform_utils.dart';
-import 'package:badges/badges.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/rank.dart';
+import '/domain/model/rarity.dart';
+import '/ui/widget/item_grid.dart';
+import '/ui/widget/backdrop.dart';
 import '/ui/widget/dummy_character.dart';
+import '/ui/widget/item_selector/view.dart';
+import '/util/platform_utils.dart';
 import 'controller.dart';
 
 class ProfileView extends StatelessWidget {
@@ -51,38 +47,55 @@ class ProfileView extends StatelessWidget {
                 List<String> subtitle = const [],
                 Rarity? rarity,
                 String? lvl,
+                void Function()? onPressed,
               }) {
                 return Container(
                   margin: const EdgeInsets.fromLTRB(8, 4, 0, 4),
-                  child: ConditionalBackdropFilter(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Container(
-                      width: 210,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.4),
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        children: [
-                          if (asset == null)
-                            const Icon(
-                              Icons.library_add,
-                              size: 42,
-                              color: Colors.black,
-                            )
-                          else
-                            Image.asset('assets/item/$asset.png'),
-                          if (asset == null)
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  title,
-                                  style: const TextStyle(fontSize: 18),
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: ConditionalBackdropFilter(
+                      borderRadius: BorderRadius.circular(15),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: onPressed,
+                        child: Container(
+                          width: 210,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.4),
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              if (asset == null)
+                                const Icon(
+                                  Icons.library_add,
+                                  size: 42,
+                                  color: Colors.black,
+                                )
+                              else
+                                Image.asset('assets/item/$asset.png'),
+                              if (asset == null)
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      title,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      title,
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                        ],
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -225,10 +238,54 @@ class ProfileView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (context.isMobile) const Spacer(),
-                          _equip(title: 'Головняк'),
-                          _equip(title: 'Броник'),
-                          _equip(title: 'Обувка'),
-                          _equip(title: 'Оружие'),
+                          _equip(
+                            title: 'Головняк',
+                            onPressed: () async {
+                              await ItemSelector.show(
+                                context: context,
+                                filter: (e) =>
+                                    e.where((e) => e.value.item is Head),
+                              );
+                            },
+                          ),
+                          _equip(
+                            title: 'Броник',
+                            onPressed: () async {
+                              await ItemSelector.show(
+                                context: context,
+                                filter: (e) =>
+                                    e.where((e) => e.value.item is Armor),
+                              );
+                            },
+                          ),
+                          _equip(
+                            title: 'Обувка',
+                            onPressed: () async {
+                              await ItemSelector.show(
+                                context: context,
+                                filter: (e) =>
+                                    e.where((e) => e.value.item is Shoes),
+                              );
+                            },
+                          ),
+                          Obx(() {
+                            MyItem? item = c.player.value?.weapon.firstOrNull;
+
+                            return _equip(
+                              title: item?.item.name ?? 'Оружие',
+                              asset: item?.item.asset,
+                              onPressed: () async {
+                                var item = await ItemSelector.show(
+                                  context: context,
+                                  category: InventoryCategory.weapon,
+                                );
+
+                                if (item is Rx<MyItem>) {
+                                  c.equip(item.value);
+                                }
+                              },
+                            );
+                          }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -430,123 +487,8 @@ class ProfileView extends StatelessWidget {
   Widget _buildItems(
     ProfileController c,
     BuildContext context,
-    InventoryCategory category,
+    InventoryCategory? category,
   ) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Obx(() {
-        Iterable<Rx<MyItem>> items = {};
-
-        switch (category) {
-          case InventoryCategory.weapon:
-            items = c.items.values.where((e) => e.value is MyWeapon);
-            break;
-
-          case InventoryCategory.equip:
-            items = c.items.values.where((e) => e.value is MyEquipable);
-            break;
-
-          case InventoryCategory.artifact:
-            items = c.items.values.where((e) => e.value.item is Artifact);
-            break;
-
-          case InventoryCategory.food:
-            items = c.items.values.where((e) => e.value.item is Consumable);
-            break;
-
-          case InventoryCategory.stuff:
-            items = c.items.values.where((e) =>
-                e.value is! MyWeapon &&
-                e.value is! MyEquipable &&
-                e.value.item is! Artifact &&
-                e.value.item is! Consumable);
-            break;
-        }
-
-        if (items.isEmpty) {
-          return Center(
-            key: Key(category.name),
-            child: const Text('Empty'),
-          );
-        }
-
-        int width = context.isMobile ? 80 + 4 : 100 + 8;
-        int rows = constraints.maxWidth ~/ width;
-
-        return Center(
-          key: Key(category.name),
-          child: ListView.builder(
-            itemCount: (c.items.length / rows).floor() + 1,
-            itemBuilder: (context, i) {
-              int from = i * rows;
-              int to = min((i + 1) * rows, c.items.length);
-
-              return Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: c.items.values.toList().sublist(from, to).map((e) {
-                    return WidgetButton(
-                      onPressed: () =>
-                          ItemView.show(context: context, item: e.value),
-                      child: Container(
-                        margin: EdgeInsets.all(context.isMobile ? 2 : 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            CustomBoxShadow(
-                              blurRadius: 4,
-                              color: Colors.black.withOpacity(0.2),
-                              blurStyle: BlurStyle.outer,
-                            ),
-                          ],
-                        ),
-                        child: Container(
-                          width: context.isMobile ? 80 : 100,
-                          height: context.isMobile ? 100 : 120,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color(0x90DDDDDD),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Hero(
-                                  tag: e.value.id,
-                                  child: Image.asset(
-                                    'assets/item/${e.value.item.asset}.png',
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                height: 20,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20),
-                                    bottomRight: Radius.circular(20),
-                                  ),
-                                ),
-                                child: Center(
-                                  child: e.value is MyWeapon
-                                      ? Text(
-                                          'Lv. ${(e.value as MyWeapon).damage}',
-                                        )
-                                      : Text('${e.value.count}'),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-            shrinkWrap: true,
-          ),
-        );
-      });
-    });
+    return ItemGrid(category: category, items: c.items.values);
   }
 }

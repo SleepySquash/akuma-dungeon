@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:akuma/domain/model/item.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
@@ -106,7 +107,13 @@ class DungeonController extends GetxController {
   void hitEnemy() {
     if (!gameEnded.value) {
       if (enemy.value != null) {
-        enemy.value?.hit();
+        int damage = 1;
+
+        for (var e in player.value?.weapon ?? <MyWeapon>[]) {
+          damage += e.damage;
+        }
+
+        enemy.value?.hit(damage);
         if (enemy.value!.isDead) {
           _slayEnemy();
         }

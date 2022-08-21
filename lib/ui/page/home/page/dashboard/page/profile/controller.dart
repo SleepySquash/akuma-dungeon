@@ -39,12 +39,7 @@ class ProfileController extends GetxController {
 
   Rx<Player?> get player => _playerService.player;
   RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
-}
 
-enum InventoryCategory {
-  weapon,
-  equip,
-  artifact,
-  food,
-  stuff,
+  void equip(MyItem item) => _playerService.equip(item);
+  void unequip(MyItem item) => _playerService.equip(item);
 }

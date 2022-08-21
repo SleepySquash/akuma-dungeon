@@ -31,11 +31,11 @@ class ItemView extends StatefulWidget {
 
   /// Displays a dialog with the provided [character] above the current
   /// contents.
-  static void show<T extends Object?>({
+  static Future<T?> show<T extends Object?>({
     required BuildContext context,
     required MyItem item,
   }) {
-    Navigator.of(context).push(
+    return Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
         barrierDismissible: true,

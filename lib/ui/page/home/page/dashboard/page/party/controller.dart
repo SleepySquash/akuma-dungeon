@@ -32,4 +32,10 @@ class PartyController extends GetxController {
   RxObsMap<String, MyCharacter> get characters => _characterService.characters;
 
   bool contains(String id) => _characterService.contains(id);
+
+  void addToParty(MyCharacter character) =>
+      _playerService.addToParty(character);
+
+  void removeFromParty(MyCharacter character) =>
+      _playerService.removeFromParty(character);
 }

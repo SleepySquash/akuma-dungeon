@@ -16,6 +16,8 @@
 
 import 'dart:async';
 
+import 'package:akuma/domain/model/character.dart';
+import 'package:akuma/domain/model/item.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
@@ -81,6 +83,50 @@ class PlayerRepository extends DisposableInterface
     Player? player = _playerLocal.get();
     if (player != null) {
       player.rank += amount;
+      _playerLocal.set(player);
+    }
+  }
+
+  @override
+  void equip(MyItem item) {
+    Player? player = _playerLocal.get();
+    if (player != null) {
+      if (item is MyWeapon) {
+        player.weapon.add(item);
+      } else if (item is MyEquipable) {
+        player.equipped.add(item);
+      }
+      _playerLocal.set(player);
+    }
+  }
+
+  @override
+  void unequip(MyItem item) {
+    Player? player = _playerLocal.get();
+    if (player != null) {
+      if (item is MyWeapon) {
+        player.weapon.removeWhere((e) => e.item.id == item.item.id);
+      } else if (item is MyEquipable) {
+        player.equipped.removeWhere((e) => e.item.id == item.item.id);
+      }
+      _playerLocal.set(player);
+    }
+  }
+
+  @override
+  void addToParty(MyCharacter character) {
+    Player? player = _playerLocal.get();
+    if (player != null) {
+      player.party.add(character);
+      _playerLocal.set(player);
+    }
+  }
+
+  @override
+  void removeFromParty(MyCharacter character) {
+    Player? player = _playerLocal.get();
+    if (player != null) {
+      player.party.removeWhere((e) => e.character.id == character.character.id);
       _playerLocal.set(player);
     }
   }
