@@ -16,6 +16,8 @@
 
 import 'package:get/get.dart';
 
+import '/domain/model/character.dart';
+import '/domain/model/item.dart';
 import '/domain/model/player.dart';
 
 abstract class AbstractPlayerRepository {
@@ -25,4 +27,9 @@ abstract class AbstractPlayerRepository {
   void addExperience(int amount);
   void addMoney(int amount);
   void addRank(int amount);
+
+  void equip(MyItem item);
+  void unequip(MyItem item);
+  void addToParty(MyCharacter character);
+  void removeFromParty(MyCharacter character);
 }

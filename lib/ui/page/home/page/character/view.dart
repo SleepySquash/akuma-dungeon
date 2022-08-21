@@ -48,7 +48,10 @@ class CharacterView extends StatefulWidget {
         opaque: false,
         barrierDismissible: true,
         pageBuilder: (BuildContext context, _, __) {
-          return CharacterView(character: character);
+          return CharacterView(
+            myCharacter: myCharacter,
+            character: character,
+          );
         },
       ),
     );

@@ -37,6 +37,7 @@ class Player {
     this.hp = 10,
     this.mp = 10,
     this.equipped = const [],
+    this.weapon = const [],
     this.party = const [],
   });
 
@@ -65,10 +66,13 @@ class Player {
   int mp;
 
   @HiveField(8)
-  List<Item> equipped;
+  List<MyEquipable> equipped;
 
   @HiveField(9)
-  List<Character> party;
+  List<MyWeapon> weapon;
+
+  @HiveField(10)
+  List<MyCharacter> party;
 
   int get level => exp ~/ 1000 + 1;
 }

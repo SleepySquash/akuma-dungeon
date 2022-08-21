@@ -16,6 +16,8 @@
 
 import 'dart:math';
 
+import 'package:akuma/domain/model/player.dart';
+import 'package:akuma/ui/widget/button.dart';
 import 'package:flutter/material.dart' hide Characters;
 import 'package:get/get.dart';
 
@@ -71,120 +73,234 @@ class PartyView extends StatelessWidget {
 
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(5, (i) {
-            Character? character;
-            if ((c.player.value?.party.length ?? 0) > i) {
-              character = c.player.value!.party[i];
-            }
+        child: DragTarget<_AddToParty>(
+          onAccept: (d) => c.addToParty(d.character),
+          builder: (context, candidates, rejected) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(5, (i) {
+                return Obx(() {
+                  MyCharacter? character;
+                  if ((c.player.value?.party.length ?? 0) > i) {
+                    character = c.player.value!.party[i];
+                  }
 
-            return SizedBox(
-              width: width,
-              height: height,
-              child: AspectRatio(
-                aspectRatio: 0.7,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: character == null
-                      ? const Icon(Icons.add)
-                      : Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/character/${character.asset}.png',
-                            ),
-                          ],
+                  return Draggable(
+                    key: character == null ? null : Key(character.character.id),
+                    data:
+                        character == null ? null : _RemoveFromParty(character),
+                    maxSimultaneousDrags: character == null ? 0 : 1,
+                    feedback: SizedBox(
+                      width: width,
+                      height: height,
+                      child: AspectRatio(
+                        aspectRatio: 0.7,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          decoration: BoxDecoration(
+                            color: character == null ? Colors.grey : null,
+                            gradient: character == null
+                                ? null
+                                : LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                      character.character.rarity.color,
+                                      character.character.rarity.color
+                                          .darken(0.1),
+                                    ],
+                                  ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: character == null
+                              ? const Icon(Icons.add)
+                              : Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/character/${character.character.asset}.png',
+                                    ),
+                                  ],
+                                ),
                         ),
-                ),
-              ),
+                      ),
+                    ),
+                    childWhenDragging: SizedBox(
+                      width: width,
+                      height: height,
+                      child: const AspectRatio(aspectRatio: 0.7),
+                    ),
+                    child: WidgetButton(
+                      onPressed: character == null
+                          ? null
+                          : () {
+                              CharacterView.show(
+                                context: context,
+                                myCharacter: character,
+                              );
+                            },
+                      child: SizedBox(
+                        width: width,
+                        height: height,
+                        child: AspectRatio(
+                          aspectRatio: 0.7,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            decoration: BoxDecoration(
+                              color: character == null ? Colors.grey : null,
+                              gradient: character == null
+                                  ? null
+                                  : LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        character.character.rarity.color,
+                                        character.character.rarity.color
+                                            .darken(0.1),
+                                      ],
+                                    ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: character == null
+                                ? const Icon(Icons.add)
+                                : Hero(
+                                    tag: character.character.id,
+                                    child: Image.asset(
+                                      'assets/character/${character.character.asset}.png',
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                });
+              }).toList(),
             );
-          }).toList(),
+          },
         ),
       );
     });
   }
 
   Widget _bottom(PartyController c) {
-    List<Character> all() {
+    Iterable<Character> all(Player? player) {
       return [
         ...c.characters.values.map((e) => e.character),
         ...Characters.all.where((e) => !c.contains(e.id)),
-      ];
+      ].where((e) =>
+          player?.party.where((m) => m.character.id == e.id).isEmpty == true);
     }
 
     Widget _characters(Iterable<Character> filter) {
-      return Container(
-        margin: const EdgeInsets.all(2),
-        child: LayoutBuilder(builder: (context, constraints) {
-          return SingleChildScrollView(
-            controller: ScrollController(),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: filter.map((e) {
-                MyCharacter? owned = c.characters[e.id];
-                return SizedBox(
-                  width: constraints.maxWidth > 500
-                      ? (500 / 3)
-                      : constraints.maxWidth / 3,
-                  child: AspectRatio(
-                    aspectRatio: 0.7,
-                    child: Container(
-                      margin: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            e.rarity.color,
-                            e.rarity.color.darken(0.1),
-                          ],
+      return DragTarget<_RemoveFromParty>(
+        onAccept: (d) => c.removeFromParty(d.character),
+        builder: (context, candidates, rejected) {
+          return Container(
+            margin: const EdgeInsets.all(2),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return SingleChildScrollView(
+                controller: ScrollController(),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: filter.map((e) {
+                    MyCharacter? owned = c.characters[e.id];
+
+                    return Draggable(
+                      key: Key(e.id),
+                      data: owned == null ? null : _AddToParty(owned),
+                      maxSimultaneousDrags: owned == null ? 0 : 1,
+                      feedback: SizedBox(
+                        width: constraints.maxWidth > 500
+                            ? (500 / 3)
+                            : constraints.maxWidth / 3,
+                        child: AspectRatio(
+                          aspectRatio: 0.7,
+                          child: Container(
+                            margin: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  e.rarity.color,
+                                  e.rarity.color.darken(0.1),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child:
+                                Image.asset('assets/character/${e.asset}.png'),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(20),
                       ),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () => CharacterView.show(
-                          context: context,
-                          myCharacter: owned,
-                          character: e,
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Hero(
-                              tag: e.id,
-                              child: Image.asset(
-                                'assets/character/${e.asset}.png',
+                      childWhenDragging: SizedBox(
+                        width: constraints.maxWidth > 500
+                            ? (500 / 3)
+                            : constraints.maxWidth / 3,
+                        child: const AspectRatio(aspectRatio: 0.7),
+                      ),
+                      child: SizedBox(
+                        width: constraints.maxWidth > 500
+                            ? (500 / 3)
+                            : constraints.maxWidth / 3,
+                        child: AspectRatio(
+                          aspectRatio: 0.7,
+                          child: Container(
+                            margin: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  e.rarity.color,
+                                  e.rarity.color.darken(0.1),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () => CharacterView.show(
+                                context: context,
+                                myCharacter: owned,
+                                character: e,
+                              ),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Hero(
+                                    tag: e.id,
+                                    child: Image.asset(
+                                      'assets/character/${e.asset}.png',
+                                    ),
+                                  ),
+                                  if (owned == null) ...[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withOpacity(0.5),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    const Icon(
+                                      Icons.lock,
+                                      color: Colors.white,
+                                      size: 48,
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
-                            if (owned == null) ...[
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              const Icon(
-                                Icons.lock,
-                                color: Colors.white,
-                                size: 48,
-                              ),
-                            ],
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+                    );
+                  }).toList(),
+                ),
+              );
+            }),
           );
-        }),
+        },
       );
     }
 
@@ -239,14 +355,27 @@ class PartyView extends StatelessWidget {
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              _characters(all()),
-              _characters(all().where((e) => e.role == Role.tank)),
-              _characters(all().where((e) => e.role == Role.dps)),
-              _characters(all().where((e) => e.role == Role.support)),
+              Obx(() => _characters(all(c.player.value))),
+              Obx(() => _characters(
+                  all(c.player.value).where((e) => e.role == Role.tank))),
+              Obx(() => _characters(
+                  all(c.player.value).where((e) => e.role == Role.dps))),
+              Obx(() => _characters(
+                  all(c.player.value).where((e) => e.role == Role.support))),
             ],
           ),
         ),
       ),
     );
   }
+}
+
+class _AddToParty {
+  const _AddToParty(this.character);
+  final MyCharacter character;
+}
+
+class _RemoveFromParty {
+  const _RemoveFromParty(this.character);
+  final MyCharacter character;
 }

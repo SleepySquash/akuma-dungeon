@@ -19,6 +19,8 @@ import 'package:hive_flutter/adapters.dart';
 import '/domain/model/gender.dart';
 import '/domain/model/player.dart';
 import '/domain/model/race.dart';
+import '/provider/hive/character.dart';
+import '/provider/hive/item.dart';
 import 'base.dart';
 
 /// [Hive] storage for a [Player].
@@ -32,6 +34,8 @@ class PlayerHiveProvider extends HiveBaseProvider<Player> {
   @override
   void registerAdapters() {
     Hive.maybeRegisterAdapter(GenderAdapter());
+    Hive.maybeRegisterAdapter(MyCharacterAdapter());
+    Hive.maybeRegisterAdapter(MyItemAdapter());
     Hive.maybeRegisterAdapter(PlayerAdapter());
     Hive.maybeRegisterAdapter(RaceAdapter());
   }
