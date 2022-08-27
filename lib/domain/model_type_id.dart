@@ -28,4 +28,5 @@ class ModelTypeId {
   static const character = 6;
   static const task = 7;
   static const gameProgression = 8;
+  static const skill = 9;
 }

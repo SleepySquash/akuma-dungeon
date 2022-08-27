@@ -65,7 +65,10 @@ class GachaService extends DisposableInterface {
 
       // 7 in 10.
       else {
-        reward = Items.weapon.sample(1).first;
+        reward = [
+          ...Items.weapon,
+          ...Items.equipable,
+        ].sample(1).first;
       }
 
       if (reward is Character) {

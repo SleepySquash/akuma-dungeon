@@ -15,11 +15,14 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import '/domain/model/item.dart';
+import '/domain/model/rarity.dart';
+import '/domain/model/stat.dart';
 
 abstract class StandardItems {
   static List<Item> get all => [
         ...consumable,
         ...weapon,
+        ...equipable,
       ];
 
   static List<Item> get consumable => [
@@ -39,6 +42,11 @@ abstract class StandardItems {
         PracticeOakSwordItem(),
         PracticeWillowSwordItem(),
         BronzeSwordItem(),
+      ];
+
+  static List<Item> get equipable => [
+        HelmetLightBronzeItem(),
+        ChainmailBronzeItem(),
       ];
 }
 
@@ -182,7 +190,16 @@ class IronDaggerItem extends Weapon with Dagger {
   String get name => 'Железный клинок';
 
   @override
+  Rarity get rarity => Rarity.useful;
+
+  @override
   int get damage => 50;
+
+  @override
+  List<Stat> get stats => [
+        const AtkPercentStat(5),
+        const DefPercentStat(5),
+      ];
 }
 
 class PracticeOakSwordItem extends Weapon with Sword {
@@ -222,4 +239,30 @@ class BronzeSwordItem extends Weapon with Sword {
 
   @override
   int get damage => 10;
+}
+
+class HelmetLightBronzeItem extends Equipable with Head {
+  HelmetLightBronzeItem([super.count = 1]);
+
+  @override
+  String get id => 'helmet_light_bronze';
+
+  @override
+  String get name => 'Лёгкий бронзовый шлем';
+
+  @override
+  int get defense => 5;
+}
+
+class ChainmailBronzeItem extends Equipable with Armor {
+  ChainmailBronzeItem([super.count = 1]);
+
+  @override
+  String get id => 'chainmail_bronze';
+
+  @override
+  String get name => 'Бронзовая кольчуга';
+
+  @override
+  int get defense => 14;
 }

@@ -15,10 +15,10 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'dart:ui';
-import 'package:akuma/domain/model/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/item.dart';
 import '/ui/widget/backdrop.dart';
 import '/ui/widget/item_grid.dart';
 import 'controller.dart';
@@ -28,16 +28,19 @@ class ItemSelector extends StatefulWidget {
     Key? key,
     this.category,
     this.filter,
+    this.empty,
   }) : super(key: key);
 
   final InventoryCategory? category;
   final Iterable<Rx<MyItem>> Function(Iterable<Rx<MyItem>> items)? filter;
+  final dynamic empty;
 
   /// Displays a dialog with the provided [category] above the current
   /// contents.
   static Future<T?> show<T extends Object?>({
     required BuildContext context,
     InventoryCategory? category,
+    dynamic empty,
     Iterable<Rx<MyItem>> Function(Iterable<Rx<MyItem>> items)? filter,
   }) {
     return Navigator.of(context).push(
@@ -47,6 +50,7 @@ class ItemSelector extends StatefulWidget {
         pageBuilder: (BuildContext context, _, __) {
           return ItemSelector(
             category: category,
+            empty: empty,
             filter: filter,
           );
         },
@@ -64,7 +68,7 @@ class _ItemSelectorState extends State<ItemSelector>
   late final AnimationController _fading;
 
   /// [MyItem] to return in the [Navigator.pop] of this [ItemSelector].
-  Rx<MyItem>? result;
+  dynamic result;
 
   @override
   void initState() {
@@ -126,6 +130,7 @@ class _ItemSelectorState extends State<ItemSelector>
                     category: widget.category,
                     items: c.items.values,
                     filter: widget.filter,
+                    first: widget.empty,
                     onPressed: (e) {
                       result = e;
                       _dismiss();

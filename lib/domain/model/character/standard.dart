@@ -17,6 +17,7 @@
 import '../character.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/skill.dart';
+import '/domain/model/skill/all.dart';
 
 abstract class StandardCharacters {
   static List<Character> get characters => [
@@ -75,7 +76,7 @@ class DrNadja extends Character {
   Rarity get rarity => Rarity.superRare;
 
   @override
-  List<Skill> get skills => [Healing(amount: 10)];
+  List<Skill> get skills => const [HealingSkill(amount: 10)];
 }
 
 class DrThomas extends Character {
@@ -89,7 +90,7 @@ class DrThomas extends Character {
   Role get role => Role.support;
 
   @override
-  List<Skill> get skills => [Healing(amount: 5)];
+  List<Skill> get skills => const [HealingSkill(amount: 5)];
 }
 
 class Magnus extends Character {
@@ -111,7 +112,7 @@ class Chiara extends Character {
   Rarity get rarity => Rarity.ultraRare;
 
   @override
-  List<Skill> get skills => [Healing(amount: 60)];
+  List<Skill> get skills => const [HealingSkill(amount: 60)];
 }
 
 class Rozzi extends Character {

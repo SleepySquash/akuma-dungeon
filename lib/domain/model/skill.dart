@@ -14,10 +14,23 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-abstract class Skill {}
+abstract class Skill {
+  const Skill();
 
-class Healing extends Skill {
-  Healing({this.amount = 1});
+  String get id => runtimeType.toString();
+}
 
-  int amount;
+class MySkill {
+  MySkill(
+    this.skill, {
+    this.exp = 0,
+  });
+
+  final Skill skill;
+
+  int exp;
+
+  String get id => skill.id;
+
+  int get level => exp ~/ 1000 + 1;
 }

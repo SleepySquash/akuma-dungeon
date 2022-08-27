@@ -106,7 +106,6 @@ abstract class ModalPopup {
                             color: Color(0xBB818181),
                           ),
                         ),
-                      const SizedBox(width: 10),
                     ],
                   ),
                   Flexible(child: child),

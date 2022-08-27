@@ -285,7 +285,7 @@ class DungeonView extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: Obx(() {
                           int hp = c.hp.value.ceil();
-                          int maxHp = c.player.value?.hp ?? 10;
+                          int maxHp = c.player.value?.health ?? 10;
 
                           return Stack(
                             children: [

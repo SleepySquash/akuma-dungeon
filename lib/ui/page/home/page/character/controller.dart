@@ -16,10 +16,11 @@
 
 import 'package:get/get.dart';
 
-enum CharacterViewScreen {
-  noop,
-}
+import '/domain/model/character.dart';
 
 class CharacterController extends GetxController {
-  Rx<CharacterViewScreen?> screen = Rx(null);
+  CharacterController({this.character, this.myCharacter});
+
+  final Character? character;
+  final MyCharacter? myCharacter;
 }

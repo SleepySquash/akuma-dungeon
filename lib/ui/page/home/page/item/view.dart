@@ -16,12 +16,15 @@
 
 import 'dart:ui';
 
-import 'package:akuma/domain/model/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/domain/model/character.dart';
+import '/domain/model/item.dart';
+import '/ui/page/home/widget/screen_switcher.dart';
 import '/ui/widget/backdrop.dart';
+import 'component/attributes.dart';
+import 'component/enhance.dart';
+import 'component/upgrade.dart';
 import 'controller.dart';
 
 class ItemView extends StatefulWidget {
@@ -89,20 +92,14 @@ class _ItemViewState extends State<ItemView>
     ));
 
     return GetBuilder(
-      init: ItemController(),
+      init: ItemController(widget.item),
       builder: (ItemController c) {
         return Stack(
           fit: StackFit.expand,
           children: [
             GestureDetector(
               behavior: HitTestBehavior.translucent,
-              onTap: () {
-                if (c.screen.value == null) {
-                  _dismiss();
-                } else {
-                  c.screen.value = null;
-                }
-              },
+              onTap: _dismiss,
               child: AnimatedBuilder(
                 animation: _fading,
                 builder: (context, child) => ConditionalBackdropFilter(
@@ -128,79 +125,57 @@ class _ItemViewState extends State<ItemView>
                 );
               },
             ),
-            ..._buildInterface(c),
+            AnimatedBuilder(
+              animation: _fading,
+              builder: (_, child) =>
+                  Opacity(opacity: _fading.value, child: child!),
+              child: AnimatedSwitcher(
+                duration: 200.milliseconds,
+                child: _screen(c),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _fading,
+              builder: (_, child) =>
+                  Opacity(opacity: _fading.value, child: child!),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16, right: 16),
+                  child: FloatingActionButton(
+                    mini: false,
+                    onPressed: _dismiss,
+                    child: const Icon(Icons.close_rounded),
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },
     );
   }
 
-  List<Widget> _buildInterface(ItemController c) {
-    Widget screen(ItemViewScreen? current) {
-      return Container();
-      // switch (current) {
-      //   case NekoViewScreen.request:
-      //     return RequestScreen(c);
-
-      //   case NekoViewScreen.action:
-      //     return ActionScreen(c);
-
-      //   case NekoViewScreen.activity:
-      //     return ActivityScreen(c);
-
-      //   case NekoViewScreen.talk:
-      //     return TalkScreen(c);
-
-      //   default:
-      //     return NekoScreen(c);
-      // }
-    }
-
-    return [
-      AnimatedBuilder(
-        animation: _fading,
-        builder: (_, child) => Opacity(opacity: _fading.value, child: child!),
-        child: Obx(
-          () => AnimatedSwitcher(
-            duration: 200.milliseconds,
-            child: screen(c.screen.value),
-          ),
+  Widget _screen(ItemController c) {
+    return ScreenSwitcher(
+      tabs: [
+        Screen(
+          desktop: const Text('Attributes'),
+          mobile: const Icon(Icons.person),
+          child: ItemAttributesTab(c),
         ),
-      ),
-      AnimatedBuilder(
-        animation: _fading,
-        builder: (_, child) => Opacity(opacity: _fading.value, child: child!),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 16, right: 16),
-            child: Obx(
-              () => FloatingActionButton(
-                mini: false,
-                onPressed: c.screen.value == null
-                    ? _dismiss
-                    : () {
-                        switch (c.screen.value) {
-                          // case CharacterViewScreen.action:
-                          // case CharacterViewScreen.activity:
-                          // case CharacterViewScreen.request:
-                          //   c.screen.value = null;
-                          //   break;
-
-                          default:
-                            c.screen.value = null;
-                            break;
-                        }
-                      },
-                child: c.screen.value == null
-                    ? const Icon(Icons.close_rounded)
-                    : const Icon(Icons.arrow_back),
-              ),
-            ),
-          ),
+        Screen(
+          desktop: const Text('Inventory'),
+          mobile: const Icon(Icons.inventory),
+          child: ItemEnhanceTab(c),
         ),
-      ),
-    ];
+        Screen(
+          desktop: const Text('Skills'),
+          mobile: const Icon(Icons.accessibility),
+          child: ItemUpgradeTab(c),
+        ),
+      ],
+    );
   }
 
   /// Starts a dismiss animation.

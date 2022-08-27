@@ -116,14 +116,14 @@ class InfiniteDungeon extends DungeonSettings {
       return Dungeon(
         stages: [
           DungeonStage(
-            name: 'Болото',
+            name: 'Болото - $floor',
             background: 'swamp',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
             multiplier: multiplier * 2,
           ),
           DungeonStage(
-            name: 'Болото - Босс Битва',
+            name: 'Болото - Босс Битва - $floor',
             background: 'swamp',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
@@ -135,14 +135,14 @@ class InfiniteDungeon extends DungeonSettings {
       return Dungeon(
         stages: [
           DungeonStage(
-            name: 'Лес',
+            name: 'Лес - $floor',
             background: 'forest',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
             multiplier: multiplier * 1.5,
           ),
           DungeonStage(
-            name: 'Лес - Босс Битва',
+            name: 'Лес - Босс Битва - $floor',
             background: 'forest',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
@@ -155,14 +155,14 @@ class InfiniteDungeon extends DungeonSettings {
     return Dungeon(
       stages: [
         DungeonStage(
-          name: 'Поля',
+          name: 'Поля - $floor',
           background: 'fields',
           enemies: FieldsEnemies.enemies,
           conditions: _conditions,
           multiplier: multiplier,
         ),
         DungeonStage(
-          name: 'Поля - Босс Битва',
+          name: 'Поля - Босс Битва - $floor',
           background: 'fields',
           enemies: FieldsEnemies.unique,
           conditions: _bossConditions,

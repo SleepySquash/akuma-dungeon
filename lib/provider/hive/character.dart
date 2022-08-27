@@ -17,8 +17,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
-import '/domain/model/character/all.dart';
 import '/domain/model/character.dart';
+import '/domain/model/character/all.dart';
+import '/domain/model/item.dart';
+import '/domain/model/item/all.dart';
 import 'base.dart';
 
 /// [Hive] storage for the [MyCharacter]s.
@@ -57,17 +59,42 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
 
   @override
   MyCharacter read(BinaryReader reader) {
-    final id = reader.read() as String;
-    final affinity = reader.read() as int;
+    final String id = reader.read() as String;
+
+    List<Artifact> artifacts = [];
+    final int artifactsLength = reader.read() as int;
+    for (var i = 0; i < artifactsLength; ++i) {
+      final String id = reader.read() as String;
+      artifacts.add(Items.get(id) as Artifact);
+    }
+
+    // List<Skill> skills = [];
+    // final int skillsLength = reader.read() as int;
+    // for (var i = 0; i < skillsLength; ++i) {
+    //   final String id = reader.read() as String;
+    //   artifacts.add(Skills.get(id));
+    // }
+
+    final int affinity = reader.read() as int;
+    final int exp = reader.read() as int;
     return MyCharacter(
       character: Characters.get(id),
       affinity: affinity,
+      artifacts: artifacts,
+      exp: exp,
     );
   }
 
   @override
   void write(BinaryWriter writer, MyCharacter obj) {
     writer.write(obj.character.id);
+
+    writer.write(obj.artifacts.length);
+    for (var i = 0; i < obj.artifacts.length; ++i) {
+      writer.write(obj.artifacts[i].id);
+    }
+
     writer.write(obj.affinity);
+    writer.write(obj.exp);
   }
 }
