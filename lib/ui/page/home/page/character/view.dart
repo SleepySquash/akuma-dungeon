@@ -20,7 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
+import '/ui/page/home/widget/screen_switcher.dart';
 import '/ui/widget/backdrop.dart';
+import 'component/artifact.dart';
+import 'component/attributes.dart';
+import 'component/skill.dart';
 import 'controller.dart';
 
 class CharacterView extends StatefulWidget {
@@ -118,20 +122,17 @@ class _CharacterViewState extends State<CharacterView>
         ));
 
         return GetBuilder(
-          init: CharacterController(),
+          init: CharacterController(
+            character: widget.character,
+            myCharacter: widget.myCharacter,
+          ),
           builder: (CharacterController c) {
             return Stack(
               fit: StackFit.expand,
               children: [
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap: () {
-                    if (c.screen.value == null) {
-                      _dismiss();
-                    } else {
-                      c.screen.value = null;
-                    }
-                  },
+                  onTap: _dismiss,
                   child: AnimatedBuilder(
                     animation: _fading,
                     builder: (context, child) => ConditionalBackdropFilter(
@@ -159,7 +160,28 @@ class _CharacterViewState extends State<CharacterView>
                     );
                   },
                 ),
-                ..._buildInterface(c),
+                AnimatedBuilder(
+                  animation: _fading,
+                  builder: (_, child) =>
+                      Opacity(opacity: _fading.value, child: child!),
+                  child: _screen(c),
+                ),
+                AnimatedBuilder(
+                  animation: _fading,
+                  builder: (_, child) =>
+                      Opacity(opacity: _fading.value, child: child!),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16, right: 16),
+                      child: FloatingActionButton(
+                        mini: false,
+                        onPressed: _dismiss,
+                        child: const Icon(Icons.close_rounded),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
           },
@@ -168,72 +190,27 @@ class _CharacterViewState extends State<CharacterView>
     );
   }
 
-  List<Widget> _buildInterface(CharacterController c) {
-    Widget screen(CharacterViewScreen? current) {
-      return Container();
-      // switch (current) {
-      //   case NekoViewScreen.request:
-      //     return RequestScreen(c);
-
-      //   case NekoViewScreen.action:
-      //     return ActionScreen(c);
-
-      //   case NekoViewScreen.activity:
-      //     return ActivityScreen(c);
-
-      //   case NekoViewScreen.talk:
-      //     return TalkScreen(c);
-
-      //   default:
-      //     return NekoScreen(c);
-      // }
-    }
-
-    return [
-      AnimatedBuilder(
-        animation: _fading,
-        builder: (_, child) => Opacity(opacity: _fading.value, child: child!),
-        child: Obx(
-          () => AnimatedSwitcher(
-            duration: 200.milliseconds,
-            child: screen(c.screen.value),
-          ),
+  Widget _screen(CharacterController c) {
+    return ScreenSwitcher(
+      tabs: [
+        Screen(
+          desktop: const Text('Attributes'),
+          mobile: const Icon(Icons.person),
+          child: CharacterAttributesTab(c),
         ),
-      ),
-      AnimatedBuilder(
-        animation: _fading,
-        builder: (_, child) => Opacity(opacity: _fading.value, child: child!),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 16, right: 16),
-            child: Obx(
-              () => FloatingActionButton(
-                mini: false,
-                onPressed: c.screen.value == null
-                    ? _dismiss
-                    : () {
-                        switch (c.screen.value) {
-                          // case CharacterViewScreen.action:
-                          // case CharacterViewScreen.activity:
-                          // case CharacterViewScreen.request:
-                          //   c.screen.value = null;
-                          //   break;
-
-                          default:
-                            c.screen.value = null;
-                            break;
-                        }
-                      },
-                child: c.screen.value == null
-                    ? const Icon(Icons.close_rounded)
-                    : const Icon(Icons.arrow_back),
-              ),
-            ),
+        if (c.myCharacter != null)
+          Screen(
+            desktop: const Text('Inventory'),
+            mobile: const Icon(Icons.inventory),
+            child: CharacterArtifactsTab(c),
           ),
+        Screen(
+          desktop: const Text('Skills'),
+          mobile: const Icon(Icons.accessibility),
+          child: CharacterSkillsTab(c),
         ),
-      ),
-    ];
+      ],
+    );
   }
 
   /// Starts a dismiss animation.

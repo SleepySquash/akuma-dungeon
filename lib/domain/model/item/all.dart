@@ -31,5 +31,9 @@ abstract class Items {
         ...StandardItems.weapon,
       ];
 
+  static List<Item> get equipable => [
+        ...StandardItems.equipable,
+      ];
+
   static Item get(String id) => all.firstWhere((e) => e.id == id);
 }

@@ -21,7 +21,7 @@ import 'character.dart';
 import 'gender.dart';
 import 'item.dart';
 import 'race.dart';
-import 'rank.dart';
+import 'stat.dart';
 
 part 'player.g.dart';
 
@@ -34,12 +34,12 @@ class Player {
     this.exp = 0,
     this.rank = 0,
     this.money = 0,
-    this.hp = 10,
-    this.mp = 10,
-    this.equipped = const [],
-    this.weapon = const [],
-    this.party = const [],
-  });
+    List<MyEquipable>? equipped,
+    List<MyWeapon>? weapon,
+    List<MyCharacter>? party,
+  })  : equipped = equipped ?? List.empty(growable: true),
+        weapon = weapon ?? List.empty(growable: true),
+        party = party ?? List.empty(growable: true);
 
   @HiveField(0)
   final String name;
@@ -60,19 +60,89 @@ class Player {
   int money;
 
   @HiveField(6)
-  int hp;
-
-  @HiveField(7)
-  int mp;
-
-  @HiveField(8)
   List<MyEquipable> equipped;
 
-  @HiveField(9)
+  @HiveField(7)
   List<MyWeapon> weapon;
 
-  @HiveField(10)
+  @HiveField(8)
   List<MyCharacter> party;
 
+  List<Stat> get stats {
+    List<Stat> list = [];
+
+    for (MyWeapon w in weapon) {
+      list.addAll((w.item as Weapon).stats);
+    }
+    for (MyEquipable e in equipped) {
+      list.addAll((e.item as Equipable).stats);
+    }
+
+    return list;
+  }
+
   int get level => exp ~/ 1000 + 1;
+
+  int get damage {
+    int dmg = damages[level];
+
+    for (MyWeapon w in weapon) {
+      dmg += w.damage;
+    }
+
+    for (AtkStat s in stats.whereType<AtkStat>()) {
+      dmg += s.amount;
+    }
+
+    for (AtkPercentStat s in stats.whereType<AtkPercentStat>()) {
+      double d = dmg * (1 + (s.amount / 100));
+      dmg = d.floor();
+    }
+
+    return dmg;
+  }
+
+  int get defense {
+    int def = defenses[level];
+
+    for (MyEquipable w in equipped) {
+      def += w.defense;
+    }
+
+    for (DefStat s in stats.whereType<DefStat>()) {
+      def += s.amount;
+    }
+
+    for (DefPercentStat s in stats.whereType<DefPercentStat>()) {
+      double d = def * (1 + (s.amount / 100));
+      def = d.floor();
+    }
+
+    return def;
+  }
+
+  int get health {
+    int hp = healths[level];
+
+    for (HpStat s in stats.whereType<HpStat>()) {
+      hp += s.amount;
+    }
+
+    for (HpPercentStat s in stats.whereType<HpPercentStat>()) {
+      double d = hp * (1 + (s.amount / 100));
+      hp = d.floor();
+    }
+
+    return hp;
+  }
+
+  /// Maximum allowed level for a [Player] to have.
+  static const int maxLevel = 100;
+
+  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
+  List<int> get damages =>
+      List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
+  List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
+  List<int> get ultCharges =>
+      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
 }

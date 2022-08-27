@@ -78,8 +78,8 @@ class DungeonController extends GetxController {
 
   @override
   void onInit() {
-    hp = RxDouble(player.value?.hp.toDouble() ?? 10);
-    mp = RxDouble(player.value?.mp.toDouble() ?? 10);
+    hp = RxDouble(player.value?.health.toDouble() ?? 10);
+    mp = RxDouble(10);
 
     _nextStage();
     _nextEnemy();

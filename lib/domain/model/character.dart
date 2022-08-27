@@ -33,6 +33,9 @@ enum Role {
 
 /// Person in the [Player]'s party.
 abstract class Character {
+  /// Maximum allowed level for a [Character] to have.
+  static const int maxLevel = 100;
+
   /// [Role] this [Character] has.
   Role get role => Role.dps;
 
@@ -50,6 +53,13 @@ abstract class Character {
 
   /// [Skill]s this [Character] possess.
   List<Skill> get skills => [];
+
+  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
+  List<int> get damages =>
+      List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
+  List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
+  List<int> get ultCharges =>
+      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
 }
 
 class MyCharacter {
@@ -58,6 +68,7 @@ class MyCharacter {
     this.artifacts = const [],
     List<Skill>? skills,
     this.affinity = 0,
+    this.exp = 0,
   }) : skills = skills ?? character.skills;
 
   /// [Character] itself.
@@ -71,4 +82,8 @@ class MyCharacter {
 
   /// Integer representation of how much this [character] loves or respects you.
   int affinity;
+
+  int exp;
+
+  int get level => exp ~/ 1000 + 1;
 }

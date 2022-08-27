@@ -14,12 +14,18 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:get/get.dart';
+import '/domain/model/skill.dart';
 
-import '/domain/model/item.dart';
+// TODO: Make generator generating `Map`: `{'id': Skill()}`.
+abstract class Skills {
+  static List<Skill> get all => [
+        const HealingSkill(),
+      ];
 
-class ItemController extends GetxController {
-  ItemController(this.item);
+  static Skill get(String id) => all.firstWhere((e) => e.id == id);
+}
 
-  final MyItem item;
+class HealingSkill extends Skill {
+  const HealingSkill({this.amount = 1});
+  final int amount;
 }

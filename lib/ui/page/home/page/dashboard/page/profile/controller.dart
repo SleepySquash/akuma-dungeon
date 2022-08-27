@@ -41,5 +41,5 @@ class ProfileController extends GetxController {
   RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
 
   void equip(MyItem item) => _playerService.equip(item);
-  void unequip(MyItem item) => _playerService.equip(item);
+  void unequip(MyItem item) => _playerService.unequip(item);
 }

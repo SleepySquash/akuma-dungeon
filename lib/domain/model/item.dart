@@ -17,10 +17,11 @@
 import 'package:uuid/uuid.dart';
 
 import 'rarity.dart';
+import 'stat.dart';
 
 /// Entity in the [Player]'s inventory.
 abstract class Item {
-  Item(this.count);
+  const Item(this.count);
 
   /// Unique [String] identifying this [Item].
   String get id => runtimeType.toString();
@@ -44,16 +45,29 @@ abstract class Item {
   final int count;
 }
 
-mixin Artifact on Item {}
+class NoopItem extends Item {
+  NoopItem(super.count);
+}
+
+mixin Artifact on Item {
+  List<Stat> get stats => [];
+}
 
 /// [Item] equipable by the [Player].
 abstract class Equipable extends Item {
-  Equipable(super.count);
+  const Equipable(super.count);
 
   @override
   String get asset => 'equipable/$id';
 
   int get defense => 1;
+
+  List<Stat> get stats => [];
+
+  /// Maximum allowed level for a [Equipable] to have.
+  static const int maxLevel = 100;
+
+  List<int> get defenses => List.generate(maxLevel + 1, (i) => defense * i);
 }
 
 mixin Head on Equipable {}
@@ -65,12 +79,19 @@ mixin Shoes on Equipable {}
 mixin Shield on Equipable {}
 
 abstract class Weapon extends Item {
-  Weapon(super.count);
+  const Weapon(super.count);
 
   @override
   String get asset => 'weapon/$id';
 
   int get damage => 1;
+
+  List<Stat> get stats => [];
+
+  /// Maximum allowed level for a [Weapon] to have.
+  static const int maxLevel = 100;
+
+  List<int> get damages => List.generate(maxLevel + 1, (i) => damage * i);
 }
 
 mixin Sword on Weapon {}
@@ -80,7 +101,7 @@ mixin BigSword on Weapon {}
 mixin Dagger on Weapon {}
 
 abstract class Consumable extends Item {
-  Consumable(super.count);
+  const Consumable(super.count);
 
   @override
   String get asset => 'consumable/$id';
@@ -116,8 +137,11 @@ class MyEquipable extends MyItem {
   MyEquipable(
     Equipable equipable, {
     int? defense,
+    this.level = 1,
   })  : defense = defense ?? equipable.defense,
         super(equipable, count: 1);
+
+  int level;
 
   int defense;
 }
@@ -126,8 +150,11 @@ class MyWeapon extends MyItem {
   MyWeapon(
     Weapon weapon, {
     int? damage,
+    this.level = 1,
   })  : damage = damage ?? weapon.damage,
         super(weapon, count: 1);
+
+  int level;
 
   int damage;
 }
