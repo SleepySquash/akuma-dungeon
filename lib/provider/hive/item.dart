@@ -56,24 +56,28 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
     final type = reader.read() as String;
     final id = reader.read() as String;
 
+    Item? item = Items.get(id);
+    if (item == null) {
+      // ignore: avoid_print
+      print('Cannot find `Item` with id: $id');
+      return MyItem(const NoopItem(0), count: 0);
+    }
+
     if (type == 'MyWeapon') {
       final damage = reader.read() as int;
       return MyWeapon(
-        Items.get(id) as Weapon,
+        item as Weapon,
         damage: damage,
       );
     } else if (type == 'MyEquipable') {
       final defense = reader.read() as int;
       return MyEquipable(
-        Items.get(id) as Equipable,
+        item as Equipable,
         defense: defense,
       );
     } else {
       final count = reader.read() as int;
-      return MyItem(
-        Items.get(id),
-        count: count,
-      );
+      return MyItem(item, count: count);
     }
   }
 

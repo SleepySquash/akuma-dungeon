@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 
 import '/l10n/l10n.dart';
 import '/ui/widget/selector.dart';
+import '/ui/widget/modal_popup.dart';
 import '/util/platform_utils.dart';
 import 'controller.dart';
 
@@ -26,55 +27,84 @@ import 'controller.dart';
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
 
+  static Future<T?> show<T>({required BuildContext context}) {
+    return ModalPopup.show(context: context, child: const SettingsView());
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
       init: SettingsController(Get.find()),
       builder: (SettingsController c) {
-        return Scaffold(
-          appBar: AppBar(title: Text('label_settings'.l10n)),
-          body: ListView(
-            children: [
-              ListTile(
-                key: const Key('LanguageDropdown'),
-                title: Text(
-                  '${L10n.chosen.value!.locale.countryCode}, ${L10n.chosen.value!.name}',
-                ),
-                onTap: () async {
-                  final TextStyle? thin =
-                      context.textTheme.caption?.copyWith(color: Colors.black);
-                  await Selector.show<Language>(
-                    context: context,
-                    buttonKey: c.languageKey,
-                    alignment: Alignment.bottomCenter,
-                    items: L10n.languages,
-                    initial: L10n.chosen.value!,
-                    onSelected: (l) => L10n.set(l),
-                    debounce: context.isMobile
-                        ? const Duration(milliseconds: 500)
-                        : null,
-                    itemBuilder: (Language e) {
-                      return Row(
-                        key: Key(
-                            'Language_${e.locale.languageCode}${e.locale.countryCode}'),
-                        children: [
-                          Text(
-                            e.name,
-                            style: thin?.copyWith(fontSize: 15),
-                          ),
-                          const Spacer(),
-                          Text(
-                            e.locale.languageCode.toUpperCase(),
-                            style: thin?.copyWith(fontSize: 15),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+        return ListView(
+          shrinkWrap: true,
+          children: [
+            ListTile(
+              key: const Key('LanguageDropdown'),
+              title: Text(
+                '${L10n.chosen.value!.locale.countryCode}, ${L10n.chosen.value!.name}',
               ),
-            ],
-          ),
+              onTap: () async {
+                final TextStyle? thin =
+                    context.textTheme.caption?.copyWith(color: Colors.black);
+                await Selector.show<Language>(
+                  context: context,
+                  buttonKey: c.languageKey,
+                  alignment: Alignment.bottomCenter,
+                  items: L10n.languages,
+                  initial: L10n.chosen.value!,
+                  onSelected: (l) => L10n.set(l),
+                  debounce: context.isMobile
+                      ? const Duration(milliseconds: 500)
+                      : null,
+                  itemBuilder: (Language e) {
+                    return Row(
+                      key: Key(
+                          'Language_${e.locale.languageCode}${e.locale.countryCode}'),
+                      children: [
+                        Text(
+                          e.name,
+                          style: thin?.copyWith(fontSize: 15),
+                        ),
+                        const Spacer(),
+                        Text(
+                          e.locale.languageCode.toUpperCase(),
+                          style: thin?.copyWith(fontSize: 15),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Music volume'),
+              subtitle: Obx(() {
+                return Slider(
+                  value: c.settings.value?.musicVolume ?? 1,
+                  onChanged: (d) => c.setMusicVolume(d),
+                );
+              }),
+            ),
+            ListTile(
+              title: const Text('Sound volume'),
+              subtitle: Obx(() {
+                return Slider(
+                  value: c.settings.value?.soundVolume ?? 1,
+                  onChanged: (d) => c.setSoundVolume(d),
+                );
+              }),
+            ),
+            ListTile(
+              title: const Text('Voice volume'),
+              subtitle: Obx(() {
+                return Slider(
+                  value: c.settings.value?.voiceVolume ?? 1,
+                  onChanged: (d) => c.setVoiceVolume(d),
+                );
+              }),
+            ),
+          ],
         );
       },
     );

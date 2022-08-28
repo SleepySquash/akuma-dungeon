@@ -14,9 +14,12 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/service/task.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '/domain/service/task.dart';
+import '/ui/worker/music.dart';
 
 enum MainTab {
   dash,
@@ -27,12 +30,28 @@ enum MainTab {
 }
 
 class DashboardController extends GetxController {
-  DashboardController(this._taskService);
+  DashboardController(this._taskService, this._musicWorker);
 
   final PageController pageController = PageController();
   final Rx<MainTab> selected = Rx(MainTab.dash);
 
   final TaskService _taskService;
+  final MusicWorker _musicWorker;
 
   RxInt get completedTasks => _taskService.completedTasks;
+
+  final AssetSource _source =
+      AssetSource('music/mixkit-driving-ambition-32.mp3');
+
+  @override
+  void onReady() {
+    _musicWorker.play(_source);
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    _musicWorker.stop(_source);
+    super.onClose();
+  }
 }

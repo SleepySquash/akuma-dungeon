@@ -46,7 +46,7 @@ class TaskWorker extends DisposableInterface {
           _notificationService.notify(
             LocalNotification(
               title: 'New task!',
-              text: e.value!.value.task.name,
+              subtitle: e.value!.value.task.name,
               icon: e.value!.value.task.icon,
             ),
           );
@@ -58,7 +58,7 @@ class TaskWorker extends DisposableInterface {
             _notificationService.notify(
               LocalNotification(
                 title: 'Task completed!',
-                text: e.value!.value.task.name,
+                subtitle: e.value!.value.task.name,
                 icon: e.value!.value.task.icon,
               ),
             );
@@ -94,7 +94,7 @@ class TaskWorker extends DisposableInterface {
           _notificationService.notify(
             LocalNotification(
               title: 'Task can be completed!',
-              text: task.task.name,
+              subtitle: task.task.name,
               icon: task.task.icon,
             ),
           );

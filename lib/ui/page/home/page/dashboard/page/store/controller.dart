@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/item/standard.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/player.dart';
@@ -29,4 +30,6 @@ class StoreController extends GetxController {
   final ItemService _itemService;
 
   Rx<Player?> get player => _playerService.player;
+  int get rubies => _itemService.amount(const Ruby());
+  int get heartCards => _itemService.amount(const HeartCard());
 }

@@ -200,7 +200,7 @@ class _CharacterViewState extends State<CharacterView>
         ),
         if (c.myCharacter != null)
           Screen(
-            desktop: const Text('Inventory'),
+            desktop: const Text('Artifacts'),
             mobile: const Icon(Icons.inventory),
             child: CharacterArtifactsTab(c),
           ),

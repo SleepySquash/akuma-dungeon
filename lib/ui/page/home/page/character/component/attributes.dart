@@ -1,6 +1,10 @@
+import 'package:akuma/ui/page/home/widget/backdrop_plate.dart';
+import 'package:akuma/util/platform_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
+import '/domain/model/character.dart';
+import '/ui/page/home/widget/level.dart';
 import '/ui/page/home/widget/stats.dart';
 
 class CharacterAttributesTab extends StatelessWidget {
@@ -10,16 +14,63 @@ class CharacterAttributesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Center(
       key: const Key('CharacterAttributesTab'),
-      children: [
-        if (c.myCharacter != null)
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [StatsWidget()],
-          ),
-        const Spacer(),
-      ],
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 900),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Spacer(),
+                BackdropPlate(
+                  child: Row(
+                    children: [
+                      Icon(
+                        (c.myCharacter?.character ?? c.character)
+                            ?.role
+                            .toIcon(),
+                        size: 21,
+                        color: Colors.black,
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            (c.myCharacter?.character ?? c.character)?.name ??
+                                '...',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (c.myCharacter != null) ...[
+                  LevelWidget(
+                    level: c.myCharacter?.level,
+                    maxLevel: Character.maxLevel,
+                  ),
+                  StatsWidget(
+                    damage:
+                        c.myCharacter?.character.damages[c.myCharacter!.level],
+                    defense:
+                        c.myCharacter?.character.defenses[c.myCharacter!.level],
+                    health:
+                        c.myCharacter?.character.healths[c.myCharacter!.level],
+                    ultCharge: c.myCharacter?.character
+                        .ultCharges[c.myCharacter!.level],
+                  ),
+                ],
+                if (!context.isMobile) const Spacer(),
+              ],
+            ),
+            const Spacer(),
+          ],
+        ),
+      ),
     );
   }
 }

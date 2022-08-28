@@ -15,7 +15,6 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import '/domain/model/task.dart';
-import 'first.dart';
 
 abstract class MainTasks {
   static List<Task> get all => [];

@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:bordered_text/bordered_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,6 +58,17 @@ class NotificationOverlayView extends StatelessWidget {
                   );
                 }),
               ),
+              IgnorePointer(
+                child: Obx(() {
+                  LocalNotification? notification = c.centered.firstOrNull;
+                  return AnimatedSwitcher(
+                    duration: 300.milliseconds,
+                    child: notification == null
+                        ? Container()
+                        : _centeredNotification(notification),
+                  );
+                }),
+              ),
             ],
           ),
         );
@@ -83,19 +96,62 @@ class NotificationOverlayView extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (item.icon != null) Icon(item.icon),
+                      if (item.icon != null) Icon(item.icon, size: 24),
+                      if (item.icon != null && item.title != null)
+                        const SizedBox(width: 5),
                       if (item.title != null) Text(item.title!),
                     ],
                   ),
-                  if (item.text != null) Text(item.text!),
+                  if (item.subtitle != null) Text(item.subtitle!),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _centeredNotification(LocalNotification item) {
+    return Align(
+      key: Key('${item.title}${item.subtitle}'),
+      alignment: Alignment.topCenter,
+      child: Container(
+        margin: const EdgeInsets.only(top: 48),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (item.icon != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Icon(item.icon, size: 24),
+              ),
+            if (item.title != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0),
+                child: BorderedText(
+                  child: Text(
+                    item.title!,
+                    style: const TextStyle(fontSize: 36, color: Colors.white),
+                  ),
+                ),
+              ),
+            if (item.subtitle != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0),
+                child: BorderedText(
+                  child: Text(
+                    item.subtitle!,
+                    style: const TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

@@ -25,5 +25,6 @@ abstract class AbstractItemRepository {
 
   void add(Item item);
   void update(MyItem item);
-  void remove(Item item);
+  void take(String id, [int? amount]);
+  int amount(Item item);
 }

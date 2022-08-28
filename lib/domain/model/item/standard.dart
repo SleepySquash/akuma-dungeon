@@ -23,9 +23,11 @@ abstract class StandardItems {
         ...consumable,
         ...weapon,
         ...equipable,
+        ...resource,
+        ...skills,
       ];
 
-  static List<Item> get consumable => [
+  static List<Item> get consumable => const [
         AppleGreenItem(),
         AppleRedItem(),
         BananaItem(),
@@ -36,7 +38,7 @@ abstract class StandardItems {
         RedPotionBigItem(),
       ];
 
-  static List<Item> get weapon => [
+  static List<Item> get weapon => const [
         BronzeDaggerItem(),
         IronDaggerItem(),
         PracticeOakSwordItem(),
@@ -44,14 +46,27 @@ abstract class StandardItems {
         BronzeSwordItem(),
       ];
 
-  static List<Item> get equipable => [
+  static List<Item> get equipable => const [
         HelmetLightBronzeItem(),
         ChainmailBronzeItem(),
+        BootItem(),
+      ];
+
+  static List<Item> get resource => const [
+        Dogecoin(),
+        Ruby(),
+        HeartCard(),
+      ];
+
+  static List<Item> get skills => const [
+        SwordBookMinor(),
+        SwordBookMajor(),
+        SwordBookSuperior(),
       ];
 }
 
 class AppleGreenItem extends Consumable with Eatable {
-  AppleGreenItem([super.count = 1]);
+  const AppleGreenItem([super.count = 1]);
 
   @override
   String get id => 'apple_green';
@@ -64,7 +79,7 @@ class AppleGreenItem extends Consumable with Eatable {
 }
 
 class AppleRedItem extends Consumable with Eatable {
-  AppleRedItem([super.count = 1]);
+  const AppleRedItem([super.count = 1]);
 
   @override
   String get id => 'apple_red';
@@ -77,7 +92,7 @@ class AppleRedItem extends Consumable with Eatable {
 }
 
 class BananaItem extends Consumable with Eatable {
-  BananaItem([super.count = 1]);
+  const BananaItem([super.count = 1]);
 
   @override
   String get id => 'banana';
@@ -90,7 +105,7 @@ class BananaItem extends Consumable with Eatable {
 }
 
 class BeefItem extends Consumable with Eatable {
-  BeefItem([super.count = 1]);
+  const BeefItem([super.count = 1]);
 
   @override
   String get id => 'beef';
@@ -103,7 +118,7 @@ class BeefItem extends Consumable with Eatable {
 }
 
 class ChickenItem extends Consumable with Eatable {
-  ChickenItem([super.count = 1]);
+  const ChickenItem([super.count = 1]);
 
   @override
   String get id => 'chicken';
@@ -116,7 +131,7 @@ class ChickenItem extends Consumable with Eatable {
 }
 
 class CarrotItem extends Consumable with Eatable {
-  CarrotItem([super.count = 1]);
+  const CarrotItem([super.count = 1]);
 
   @override
   String get id => 'carrot';
@@ -129,7 +144,7 @@ class CarrotItem extends Consumable with Eatable {
 }
 
 class RedPotionSmallItem extends Consumable with Drinkable {
-  RedPotionSmallItem([super.count = 1]);
+  const RedPotionSmallItem([super.count = 1]);
 
   @override
   String get id => 'potion_red_small';
@@ -139,10 +154,13 @@ class RedPotionSmallItem extends Consumable with Drinkable {
 
   @override
   int get hp => 10;
+
+  @override
+  Rarity get rarity => Rarity.common;
 }
 
 class RedPotionMediumItem extends Consumable with Drinkable {
-  RedPotionMediumItem([super.count = 1]);
+  const RedPotionMediumItem([super.count = 1]);
 
   @override
   String get id => 'potion_red_medium';
@@ -152,10 +170,13 @@ class RedPotionMediumItem extends Consumable with Drinkable {
 
   @override
   int get hp => 50;
+
+  @override
+  Rarity get rarity => Rarity.useful;
 }
 
 class RedPotionBigItem extends Consumable with Drinkable {
-  RedPotionBigItem([super.count = 1]);
+  const RedPotionBigItem([super.count = 1]);
 
   @override
   String get id => 'potion_red_big';
@@ -165,10 +186,13 @@ class RedPotionBigItem extends Consumable with Drinkable {
 
   @override
   int get hp => 150;
+
+  @override
+  Rarity get rarity => Rarity.rare;
 }
 
 class BronzeDaggerItem extends Weapon with Dagger {
-  BronzeDaggerItem([super.count = 1]);
+  const BronzeDaggerItem([super.count = 1]);
 
   @override
   String get id => 'dagger_bronze';
@@ -181,7 +205,7 @@ class BronzeDaggerItem extends Weapon with Dagger {
 }
 
 class IronDaggerItem extends Weapon with Dagger {
-  IronDaggerItem([super.count = 1]);
+  const IronDaggerItem([super.count = 1]);
 
   @override
   String get id => 'dagger_iron';
@@ -203,7 +227,7 @@ class IronDaggerItem extends Weapon with Dagger {
 }
 
 class PracticeOakSwordItem extends Weapon with Sword {
-  PracticeOakSwordItem([super.count = 1]);
+  const PracticeOakSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_practice_oak';
@@ -216,7 +240,7 @@ class PracticeOakSwordItem extends Weapon with Sword {
 }
 
 class PracticeWillowSwordItem extends Weapon with Sword {
-  PracticeWillowSwordItem([super.count = 1]);
+  const PracticeWillowSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_practice_willow';
@@ -229,7 +253,7 @@ class PracticeWillowSwordItem extends Weapon with Sword {
 }
 
 class BronzeSwordItem extends Weapon with Sword {
-  BronzeSwordItem([super.count = 1]);
+  const BronzeSwordItem([super.count = 1]);
 
   @override
   String get id => 'sword_bronze';
@@ -242,7 +266,7 @@ class BronzeSwordItem extends Weapon with Sword {
 }
 
 class HelmetLightBronzeItem extends Equipable with Head {
-  HelmetLightBronzeItem([super.count = 1]);
+  const HelmetLightBronzeItem([super.count = 1]);
 
   @override
   String get id => 'helmet_light_bronze';
@@ -255,7 +279,7 @@ class HelmetLightBronzeItem extends Equipable with Head {
 }
 
 class ChainmailBronzeItem extends Equipable with Armor {
-  ChainmailBronzeItem([super.count = 1]);
+  const ChainmailBronzeItem([super.count = 1]);
 
   @override
   String get id => 'chainmail_bronze';
@@ -265,4 +289,124 @@ class ChainmailBronzeItem extends Equipable with Armor {
 
   @override
   int get defense => 14;
+}
+
+class BootItem extends Equipable with Shoes {
+  const BootItem([super.count = 1]);
+
+  @override
+  String get id => 'boot';
+
+  @override
+  String get name => 'Лёгкие ботинки';
+
+  @override
+  int get defense => 4;
+}
+
+class Dogecoin extends Item {
+  const Dogecoin([super.count = 1]);
+
+  @override
+  String get id => 'dogecoin';
+
+  @override
+  String get asset => 'resource/$id';
+
+  @override
+  String get name => 'Dogecoin';
+}
+
+class Ruby extends Item {
+  const Ruby([super.count = 1]);
+
+  @override
+  String get id => 'ruby';
+
+  @override
+  String get asset => 'resource/ruby_2';
+
+  @override
+  String get name => 'Рубин';
+
+  @override
+  String get description =>
+      'Очень ценный камень, который любой торговец с удовольствием обменяет на очень полезные предметы.';
+
+  @override
+  Rarity get rarity => Rarity.rare;
+}
+
+class HeartCard extends Item {
+  const HeartCard([super.count = 1]);
+
+  @override
+  String get id => 'card_heart';
+
+  @override
+  String get asset => 'misc/$id';
+
+  @override
+  String get name => 'Карта черви';
+
+  @override
+  String get description => 'Быть может, удача ляжет нужной стороной?';
+
+  @override
+  Rarity get rarity => Rarity.superRare;
+}
+
+class SwordBookMinor extends Item {
+  const SwordBookMinor([super.count = 1]);
+
+  @override
+  String get id => 'spell_sword_minor';
+
+  @override
+  String get asset => 'skill/$id';
+
+  @override
+  String get name => 'Чтиво Меча';
+
+  @override
+  String get description =>
+      'В ней содержится достаточно знаний, чтобы научиться махать мечом.';
+}
+
+class SwordBookMajor extends Item {
+  const SwordBookMajor([super.count = 1]);
+
+  @override
+  String get id => 'spell_sword_major';
+
+  @override
+  String get asset => 'skill/$id';
+
+  @override
+  String get name => 'Книга Меча';
+
+  @override
+  String get description => 'Техники, приёмы, всё об искусстве меча от А до Я.';
+
+  @override
+  Rarity get rarity => Rarity.useful;
+}
+
+class SwordBookSuperior extends Item {
+  const SwordBookSuperior([super.count = 1]);
+
+  @override
+  String get id => 'spell_sword_superior';
+
+  @override
+  String get asset => 'skill/$id';
+
+  @override
+  String get name => 'Мемуары Меча';
+
+  @override
+  String get description => 'Стань мечом.';
+
+  @override
+  Rarity get rarity => Rarity.rare;
 }

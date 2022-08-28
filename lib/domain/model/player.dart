@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'dart:math';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model_type_id.dart';
@@ -33,7 +35,6 @@ class Player {
     this.gender = Gender.female,
     this.exp = 0,
     this.rank = 0,
-    this.money = 0,
     List<MyEquipable>? equipped,
     List<MyWeapon>? weapon,
     List<MyCharacter>? party,
@@ -57,15 +58,12 @@ class Player {
   int rank;
 
   @HiveField(5)
-  int money;
-
-  @HiveField(6)
   List<MyEquipable> equipped;
 
-  @HiveField(7)
+  @HiveField(6)
   List<MyWeapon> weapon;
 
-  @HiveField(8)
+  @HiveField(7)
   List<MyCharacter> party;
 
   List<Stat> get stats {
@@ -81,7 +79,7 @@ class Player {
     return list;
   }
 
-  int get level => exp ~/ 1000 + 1;
+  int get level => min(exp ~/ 1000 + 1, maxLevel);
 
   int get damage {
     int dmg = damages[level];
@@ -136,6 +134,41 @@ class Player {
     return hp;
   }
 
+  int get critDamage {
+    int damage = critRates[level];
+
+    for (CritDmgStat s in stats.whereType<CritDmgStat>()) {
+      damage += s.amount;
+    }
+
+    return damage;
+  }
+
+  int get critRate {
+    int rate = critRates[level];
+
+    for (CritRateStat s in stats.whereType<CritRateStat>()) {
+      rate += s.amount;
+    }
+
+    return rate;
+  }
+
+  int get ultCharge {
+    int ult = ultCharges[level];
+
+    for (UltStat s in stats.whereType<UltStat>()) {
+      ult += s.amount;
+    }
+
+    for (UltPercentStat s in stats.whereType<UltPercentStat>()) {
+      double d = ult * (1 + (s.amount / 100));
+      ult = d.floor();
+    }
+
+    return ult;
+  }
+
   /// Maximum allowed level for a [Player] to have.
   static const int maxLevel = 100;
 
@@ -143,6 +176,10 @@ class Player {
   List<int> get damages =>
       List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
   List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
-  List<int> get ultCharges =>
+  List<int> get critRates =>
       List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+  List<int> get critDamages =>
+      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+  List<int> get ultCharges =>
+      List.generate(maxLevel + 1, (i) => 4 + (1 * i / 10).floor());
 }

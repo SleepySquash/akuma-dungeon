@@ -33,7 +33,7 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DashboardController(Get.find()),
+      init: DashboardController(Get.find(), Get.find()),
       builder: (DashboardController c) {
         return Stack(
           children: [

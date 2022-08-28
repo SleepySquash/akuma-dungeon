@@ -14,12 +14,13 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:audioplayers/audioplayers.dart' show Source;
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 /// Entity dealing damage to the [Player].
 abstract class Enemy {
-  Enemy();
+  const Enemy();
 
   /// Unique ID of this [Enemy].
   String get id;
@@ -38,6 +39,15 @@ abstract class Enemy {
 
   /// Money to give the [Player] upon slaying this [Enemy].
   int get money => 10;
+
+  /// [Source] sounds to play when hitting this [Enemy].
+  List<Source>? get hitSounds => null;
+
+  /// [Source] sounds to play when slaying this [Enemy].
+  List<Source>? get slayedSounds => null;
+
+  /// [Source] sounds played by this [Enemy] over some time periods.
+  List<Source>? get idleSounds => null;
 
   double get damage => 0.05;
   Duration get interval => const Duration(seconds: 1);

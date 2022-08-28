@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
+
 import '../enemy.dart';
 
 abstract class FieldsEnemies {
@@ -22,29 +24,44 @@ abstract class FieldsEnemies {
         ...unique,
       ];
 
-  static List<Enemy> get enemies => [
+  static List<Enemy> get enemies => const [
         GreenSlimeEnemy(),
         BlueSlimeEnemy(),
         RedSlimeEnemy(),
         CatSlimeEnemy(),
       ];
 
-  static List<Enemy> get unique => [
+  static List<Enemy> get unique => const [
         RedLongSlimeEnemy(),
       ];
 }
 
 abstract class Slime extends Enemy {
+  const Slime();
+
   @override
   String get asset => 'slime/$id';
+
+  @override
+  List<Source>? get hitSounds => [
+        AssetSource('sound/slime1.mp3'),
+        AssetSource('sound/slime2.wav'),
+      ];
+
+  @override
+  List<Source>? get slayedSounds => null;
 }
 
 class GreenSlimeEnemy extends Slime {
+  const GreenSlimeEnemy();
+
   @override
   String get id => 'Green Slime';
 }
 
 class BlueSlimeEnemy extends Slime {
+  const BlueSlimeEnemy();
+
   @override
   String get id => 'Blue Slime';
 
@@ -53,6 +70,8 @@ class BlueSlimeEnemy extends Slime {
 }
 
 class RedSlimeEnemy extends Slime {
+  const RedSlimeEnemy();
+
   @override
   String get id => 'Red Slime';
 
@@ -61,6 +80,8 @@ class RedSlimeEnemy extends Slime {
 }
 
 class CatSlimeEnemy extends Slime {
+  const CatSlimeEnemy();
+
   @override
   String get id => 'Cat Slime';
 
@@ -75,6 +96,8 @@ class CatSlimeEnemy extends Slime {
 }
 
 class RedLongSlimeEnemy extends Slime {
+  const RedLongSlimeEnemy();
+
   @override
   String get id => 'Red Long Slime';
 

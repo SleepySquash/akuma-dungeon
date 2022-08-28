@@ -17,9 +17,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/router.dart';
+import '/ui/page/home/page/settings/view.dart';
 import '/ui/widget/dummy_character.dart';
 import '/ui/widget/modal_popup.dart';
+import '/ui/worker/music.dart';
 import 'controller.dart';
 import 'destination/view.dart';
 
@@ -36,8 +37,19 @@ class DashView extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                  onPressed: router.settings,
+                  onPressed: () => SettingsView.show(context: context),
                   icon: const Icon(Icons.settings),
+                ),
+                IconButton(
+                  onPressed: () {
+                    MusicWorker worker = Get.find<MusicWorker>();
+                    if (worker.isPlaying) {
+                      worker.stop();
+                    } else {
+                      worker.resume();
+                    }
+                  },
+                  icon: const Icon(Icons.volume_down),
                 ),
                 const Spacer(),
                 IconButton(
@@ -122,7 +134,7 @@ class DashView extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: c.addLevel,
                             child: const Text('Mail'),
                           ),
                         ],

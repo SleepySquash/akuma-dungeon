@@ -15,7 +15,6 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 /// Determining whether a [BuildContext] is mobile or not.
 extension MobileExtensionOnContext on BuildContext {

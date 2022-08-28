@@ -53,17 +53,19 @@ class _ScreenSwitcherState extends State<ScreenSwitcher> {
             padding: const EdgeInsets.only(top: 64),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: widget.tabs.mapIndexed((i, e) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: _SingleTab(
-                    desktop: e.desktop,
-                    mobile: e.mobile,
-                    onTap: () => setState(() => tab = i),
-                    selected: tab == i,
-                  ),
-                );
-              }).toList(),
+              children: widget.tabs.length == 1
+                  ? []
+                  : widget.tabs.mapIndexed((i, e) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: _SingleTab(
+                          desktop: e.desktop,
+                          mobile: e.mobile,
+                          onTap: () => setState(() => tab = i),
+                          selected: tab == i,
+                        ),
+                      );
+                    }).toList(),
             ),
           ),
         ),

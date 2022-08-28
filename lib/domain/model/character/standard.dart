@@ -20,7 +20,7 @@ import '/domain/model/skill.dart';
 import '/domain/model/skill/all.dart';
 
 abstract class StandardCharacters {
-  static List<Character> get characters => [
+  static List<Character> get characters => const [
         Chiara(),
         DrNadja(),
         DrThomas(),
@@ -40,6 +40,8 @@ abstract class StandardCharacters {
 }
 
 class Zahir extends Character {
+  const Zahir();
+
   @override
   String get id => 'Zahir';
 
@@ -48,6 +50,8 @@ class Zahir extends Character {
 }
 
 class Rio extends Character {
+  const Rio();
+
   @override
   String get id => 'Rio';
 
@@ -59,6 +63,8 @@ class Rio extends Character {
 }
 
 class Jan extends Character {
+  const Jan();
+
   @override
   String get id => 'Jan';
 
@@ -70,6 +76,8 @@ class Jan extends Character {
 }
 
 class DrNadja extends Character {
+  const DrNadja();
+
   @override
   String get id => 'Dr._Nadja';
 
@@ -87,6 +95,8 @@ class DrNadja extends Character {
 }
 
 class DrThomas extends Character {
+  const DrThomas();
+
   @override
   String get id => 'Dr._Thomas';
 
@@ -101,6 +111,8 @@ class DrThomas extends Character {
 }
 
 class Magnus extends Character {
+  const Magnus();
+
   @override
   String get id => 'Magnus';
 
@@ -109,6 +121,8 @@ class Magnus extends Character {
 }
 
 class Chiara extends Character {
+  const Chiara();
+
   @override
   String get id => 'Chiara';
 
@@ -123,6 +137,8 @@ class Chiara extends Character {
 }
 
 class Rozzi extends Character {
+  const Rozzi();
+
   @override
   String get id => 'Rozzi';
 

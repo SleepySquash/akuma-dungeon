@@ -164,7 +164,6 @@ class RestaurantDungeonTask extends Task {
   Rank get rank => Rank.F;
 
   @override
-  // TODO: implement rewards
   List<TaskReward> get rewards => [
         ...super.rewards,
         ItemReward(StandardItems.consumable.sample(1).first),

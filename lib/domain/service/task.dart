@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/progression.dart';
+import '/domain/model/item/standard.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/task.dart';
 import '/domain/service/item.dart';
@@ -40,7 +41,7 @@ class TaskService extends DisposableInterface {
     if (task.isCompleted) {
       for (var r in task.task.rewards) {
         if (r is MoneyReward) {
-          _playerService.addMoney(r.amount);
+          _itemService.add(Dogecoin(r.amount));
         } else if (r is ExpReward) {
           _playerService.addExperience(r.amount);
         } else if (r is ItemReward) {
@@ -63,15 +64,23 @@ class TaskService extends DisposableInterface {
     }
 
     if (task.isCompleted) {
+      router.home();
       completedTasks.value++;
     } else {
       int i = task.progress;
       TaskStep step = task.task.steps[i];
       if (step is NovelStep) {
+        router.nowhere();
         Novel.show(context: router.context!, scenario: step.scenario)
             .then((_) => _next());
       } else if (step is DungeonStep) {
-        router.dungeon(step.settings, onClear: _next);
+        router.dungeon(
+          step.settings,
+          onClear: () {
+            router.nowhere();
+            _next();
+          },
+        );
       }
     }
   }

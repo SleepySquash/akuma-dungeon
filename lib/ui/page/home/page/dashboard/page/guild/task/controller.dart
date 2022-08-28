@@ -1,6 +1,3 @@
-import 'package:akuma/router.dart';
-import 'package:akuma/ui/widget/modal_popup.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/task.dart';

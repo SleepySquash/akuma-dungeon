@@ -1,12 +1,11 @@
-import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/item.dart';
-import 'package:akuma/domain/model/rarity.dart';
-import 'package:akuma/ui/widget/button.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
+import '/domain/model/character.dart';
+import '/domain/model/item.dart';
+import '/domain/model/rarity.dart';
 import '/domain/service/gacha.dart';
 import 'controller.dart';
 

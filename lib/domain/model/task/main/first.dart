@@ -14,12 +14,11 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/enemy/fields.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
+import '/domain/model/enemy/fields.dart';
 import '/domain/model/task.dart';
-import '/router.dart';
 
 abstract class FirstMainTasks {
   static List<Task> get all => [

@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,12 +36,14 @@ class DungeonView extends StatelessWidget {
 
   final DungeonSettings settings;
 
-  final void Function()? onClear;
+  final FutureOr<void> Function()? onClear;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
       init: DungeonController(
+        Get.find(),
+        Get.find(),
         Get.find(),
         settings: settings,
         onClear: onClear,
@@ -255,63 +259,90 @@ class DungeonView extends StatelessWidget {
     return LayoutBuilder(builder: (context, constraints) {
       return Row(
         children: [
-          WidgetButton(
-            child: Container(
-              margin: const EdgeInsets.only(left: 8, bottom: 0),
-              constraints: BoxConstraints(
-                maxWidth: constraints.maxWidth / 4,
-                maxHeight: 200,
-              ),
-              width: 180,
-              height: double.infinity,
-              child: Stack(
-                children: [
-                  Positioned.fill(
+          Container(
+            margin: const EdgeInsets.only(left: 8, bottom: 0),
+            constraints: BoxConstraints(
+              maxWidth: constraints.maxWidth / 5,
+              maxHeight: 200,
+            ),
+            width: 180,
+            height: double.infinity,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: FractionalTranslation(
+                    translation: const Offset(0, 0.3),
+                    child: DummyCharacter(
+                      alignment: Alignment.topCenter,
+                      fit: BoxFit.cover,
+                      gender: c.player.value!.gender,
+                      race: c.player.value!.race,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 100),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: DummyCharacter(
-                        alignment: Alignment.topCenter,
-                        fit: BoxFit.cover,
-                        gender: c.player.value!.gender,
-                        race: c.player.value!.race,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 100),
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Obx(() {
-                          int hp = c.hp.value.ceil();
-                          int maxHp = c.player.value?.health ?? 10;
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Obx(() {
+                        int hp = c.hp.value.ceil();
+                        int maxHp = c.player.value?.health ?? 10;
 
-                          return Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: LinearProgressIndicator(
-                                  minHeight: 20,
-                                  value: 1 - c.hp.value / maxHp,
-                                  backgroundColor: Colors.green,
-                                  color: Colors.grey,
-                                ),
+                        return Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: LinearProgressIndicator(
+                                minHeight: 20,
+                                value: 1 - c.hp.value / maxHp,
+                                backgroundColor: Colors.green,
+                                color: Colors.grey,
                               ),
-                              Positioned.fill(
-                                child: Center(child: Text('$hp/$maxHp')),
-                              ),
-                            ],
-                          );
-                        }),
-                      ),
+                            ),
+                            Positioned.fill(
+                              child: Center(child: Text('$hp/$maxHp')),
+                            ),
+                          ],
+                        );
+                      }),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          Expanded(child: _party(c)),
         ],
+      );
+    });
+  }
+
+  Widget _party(DungeonController c) {
+    if (c.player.value?.party.isNotEmpty != true) {
+      return Container();
+    }
+
+    return LayoutBuilder(builder: (context, constraints) {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 300),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: c.player.value!.party.map((e) {
+            return Flexible(
+              child: Container(
+                constraints: const BoxConstraints(maxHeight: 200),
+                child: FractionalTranslation(
+                  translation: const Offset(0, 0.4),
+                  child: Image.asset(
+                    'assets/character/${e.character.id}.png',
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       );
     });
   }

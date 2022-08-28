@@ -28,4 +28,8 @@ abstract class AbstractSettingsRepository {
 
   /// Sets the [ApplicationSettings.locale] value.
   Future<void> setLocale(String locale);
+
+  Future<void> setMusicVolume(double volume);
+  Future<void> setSoundVolume(double volume);
+  Future<void> setVoiceVolume(double volume);
 }

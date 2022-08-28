@@ -37,6 +37,12 @@ class ItemRepository extends DisposableInterface
 
   @override
   void onInit() {
+    for (var item in _itemHive.items) {
+      if (item.item is ImpossibleItem) {
+        _itemHive.remove(item.item.id);
+      }
+    }
+
     items = RxObsMap(
       Map.fromEntries(_itemHive.items.map((e) => MapEntry(e.id, Rx(e)))),
     );
@@ -73,16 +79,22 @@ class ItemRepository extends DisposableInterface
   void update(MyItem item) => _itemHive.put(item);
 
   @override
-  void remove(Item item, [int? count]) {
-    MyItem? existing = _itemHive.get(item.id);
+  void take(String id, [int? amount]) {
+    MyItem? existing = _itemHive.get(id);
     if (existing != null) {
-      existing.count -= count ?? existing.count;
+      existing.count -= amount ?? existing.count;
       if (existing.count <= 0) {
-        _itemHive.remove(item.id);
+        _itemHive.remove(id);
       } else {
         _itemHive.put(existing);
       }
     }
+  }
+
+  @override
+  int amount(Item item) {
+    MyItem? existing = _itemHive.get(item.id);
+    return existing?.count ?? 0;
   }
 
   Future<void> _initLocalSubscription() async {

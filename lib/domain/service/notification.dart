@@ -29,8 +29,9 @@ import '/util/web/web.dart';
 /// Service responsible for notifications management.
 class NotificationService extends DisposableInterface {
   final RxObsList<LocalNotification> notifications = RxObsList();
+  final RxObsList<LocalNotification> centered = RxObsList();
 
-  static const Duration notificationDuration = Duration(seconds: 10);
+  static const Duration notificationDuration = Duration(seconds: 5);
 
   final List<Timer> _timers = [];
 
@@ -78,6 +79,15 @@ class NotificationService extends DisposableInterface {
         );
       }
     }
+  }
+
+  @override
+  void onClose() {
+    for (var t in _timers) {
+      t.cancel();
+    }
+
+    super.onClose();
   }
 
   /// Shows a notification with a [title] and an optional [body] and [icon].
@@ -137,26 +147,45 @@ class NotificationService extends DisposableInterface {
   }
 
   void notify(LocalNotification notification) {
-    notifications.add(notification);
-
     Timer? timer;
-    timer = Timer(notificationDuration, () {
-      notifications.remove(notification);
-      _timers.remove(timer);
-    });
+
+    switch (notification.type) {
+      case LocalNotificationType.common:
+        notifications.add(notification);
+        timer = Timer(notificationDuration, () {
+          notifications.remove(notification);
+          _timers.remove(timer);
+        });
+        break;
+
+      case LocalNotificationType.centered:
+        centered.add(notification);
+        timer = Timer(notificationDuration, () {
+          centered.remove(notification);
+          _timers.remove(timer);
+        });
+        break;
+    }
 
     _timers.add(timer);
   }
 }
 
+enum LocalNotificationType {
+  common,
+  centered,
+}
+
 class LocalNotification {
   const LocalNotification({
     this.title,
-    this.text,
+    this.subtitle,
     this.icon,
+    this.type = LocalNotificationType.common,
   });
 
   final String? title;
-  final String? text;
+  final String? subtitle;
   final IconData? icon;
+  final LocalNotificationType type;
 }

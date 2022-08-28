@@ -35,6 +35,15 @@ class SettingsController extends GetxController {
   Rx<ApplicationSettings?> get settings => _settingsRepo.applicationSettings;
 
   /// Sets the [ApplicationSettings.locale] value.
-  Future<void> setLocale(Language? locale) =>
-      _settingsRepo.setLocale(locale!.toString());
+  Future<void> setLocale(Language locale) =>
+      _settingsRepo.setLocale(locale.toString());
+
+  Future<void> setMusicVolume(double volume) =>
+      _settingsRepo.setMusicVolume(volume);
+
+  Future<void> setSoundVolume(double volume) =>
+      _settingsRepo.setSoundVolume(volume);
+
+  Future<void> setVoiceVolume(double volume) =>
+      _settingsRepo.setVoiceVolume(volume);
 }
