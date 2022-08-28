@@ -56,6 +56,18 @@ class SettingsRepository extends DisposableInterface
   @override
   Future<void> setLocale(String locale) => _settingsLocal.setLocale(locale);
 
+  @override
+  Future<void> setMusicVolume(double volume) =>
+      _settingsLocal.setMusicVolume(volume);
+
+  @override
+  Future<void> setSoundVolume(double volume) =>
+      _settingsLocal.setSoundVolume(volume);
+
+  @override
+  Future<void> setVoiceVolume(double volume) =>
+      _settingsLocal.setVoiceVolume(volume);
+
   /// Initializes [ApplicationSettingsHiveProvider.boxEvents] subscription.
   Future<void> _initSettingsSubscription() async {
     _settingsSubscription = StreamIterator(_settingsLocal.boxEvents);

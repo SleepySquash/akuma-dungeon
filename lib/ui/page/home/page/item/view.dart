@@ -16,6 +16,9 @@
 
 import 'dart:ui';
 
+import 'package:akuma/ui/page/home/widget/material_button.dart';
+import 'package:akuma/ui/widget/item_selector/view.dart';
+import 'package:akuma/util/platform_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,8 +31,13 @@ import 'component/upgrade.dart';
 import 'controller.dart';
 
 class ItemView extends StatefulWidget {
-  const ItemView({Key? key, required this.item}) : super(key: key);
+  const ItemView({
+    Key? key,
+    required this.item,
+    this.exchangeItemSettings,
+  }) : super(key: key);
 
+  final ExchangeItemSettings? exchangeItemSettings;
   final MyItem item;
 
   /// Displays a dialog with the provided [character] above the current
@@ -37,13 +45,17 @@ class ItemView extends StatefulWidget {
   static Future<T?> show<T extends Object?>({
     required BuildContext context,
     required MyItem item,
+    ExchangeItemSettings? exchangeItemSettings,
   }) {
     return Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
         barrierDismissible: true,
         pageBuilder: (BuildContext context, _, __) {
-          return ItemView(item: item);
+          return ItemView(
+            item: item,
+            exchangeItemSettings: exchangeItemSettings,
+          );
         },
       ),
     );
@@ -92,7 +104,10 @@ class _ItemViewState extends State<ItemView>
     ));
 
     return GetBuilder(
-      init: ItemController(widget.item),
+      init: ItemController(
+        widget.item,
+        exchangeItemSettings: widget.exchangeItemSettings,
+      ),
       builder: (ItemController c) {
         return Stack(
           fit: StackFit.expand,
@@ -116,12 +131,14 @@ class _ItemViewState extends State<ItemView>
               builder: (context, child) {
                 return FadeTransition(
                   opacity: fade,
-                  child: Hero(
-                    tag: widget.item.id,
-                    child: Image.asset(
-                      'assets/item/${widget.item.item.asset}.png',
-                    ),
-                  ),
+                  child: Obx(() {
+                    return Hero(
+                      tag: c.item.value.id,
+                      child: Image.asset(
+                        'assets/item/${c.item.value.item.asset}.png',
+                      ),
+                    );
+                  }),
                 );
               },
             ),
@@ -142,10 +159,65 @@ class _ItemViewState extends State<ItemView>
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16, right: 16),
-                  child: FloatingActionButton(
-                    mini: false,
-                    onPressed: _dismiss,
-                    child: const Icon(Icons.close_rounded),
+                  child: Flex(
+                    direction:
+                        context.isMobile ? Axis.vertical : Axis.horizontal,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      if (c.exchangeItemSettings != null) ...[
+                        if (context.isMobile)
+                          FloatingActionButton(
+                            heroTag: 0,
+                            onPressed: () async {
+                              dynamic selected = await ItemSelector.show(
+                                context: context,
+                                empty: const NoopItem(0),
+                                category: c.exchangeItemSettings?.category,
+                                filter: c.exchangeItemSettings?.filter,
+                              );
+
+                              if (selected is Rx<MyItem>) {
+                                c.exchangeItemSettings?.onExchange
+                                    ?.call(selected.value);
+                                c.item.value = selected.value;
+                              } else if (selected is NoopItem) {
+                                c.exchangeItemSettings?.onExchange?.call(null);
+                                _dismiss();
+                              }
+                            },
+                            child: const Icon(Icons.change_circle),
+                          )
+                        else
+                          WideButton(
+                            onPressed: () async {
+                              dynamic selected = await ItemSelector.show(
+                                context: context,
+                                empty: const NoopItem(0),
+                                category: c.exchangeItemSettings?.category,
+                                filter: c.exchangeItemSettings?.filter,
+                              );
+
+                              if (selected is Rx<MyItem>) {
+                                c.exchangeItemSettings?.onExchange
+                                    ?.call(selected.value);
+                                c.item.value = selected.value;
+                              } else if (selected is NoopItem) {
+                                c.exchangeItemSettings?.onExchange?.call(null);
+                                _dismiss();
+                              }
+                            },
+                            child: const Text('Switch'),
+                          ),
+                        const SizedBox(width: 10, height: 10),
+                      ],
+                      FloatingActionButton(
+                        heroTag: 1,
+                        mini: false,
+                        onPressed: _dismiss,
+                        child: const Icon(Icons.close_rounded),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -164,16 +236,18 @@ class _ItemViewState extends State<ItemView>
           mobile: const Icon(Icons.person),
           child: ItemAttributesTab(c),
         ),
-        Screen(
-          desktop: const Text('Inventory'),
-          mobile: const Icon(Icons.inventory),
-          child: ItemEnhanceTab(c),
-        ),
-        Screen(
-          desktop: const Text('Skills'),
-          mobile: const Icon(Icons.accessibility),
-          child: ItemUpgradeTab(c),
-        ),
+        if (c.item.value is MyWeapon || c.item.value is MyEquipable) ...[
+          Screen(
+            desktop: const Text('Enhance'),
+            mobile: const Icon(Icons.plus_one),
+            child: ItemEnhanceTab(c),
+          ),
+          Screen(
+            desktop: const Text('Upgrade'),
+            mobile: const Icon(Icons.upgrade),
+            child: ItemUpgradeTab(c),
+          ),
+        ],
       ],
     );
   }

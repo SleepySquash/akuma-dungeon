@@ -17,6 +17,10 @@
 import 'dart:async';
 
 import 'package:akuma/domain/model/item.dart';
+import 'package:akuma/domain/model/item/standard.dart';
+import 'package:akuma/domain/service/item.dart';
+import 'package:akuma/ui/worker/music.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
@@ -30,7 +34,9 @@ import 'component/result.dart';
 
 class DungeonController extends GetxController {
   DungeonController(
-    this._playerService, {
+    this._playerService,
+    this._itemService,
+    this._musicWorker, {
     required this.settings,
     this.onClear,
   });
@@ -38,7 +44,7 @@ class DungeonController extends GetxController {
   /// [DungeonSettings] controlling this [DungeonController].
   final DungeonSettings settings;
 
-  final void Function()? onClear;
+  final FutureOr<void> Function()? onClear;
 
   /// Indicator whether the game has ended.
   final RxBool gameEnded = RxBool(false);
@@ -61,6 +67,10 @@ class DungeonController extends GetxController {
   /// [PlayerService] maintaining the [Player].
   final PlayerService _playerService;
 
+  final ItemService _itemService;
+
+  final MusicWorker _musicWorker;
+
   /// [DateTime] when the current [stage] has started.
   DateTime? _stageStartedAt;
 
@@ -72,6 +82,8 @@ class DungeonController extends GetxController {
 
   /// [Timer] updating every second (fixed interval of time).
   Timer? _fixedTimer;
+
+  Source? _musicSource;
 
   /// Currently authenticated [Player].
   Rx<Player?> get player => _playerService.player;
@@ -101,6 +113,8 @@ class DungeonController extends GetxController {
       e.cancel();
     }
 
+    _musicWorker.stop(_musicSource);
+
     super.onClose();
   }
 
@@ -111,6 +125,11 @@ class DungeonController extends GetxController {
 
         for (var e in player.value?.weapon ?? <MyWeapon>[]) {
           damage += e.damage;
+        }
+
+        Source? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
+        if (hit != null) {
+          _musicWorker.once(hit);
         }
 
         enemy.value?.hit(damage);
@@ -157,7 +176,7 @@ class DungeonController extends GetxController {
     _enemyTimer = null;
 
     _playerService.addExperience(enemy.value!.exp);
-    _playerService.addMoney(enemy.value!.money);
+    _itemService.add(Dogecoin(enemy.value!.money));
     enemy.value = null;
     ++slayedEnemies.value;
 
@@ -177,13 +196,23 @@ class DungeonController extends GetxController {
     _conditions.clear();
 
     stage.value?.onPass?.call();
-    stage.value = settings.next();
+    DungeonStage? next = settings.next();
 
-    if (stage.value == null) {
+    if (next == null) {
       _winGame();
     } else {
+      stage.value = next;
+
       slayedEnemies.value = 0;
       _stageStartedAt = DateTime.now();
+
+      Source? source = stage.value?.music ?? settings.music;
+      if (source != null) {
+        _musicSource = source;
+        _musicWorker.play(_musicSource!);
+      } else if (_musicSource != null) {
+        _musicWorker.stop(_musicSource);
+      }
 
       for (var condition in stage.value?.conditions ?? []) {
         if (condition is TimerStageCondition) {
@@ -211,13 +240,16 @@ class DungeonController extends GetxController {
   Future<void> _winGame() async {
     if (!gameEnded.value) {
       gameEnded.value = true;
-      await ModalPopup.show(
-        context: router.context!,
-        isDismissible: false,
-        child: const ResultModal(true),
-      );
 
-      onClear?.call();
+      if (onClear == null) {
+        await ModalPopup.show(
+          context: router.context!,
+          isDismissible: false,
+          child: const ResultModal(true),
+        );
+      }
+
+      await onClear?.call();
     }
   }
 

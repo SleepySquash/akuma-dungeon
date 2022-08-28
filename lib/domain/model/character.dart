@@ -14,25 +14,16 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/skill.dart';
+import 'package:flutter/material.dart';
 
+import 'skill.dart';
 import 'item.dart';
 import 'rarity.dart';
 
-/// Role a certain [Character] has in the battle.
-enum Role {
-  /// Dealing damage.
-  dps,
-
-  /// Taking and reducing damage.
-  tank,
-
-  /// Healing.
-  support,
-}
-
 /// Person in the [Player]'s party.
 abstract class Character {
+  const Character();
+
   /// Maximum allowed level for a [Character] to have.
   static const int maxLevel = 100;
 
@@ -86,4 +77,31 @@ class MyCharacter {
   int exp;
 
   int get level => exp ~/ 1000 + 1;
+}
+
+/// Role a certain [Character] has in the battle.
+enum Role {
+  /// Dealing damage.
+  dps,
+
+  /// Taking and reducing damage.
+  tank,
+
+  /// Healing.
+  support,
+}
+
+extension RoleToIcon on Role {
+  IconData toIcon() {
+    switch (this) {
+      case Role.dps:
+        return Icons.dangerous;
+
+      case Role.tank:
+        return Icons.shield;
+
+      case Role.support:
+        return Icons.healing;
+    }
+  }
 }

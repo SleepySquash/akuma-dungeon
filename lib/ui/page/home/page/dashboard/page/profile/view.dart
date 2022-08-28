@@ -29,7 +29,7 @@ class ProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: ProfileController(Get.find(), Get.find()),
+      init: ProfileController(Get.find(), Get.find(), Get.find()),
       builder: (ProfileController c) {
         return ScreenSwitcher(
           tabs: [

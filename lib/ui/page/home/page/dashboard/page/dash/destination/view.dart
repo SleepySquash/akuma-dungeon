@@ -14,13 +14,12 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/dungeon.dart';
-import 'package:akuma/domain/model/task.dart';
-import 'package:akuma/router.dart';
-import 'package:akuma/util/message_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/dungeon.dart';
+import '/domain/model/task.dart';
+import '/router.dart';
 import 'controller.dart';
 
 class DestinationView extends StatelessWidget {
@@ -60,16 +59,7 @@ class DestinationView extends StatelessWidget {
                   },
                 ),
                 const Divider(),
-                const ListTile(title: Text('Ежедневные задания')),
-                const ListTile(
-                  leading: Icon(Icons.park),
-                  title: Text('Гильдия путешественников'),
-                  subtitle: Text(
-                    'Закрой любые 2 подземелья, чтобы получить награду!',
-                  ),
-                  trailing: Text('0 из 2'),
-                ),
-                const Divider(),
+
                 const ListTile(title: Text('Путешествия')),
                 // const ListTile(
                 //   leading: Icon(Icons.auto_awesome),
@@ -79,7 +69,11 @@ class DestinationView extends StatelessWidget {
                 //   trailing: Text('F'),
                 // ),
                 if (tasks.isEmpty)
-                  const Text('Чтобы взять задания, обратись в гильдию!'),
+                  const ListTile(
+                    title: Center(
+                      child: Text('Чтобы взять задания, обратись в гильдию!'),
+                    ),
+                  ),
                 ...tasks.map((m) {
                   Task e = m.value.task;
                   return ListTile(

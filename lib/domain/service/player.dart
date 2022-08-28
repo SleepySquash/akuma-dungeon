@@ -32,8 +32,6 @@ class PlayerService extends GetxService {
 
   void addExperience(int amount) => _playerRepository.addExperience(amount);
 
-  void addMoney(int amount) => _playerRepository.addMoney(amount);
-
   void addRank(int amount) => _playerRepository.addRank(amount);
 
   void equip(MyItem item) {

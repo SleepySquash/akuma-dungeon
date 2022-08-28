@@ -33,4 +33,6 @@ class DashController extends GetxController {
     _authService.logout();
     router.auth();
   }
+
+  void addLevel() => _playerService.addExperience(1000);
 }

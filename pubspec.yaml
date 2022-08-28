@@ -24,10 +24,11 @@ dependencies:
   js: ^0.6.4
   mutex: ^3.0.0
   novel:
-    path: ../novel
-    # git:
-    #   url: https://github.com/SleepySquash/novel.dart.git
-    #   ref: improve-implementation
+    # path: ../novel
+    git:
+      url: https://github.com/SleepySquash/novel.dart.git
+      ref: improve-implementation
+  page_transition: ^2.0.5
   path_provider: ^2.0.10
   timezone: ^0.8.0
   universal_io: ^2.0.4
@@ -46,8 +47,8 @@ flutter:
   assets:
     - assets/background/dungeon/
     - assets/background/location/
-    - assets/background/room/
     - assets/background/misc/
+    - assets/background/room/
     - assets/character/
     - assets/font/
     - assets/item/consumable/
@@ -59,4 +60,7 @@ flutter:
     - assets/l10n/
     - assets/monster/slime/
     - assets/music/
+    - assets/sound/
+    - assets/voice/darknightprincess/
     - assets/voice/intro/
+    - assets/voice/sfx/

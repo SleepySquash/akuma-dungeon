@@ -42,4 +42,11 @@ class ApplicationSettingsHiveProvider
   /// Stores a new [locale] value of [ApplicationSettings.locale] to [Hive].
   Future<void> setLocale(String locale) =>
       putSafe(0, (box.get(0) ?? ApplicationSettings())..locale = locale);
+
+  Future<void> setMusicVolume(double volume) =>
+      putSafe(0, (box.get(0) ?? ApplicationSettings())..musicVolume = volume);
+  Future<void> setSoundVolume(double volume) =>
+      putSafe(0, (box.get(0) ?? ApplicationSettings())..soundVolume = volume);
+  Future<void> setVoiceVolume(double volume) =>
+      putSafe(0, (box.get(0) ?? ApplicationSettings())..voiceVolume = volume);
 }

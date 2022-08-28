@@ -1,6 +1,4 @@
-import 'package:akuma/domain/model/skill.dart';
-import 'package:akuma/domain/model_type_id.dart';
-import 'package:hive/hive.dart';
+
 
 /// [Skill]s must be balanceable, e.g. we'd like to adjust them in the separate
 /// [Character]s.

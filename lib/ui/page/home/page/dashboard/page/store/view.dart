@@ -14,14 +14,13 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/service/gacha.dart';
-import 'package:akuma/ui/page/home/page/dashboard/page/store/gacha/view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
+import '/domain/service/gacha.dart';
 import '/ui/widget/backdrop.dart';
 import 'controller.dart';
+import 'gacha/view.dart';
 
 class StoreView extends StatelessWidget {
   const StoreView({Key? key}) : super(key: key);
@@ -89,17 +88,6 @@ class StoreView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _featured(StoreController c, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: _tripleLayout(
-        child1: Text('1'),
-        child2: Text('2'),
-        child3: Text('3'),
-      ),
     );
   }
 
@@ -197,7 +185,10 @@ class StoreView extends StatelessWidget {
                         child: Image.asset('assets/item/misc/card_heart.png'),
                       ),
                       const SizedBox(width: 0),
-                      const Text('20', style: TextStyle(fontSize: 18)),
+                      Text(
+                        '${c.heartCards}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ],
                   ),
                 ),
@@ -217,9 +208,9 @@ class StoreView extends StatelessWidget {
                         child: Image.asset('assets/item/resource/ruby_2.png'),
                       ),
                       const SizedBox(width: 4),
-                      const Text(
-                        '1600',
-                        style: TextStyle(fontSize: 18),
+                      Text(
+                        '${c.rubies}',
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   ),

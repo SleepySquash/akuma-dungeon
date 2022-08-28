@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:akuma/domain/model/character.dart';
 import 'package:akuma/domain/model/item.dart';
@@ -65,15 +66,7 @@ class PlayerRepository extends DisposableInterface
     Player? player = _playerLocal.get();
     if (player != null) {
       player.exp += amount;
-      _playerLocal.set(player);
-    }
-  }
-
-  @override
-  void addMoney(int amount) {
-    Player? player = _playerLocal.get();
-    if (player != null) {
-      player.money += amount;
+      player.exp = min(player.exp, Player.maxLevel * 1000 - 1);
       _playerLocal.set(player);
     }
   }

@@ -14,7 +14,10 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '/domain/model/dungeon.dart';
 import '/router.dart';
@@ -60,7 +63,7 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
         DungeonSettings? settings =
             _state.arguments?['args'] as DungeonSettings?;
         void Function()? onClear =
-            _state.arguments?['onClear'] as void Function()?;
+            _state.arguments?['onClear'] as FutureOr<void> Function()?;
 
         if (settings == null) {
           pages.add(MaterialPage(
@@ -79,6 +82,12 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
             child: DungeonView(settings: settings, onClear: onClear),
           ));
         }
+      } else if (route == Routes.nowhere) {
+        pages.add(TransitionPage(
+          key: const ValueKey('NowherePage'),
+          name: Routes.nowhere,
+          child: Container(color: Colors.black),
+        ));
       }
     }
 
@@ -116,5 +125,43 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
     // This is not required for inner router delegate because it doesn't parse
     // routes.
     assert(false, 'unexpected setNewRoutePath() call');
+  }
+}
+
+class TransitionPage<T> extends Page<T> {
+  const TransitionPage({
+    required this.child,
+    this.type = PageTransitionType.fade,
+    this.maintainState = true,
+    this.fullscreenDialog = false,
+    LocalKey? key,
+    String? name,
+    Object? arguments,
+    String? restorationId,
+  }) : super(
+          key: key,
+          name: name,
+          arguments: arguments,
+          restorationId: restorationId,
+        );
+
+  /// The content to be shown in the [Route] created by this page.
+  final Widget child;
+
+  /// {@macro flutter.widgets.ModalRoute.maintainState}
+  final bool maintainState;
+
+  /// {@macro flutter.widgets.PageRoute.fullscreenDialog}
+  final bool fullscreenDialog;
+
+  final PageTransitionType type;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return PageTransition(
+      type: type,
+      settings: this,
+      child: child,
+    );
   }
 }

@@ -1,7 +1,7 @@
-import 'package:akuma/domain/model/enemy/fields.dart';
-import 'package:collection/collection.dart';
+import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
 
 import 'enemy.dart';
+import 'enemy/fields.dart';
 
 /// Single stage of a dungeon.
 class DungeonStage {
@@ -10,6 +10,7 @@ class DungeonStage {
     required this.enemies,
     this.conditions = const [],
     this.background,
+    this.music,
     this.multiplier = 1,
     this.onPass,
   });
@@ -18,6 +19,7 @@ class DungeonStage {
   final List<Enemy> enemies;
   final List<NextStageCondition> conditions;
   final String? background;
+  final Source? music;
   final double multiplier;
   final void Function()? onPass;
 }
@@ -29,6 +31,7 @@ abstract class DungeonSettings {
   const DungeonSettings();
 
   String? get background;
+  Source? get music;
   DungeonStage? next();
 }
 
@@ -36,12 +39,16 @@ class Dungeon extends DungeonSettings {
   Dungeon({
     required this.stages,
     this.background,
+    this.music,
   });
 
   final List<DungeonStage> stages;
 
   @override
   final String? background;
+
+  @override
+  final Source? music;
 
   int _index = -1;
 
@@ -90,7 +97,10 @@ class InfiniteDungeon extends DungeonSettings {
   final void Function(int)? onProgress;
 
   @override
-  String? get background => null;
+  String? background;
+
+  @override
+  Source? music;
 
   List<NextStageCondition> get _conditions {
     return const [
@@ -107,24 +117,23 @@ class InfiniteDungeon extends DungeonSettings {
   }
 
   Dungeon _next(int floor, [double multiplier = 1]) {
-    print('multiplier is $multiplier');
     if (floor >= 6) {
       return _next(floor % 6, multiplier * 4 * (floor ~/ 6));
     }
 
     if (floor >= 4) {
       return Dungeon(
+        music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+        background: 'swamp',
         stages: [
           DungeonStage(
             name: 'Болото - $floor',
-            background: 'swamp',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
             multiplier: multiplier * 2,
           ),
           DungeonStage(
             name: 'Болото - Босс Битва - $floor',
-            background: 'swamp',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
             multiplier: multiplier * 2,
@@ -133,17 +142,17 @@ class InfiniteDungeon extends DungeonSettings {
       );
     } else if (floor >= 2) {
       return Dungeon(
+        music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+        background: 'forest',
         stages: [
           DungeonStage(
             name: 'Лес - $floor',
-            background: 'forest',
             enemies: FieldsEnemies.enemies,
             conditions: _conditions,
             multiplier: multiplier * 1.5,
           ),
           DungeonStage(
             name: 'Лес - Босс Битва - $floor',
-            background: 'forest',
             enemies: FieldsEnemies.unique,
             conditions: _bossConditions,
             multiplier: multiplier * 1.5,
@@ -153,17 +162,17 @@ class InfiniteDungeon extends DungeonSettings {
     }
 
     return Dungeon(
+      music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+      background: 'fields',
       stages: [
         DungeonStage(
           name: 'Поля - $floor',
-          background: 'fields',
           enemies: FieldsEnemies.enemies,
           conditions: _conditions,
           multiplier: multiplier,
         ),
         DungeonStage(
           name: 'Поля - Босс Битва - $floor',
-          background: 'fields',
           enemies: FieldsEnemies.unique,
           conditions: _bossConditions,
           multiplier: multiplier,
@@ -185,6 +194,8 @@ class InfiniteDungeon extends DungeonSettings {
 
       _dungeon = _next(floor);
       stage = _dungeon!.next();
+      background = _dungeon!.background;
+      music = _dungeon!.music;
     }
 
     return stage;

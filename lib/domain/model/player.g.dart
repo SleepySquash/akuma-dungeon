@@ -22,17 +22,16 @@ class PlayerAdapter extends TypeAdapter<Player> {
       gender: fields[2] as Gender,
       exp: fields[3] as int,
       rank: fields[4] as int,
-      money: fields[5] as int,
-      equipped: (fields[6] as List).cast<MyEquipable>(),
-      weapon: (fields[7] as List).cast<MyWeapon>(),
-      party: (fields[8] as List).cast<MyCharacter>(),
+      equipped: (fields[5] as List?)?.cast<MyEquipable>(),
+      weapon: (fields[6] as List?)?.cast<MyWeapon>(),
+      party: (fields[7] as List?)?.cast<MyCharacter>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Player obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -44,12 +43,10 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..writeByte(4)
       ..write(obj.rank)
       ..writeByte(5)
-      ..write(obj.money)
-      ..writeByte(6)
       ..write(obj.equipped)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.weapon)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.party);
   }
 

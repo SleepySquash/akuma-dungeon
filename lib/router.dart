@@ -14,11 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/repository/player.dart';
-import 'package:akuma/domain/service/gacha.dart';
-import 'package:akuma/domain/service/player.dart';
-import 'package:akuma/provider/hive/player.dart';
-import 'package:akuma/store/player.dart';
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,29 +26,35 @@ import 'domain/model/player.dart';
 import 'domain/repository/character.dart';
 import 'domain/repository/flag.dart';
 import 'domain/repository/item.dart';
+import 'domain/repository/player.dart';
 import 'domain/repository/settings.dart';
 import 'domain/repository/task.dart';
 import 'domain/service/auth.dart';
 import 'domain/service/character.dart';
+import 'domain/service/gacha.dart';
 import 'domain/service/item.dart';
+import 'domain/service/player.dart';
 import 'domain/service/task.dart';
 import 'provider/hive/application_settings.dart';
 import 'provider/hive/character.dart';
 import 'provider/hive/flag.dart';
 import 'provider/hive/item.dart';
+import 'provider/hive/player.dart';
 import 'provider/hive/progression.dart';
 import 'provider/hive/task.dart';
 import 'store/character.dart';
 import 'store/flag.dart';
 import 'store/item.dart';
+import 'store/player.dart';
 import 'store/settings.dart';
 import 'store/task.dart';
 import 'ui/page/auth/view.dart';
-import 'ui/page/home/page/dungeon/controller.dart';
 import 'ui/page/home/view.dart';
 import 'ui/page/introduction/view.dart';
 import 'ui/widget/context_menu/overlay.dart';
 import 'ui/widget/notification/view.dart';
+import 'ui/worker/music.dart';
+import 'ui/worker/player.dart';
 import 'ui/worker/settings.dart';
 import 'ui/worker/task.dart';
 import 'util/scoped_dependencies.dart';
@@ -62,10 +65,11 @@ late RouterState router;
 /// Application routes names.
 class Routes {
   static const auth = '/';
+  static const dungeon = '/dungeon';
   static const home = '/';
   static const introduction = '/introduction';
+  static const nowhere = '/nowhere';
   static const settings = '/settings';
-  static const dungeon = '/dungeon';
 }
 
 /// Application's router state.
@@ -321,7 +325,9 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
               ),
             );
 
+            MusicWorker musicWorker = deps.put(MusicWorker(settingsRepository));
             deps.put(TaskWorker(taskService, Get.find()));
+            deps.put(PlayerWorker(playerService, Get.find(), musicWorker));
 
             return deps;
           },
@@ -382,8 +388,11 @@ extension RouteLinks on RouterState {
   void introduction() => go(Routes.introduction);
 
   /// Changes router location to the [Routes.dungeon] page.
-  void dungeon(DungeonSettings settings, {void Function()? onClear}) {
+  void dungeon(DungeonSettings settings, {FutureOr<void> Function()? onClear}) {
     go(Routes.dungeon);
     arguments = {'args': settings, 'onClear': onClear};
   }
+
+  /// Changes router location to the [Routes.nowhere] page.
+  void nowhere() => go(Routes.nowhere);
 }

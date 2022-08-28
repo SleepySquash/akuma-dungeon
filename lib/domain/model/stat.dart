@@ -4,14 +4,6 @@ abstract class Stat {
   final int max;
 }
 
-class CritRateStat extends Stat {
-  const CritRateStat(super.amount);
-}
-
-class CritDmgStat extends Stat {
-  const CritDmgStat(super.amount);
-}
-
 class AtkPercentStat extends Stat {
   const AtkPercentStat(super.amount);
 }
@@ -34,4 +26,20 @@ class HpStat extends Stat {
 
 class HpPercentStat extends Stat {
   const HpPercentStat(super.amount);
+}
+
+class CritRateStat extends Stat {
+  const CritRateStat(super.amount);
+}
+
+class CritDmgStat extends Stat {
+  const CritDmgStat(super.amount);
+}
+
+class UltStat extends Stat {
+  const UltStat(super.amount);
+}
+
+class UltPercentStat extends Stat {
+  const UltPercentStat(super.amount);
 }

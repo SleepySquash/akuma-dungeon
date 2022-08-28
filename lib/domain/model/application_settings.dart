@@ -23,9 +23,23 @@ part 'application_settings.g.dart';
 /// Overall application settings used by the whole app.
 @HiveType(typeId: ModelTypeId.applicationSettings)
 class ApplicationSettings extends HiveObject {
-  ApplicationSettings({this.locale});
+  ApplicationSettings({
+    this.locale,
+    this.musicVolume,
+    this.soundVolume,
+    this.voiceVolume,
+  });
 
   /// Preferred language to use in the application.
   @HiveField(0)
   String? locale;
+
+  @HiveField(1)
+  double? musicVolume;
+
+  @HiveField(2)
+  double? soundVolume;
+
+  @HiveField(3)
+  double? voiceVolume;
 }

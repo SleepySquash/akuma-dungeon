@@ -17,9 +17,26 @@
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
+import '/ui/widget/item_grid.dart' show InventoryCategory;
 
 class ItemController extends GetxController {
-  ItemController(this.item);
+  ItemController(
+    MyItem item, {
+    this.exchangeItemSettings,
+  }) : item = Rx(item);
 
-  final MyItem item;
+  final Rx<MyItem> item;
+  final ExchangeItemSettings? exchangeItemSettings;
+}
+
+class ExchangeItemSettings {
+  const ExchangeItemSettings({
+    this.category,
+    this.filter,
+    this.onExchange,
+  });
+
+  final void Function(MyItem? item)? onExchange;
+  final InventoryCategory? category;
+  final Iterable<Rx<MyItem>> Function(Iterable<Rx<MyItem>> items)? filter;
 }

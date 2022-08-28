@@ -56,8 +56,6 @@ class PreciseButton extends StatefulWidget {
 }
 
 class _PreciseButtonState extends State<PreciseButton> {
-  int _fingers = 0;
-
   @override
   Widget build(BuildContext context) {
     return MouseRegion(

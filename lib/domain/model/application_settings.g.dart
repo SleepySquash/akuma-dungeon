@@ -18,15 +18,24 @@ class ApplicationSettingsAdapter extends TypeAdapter<ApplicationSettings> {
     };
     return ApplicationSettings(
       locale: fields[0] as String?,
+      musicVolume: fields[1] as double?,
+      soundVolume: fields[2] as double?,
+      voiceVolume: fields[3] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ApplicationSettings obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.locale);
+      ..write(obj.locale)
+      ..writeByte(1)
+      ..write(obj.musicVolume)
+      ..writeByte(2)
+      ..write(obj.soundVolume)
+      ..writeByte(3)
+      ..write(obj.voiceVolume);
   }
 
   @override

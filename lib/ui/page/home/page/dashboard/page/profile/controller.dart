@@ -14,12 +14,14 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:audioplayers/audioplayers.dart' show AssetSource;
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
 import '/domain/model/player.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
+import '/ui/worker/music.dart';
 import '/util/obs/obs.dart';
 
 enum ProfileTab {
@@ -30,16 +32,21 @@ enum ProfileTab {
 }
 
 class ProfileController extends GetxController {
-  ProfileController(this._playerService, this._itemService);
+  ProfileController(this._playerService, this._itemService, this._musicWorker);
 
   final Rx<ProfileTab> tab = Rx(ProfileTab.attributes);
 
   final PlayerService _playerService;
   final ItemService _itemService;
+  final MusicWorker _musicWorker;
 
   Rx<Player?> get player => _playerService.player;
   RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
 
-  void equip(MyItem item) => _playerService.equip(item);
+  void equip(MyItem item) {
+    _playerService.equip(item);
+    _musicWorker.once(AssetSource('sound/shu-shu-equip.m4a'));
+  }
+
   void unequip(MyItem item) => _playerService.unequip(item);
 }

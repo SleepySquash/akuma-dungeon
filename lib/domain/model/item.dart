@@ -45,12 +45,33 @@ abstract class Item {
   final int count;
 }
 
-class NoopItem extends Item {
-  NoopItem(super.count);
+mixin ImpossibleItem on Item {}
+
+class NoopItem extends Item with ImpossibleItem {
+  const NoopItem(super.count);
 }
 
-mixin Artifact on Item {
+class NoopWeapon extends Weapon with ImpossibleItem {
+  const NoopWeapon(super.count);
+}
+
+class NoopEquipable extends Equipable with ImpossibleItem {
+  const NoopEquipable(super.count);
+}
+
+abstract class Artifact extends Item {
+  const Artifact(super.count);
+
+  @override
+  String get asset => 'artifact/$id';
+
   List<Stat> get stats => [];
+
+  @override
+  int? get max => 1;
+
+  /// Maximum allowed level for an [Artifact] to have.
+  static const int maxLevel = 100;
 }
 
 /// [Item] equipable by the [Player].
@@ -64,7 +85,10 @@ abstract class Equipable extends Item {
 
   List<Stat> get stats => [];
 
-  /// Maximum allowed level for a [Equipable] to have.
+  @override
+  int? get max => 1;
+
+  /// Maximum allowed level for an [Equipable] to have.
   static const int maxLevel = 100;
 
   List<int> get defenses => List.generate(maxLevel + 1, (i) => defense * i);
@@ -87,6 +111,9 @@ abstract class Weapon extends Item {
   int get damage => 1;
 
   List<Stat> get stats => [];
+
+  @override
+  int? get max => 1;
 
   /// Maximum allowed level for a [Weapon] to have.
   static const int maxLevel = 100;
@@ -125,9 +152,10 @@ class MyItem {
   MyItem(
     this.item, {
     int? count,
-  }) : count = count ?? item.count;
+  })  : count = count ?? item.count,
+        id = item.max == null ? item.id : const Uuid().v4();
 
-  final String id = const Uuid().v4();
+  final String id;
   final Item item;
 
   int count;
@@ -157,4 +185,13 @@ class MyWeapon extends MyItem {
   int level;
 
   int damage;
+}
+
+class MyArtifact extends MyItem {
+  MyArtifact(
+    Artifact artifact, {
+    this.level = 1,
+  }) : super(artifact, count: 1);
+
+  int level;
 }
