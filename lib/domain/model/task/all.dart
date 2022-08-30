@@ -14,15 +14,25 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import 'dungeon/all.dart';
 import 'main/all.dart';
 
 abstract class Tasks {
   static List<Task> get all => [
-        ...DungeonTasks.all,
-        ...MainTasks.all,
+        ...DungeonTasks.tasks,
+        ...MainTasks.tasks,
       ];
 
   static Task get(String id) => all.firstWhere((e) => e.id == id);
+}
+
+abstract class TasksQueues {
+  static List<TaskQueue> get all => [
+        ...DungeonTasks.queues,
+        ...MainTasks.queues,
+      ];
+
+  static TaskQueue get(String id) => all.firstWhere((e) => e.id == id);
 }

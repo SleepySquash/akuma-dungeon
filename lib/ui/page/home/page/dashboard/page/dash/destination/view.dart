@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
+import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/router.dart';
 import 'controller.dart';
@@ -28,7 +29,7 @@ class DestinationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DestinationController(Get.find()),
+      init: DestinationController(Get.find(), Get.find()),
       builder: (DestinationController c) {
         return Material(
           type: MaterialType.transparency,
@@ -39,26 +40,94 @@ class DestinationView extends StatelessWidget {
             return ListView(
               shrinkWrap: true,
               children: [
-                const ListTile(title: Text('Путь к Богине')),
-                ListTile(
-                  leading: const Icon(Icons.fort),
-                  title: const Text('Путь к Богине'),
-                  subtitle:
-                      const Text('Хватит обороняться, напади на монстров!'),
-                  trailing: Obx(() {
-                    return Text('${c.progression.value.level}-й этаж');
-                  }),
-                  onTap: () {
-                    router.dungeon(
-                      InfiniteDungeon(
-                        floor: c.progression.value.level,
-                        onProgress: c.progress,
-                      ),
+                if (c.queues.isNotEmpty) ...[
+                  const ListTile(title: Text('Приключения')),
+                  ...c.queues.values.map((m) {
+                    MyTaskQueue e = m.value;
+
+                    if (e.isCompleted || e.active == null) {
+                      return ListTile(
+                        leading: const Icon(Icons.question_answer),
+                        title: Text(e.queue.name),
+                        subtitle: const Text('Продолжение следует...'),
+                        trailing: IconButton(
+                          onPressed: () => c.restartQueue(e),
+                          icon: const Icon(Icons.restart_alt),
+                        ),
+                        onTap: null,
+                      );
+                    }
+
+                    bool met = c.criteriaMet(e.active!);
+
+                    return Stack(
+                      children: [
+                        ListTile(
+                          leading: Icon(e.active!.task.icon),
+                          title: Text(e.queue.name),
+                          subtitle: Text(e.active!.task.description ??
+                              e.active!.task.name),
+                          trailing: const Icon(Icons.forward),
+                          onTap: met
+                              ? () {
+                                  Navigator.of(context).pop();
+                                  c.executeQueue(m.value);
+                                }
+                              : null,
+                        ),
+                        if (!met)
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                color: Colors.black.withOpacity(0.6),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.lock, color: Colors.white),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: e.active!.task.criteria.map((e) {
+                                      if (e is LevelCriteria) {
+                                        if ((c.player.value?.level ?? 0) <
+                                            e.level) {
+                                          return Text(
+                                            'Level: ${e.level} or higher',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        }
+                                      } else if (e is RankCriteria) {
+                                        if ((c.player.value?.rank ?? 0) <
+                                            e.rank.index) {
+                                          return Text(
+                                            'Rank: ${e.rank.name} or higher',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        }
+                                      }
+
+                                      return Container();
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
                     );
-                    Navigator.of(context).pop();
-                  },
-                ),
-                const Divider(),
+                  }),
+                  const Divider(),
+                ],
 
                 const ListTile(title: Text('Путешествия')),
                 // const ListTile(
@@ -85,10 +154,34 @@ class DestinationView extends StatelessWidget {
                         '${e.rank.name} (${m.value.progress}/${e.steps.length})'),
                     onTap: () {
                       Navigator.of(context).pop();
-                      c.execute(m.value);
+                      c.executeTask(m.value);
                     },
                   );
                 }),
+
+                const Divider(),
+
+                const ListTile(title: Text('Путь к Богине')),
+                ListTile(
+                  leading: const Icon(Icons.fort),
+                  title: const Text('Путь к Богине'),
+                  subtitle:
+                      const Text('Хватит обороняться, напади на монстров!'),
+                  trailing: Obx(() {
+                    return Text(
+                      '${c.progression.value.goddessTowerLevel}-й этаж',
+                    );
+                  }),
+                  onTap: () {
+                    router.dungeon(
+                      InfiniteDungeon(
+                        floor: c.progression.value.goddessTowerLevel,
+                        onProgress: c.setGoddessTower,
+                      ),
+                    );
+                    Navigator.of(context).pop();
+                  },
+                ),
 
                 // const Divider(),
                 // const ListTile(title: Text('Артефакты')),

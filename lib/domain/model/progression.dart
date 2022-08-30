@@ -5,8 +5,14 @@ part 'progression.g.dart';
 
 @HiveType(typeId: ModelTypeId.gameProgression)
 class GameProgression extends HiveObject {
-  GameProgression({this.level = 0});
+  GameProgression({
+    this.goddessTowerLevel = 0,
+    this.storyChapter = 1,
+  });
 
   @HiveField(0)
-  int level;
+  int goddessTowerLevel;
+
+  @HiveField(1)
+  int storyChapter;
 }

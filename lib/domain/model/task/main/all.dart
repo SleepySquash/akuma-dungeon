@@ -15,9 +15,15 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import '/domain/model/task.dart';
+import '/domain/model/task_queue.dart';
+import 'chapter_1.dart';
 
 abstract class MainTasks {
-  static List<Task> get all => [];
+  static List<Task> get tasks => [
+        ...ChapterOneTasks.tasks,
+      ];
 
-  static Task get(String id) => all.firstWhere((e) => e.id == id);
+  static List<TaskQueue> get queues => [
+        ...ChapterOneTasks.queues,
+      ];
 }

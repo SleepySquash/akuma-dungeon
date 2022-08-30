@@ -17,16 +17,19 @@ class GameProgressionAdapter extends TypeAdapter<GameProgression> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GameProgression(
-      level: fields[0] as int,
+      goddessTowerLevel: fields[0] as int,
+      storyChapter: fields[1] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, GameProgression obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.level);
+      ..write(obj.goddessTowerLevel)
+      ..writeByte(1)
+      ..write(obj.storyChapter);
   }
 
   @override

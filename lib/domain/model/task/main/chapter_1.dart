@@ -18,22 +18,45 @@ import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/fields.dart';
+import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 
-abstract class FirstMainTasks {
-  static List<Task> get all => [
+abstract class ChapterOneTasks {
+  static List<Task> get tasks => [
+        ...const ChapterOne().tasks,
+      ];
+
+  static List<TaskQueue> get queues => const [
+        ChapterOne(),
+      ];
+}
+
+class ChapterOne extends TaskQueue {
+  const ChapterOne();
+
+  @override
+  String get id => 'chapter_one';
+
+  @override
+  String get name => 'Story - Chapter I';
+
+  @override
+  List<Task> get tasks => const [
         IntroductionTask(),
+        NeighborVillageTask(),
       ];
 }
 
 class IntroductionTask extends Task {
+  const IntroductionTask();
+
   @override
-  String get id => 'introduction';
+  String get id => 'chapter1_introduction';
 
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          BackgroundLine('guild.jpg'),
+          BackgroundLine('location/guild.jpg'),
           DialogueLine('Hello, testing!!'),
           DialogueLine('Yay!'),
         ]),
@@ -54,7 +77,47 @@ class IntroductionTask extends Task {
           ),
         ),
         NovelStep([
-          BackgroundLine('guild.jpg'),
+          BackgroundLine('location/guild.jpg'),
+          DialogueLine('Wow, you did it!!'),
+          DialogueLine('Yay! Yay! Yay!'),
+        ]),
+      ];
+}
+
+class NeighborVillageTask extends Task {
+  const NeighborVillageTask();
+
+  @override
+  String get id => 'chapter1_neighbor_village';
+
+  @override
+  List<TaskCriteria> get criteria => [const LevelCriteria(10)];
+
+  @override
+  List<TaskStep> get steps => [
+        NovelStep([
+          BackgroundLine('location/forest_house.jpg'),
+          DialogueLine('Hello, testing!!'),
+          DialogueLine('Yay!'),
+        ]),
+        DungeonStep(
+          Dungeon(
+            stages: [
+              DungeonStage(
+                background: 'fields',
+                enemies: FieldsEnemies.all,
+                conditions: const [SlayedStageCondition(1)],
+              ),
+              DungeonStage(
+                background: 'forest',
+                enemies: FieldsEnemies.all,
+                conditions: const [SlayedStageCondition(2)],
+              ),
+            ],
+          ),
+        ),
+        NovelStep([
+          BackgroundLine('location/forest_house.jpg'),
           DialogueLine('Wow, you did it!!'),
           DialogueLine('Yay! Yay! Yay!'),
         ]),
