@@ -42,6 +42,7 @@ import 'provider/hive/item.dart';
 import 'provider/hive/player.dart';
 import 'provider/hive/progression.dart';
 import 'provider/hive/task.dart';
+import 'provider/hive/task_queue.dart';
 import 'store/character.dart';
 import 'store/flag.dart';
 import 'store/item.dart';
@@ -275,6 +276,7 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
               deps.put(FlagHiveProvider()).init(),
               deps.put(TaskHiveProvider()).init(),
               deps.put(ProgressionHiveProvider()).init(),
+              deps.put(TaskQueueHiveProvider()).init(),
             ]);
 
             AbstractSettingsRepository settingsRepository =
@@ -313,6 +315,7 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             AbstractTaskRepository taskRepository =
                 deps.put<AbstractTaskRepository>(
               TaskRepository(
+                Get.find(),
                 Get.find(),
                 Get.find(),
               ),

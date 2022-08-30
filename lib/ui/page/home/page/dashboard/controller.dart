@@ -38,7 +38,7 @@ class DashboardController extends GetxController {
   final TaskService _taskService;
   final MusicWorker _musicWorker;
 
-  RxInt get completedTasks => _taskService.completedTasks;
+  RxInt get completedTasks => RxInt(0);
 
   final AssetSource _source =
       AssetSource('music/mixkit-driving-ambition-32.mp3');

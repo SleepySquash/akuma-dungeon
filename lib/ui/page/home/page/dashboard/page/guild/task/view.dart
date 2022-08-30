@@ -36,7 +36,7 @@ class TaskView extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              ...DungeonTasks.all.map((e) {
+              ...DungeonTasks.tasks.map((e) {
                 return Obx(() {
                   Rx<MyTask>? task = c.tasks[e.id];
                   bool taken = task != null;

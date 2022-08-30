@@ -1,13 +1,16 @@
 import 'dart:async';
 
-import 'package:akuma/domain/model/item.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
 import 'dungeon.dart';
+import 'item.dart';
+import 'player.dart';
 import 'rank.dart';
 
 abstract class Task {
+  const Task();
+
   String get id;
 
   String get name => id;
@@ -15,14 +18,20 @@ abstract class Task {
   IconData get icon => Icons.abc;
 
   Rank get rank => Rank.F;
+  int get level => 1;
 
   List<TaskStep> get steps;
+
   List<TaskReward> get rewards => const [
         MoneyReward(50),
         ExpReward(10),
         RankReward(1),
       ];
+
+  List<TaskCriteria> get criteria => const [];
 }
+
+mixin GuildTask on Task {}
 
 class MyTask {
   MyTask({
@@ -35,6 +44,20 @@ class MyTask {
   int progress;
 
   bool get isCompleted => progress >= task.steps.length;
+
+  bool criteriaMet({Player? player}) {
+    bool met = true;
+
+    for (var c in task.criteria) {
+      if (c is LevelCriteria) {
+        met = met && (player?.level ?? 0) >= c.level;
+      } else if (c is RankCriteria) {
+        met = met && (player?.rank ?? 0) >= c.rank.index;
+      }
+    }
+
+    return met;
+  }
 }
 
 abstract class TaskStep {
@@ -78,4 +101,18 @@ class ItemReward extends TaskReward {
 class RankReward extends TaskReward {
   const RankReward(this.amount);
   final int amount;
+}
+
+abstract class TaskCriteria {
+  const TaskCriteria();
+}
+
+class LevelCriteria extends TaskCriteria {
+  const LevelCriteria(this.level);
+  final int level;
+}
+
+class RankCriteria extends TaskCriteria {
+  const RankCriteria(this.rank);
+  final Rank rank;
 }
