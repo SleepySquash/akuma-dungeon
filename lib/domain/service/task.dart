@@ -75,16 +75,10 @@ class TaskService extends DisposableInterface {
   }
 
   void executeQueue(MyTaskQueue queue) {
-    MyTask? task;
-
-    if (queue.active?.isCompleted == true) {
-      task = queue.accomplish();
-    } else {
-      task = queue.active;
-    }
+    MyTask? task = queue.active ?? queue.execute();
 
     if (task != null) {
-      if (!task.criteriaMet(player: _playerService.player.value)) {
+      if (!task.task.criteriaMet(player: _playerService.player.value)) {
         return;
       }
 
@@ -97,7 +91,7 @@ class TaskService extends DisposableInterface {
 
         if (task.isCompleted) {
           finish(task);
-          if (queue.accomplish() == null) {
+          if (queue.complete()) {
             complete(queue);
           }
           router.home();

@@ -37,5 +37,13 @@ abstract class Items {
         ...StandardItems.equipable,
       ];
 
+  static List<Item> get resource => [
+        ...StandardItems.resource,
+      ];
+
+  static List<Item> get skills => [
+        ...StandardItems.skills,
+      ];
+
   static Item? get(String id) => all.firstWhereOrNull((e) => e.id == id);
 }

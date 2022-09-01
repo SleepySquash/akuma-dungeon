@@ -19,7 +19,7 @@ import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
-import '/domain/model/enemy/fields.dart';
+import '/domain/model/enemy/slime.dart';
 import '/domain/model/item/standard.dart';
 import '/domain/model/rank.dart';
 import '/domain/model/task_queue.dart';
@@ -62,12 +62,12 @@ class SlimeFieldsDungeonTask extends Task with GuildTask {
             stages: [
               DungeonStage(
                 background: 'fields',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'forest',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],
@@ -101,12 +101,12 @@ class SlimeForestDungeonTask extends Task with GuildTask {
             stages: [
               DungeonStage(
                 background: 'forest',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'forest',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],
@@ -140,12 +140,12 @@ class SlimeSwampDungeonTask extends Task with GuildTask {
             stages: [
               DungeonStage(
                 background: 'swamp',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'swamp',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],
@@ -190,12 +190,12 @@ class RestaurantDungeonTask extends Task with GuildTask {
             stages: [
               DungeonStage(
                 background: 'swamp',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'swamp',
-                enemies: FieldsEnemies.enemies,
+                enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],

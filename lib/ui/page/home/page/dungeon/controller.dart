@@ -16,20 +16,21 @@
 
 import 'dart:async';
 
-import 'package:akuma/domain/model/item.dart';
-import 'package:akuma/domain/model/item/standard.dart';
-import 'package:akuma/domain/service/item.dart';
-import 'package:akuma/ui/worker/music.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
+import '/domain/model/item.dart';
+import '/domain/model/item/standard.dart';
 import '/domain/model/player.dart';
+import '/domain/model/task.dart';
+import '/domain/service/item.dart';
 import '/domain/service/player.dart';
 import '/router.dart';
 import '/ui/widget/modal_popup.dart';
+import '/ui/worker/music.dart';
 import 'component/result.dart';
 
 class DungeonController extends GetxController {
@@ -241,11 +242,21 @@ class DungeonController extends GetxController {
     if (!gameEnded.value) {
       gameEnded.value = true;
 
+      for (var r in settings.rewards ?? []) {
+        if (r is MoneyReward) {
+          _itemService.add(Dogecoin(r.amount));
+        } else if (r is ItemReward) {
+          _itemService.add(r.item);
+        } else if (r is ExpReward) {
+          _playerService.addExperience(r.amount);
+        }
+      }
+
       if (onClear == null) {
         await ModalPopup.show(
           context: router.context!,
           isDismissible: false,
-          child: const ResultModal(true),
+          child: ResultModal(this, won: true),
         );
       }
 
@@ -259,7 +270,7 @@ class DungeonController extends GetxController {
       ModalPopup.show(
         context: router.context!,
         isDismissible: false,
-        child: const ResultModal(false),
+        child: ResultModal(this),
       );
     }
   }

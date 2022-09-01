@@ -25,6 +25,12 @@ class Themes {
     return theme.copyWith(
       useMaterial3: true,
       textTheme: GoogleFonts.balsamiqSansTextTheme(),
+      // colorScheme: theme.colorScheme.copyWith(
+      //   primary: const Color(0xFFEEEEEE),
+      //   primaryContainer: const Color(0xFFEEEEEE),
+      //   onPrimaryContainer: Colors.black,
+      //   onPrimary: Colors.black,
+      // ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),

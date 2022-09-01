@@ -15,11 +15,11 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import '/domain/model/enemy.dart';
-import 'fields.dart';
+import 'slime.dart';
 
 abstract class Enemies {
   static List<Enemy> get all => [
-        ...FieldsEnemies.enemies,
+        ...SlimeEnemies.all,
       ];
 
   static Enemy get(String id) => all.firstWhere((e) => e.id == id);

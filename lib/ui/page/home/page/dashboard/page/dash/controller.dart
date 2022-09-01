@@ -17,17 +17,21 @@
 import 'package:get/get.dart';
 
 import '/domain/model/player.dart';
+import '/domain/model/progression.dart';
 import '/domain/service/auth.dart';
 import '/domain/service/player.dart';
+import '/domain/service/task.dart';
 import '/router.dart';
 
 class DashController extends GetxController {
-  DashController(this._authService, this._playerService);
+  DashController(this._authService, this._playerService, this._taskService);
 
   final AuthService _authService;
   final PlayerService _playerService;
+  final TaskService _taskService;
 
   Rx<Player?> get player => _playerService.player;
+  Rx<GameProgression> get progression => _taskService.progression;
 
   void logout() {
     _authService.logout();

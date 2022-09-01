@@ -27,7 +27,7 @@ import 'controller.dart';
 class SettingsView extends StatelessWidget {
   const SettingsView({Key? key}) : super(key: key);
 
-  static Future<T?> show<T>({required BuildContext context}) {
+  static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const SettingsView());
   }
 

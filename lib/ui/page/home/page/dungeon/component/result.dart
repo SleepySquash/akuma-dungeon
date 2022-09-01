@@ -16,19 +16,66 @@
 
 import 'package:flutter/material.dart';
 
+import '/domain/model/task.dart';
 import '/router.dart';
+import '/ui/page/home/page/dungeon/controller.dart';
 
 class ResultModal extends StatelessWidget {
-  const ResultModal(this.won, {Key? key}) : super(key: key);
+  const ResultModal(
+    this.c, {
+    Key? key,
+    this.won = false,
+  }) : super(key: key);
 
+  final DungeonController c;
   final bool won;
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(won ? 'You cleared the dungeon!!' : 'You lost, you retreat :('),
+        if (won && (c.settings.rewards ?? []).isNotEmpty)
+          Flexible(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                const ListTile(title: Text('Rewards:')),
+                ...(c.settings.rewards ?? []).map((e) {
+                  IconData? icon;
+                  Widget? title;
+
+                  if (e is MoneyReward) {
+                    icon = Icons.money;
+                    title = Text('${e.amount} gold');
+                  } else if (e is ExpReward) {
+                    icon = Icons.person;
+                    title = Text('${e.amount} experience');
+                  } else if (e is RankReward) {
+                    icon = Icons.add_card;
+                    title = Text('${e.amount} rank progression');
+                  } else if (e is ItemReward) {
+                    icon = Icons.check_box;
+                    title = Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset('assets/item/${e.item.asset}.png',
+                            height: 30),
+                        const SizedBox(width: 5),
+                        Text('${e.item.count} ${e.item.name}'),
+                      ],
+                    );
+                  }
+
+                  return ListTile(
+                    leading: icon == null ? null : Icon(icon),
+                    title: title,
+                  );
+                }),
+              ],
+            ),
+          ),
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
