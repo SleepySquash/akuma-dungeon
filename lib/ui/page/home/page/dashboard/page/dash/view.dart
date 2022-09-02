@@ -18,11 +18,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/ui/page/home/page/settings/view.dart';
+import '/ui/page/home/widget/menu_tile.dart';
+import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/dummy_character.dart';
-import '/ui/widget/modal_popup.dart';
-import '/ui/worker/music.dart';
+import '/ui/widget/locked.dart';
+import 'adventures/view.dart';
+import 'battle_pass/view.dart';
 import 'controller.dart';
-import 'destination/view.dart';
+import 'daily/view.dart';
+import 'dungeons/view.dart';
+import 'events/view.dart';
+import 'goddess/view.dart';
+import 'guild/view.dart';
+import 'mail/view.dart';
+import 'profile_settings/view.dart';
+import 'room/view.dart';
+import 'social/view.dart';
 
 class DashView extends StatelessWidget {
   const DashView({Key? key}) : super(key: key);
@@ -30,123 +41,181 @@ class DashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DashController(Get.find(), Get.find()),
+      init: DashController(Get.find(), Get.find(), Get.find()),
       builder: (DashController c) {
-        return Column(
+        return Stack(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () => SettingsView.show(context: context),
-                  icon: const Icon(Icons.settings),
-                ),
-                IconButton(
-                  onPressed: () {
-                    MusicWorker worker = Get.find<MusicWorker>();
-                    if (worker.isPlaying) {
-                      worker.stop();
-                    } else {
-                      worker.resume();
-                    }
-                  },
-                  icon: const Icon(Icons.volume_down),
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: c.logout,
-                  icon: const Icon(Icons.logout),
-                )
-              ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Obx(() {
+                return DummyCharacter(
+                  race: c.player.value!.race,
+                  gender: c.player.value!.gender,
+                );
+              }),
             ),
-            Expanded(
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Obx(() {
-                      return DummyCharacter(
-                        race: c.player.value!.race,
-                        gender: c.player.value!.gender,
-                      );
-                    }),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              await ModalPopup.show(
-                                context: context,
-                                maxWidth: 600,
-                                child: const DestinationView(),
-                              );
-
-                              // return router.dungeon(
-                              //   DungeonSettings(
-                              //     stages: [
-                              //       DungeonStage(
-                              //         name: 'Fields',
-                              //         enemies: FieldsEnemies.enemies,
-                              //         background: 'fields',
-                              //         conditions: [
-                              //           const SlayedStageCondition(10),
-                              //         ],
-                              //       ),
-                              //       DungeonStage(
-                              //         name: 'Forest',
-                              //         enemies: FieldsEnemies.enemies,
-                              //         background: 'forest',
-                              //         conditions: [
-                              //           const SlayedStageCondition(10),
-                              //           TimerStageCondition(120.seconds),
-                              //         ],
-                              //       ),
-                              //       DungeonStage(
-                              //         name: 'Swamp - Boss Battle',
-                              //         enemies: [RedLongSlimeEnemy()],
-                              //         background: 'swamp',
-                              //         conditions: [
-                              //           const SlayedStageCondition(1),
-                              //           TimerStageCondition(60.seconds),
-                              //         ],
-                              //       ),
-                              //     ],
-                              //   ),
-                              // );
-                            },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                SizedBox(height: 8),
-                                Text('Путешествия!'),
-                                SizedBox(height: 8),
-                              ],
+                          LockedWidget(
+                            borderRadius: BorderRadius.circular(12),
+                            child: FloatingActionButton(
+                              onPressed: () => DailyView.show(context),
+                              child: const Icon(Icons.bookmark),
                             ),
                           ),
-                          const SizedBox(height: 4),
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Battle pass'),
+                          const SizedBox(width: 5),
+                          LockedWidget(
+                            borderRadius: BorderRadius.circular(12),
+                            child: FloatingActionButton(
+                              onPressed: () => MailView.show(context),
+                              child: const Icon(Icons.mail),
+                            ),
                           ),
-                          const SizedBox(height: 4),
-                          ElevatedButton(
-                            onPressed: c.addLevel,
-                            child: const Text('Mail'),
+                          const SizedBox(width: 5),
+                          FloatingActionButton(
+                            onPressed: () => SettingsView.show(context),
+                            child: const Icon(Icons.settings),
+                          ),
+                          const SizedBox(width: 5),
+                          Flexible(
+                            child: WideButton(
+                              onPressed: () =>
+                                  ProfileSettingsView.show(context),
+                              child: Center(
+                                widthFactor: 0,
+                                child: Text(
+                                  '${c.player.value?.name}',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 17),
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Flexible(child: _menu(context, c)),
+                  ],
+                ),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _menu(BuildContext context, DashController c) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 450, maxHeight: 500),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Expanded(
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () => EventsView.show(context),
+                    child: const Text('События'),
+                  ),
+                ),
+                Expanded(
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () => BattlePassView.show(context),
+                    child: const Text('Боевой пропуск'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 4,
+            child: MenuTile(
+              onPressed: () => AdventuresView.show(context),
+              child: const Text('Приключения'),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: MenuTile(
+                    onPressed: () => DungeonsView.show(context),
+                    child: const Text('Подземелья'),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: MenuTile(
+                    onPressed: () => GoddessView.show(context),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Flexible(child: Text('Путь к Богине')),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${c.progression.value.goddessTowerLevel}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Expanded(
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () => SocialView.show(context),
+                    child: const Text('Друзья'),
+                  ),
+                ),
+                Expanded(
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () => GuildView.show(context),
+                    child: const Text('Гильдия'),
+                  ),
+                ),
+                Expanded(
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () => RoomView.show(context),
+                    child: const Text('Комната'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

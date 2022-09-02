@@ -39,6 +39,7 @@ class NotificationOverlayController extends GetxController {
   RxObsList<LocalNotification> get notifications =>
       _notificationService.notifications;
   RxObsList<LocalNotification> get centered => _notificationService.centered;
+  RxObsList<LocalNotification> get additions => _notificationService.additions;
 
   @override
   void onInit() {

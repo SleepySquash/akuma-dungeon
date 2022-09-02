@@ -61,10 +61,23 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
   MyTaskQueue read(BinaryReader reader) {
     final id = reader.read() as String;
     final progress = reader.read() as int;
-    final active = reader.read() as MyTask?;
+    final activeId = reader.read() as String?;
+    final activeProgress = reader.read() as int?;
+
+    Task? active;
+    if (activeId != null) {
+      active = Tasks.get(activeId);
+      if (active == null) {
+        // ignore: avoid_print
+        print('Cannot find `Task` with id: $activeId');
+      }
+    }
+
     return MyTaskQueue(
       queue: TasksQueues.get(id),
-      active: active,
+      active: active == null
+          ? null
+          : MyTask(task: active, progress: activeProgress ?? 0),
       progress: progress,
     );
   }
@@ -73,6 +86,7 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
   void write(BinaryWriter writer, MyTaskQueue obj) {
     writer.write(obj.queue.id);
     writer.write(obj.progress);
-    writer.write(obj.active);
+    writer.write(obj.active?.task.id);
+    writer.write(obj.active?.progress);
   }
 }

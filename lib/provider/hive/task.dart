@@ -58,10 +58,15 @@ class MyTaskAdapter extends TypeAdapter<MyTask> {
   MyTask read(BinaryReader reader) {
     final id = reader.read() as String;
     final progress = reader.read() as int;
-    return MyTask(
-      task: Tasks.get(id),
-      progress: progress,
-    );
+
+    final Task? task = Tasks.get(id);
+    if (task == null) {
+      // ignore: avoid_print
+      print('Cannot find `Task` with id: $id');
+      return MyTask(task: const NoopTask());
+    }
+
+    return MyTask(task: task, progress: progress);
   }
 
   @override

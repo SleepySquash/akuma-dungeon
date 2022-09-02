@@ -29,6 +29,30 @@ abstract class Task {
       ];
 
   List<TaskCriteria> get criteria => const [];
+
+  bool criteriaMet({Player? player}) {
+    bool met = true;
+
+    for (var c in criteria) {
+      if (c is LevelCriteria) {
+        met = met && (player?.level ?? 0) >= c.level;
+      } else if (c is RankCriteria) {
+        met = met && (player?.rank ?? 0) >= c.rank.index;
+      }
+    }
+
+    return met;
+  }
+}
+
+class NoopTask extends Task {
+  const NoopTask();
+
+  @override
+  String get id => 'noop';
+
+  @override
+  List<TaskStep> get steps => [];
 }
 
 mixin GuildTask on Task {}
@@ -44,20 +68,6 @@ class MyTask {
   int progress;
 
   bool get isCompleted => progress >= task.steps.length;
-
-  bool criteriaMet({Player? player}) {
-    bool met = true;
-
-    for (var c in task.criteria) {
-      if (c is LevelCriteria) {
-        met = met && (player?.level ?? 0) >= c.level;
-      } else if (c is RankCriteria) {
-        met = met && (player?.rank ?? 0) >= c.rank.index;
-      }
-    }
-
-    return met;
-  }
 }
 
 abstract class TaskStep {

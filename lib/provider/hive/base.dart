@@ -66,7 +66,10 @@ abstract class HiveBaseProvider<T> extends DisposableInterface {
     registerAdapters();
     await _mutex.protect(() async {
       try {
-        _box = await Hive.openBox<T>(boxName);
+        _box = await Hive.openBox<T>(
+          boxName,
+          compactionStrategy: (i, j) => true,
+        );
       } catch (e) {
         await Future.delayed(Duration.zero);
         await Hive.deleteBoxFromDisk(boxName);

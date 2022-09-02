@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:collection/collection.dart';
+
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import 'dungeon/all.dart';
@@ -25,7 +27,7 @@ abstract class Tasks {
         ...MainTasks.tasks,
       ];
 
-  static Task get(String id) => all.firstWhere((e) => e.id == id);
+  static Task? get(String id) => all.firstWhereOrNull((e) => e.id == id);
 }
 
 abstract class TasksQueues {

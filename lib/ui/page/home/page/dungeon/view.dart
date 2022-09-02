@@ -26,6 +26,7 @@ import '/ui/widget/button.dart';
 import '/ui/widget/dummy_character.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
+import 'widget/hit_indicator.dart';
 
 class DungeonView extends StatelessWidget {
   const DungeonView({
@@ -47,7 +48,27 @@ class DungeonView extends StatelessWidget {
         Get.find(),
         settings: settings,
         onClear: onClear,
+        onHitTaken: (hit, entries) {
+          OverlayEntry? entry;
+          entry = OverlayEntry(
+            builder: (context) => IgnorePointer(
+              child: HitIndicator(
+                position: Offset(
+                  MediaQuery.of(context).size.width * 0.1,
+                  MediaQuery.of(context).size.height * 0.9,
+                ),
+                damage: hit.damage,
+                isCrit: hit.isCrit,
+                onEnd: entry?.remove,
+              ),
+            ),
+          );
+
+          entries.add(entry);
+          Overlay.of(context)?.insert(entry);
+        },
       ),
+      tag: settings.hashCode.toString(),
       builder: (DungeonController c) {
         return Stack(
           fit: StackFit.expand,
@@ -85,7 +106,7 @@ class DungeonView extends StatelessWidget {
               body: Stack(
                 alignment: Alignment.center,
                 children: [
-                  _enemy(c),
+                  _enemy(c, context),
                   Column(
                     children: [
                       _top(c, context),
@@ -102,7 +123,7 @@ class DungeonView extends StatelessWidget {
     );
   }
 
-  Widget _enemy(DungeonController c) {
+  Widget _enemy(DungeonController c, BuildContext context) {
     return Obx(() {
       MyEnemy? enemy = c.enemy.value;
       return AnimatedSwitcher(
@@ -114,7 +135,26 @@ class DungeonView extends StatelessWidget {
         child: enemy != null
             ? PreciseButton(
                 key: Key(enemy.key),
-                onPressed: c.hitEnemy,
+                onPressed: (p) {
+                  HitResult? hit = c.hitEnemy();
+
+                  if (hit != null) {
+                    OverlayEntry? entry;
+                    entry = OverlayEntry(
+                      builder: (context) => IgnorePointer(
+                        child: HitIndicator(
+                          position: p,
+                          damage: hit.damage,
+                          isCrit: hit.isCrit,
+                          onEnd: entry?.remove,
+                        ),
+                      ),
+                    );
+
+                    c.entries.add(entry);
+                    Overlay.of(context)?.insert(entry);
+                  }
+                },
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 400),
                   child: Image.asset('assets/monster/${enemy.enemy.asset}.png'),
@@ -126,7 +166,7 @@ class DungeonView extends StatelessWidget {
   }
 
   Widget _top(DungeonController c, BuildContext context) {
-    Widget _stageTitle() {
+    Widget stageTitle() {
       return Obx(() {
         String? stage = c.stage.value?.name;
         if (stage != null) {
@@ -137,7 +177,7 @@ class DungeonView extends StatelessWidget {
       });
     }
 
-    Widget _enemyHp() {
+    Widget enemyHp() {
       return ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Obx(() {
@@ -171,11 +211,11 @@ class DungeonView extends StatelessWidget {
       );
     }
 
-    Widget _conditions() {
+    Widget conditions() {
       return Obx(() {
         List<Widget> widgets = [];
 
-        Widget _styled(Widget child) {
+        Widget styled(Widget child) {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -190,14 +230,15 @@ class DungeonView extends StatelessWidget {
         for (var condition in c.stage.value?.conditions ?? []) {
           if (condition is SlayedStageCondition) {
             widgets.add(
-              _styled(
-                  Text('${c.slayedEnemies.value}/${condition.amount} slayed')),
+              styled(
+                Text('${c.slayedEnemies.value}/${condition.amount} slayed'),
+              ),
             );
           } else if (condition is TimerStageCondition) {
             int seconds =
                 condition.duration.inSeconds + c.duration.value.inSeconds;
             widgets.add(
-              _styled(Text('${seconds > 0 ? '$seconds' : 0} seconds')),
+              styled(Text('${seconds > 0 ? '$seconds' : 0} seconds')),
             );
           }
         }
@@ -220,8 +261,8 @@ class DungeonView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _stageTitle(),
-                  _enemyHp(),
+                  stageTitle(),
+                  enemyHp(),
                 ],
               ),
             ),
@@ -236,7 +277,7 @@ class DungeonView extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: _conditions(),
+          child: conditions(),
         ),
       ],
     );

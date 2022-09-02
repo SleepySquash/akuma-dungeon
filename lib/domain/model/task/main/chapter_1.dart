@@ -17,7 +17,7 @@
 import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
-import '/domain/model/enemy/fields.dart';
+import '/domain/model/enemy/slime.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 
@@ -44,6 +44,7 @@ class ChapterOne extends TaskQueue {
   List<Task> get tasks => const [
         IntroductionTask(),
         NeighborVillageTask(),
+        // NextMissionTask(),
       ];
 }
 
@@ -65,12 +66,12 @@ class IntroductionTask extends Task {
             stages: [
               DungeonStage(
                 background: 'fields',
-                enemies: FieldsEnemies.all,
+                enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'forest',
-                enemies: FieldsEnemies.all,
+                enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],
@@ -105,12 +106,12 @@ class NeighborVillageTask extends Task {
             stages: [
               DungeonStage(
                 background: 'fields',
-                enemies: FieldsEnemies.all,
+                enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
                 background: 'forest',
-                enemies: FieldsEnemies.all,
+                enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],
@@ -121,5 +122,38 @@ class NeighborVillageTask extends Task {
           DialogueLine('Wow, you did it!!'),
           DialogueLine('Yay! Yay! Yay!'),
         ]),
+      ];
+}
+
+class NextMissionTask extends Task {
+  const NextMissionTask();
+
+  @override
+  String get id => 'chapter1_next_mission';
+
+  @override
+  List<TaskCriteria> get criteria => [const LevelCriteria(12)];
+
+  @override
+  List<TaskStep> get steps => [
+        NovelStep([
+          BackgroundLine('location/forest_house.jpg'),
+          DialogueLine('Ебать, ты дожил до этого момента!!'),
+          DialogueLine('Я покажу тебе свою ПИСЬКУ!'),
+          DialogueLine('ТЫ ГОТОВ, СПАНЧ БОБ?????'),
+          DialogueLine('ЖОПА ТЕБЕ БУДЕТ...'),
+        ]),
+        DungeonStep(
+          Dungeon(
+            stages: [
+              DungeonStage(
+                background: 'fields',
+                enemies: SlimeEnemies.unique,
+                conditions: const [SlayedStageCondition(1)],
+                multiplier: 1478024712421,
+              ),
+            ],
+          ),
+        ),
       ];
 }

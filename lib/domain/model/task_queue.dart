@@ -16,41 +16,58 @@ abstract class TaskQueue {
 class MyTaskQueue {
   MyTaskQueue({
     required this.queue,
-    MyTask? active,
+    this.active,
     this.progress = 0,
-    String? nextTask,
-  }) : active = active ?? MyTask(task: queue.tasks.first) {
-    if (active != null) {
-      int i = queue.tasks.indexOf(active.task);
-      if (i != -1 && i < queue.tasks.length - 1) {
-        nextTask = queue.tasks[i].id;
+  }) {
+    if (active == null) {
+      if (progress < queue.tasks.length) {
+        next = queue.tasks[progress];
+      }
+    } else {
+      if (progress < queue.tasks.length - 1) {
+        next = queue.tasks[progress + 1];
       }
     }
+
+    print('active: ${active?.task.id}, next is ${next?.id}');
   }
 
   final TaskQueue queue;
+
   MyTask? active;
 
   int progress;
 
-  String? nextTask;
+  Task? next;
 
   bool get isCompleted => progress >= queue.tasks.length;
 
-  MyTask? accomplish() {
-    if (active != null) {
-      progress = queue.tasks.indexOf(active!.task) + 1;
-      if (progress < queue.tasks.length) {
-        active = MyTask(task: queue.tasks[progress]);
-      }
-    } else if (progress == 0) {
-      Task? first = queue.tasks.firstOrNull;
-      if (first != null) {
-        active = MyTask(task: first);
+  MyTask? execute() {
+    if (!complete()) {
+      active = MyTask(task: next ?? queue.tasks[progress]);
+
+      int i = next == null ? progress : queue.tasks.indexOf(next!);
+      if (i < queue.tasks.length - 1) {
+        next = queue.tasks[i + 1];
       }
     }
 
     return active;
+  }
+
+  bool complete() {
+    if (active?.isCompleted == true) {
+      progress = queue.tasks.indexOf(active!.task) + 1;
+      if (progress < queue.tasks.length) {
+        next = queue.tasks[progress];
+      } else {
+        next = null;
+      }
+
+      active = null;
+    }
+
+    return isCompleted;
   }
 
   void restart() {

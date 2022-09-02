@@ -16,15 +16,15 @@
 
 import 'dart:ui';
 
-import 'package:akuma/ui/page/home/widget/material_button.dart';
-import 'package:akuma/ui/widget/item_selector/view.dart';
-import 'package:akuma/util/platform_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
 import '/ui/page/home/widget/screen_switcher.dart';
+import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/backdrop.dart';
+import '/ui/widget/item_selector/view.dart';
+import '/util/platform_utils.dart';
 import 'component/attributes.dart';
 import 'component/enhance.dart';
 import 'component/upgrade.dart';
@@ -207,7 +207,7 @@ class _ItemViewState extends State<ItemView>
                                 _dismiss();
                               }
                             },
-                            child: const Text('Switch'),
+                            child: const Center(child: Text('Switch')),
                           ),
                         const SizedBox(width: 10, height: 10),
                       ],

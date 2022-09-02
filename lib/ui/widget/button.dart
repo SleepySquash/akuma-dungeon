@@ -49,7 +49,7 @@ class PreciseButton extends StatefulWidget {
   }) : super(key: key);
 
   final Widget child;
-  final void Function()? onPressed;
+  final void Function(Offset)? onPressed;
 
   @override
   State<PreciseButton> createState() => _PreciseButtonState();
@@ -63,7 +63,7 @@ class _PreciseButtonState extends State<PreciseButton> {
       cursor: SystemMouseCursors.click,
       child: Listener(
         onPointerDown: (d) {
-          widget.onPressed?.call();
+          widget.onPressed?.call(d.position);
           // ++_fingers;
 
           // if (_fingers == 1) {
