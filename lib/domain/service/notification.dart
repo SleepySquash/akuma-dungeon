@@ -30,6 +30,7 @@ import '/util/web/web.dart';
 class NotificationService extends DisposableInterface {
   final RxObsList<LocalNotification> notifications = RxObsList();
   final RxObsList<LocalNotification> centered = RxObsList();
+  final RxObsList<LocalNotification> additions = RxObsList();
 
   static const Duration notificationDuration = Duration(seconds: 5);
 
@@ -165,6 +166,14 @@ class NotificationService extends DisposableInterface {
           _timers.remove(timer);
         });
         break;
+
+      case LocalNotificationType.addition:
+        additions.add(notification);
+        timer = Timer(notificationDuration, () {
+          additions.remove(notification);
+          _timers.remove(timer);
+        });
+        break;
     }
 
     _timers.add(timer);
@@ -174,6 +183,7 @@ class NotificationService extends DisposableInterface {
 enum LocalNotificationType {
   common,
   centered,
+  addition,
 }
 
 class LocalNotification {

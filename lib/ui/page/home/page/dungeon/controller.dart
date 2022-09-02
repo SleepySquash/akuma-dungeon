@@ -15,14 +15,15 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'dart:async';
+import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart' show OverlayEntry;
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
-import '/domain/model/item.dart';
 import '/domain/model/item/standard.dart';
 import '/domain/model/player.dart';
 import '/domain/model/task.dart';
@@ -40,12 +41,14 @@ class DungeonController extends GetxController {
     this._musicWorker, {
     required this.settings,
     this.onClear,
+    this.onHitTaken,
   });
 
   /// [DungeonSettings] controlling this [DungeonController].
   final DungeonSettings settings;
 
   final FutureOr<void> Function()? onClear;
+  final void Function(HitResult, List<OverlayEntry>)? onHitTaken;
 
   /// Indicator whether the game has ended.
   final RxBool gameEnded = RxBool(false);
@@ -61,6 +64,8 @@ class DungeonController extends GetxController {
 
   /// [Duration] of the current [stage].
   final Rx<Duration> duration = Rx(Duration.zero);
+
+  final List<OverlayEntry> entries = [];
 
   late final RxDouble hp;
   late final RxDouble mp;
@@ -108,10 +113,17 @@ class DungeonController extends GetxController {
 
   @override
   void onClose() {
+    gameEnded.value = true;
     _fixedTimer?.cancel();
     _enemyTimer?.cancel();
     for (Timer e in _conditions) {
       e.cancel();
+    }
+
+    for (var e in entries) {
+      if (e.mounted) {
+        e.remove();
+      }
     }
 
     _musicWorker.stop(_musicSource);
@@ -119,13 +131,17 @@ class DungeonController extends GetxController {
     super.onClose();
   }
 
-  void hitEnemy() {
+  HitResult? hitEnemy() {
     if (!gameEnded.value) {
       if (enemy.value != null) {
-        int damage = 1;
+        int damage = player.value?.damage ?? 0;
+        bool isCrit = false;
+        bool isSlayed = false;
 
-        for (var e in player.value?.weapon ?? <MyWeapon>[]) {
-          damage += e.damage;
+        int chance = Random().nextInt(100);
+        if (chance < (player.value?.critRate ?? 0)) {
+          damage = damage + damage * (player.value?.critRate ?? 0) ~/ 100;
+          isCrit = true;
         }
 
         Source? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
@@ -135,19 +151,34 @@ class DungeonController extends GetxController {
 
         enemy.value?.hit(damage);
         if (enemy.value!.isDead) {
+          isSlayed = true;
           _slayEnemy();
         }
+
+        return HitResult(
+          damage: damage,
+          isCrit: isCrit,
+          isSlayed: isSlayed,
+        );
       }
     }
+
+    return null;
   }
 
   void _hitPlayer(double amount) {
     if (!gameEnded.value) {
-      hp.value -= amount;
+      final int defense = max(player.value?.defense ?? 0, 1);
+      final double damage = max(amount - (defense / 9), 0);
+
+      hp.value -= damage;
+
       if (hp.value <= 0) {
         hp.value = 0;
         _loseGame();
       }
+
+      onHitTaken?.call(HitResult(damage: damage.toInt()), entries);
     }
   }
 
@@ -249,6 +280,8 @@ class DungeonController extends GetxController {
           _itemService.add(r.item);
         } else if (r is ExpReward) {
           _playerService.addExperience(r.amount);
+        } else if (r is RankReward) {
+          _playerService.addRank(r.amount);
         }
       }
 
@@ -274,4 +307,16 @@ class DungeonController extends GetxController {
       );
     }
   }
+}
+
+class HitResult {
+  const HitResult({
+    required this.damage,
+    this.isCrit = false,
+    this.isSlayed = false,
+  });
+
+  final int damage;
+  final bool isCrit;
+  final bool isSlayed;
 }

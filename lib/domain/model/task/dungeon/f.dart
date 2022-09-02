@@ -36,7 +36,18 @@ abstract class FDungeonTasks {
   static List<TaskQueue> get queues => const [];
 }
 
-class SlimeFieldsDungeonTask extends Task with GuildTask {
+abstract class FDungeonTask extends Task with GuildTask {
+  const FDungeonTask();
+
+  @override
+  List<TaskReward> get rewards => const [
+        MoneyReward(100),
+        RankReward(4),
+        ItemReward(Ruby(2)),
+      ];
+}
+
+class SlimeFieldsDungeonTask extends FDungeonTask {
   const SlimeFieldsDungeonTask();
 
   @override
@@ -76,7 +87,7 @@ class SlimeFieldsDungeonTask extends Task with GuildTask {
       ];
 }
 
-class SlimeForestDungeonTask extends Task with GuildTask {
+class SlimeForestDungeonTask extends FDungeonTask {
   const SlimeForestDungeonTask();
 
   @override
@@ -115,7 +126,7 @@ class SlimeForestDungeonTask extends Task with GuildTask {
       ];
 }
 
-class SlimeSwampDungeonTask extends Task with GuildTask {
+class SlimeSwampDungeonTask extends FDungeonTask {
   const SlimeSwampDungeonTask();
 
   @override
@@ -154,7 +165,7 @@ class SlimeSwampDungeonTask extends Task with GuildTask {
       ];
 }
 
-class RestaurantDungeonTask extends Task with GuildTask {
+class RestaurantDungeonTask extends FDungeonTask {
   const RestaurantDungeonTask();
 
   @override

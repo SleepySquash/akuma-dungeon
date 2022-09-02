@@ -19,6 +19,7 @@ import 'package:get/get.dart';
 
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
+import '/ui/widget/locked.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
@@ -64,69 +65,49 @@ class AdventuresView extends StatelessWidget {
                     Task task = e.active?.task ?? e.next!;
                     bool met = c.criteriaMet(task);
 
-                    return Stack(
-                      children: [
-                        ListTile(
-                          leading: Icon(task.icon),
-                          title: Text(e.queue.name),
-                          subtitle: Text(task.description ?? task.name),
-                          trailing: const Icon(Icons.forward),
-                          onTap: met
-                              ? () {
-                                  Navigator.of(context).pop();
-                                  c.executeQueue(m.value);
-                                }
-                              : null,
-                        ),
-                        if (!met)
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.lock, color: Colors.white),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: task.criteria.map((e) {
-                                      if (e is LevelCriteria) {
-                                        if ((c.player.value?.level ?? 0) <
-                                            e.level) {
-                                          return Text(
-                                            'Level: ${e.level} or higher',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          );
-                                        }
-                                      } else if (e is RankCriteria) {
-                                        if ((c.player.value?.rank ?? 0) <
-                                            e.rank.index) {
-                                          return Text(
-                                            'Rank: ${e.rank.name} or higher',
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          );
-                                        }
-                                      }
-
-                                      return Container();
-                                    }).toList(),
+                    return LockedWidget(
+                      locked: !met,
+                      additional: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: task.criteria.map((e) {
+                            if (e is LevelCriteria) {
+                              if ((c.player.value?.level ?? 0) < e.level) {
+                                return Text(
+                                  'Level: ${e.level} or higher',
+                                  style: const TextStyle(
+                                    color: Colors.white,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                );
+                              }
+                            } else if (e is RankCriteria) {
+                              if ((c.player.value?.rank ?? 0) < e.rank.index) {
+                                return Text(
+                                  'Rank: ${e.rank.name} or higher',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }
+                            }
+
+                            return Container();
+                          }).toList(),
+                        ),
                       ],
+                      child: ListTile(
+                        leading: Icon(task.icon),
+                        title: Text(e.queue.name),
+                        subtitle: Text(task.description ?? task.name),
+                        trailing: const Icon(Icons.forward),
+                        onTap: met
+                            ? () {
+                                Navigator.of(context).pop();
+                                c.executeQueue(m.value);
+                              }
+                            : null,
+                      ),
                     );
                   }),
                   const Divider(),

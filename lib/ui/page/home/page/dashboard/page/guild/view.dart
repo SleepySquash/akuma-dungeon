@@ -14,10 +14,12 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/ui/widget/modal_popup.dart';
+import '/domain/model/rank.dart';
+import '/ui/page/home/widget/menu_tile.dart';
 import 'controller.dart';
 import 'task/view.dart';
 
@@ -27,7 +29,7 @@ class GuildView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: GuildController(),
+      init: GuildController(Get.find()),
       builder: (GuildController c) {
         return Stack(
           children: [
@@ -45,26 +47,80 @@ class GuildView extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        await ModalPopup.show(
-                          context: context,
-                          child: const TaskView(),
-                        );
-                      },
-                      child: const Text('Задания'),
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: _menu(context, c),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _menu(BuildContext context, GuildController c) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 300),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            flex: 4,
+            child: MenuTile(
+              onPressed: () => TaskView.show(context),
+              child: const Text('Поручения'),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: MenuTile(
+                    locked: true,
+                    onPressed: () {},
+                    child: const Text('Подземелья'),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: MenuTile(
+                    onPressed: () {},
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Obx(() {
+                            return BorderedText(
+                              child: Text(
+                                '${c.player.value?.rank.toRank.name}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(height: 4),
+                        Obx(() {
+                          return Text(
+                            '${c.player.value?.rank}/100',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

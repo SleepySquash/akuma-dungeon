@@ -26,6 +26,10 @@ import 'controller.dart';
 class TaskView extends StatelessWidget {
   const TaskView({Key? key}) : super(key: key);
 
+  static Future<T?> show<T>(BuildContext context) {
+    return ModalPopup.show(context: context, child: const TaskView());
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(

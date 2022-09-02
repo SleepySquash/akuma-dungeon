@@ -73,6 +73,7 @@ class DungeonsView extends StatelessWidget {
                       rewards: [
                         const MoneyReward(100),
                         const ExpReward(10),
+                        const RankReward(1),
                         ItemReward(Items.skills.sample(1).first),
                         ItemReward(Items.skills.sample(1).first),
                         ItemReward(Items.skills.sample(1).first),

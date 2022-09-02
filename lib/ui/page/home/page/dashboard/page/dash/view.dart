@@ -18,8 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/ui/page/home/page/settings/view.dart';
+import '/ui/page/home/widget/menu_tile.dart';
 import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/dummy_character.dart';
+import '/ui/widget/locked.dart';
 import 'adventures/view.dart';
 import 'battle_pass/view.dart';
 import 'controller.dart';
@@ -32,7 +34,6 @@ import 'mail/view.dart';
 import 'profile_settings/view.dart';
 import 'room/view.dart';
 import 'social/view.dart';
-import 'widget/tile.dart';
 
 class DashView extends StatelessWidget {
   const DashView({Key? key}) : super(key: key);
@@ -66,14 +67,20 @@ class DashView extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          FloatingActionButton(
-                            onPressed: () => DailyView.show(context),
-                            child: const Icon(Icons.bookmark),
+                          LockedWidget(
+                            borderRadius: BorderRadius.circular(12),
+                            child: FloatingActionButton(
+                              onPressed: () => DailyView.show(context),
+                              child: const Icon(Icons.bookmark),
+                            ),
                           ),
                           const SizedBox(width: 5),
-                          FloatingActionButton(
-                            onPressed: () => MailView.show(context),
-                            child: const Icon(Icons.mail),
+                          LockedWidget(
+                            borderRadius: BorderRadius.circular(12),
+                            child: FloatingActionButton(
+                              onPressed: () => MailView.show(context),
+                              child: const Icon(Icons.mail),
+                            ),
                           ),
                           const SizedBox(width: 5),
                           FloatingActionButton(
@@ -123,12 +130,14 @@ class DashView extends StatelessWidget {
               children: [
                 Expanded(
                   child: MenuTile(
+                    locked: true,
                     onPressed: () => EventsView.show(context),
                     child: const Text('События'),
                   ),
                 ),
                 Expanded(
                   child: MenuTile(
+                    locked: true,
                     onPressed: () => BattlePassView.show(context),
                     child: const Text('Боевой пропуск'),
                   ),
@@ -183,18 +192,21 @@ class DashView extends StatelessWidget {
               children: [
                 Expanded(
                   child: MenuTile(
+                    locked: true,
                     onPressed: () => SocialView.show(context),
                     child: const Text('Друзья'),
                   ),
                 ),
                 Expanded(
                   child: MenuTile(
+                    locked: true,
                     onPressed: () => GuildView.show(context),
                     child: const Text('Гильдия'),
                   ),
                 ),
                 Expanded(
                   child: MenuTile(
+                    locked: true,
                     onPressed: () => RoomView.show(context),
                     child: const Text('Комната'),
                   ),

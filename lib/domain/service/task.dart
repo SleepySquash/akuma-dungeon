@@ -65,7 +65,7 @@ class TaskService extends DisposableInterface {
           _playerService.addExperience(r.amount);
         } else if (r is ItemReward) {
           _itemService.add(r.item);
-        } else if (r is ExpReward) {
+        } else if (r is RankReward) {
           _playerService.addRank(r.amount);
         }
       }
@@ -82,11 +82,11 @@ class TaskService extends DisposableInterface {
         return;
       }
 
-      void _execute(MyTask task) {
-        void _next() {
+      void execute(MyTask task) {
+        void next() {
           task.progress++;
           _taskRepository.progress(queue);
-          _execute(task);
+          execute(task);
         }
 
         if (task.isCompleted) {
@@ -101,20 +101,20 @@ class TaskService extends DisposableInterface {
           if (step is NovelStep) {
             router.nowhere();
             Novel.show(context: router.context!, scenario: step.scenario)
-                .then((_) => _next());
+                .then((_) => next());
           } else if (step is DungeonStep) {
             router.dungeon(
               step.settings,
               onClear: () {
                 router.nowhere();
-                _next();
+                next();
               },
             );
           }
         }
       }
 
-      _execute(queue.active!);
+      execute(queue.active!);
     } else if (queue.isCompleted) {
       complete(queue);
     }
@@ -126,7 +126,7 @@ class TaskService extends DisposableInterface {
   }
 
   void executeTask(MyTask task) async {
-    void _next() {
+    void next() {
       task.progress++;
       _taskRepository.update(task);
       executeTask(task);
@@ -143,13 +143,13 @@ class TaskService extends DisposableInterface {
       if (step is NovelStep) {
         router.nowhere();
         Novel.show(context: router.context!, scenario: step.scenario)
-            .then((_) => _next());
+            .then((_) => next());
       } else if (step is DungeonStep) {
         router.dungeon(
           step.settings,
           onClear: () {
             router.nowhere();
-            _next();
+            next();
           },
         );
       }
