@@ -23,9 +23,7 @@ import 'package:get/get.dart';
 
 import 'domain/model/dungeon.dart';
 import 'domain/model/player.dart';
-import 'domain/repository/character.dart';
 import 'domain/repository/flag.dart';
-import 'domain/repository/item.dart';
 import 'domain/repository/player.dart';
 import 'domain/repository/settings.dart';
 import 'domain/repository/task.dart';
@@ -133,6 +131,7 @@ class RouterState extends ChangeNotifier {
 
   /// Pushes [to] to the [routes] stack.
   void push(String to) {
+    arguments = null;
     int pageIndex = _routes.indexWhere((e) => e == to);
     if (pageIndex != -1) {
       while (_routes.length - 1 > pageIndex) {
@@ -290,13 +289,14 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
 
             deps.put<AbstractFlagRepository>(FlagRepository(Get.find()));
 
-            AbstractItemRepository itemRepository =
-                deps.put<AbstractItemRepository>(ItemRepository(Get.find()));
+            ItemRepository itemRepository =
+                deps.put<ItemRepository>(ItemRepository(Get.find()));
             ItemService itemService = deps.put(ItemService(itemRepository));
 
-            AbstractCharacterRepository characterRepository =
-                deps.put<AbstractCharacterRepository>(
-                    CharacterRepository(Get.find()));
+            CharacterRepository characterRepository =
+                deps.put<CharacterRepository>(
+              CharacterRepository(Get.find(), itemRepository),
+            );
             CharacterService characterService =
                 deps.put(CharacterService(characterRepository));
 
@@ -306,6 +306,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
                 deps.put<AbstractPlayerRepository>(
               PlayerRepository(
                 Get.find(),
+                itemRepository,
+                characterRepository,
                 initial: _state.arguments?['args'] as Player?,
               ),
             );

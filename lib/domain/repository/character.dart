@@ -14,14 +14,26 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:get/get.dart';
+
 import '/util/obs/obs.dart';
 
 import '/domain/model/character.dart';
+import '/domain/model/item.dart';
 
 abstract class AbstractCharacterRepository {
-  RxObsMap<String, MyCharacter> get characters;
+  RxObsMap<CharacterId, RxMyCharacter> get characters;
 
   void add(MyCharacter character);
-  void remove(String character);
-  bool contains(String character);
+  void remove(CharacterId character);
+  bool contains(CharacterId character);
+
+  void addExperience(CharacterId id, int amount);
+}
+
+abstract class RxMyCharacter {
+  Rx<MyCharacter> get character;
+
+  RxList<Rx<MyItem>> get artifacts;
+  RxList<Rx<MyItem>> get weapons;
 }

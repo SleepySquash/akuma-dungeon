@@ -50,7 +50,7 @@ class ItemAttributesTab extends StatelessWidget {
                   }),
                   if (weapon != null || equipable != null) ...[
                     LevelWidget(
-                      level: weapon?.level ?? equipable?.level,
+                      level: weapon?.level ?? equipable?.level ?? 1,
                       maxLevel: Weapon.maxLevel,
                     ),
                     StatsWidget(

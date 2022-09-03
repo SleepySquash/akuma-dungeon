@@ -20,6 +20,7 @@ import 'package:audioplayers/audioplayers.dart' show AssetSource;
 import 'package:get/get.dart';
 
 import '/domain/model/player.dart';
+import '/domain/repository/player.dart';
 import '/domain/service/notification.dart';
 import '/domain/service/player.dart';
 import '/ui/worker/music.dart';
@@ -39,17 +40,17 @@ class PlayerWorker extends DisposableInterface {
 
   Worker? _worker;
 
-  Rx<Player?> get player => _playerService.player;
+  RxPlayer get player => _playerService.player;
 
   @override
   void onInit() {
     _levelUpSound = Random().nextInt(3) + 1;
 
-    int oldLevel = player.value?.level ?? 0;
+    int oldLevel = player.level;
     _worker = ever(
-      player,
-      (Player? player) {
-        int newLevel = player?.level ?? 0;
+      player.player,
+      (Player player) {
+        int newLevel = player.level;
         if (newLevel != oldLevel) {
           oldLevel = newLevel;
 

@@ -22,9 +22,9 @@ class PlayerAdapter extends TypeAdapter<Player> {
       gender: fields[2] as Gender,
       exp: fields[3] as int,
       rank: fields[4] as int,
-      equipped: (fields[5] as List?)?.cast<MyEquipable>(),
-      weapon: (fields[6] as List?)?.cast<MyWeapon>(),
-      party: (fields[7] as List?)?.cast<MyCharacter>(),
+      equipped: (fields[5] as List?)?.cast<ItemId>(),
+      weapons: (fields[6] as List?)?.cast<ItemId>(),
+      party: (fields[7] as List?)?.cast<CharacterId>(),
     );
   }
 
@@ -45,7 +45,7 @@ class PlayerAdapter extends TypeAdapter<Player> {
       ..writeByte(5)
       ..write(obj.equipped)
       ..writeByte(6)
-      ..write(obj.weapon)
+      ..write(obj.weapons)
       ..writeByte(7)
       ..write(obj.party);
   }

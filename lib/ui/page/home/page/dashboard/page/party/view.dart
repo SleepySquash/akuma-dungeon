@@ -22,6 +22,7 @@ import 'package:get/get.dart';
 import '/domain/model/character.dart';
 import '/domain/model/character/all.dart';
 import '/domain/model/player.dart';
+import '/domain/repository/character.dart';
 import '/ui/widget/backdrop.dart';
 import 'controller.dart';
 import 'widget/character_card.dart';
@@ -68,7 +69,7 @@ class PartyView extends StatelessWidget {
         maxWidth = height * 0.7 * 5;
       }
 
-      Widget _sized(Widget child) =>
+      Widget sized(Widget child) =>
           SizedBox(width: width, height: height, child: child);
 
       return ConstrainedBox(
@@ -80,17 +81,19 @@ class PartyView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(5, (i) {
                 return Obx(() {
-                  MyCharacter? character;
-                  if ((c.player.value?.party.length ?? 0) > i) {
-                    character = c.player.value!.party[i];
+                  RxMyCharacter? character;
+                  if (c.player.party.length > i) {
+                    character = c.player.party[i];
                   }
 
                   return Draggable(
-                    key: character == null ? null : Key(character.character.id),
+                    key: character == null
+                        ? null
+                        : Key(character.character.value.id.val),
                     data:
                         character == null ? null : _RemoveFromParty(character),
                     maxSimultaneousDrags: character == null ? 0 : 1,
-                    feedback: _sized(
+                    feedback: sized(
                       character == null
                           ? AspectRatio(
                               aspectRatio: 0.7,
@@ -104,11 +107,13 @@ class PartyView extends StatelessWidget {
                                 child: const Icon(Icons.add),
                               ),
                             )
-                          : CharacterCard(myCharacter: character),
+                          : CharacterCard(
+                              myCharacter: character.character.value,
+                            ),
                     ),
                     childWhenDragging:
-                        _sized(const AspectRatio(aspectRatio: 0.7)),
-                    child: _sized(
+                        sized(const AspectRatio(aspectRatio: 0.7)),
+                    child: sized(
                       character == null
                           ? AspectRatio(
                               aspectRatio: 0.7,
@@ -122,7 +127,9 @@ class PartyView extends StatelessWidget {
                                 child: const Icon(Icons.add),
                               ),
                             )
-                          : CharacterCard(myCharacter: character),
+                          : CharacterCard(
+                              myCharacter: character.character.value,
+                            ),
                     ),
                   );
                 });
@@ -137,20 +144,19 @@ class PartyView extends StatelessWidget {
   Widget _bottom(PartyController c) {
     Iterable<Character> all(Player? player) {
       return [
-        ...c.characters.values.map((e) => e.character),
-        ...Characters.all.where((e) => !c.contains(e.id)),
-      ].where((e) =>
-          player?.party.where((m) => m.character.id == e.id).isEmpty == true);
+        ...c.characters.values.map((e) => e.character.value.character),
+        ...Characters.all.where((e) => !c.contains(CharacterId(e.id))),
+      ].where((e) => player?.party.where((m) => m.val == e.id).isEmpty == true);
     }
 
-    Widget _characters(Iterable<Character> filter) {
+    Widget characters(Iterable<Character> filter) {
       return DragTarget<_RemoveFromParty>(
         onAccept: (d) => c.removeFromParty(d.character),
         builder: (context, candidates, rejected) {
           return Container(
             margin: const EdgeInsets.all(2),
             child: LayoutBuilder(builder: (context, constraints) {
-              Widget _sized(Widget child) => SizedBox(
+              Widget sized(Widget child) => SizedBox(
                     width: constraints.maxWidth > 500
                         ? (500 / 3)
                         : constraints.maxWidth / 3,
@@ -162,19 +168,25 @@ class PartyView extends StatelessWidget {
                 child: Wrap(
                   alignment: WrapAlignment.center,
                   children: filter.map((e) {
-                    MyCharacter? owned = c.characters[e.id];
+                    RxMyCharacter? owned = c.characters[CharacterId(e.id)];
 
                     return Draggable(
                       key: Key(e.id),
                       data: owned == null ? null : _AddToParty(owned),
                       maxSimultaneousDrags: owned == null ? 0 : 1,
-                      feedback: _sized(
-                        CharacterCard(myCharacter: owned, character: e),
+                      feedback: sized(
+                        CharacterCard(
+                          myCharacter: owned?.character.value,
+                          character: e,
+                        ),
                       ),
                       childWhenDragging:
-                          _sized(const AspectRatio(aspectRatio: 0.7)),
-                      child: _sized(
-                        CharacterCard(myCharacter: owned, character: e),
+                          sized(const AspectRatio(aspectRatio: 0.7)),
+                      child: sized(
+                        CharacterCard(
+                          myCharacter: owned?.character.value,
+                          character: e,
+                        ),
                       ),
                     );
                   }).toList(),
@@ -237,13 +249,13 @@ class PartyView extends StatelessWidget {
           child: TabBarView(
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              Obx(() => _characters(all(c.player.value))),
-              Obx(() => _characters(
-                  all(c.player.value).where((e) => e.role == Role.tank))),
-              Obx(() => _characters(
-                  all(c.player.value).where((e) => e.role == Role.dps))),
-              Obx(() => _characters(
-                  all(c.player.value).where((e) => e.role == Role.support))),
+              Obx(() => characters(all(c.player.player.value))),
+              Obx(() => characters(all(c.player.player.value)
+                  .where((e) => e.role == Role.tank))),
+              Obx(() => characters(
+                  all(c.player.player.value).where((e) => e.role == Role.dps))),
+              Obx(() => characters(all(c.player.player.value)
+                  .where((e) => e.role == Role.support))),
             ],
           ),
         ),
@@ -254,10 +266,10 @@ class PartyView extends StatelessWidget {
 
 class _AddToParty {
   const _AddToParty(this.character);
-  final MyCharacter character;
+  final RxMyCharacter character;
 }
 
 class _RemoveFromParty {
   const _RemoveFromParty(this.character);
-  final MyCharacter character;
+  final RxMyCharacter character;
 }

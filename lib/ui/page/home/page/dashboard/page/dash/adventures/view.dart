@@ -73,7 +73,7 @@ class AdventuresView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: task.criteria.map((e) {
                             if (e is LevelCriteria) {
-                              if ((c.player.value?.level ?? 0) < e.level) {
+                              if (c.player.player.value.level < e.level) {
                                 return Text(
                                   'Level: ${e.level} or higher',
                                   style: const TextStyle(
@@ -82,7 +82,7 @@ class AdventuresView extends StatelessWidget {
                                 );
                               }
                             } else if (e is RankCriteria) {
-                              if ((c.player.value?.rank ?? 0) < e.rank.index) {
+                              if (c.player.player.value.rank < e.rank.index) {
                                 return Text(
                                   'Rank: ${e.rank.name} or higher',
                                   style: const TextStyle(

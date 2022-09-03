@@ -50,7 +50,9 @@ class CharacterAttributesTab extends StatelessWidget {
                 ),
                 if (c.myCharacter != null) ...[
                   LevelWidget(
-                    level: c.myCharacter?.level,
+                    exp: c.myCharacter!.exp,
+                    level: c.myCharacter!.level,
+                    levels: c.myCharacter!.character.levels,
                     maxLevel: Character.maxLevel,
                   ),
                   StatsWidget(

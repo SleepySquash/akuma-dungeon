@@ -30,4 +30,7 @@ class ModelTypeId {
   static const gameProgression = 8;
   static const skill = 9;
   static const taskQueue = 10;
+  static const itemId = 11;
+  static const characterId = 12;
+  static const skillId = 13;
 }

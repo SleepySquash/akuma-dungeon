@@ -15,10 +15,15 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:flutter/material.dart' show IconData, Icons;
+import 'package:hive/hive.dart';
 
-import 'skill.dart';
+import '/domain/model_type_id.dart';
+import '/util/new_type.dart';
 import 'item.dart';
 import 'rarity.dart';
+import 'skill.dart';
+
+part 'character.g.dart';
 
 /// Person in the [Player]'s party.
 abstract class Character {
@@ -45,6 +50,9 @@ abstract class Character {
   /// [Skill]s this [Character] possess.
   List<Skill> get skills => [];
 
+  List<int> get levels =>
+      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
+
   List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
   List<int> get damages =>
       List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
@@ -53,30 +61,39 @@ abstract class Character {
       List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
 }
 
+@HiveType(typeId: ModelTypeId.characterId)
+class CharacterId extends NewType<String> {
+  const CharacterId(String val) : super(val);
+}
+
 class MyCharacter {
   MyCharacter({
     required this.character,
-    this.artifacts = const [],
-    List<Skill>? skills,
+    List<ItemId>? artifacts,
+    List<ItemId>? weapons,
     this.affinity = 0,
     this.exp = 0,
-  }) : skills = skills ?? character.skills;
+  })  : id = CharacterId(character.id),
+        artifacts = artifacts ?? List.empty(growable: true),
+        weapons = weapons ?? List.empty(growable: true);
+
+  final CharacterId id;
 
   /// [Character] itself.
   final Character character;
 
   /// [Artifact]s equipped to this [Character].
-  List<Artifact> artifacts;
+  final List<ItemId> artifacts;
 
-  /// [Skill]s this [Character] possess.
-  List<Skill> skills;
+  /// [Weapon]s equipped to this [Character].
+  final List<ItemId> weapons;
 
   /// Integer representation of how much this [character] loves or respects you.
   int affinity;
 
   int exp;
 
-  int get level => exp ~/ 1000 + 1;
+  int get level => character.levels.indexWhere((e) => exp < e) + 1;
 }
 
 /// Role a certain [Character] has in the battle.

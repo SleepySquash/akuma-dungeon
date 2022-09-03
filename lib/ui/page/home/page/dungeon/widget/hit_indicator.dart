@@ -3,18 +3,73 @@ import 'dart:math';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 
+enum HitIndicatorFlowDirection {
+  any,
+  down,
+  horizontal,
+  left,
+  none,
+  right,
+  up,
+  vertical,
+}
+
+extension HitIndicatorFlowDirectionExtension on HitIndicatorFlowDirection {
+  int get horizontal {
+    switch (this) {
+      case HitIndicatorFlowDirection.any:
+      case HitIndicatorFlowDirection.horizontal:
+        return Random().nextBool() ? 1 : -1;
+
+      case HitIndicatorFlowDirection.right:
+        return 1;
+
+      case HitIndicatorFlowDirection.left:
+        return -1;
+
+      case HitIndicatorFlowDirection.down:
+      case HitIndicatorFlowDirection.up:
+      case HitIndicatorFlowDirection.vertical:
+      case HitIndicatorFlowDirection.none:
+        return 0;
+    }
+  }
+
+  int get vertical {
+    switch (this) {
+      case HitIndicatorFlowDirection.any:
+      case HitIndicatorFlowDirection.vertical:
+        return Random().nextBool() ? 1 : -1;
+
+      case HitIndicatorFlowDirection.down:
+        return 1;
+
+      case HitIndicatorFlowDirection.up:
+        return -1;
+
+      case HitIndicatorFlowDirection.right:
+      case HitIndicatorFlowDirection.left:
+      case HitIndicatorFlowDirection.horizontal:
+      case HitIndicatorFlowDirection.none:
+        return 0;
+    }
+  }
+}
+
 class HitIndicator extends StatefulWidget {
   const HitIndicator({
     Key? key,
     required this.position,
     required this.damage,
     this.isCrit = false,
+    this.direction = HitIndicatorFlowDirection.any,
     this.onEnd,
   }) : super(key: key);
 
   final Offset position;
   final int damage;
   final bool isCrit;
+  final HitIndicatorFlowDirection direction;
 
   final void Function()? onEnd;
 
@@ -31,8 +86,8 @@ class _HitIndicatorState extends State<HitIndicator>
   @override
   void initState() {
     _offset = Offset(
-      Random().nextDouble() * 2,
-      Random().nextDouble() * 2,
+      widget.direction.horizontal * Random().nextDouble() * 2,
+      widget.direction.vertical * Random().nextDouble() * 2,
     );
 
     _controller = AnimationController(

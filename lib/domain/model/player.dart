@@ -14,16 +14,13 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'dart:math';
-
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../model_type_id.dart';
+import '/domain/model_type_id.dart';
 import 'character.dart';
 import 'gender.dart';
 import 'item.dart';
 import 'race.dart';
-import 'stat.dart';
 
 part 'player.g.dart';
 
@@ -35,11 +32,11 @@ class Player {
     this.gender = Gender.female,
     this.exp = 0,
     this.rank = 0,
-    List<MyEquipable>? equipped,
-    List<MyWeapon>? weapon,
-    List<MyCharacter>? party,
+    List<ItemId>? equipped,
+    List<ItemId>? weapons,
+    List<CharacterId>? party,
   })  : equipped = equipped ?? List.empty(growable: true),
-        weapon = weapon ?? List.empty(growable: true),
+        weapons = weapons ?? List.empty(growable: true),
         party = party ?? List.empty(growable: true);
 
   @HiveField(0)
@@ -58,116 +55,17 @@ class Player {
   int rank;
 
   @HiveField(5)
-  List<MyEquipable> equipped;
+  List<ItemId> equipped;
 
   @HiveField(6)
-  List<MyWeapon> weapon;
+  List<ItemId> weapons;
 
   @HiveField(7)
-  List<MyCharacter> party;
+  List<CharacterId> party;
 
-  List<Stat> get stats {
-    List<Stat> list = [];
-
-    for (MyWeapon w in weapon) {
-      list.addAll((w.item as Weapon).stats);
-    }
-    for (MyEquipable e in equipped) {
-      list.addAll((e.item as Equipable).stats);
-    }
-
-    return list;
-  }
-
-  int get level => min(exp ~/ 1000 + 1, maxLevel);
-
-  int get damage {
-    int dmg = damages[level];
-
-    for (MyWeapon w in weapon) {
-      dmg += w.damage;
-    }
-
-    for (AtkStat s in stats.whereType<AtkStat>()) {
-      dmg += s.amount;
-    }
-
-    for (AtkPercentStat s in stats.whereType<AtkPercentStat>()) {
-      double d = dmg * (1 + (s.amount / 100));
-      dmg = d.floor();
-    }
-
-    return dmg;
-  }
-
-  int get defense {
-    int def = defenses[level];
-
-    for (MyEquipable w in equipped) {
-      def += w.defense;
-    }
-
-    for (DefStat s in stats.whereType<DefStat>()) {
-      def += s.amount;
-    }
-
-    for (DefPercentStat s in stats.whereType<DefPercentStat>()) {
-      double d = def * (1 + (s.amount / 100));
-      def = d.floor();
-    }
-
-    return def;
-  }
-
-  int get health {
-    int hp = healths[level];
-
-    for (HpStat s in stats.whereType<HpStat>()) {
-      hp += s.amount;
-    }
-
-    for (HpPercentStat s in stats.whereType<HpPercentStat>()) {
-      double d = hp * (1 + (s.amount / 100));
-      hp = d.floor();
-    }
-
-    return hp;
-  }
-
-  int get critDamage {
-    int damage = critRates[level];
-
-    for (CritDmgStat s in stats.whereType<CritDmgStat>()) {
-      damage += s.amount;
-    }
-
-    return damage;
-  }
-
-  int get critRate {
-    int rate = critRates[level];
-
-    for (CritRateStat s in stats.whereType<CritRateStat>()) {
-      rate += s.amount;
-    }
-
-    return rate;
-  }
-
-  int get ultCharge {
-    int ult = ultCharges[level];
-
-    for (UltStat s in stats.whereType<UltStat>()) {
-      ult += s.amount;
-    }
-
-    for (UltPercentStat s in stats.whereType<UltPercentStat>()) {
-      double d = ult * (1 + (s.amount / 100));
-      ult = d.floor();
-    }
-
-    return ult;
-  }
+  List<int> get levels =>
+      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
+  int get level => levels.indexWhere((e) => exp < e) + 1;
 
   /// Maximum allowed level for a [Player] to have.
   static const int maxLevel = 100;
