@@ -17,8 +17,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
-import '/domain/model/item/all.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
+import '/domain/model/item/all.dart';
+import '/util/log.dart';
 import 'base.dart';
 
 /// [Hive] storage for the [MyItem]s.
@@ -34,17 +36,18 @@ class ItemHiveProvider extends HiveBaseProvider<MyItem> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(ItemIdAdapter());
     Hive.maybeRegisterAdapter(MyItemAdapter());
   }
 
   /// Puts the provided [MyItem] to the [Hive].
-  Future<void> put(MyItem item) => putSafe(item.id, item);
+  Future<void> put(MyItem item) => putSafe(item.id.val, item);
 
   /// Returns the stored [Item] from the [Hive].
-  MyItem? get(String id) => getSafe(id);
+  MyItem? get(ItemId id) => getSafe(id.val);
 
   /// Removes the stored [Item] from the [Hive].
-  Future<void> remove(String id) => deleteSafe(id);
+  Future<void> remove(ItemId id) => deleteSafe(id.val);
 }
 
 class MyItemAdapter extends TypeAdapter<MyItem> {
@@ -53,14 +56,14 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
 
   @override
   MyItem read(BinaryReader reader) {
-    final type = reader.read() as String;
-    final id = reader.read() as String;
+    final ItemId id = ItemId(reader.read() as String);
+    final String type = reader.read() as String;
+    final String itemId = reader.read() as String;
 
-    Item? item = Items.get(id);
+    Item? item = Items.get(itemId);
     if (item == null) {
-      // ignore: avoid_print
-      print('Cannot find `Item` with id: $id');
-      return MyItem(const NoopItem(0), count: 0);
+      Log.print('Cannot find `Item` with id: $itemId');
+      return MyItem(const ImpossibleItem(0), count: 0);
     }
 
     if (type == 'MyWeapon') {
@@ -68,21 +71,24 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
       return MyWeapon(
         item as Weapon,
         damage: damage,
+        id: id,
       );
     } else if (type == 'MyEquipable') {
       final defense = reader.read() as int;
       return MyEquipable(
         item as Equipable,
         defense: defense,
+        id: id,
       );
     } else {
       final count = reader.read() as int;
-      return MyItem(item, count: count);
+      return MyItem(item, id: id, count: count);
     }
   }
 
   @override
   void write(BinaryWriter writer, MyItem obj) {
+    writer.write(obj.id.val);
     writer.write(obj.runtimeType.toString());
     writer.write(obj.item.id);
 

@@ -46,6 +46,7 @@ class DungeonView extends StatelessWidget {
         Get.find(),
         Get.find(),
         Get.find(),
+        Get.find(),
         settings: settings,
         onClear: onClear,
         onHitTaken: (hit, entries) {
@@ -57,6 +58,7 @@ class DungeonView extends StatelessWidget {
                   MediaQuery.of(context).size.width * 0.1,
                   MediaQuery.of(context).size.height * 0.9,
                 ),
+                direction: HitIndicatorFlowDirection.up,
                 damage: hit.damage,
                 isCrit: hit.isCrit,
                 onEnd: entry?.remove,
@@ -316,8 +318,8 @@ class DungeonView extends StatelessWidget {
                     child: DummyCharacter(
                       alignment: Alignment.topCenter,
                       fit: BoxFit.cover,
-                      gender: c.player.value!.gender,
-                      race: c.player.value!.race,
+                      gender: c.player.player.value.gender,
+                      race: c.player.player.value.race,
                     ),
                   ),
                 ),
@@ -329,7 +331,7 @@ class DungeonView extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: Obx(() {
                         int hp = c.hp.value.ceil();
-                        int maxHp = c.player.value?.health ?? 10;
+                        int maxHp = c.player.health;
 
                         return Stack(
                           children: [
@@ -361,7 +363,7 @@ class DungeonView extends StatelessWidget {
   }
 
   Widget _party(DungeonController c) {
-    if (c.player.value?.party.isNotEmpty != true) {
+    if (c.player.party.isNotEmpty != true) {
       return Container();
     }
 
@@ -370,14 +372,14 @@ class DungeonView extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 300),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: c.player.value!.party.map((e) {
+          children: c.player.party.map((e) {
             return Flexible(
               child: Container(
                 constraints: const BoxConstraints(maxHeight: 200),
                 child: FractionalTranslation(
                   translation: const Offset(0, 0.4),
                   child: Image.asset(
-                    'assets/character/${e.character.id}.png',
+                    'assets/character/${e.character.value.character.asset}.png',
                   ),
                 ),
               ),

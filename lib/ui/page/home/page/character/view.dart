@@ -20,10 +20,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
+import '/domain/repository/character.dart';
 import '/ui/page/home/widget/screen_switcher.dart';
 import '/ui/widget/backdrop.dart';
-import 'component/artifact.dart';
 import 'component/attributes.dart';
+import 'component/equipment.dart';
 import 'component/skill.dart';
 import 'controller.dart';
 
@@ -37,14 +38,14 @@ class CharacterView extends StatefulWidget {
 
   final Rect? bounds;
   final Character? character;
-  final MyCharacter? myCharacter;
+  final RxMyCharacter? myCharacter;
 
   /// Displays a dialog with the provided [character] above the current
   /// contents.
   static void show<T extends Object?>({
     required BuildContext context,
     Character? character,
-    MyCharacter? myCharacter,
+    RxMyCharacter? myCharacter,
     Rect? bounds,
   }) {
     Navigator.of(context).push(
@@ -123,6 +124,7 @@ class _CharacterViewState extends State<CharacterView>
 
         return GetBuilder(
           init: CharacterController(
+            Get.find(),
             character: widget.character,
             myCharacter: widget.myCharacter,
           ),
@@ -150,11 +152,11 @@ class _CharacterViewState extends State<CharacterView>
                     return FadeTransition(
                       opacity: fade,
                       child: Hero(
-                        tag: widget.myCharacter?.character.id ??
+                        tag: widget.myCharacter?.character.value.character.id ??
                             widget.character?.id ??
                             '',
                         child: Image.asset(
-                          'assets/character/${widget.myCharacter?.character.asset ?? widget.character?.asset}.png',
+                          'assets/character/${widget.myCharacter?.character.value.character.asset ?? widget.character?.asset}.png',
                         ),
                       ),
                     );
@@ -200,9 +202,9 @@ class _CharacterViewState extends State<CharacterView>
         ),
         if (c.myCharacter != null)
           Screen(
-            desktop: const Text('Artifacts'),
+            desktop: const Text('Equipment'),
             mobile: const Icon(Icons.inventory),
-            child: CharacterArtifactsTab(c),
+            child: CharacterEquipmentTab(c),
           ),
         Screen(
           desktop: const Text('Skills'),

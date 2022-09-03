@@ -16,7 +16,7 @@
 
 import 'package:get/get.dart';
 
-import '/domain/model/player.dart';
+import '/domain/repository/player.dart';
 import '/domain/service/player.dart';
 
 class GuildController extends GetxController {
@@ -24,5 +24,5 @@ class GuildController extends GetxController {
 
   final PlayerService _playerService;
 
-  Rx<Player?> get player => _playerService.player;
+  RxPlayer get player => _playerService.player;
 }

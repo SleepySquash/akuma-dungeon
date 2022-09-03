@@ -39,43 +39,66 @@ abstract class StandardCharacters {
       ];
 }
 
-class Zahir extends Character {
+abstract class DpsCharacter extends Character {
+  const DpsCharacter();
+
+  @override
+  Role get role => Role.dps;
+
+  @override
+  List<Skill> get skills =>
+      [const HittingSkill(damage: 1, period: Duration(seconds: 1))];
+}
+
+abstract class TankCharacter extends Character {
+  const TankCharacter();
+
+  @override
+  Role get role => Role.tank;
+
+  @override
+  List<Skill> get skills => [const ShieldSkill(shield: 10)];
+}
+
+abstract class SupportCharacter extends Character {
+  const SupportCharacter();
+
+  @override
+  Role get role => Role.support;
+
+  @override
+  List<Skill> get skills =>
+      [const HealingSkill(health: 1, period: Duration(seconds: 2))];
+}
+
+class Zahir extends DpsCharacter {
   const Zahir();
 
   @override
   String get id => 'Zahir';
-
-  @override
-  Role get role => Role.dps;
 }
 
-class Rio extends Character {
+class Rio extends DpsCharacter {
   const Rio();
 
   @override
   String get id => 'Rio';
 
   @override
-  Role get role => Role.dps;
-
-  @override
   Rarity get rarity => Rarity.superRare;
 }
 
-class Jan extends Character {
+class Jan extends TankCharacter {
   const Jan();
 
   @override
   String get id => 'Jan';
 
   @override
-  Role get role => Role.tank;
-
-  @override
   Rarity get rarity => Rarity.rare;
 }
 
-class DrNadja extends Character {
+class DrNadja extends SupportCharacter {
   const DrNadja();
 
   @override
@@ -85,16 +108,13 @@ class DrNadja extends Character {
   String get name => 'Dr. Nadja';
 
   @override
-  Role get role => Role.support;
-
-  @override
   Rarity get rarity => Rarity.superRare;
 
   @override
-  List<Skill> get skills => const [HealingSkill(amount: 10)];
+  List<Skill> get skills => const [HealingSkill(health: 10)];
 }
 
-class DrThomas extends Character {
+class DrThomas extends SupportCharacter {
   const DrThomas();
 
   @override
@@ -104,46 +124,34 @@ class DrThomas extends Character {
   String get name => 'Dr. Thomas';
 
   @override
-  Role get role => Role.support;
-
-  @override
-  List<Skill> get skills => const [HealingSkill(amount: 5)];
+  List<Skill> get skills => const [HealingSkill(health: 5)];
 }
 
-class Magnus extends Character {
+class Magnus extends TankCharacter {
   const Magnus();
 
   @override
   String get id => 'Magnus';
-
-  @override
-  Role get role => Role.tank;
 }
 
-class Chiara extends Character {
+class Chiara extends SupportCharacter {
   const Chiara();
 
   @override
   String get id => 'Chiara';
 
   @override
-  Role get role => Role.support;
-
-  @override
   Rarity get rarity => Rarity.ultraRare;
 
   @override
-  List<Skill> get skills => const [HealingSkill(amount: 60)];
+  List<Skill> get skills => const [HealingSkill(health: 60)];
 }
 
-class Rozzi extends Character {
+class Rozzi extends DpsCharacter {
   const Rozzi();
 
   @override
   String get id => 'Rozzi';
-
-  @override
-  Role get role => Role.dps;
 
   @override
   Rarity get rarity => Rarity.rare;

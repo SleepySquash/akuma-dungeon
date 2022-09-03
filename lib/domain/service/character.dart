@@ -17,6 +17,7 @@
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
+import '/domain/model/item.dart';
 import '/domain/repository/character.dart';
 import '/util/obs/obs.dart';
 
@@ -25,15 +26,23 @@ class CharacterService extends GetxService {
 
   final AbstractCharacterRepository _characterRepository;
 
-  RxObsMap<String, MyCharacter> get characters =>
+  RxObsMap<CharacterId, RxMyCharacter> get characters =>
       _characterRepository.characters;
 
   void add(Character character) {
-    if (!contains(character.id)) {
+    if (!contains(CharacterId(character.id))) {
       _characterRepository.add(MyCharacter(character: character));
     }
   }
 
-  void remove(String id) => _characterRepository.remove(id);
-  bool contains(String id) => _characterRepository.contains(id);
+  void remove(CharacterId id) => _characterRepository.remove(id);
+  bool contains(CharacterId id) => _characterRepository.contains(id);
+
+  void equip(MyCharacter character, MyItem item) =>
+      _characterRepository.equip(character.id, item);
+  void unequip(MyCharacter character, MyItem item) =>
+      _characterRepository.unequip(character.id, item);
+
+  void addExperience(MyCharacter character, int amount) =>
+      _characterRepository.addExperience(character.id, amount);
 }

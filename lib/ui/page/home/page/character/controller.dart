@@ -17,10 +17,24 @@
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
+import '/domain/model/item.dart';
+import '/domain/repository/character.dart';
+import '/domain/service/character.dart';
 
 class CharacterController extends GetxController {
-  CharacterController({this.character, this.myCharacter});
+  CharacterController(
+    this._characterService, {
+    this.character,
+    this.myCharacter,
+  });
+
+  final CharacterService _characterService;
 
   final Character? character;
-  final MyCharacter? myCharacter;
+  final RxMyCharacter? myCharacter;
+
+  void equip(MyItem item) =>
+      _characterService.equip(myCharacter!.character.value, item);
+  void unequip(MyItem item) =>
+      _characterService.unequip(myCharacter!.character.value, item);
 }

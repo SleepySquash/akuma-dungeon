@@ -19,6 +19,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/domain/repository/item.dart';
 import '/provider/hive/item.dart';
@@ -29,7 +30,7 @@ class ItemRepository extends DisposableInterface
   ItemRepository(this._itemHive);
 
   @override
-  late final RxObsMap<String, Rx<MyItem>> items;
+  late final RxObsMap<ItemId, Rx<MyItem>> items;
 
   final ItemHiveProvider _itemHive;
 
@@ -37,9 +38,9 @@ class ItemRepository extends DisposableInterface
 
   @override
   void onInit() {
-    for (var item in _itemHive.items) {
-      if (item.item is ImpossibleItem) {
-        _itemHive.remove(item.item.id);
+    for (MyItem item in _itemHive.items) {
+      if (item.item is Impossible) {
+        _itemHive.remove(item.id);
       }
     }
 
@@ -60,7 +61,7 @@ class ItemRepository extends DisposableInterface
 
   @override
   void add(Item item) {
-    MyItem? existing = _itemHive.get(item.id);
+    MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
       existing.count += item.count;
       _itemHive.put(existing);
@@ -79,7 +80,7 @@ class ItemRepository extends DisposableInterface
   void update(MyItem item) => _itemHive.put(item);
 
   @override
-  void take(String id, [int? amount]) {
+  void take(ItemId id, [int? amount]) {
     MyItem? existing = _itemHive.get(id);
     if (existing != null) {
       existing.count -= amount ?? existing.count;
@@ -93,7 +94,7 @@ class ItemRepository extends DisposableInterface
 
   @override
   int amount(Item item) {
-    MyItem? existing = _itemHive.get(item.id);
+    MyItem? existing = _itemHive.get(ItemId(item.id));
     return existing?.count ?? 0;
   }
 
@@ -102,11 +103,11 @@ class ItemRepository extends DisposableInterface
     while (await _localSubscription!.moveNext()) {
       BoxEvent e = _localSubscription!.current;
       if (e.deleted) {
-        items.remove(e.key);
+        items.remove(ItemId(e.key));
       } else {
-        Rx<MyItem>? item = items[e.key];
+        Rx<MyItem>? item = items[ItemId(e.key)];
         if (item == null) {
-          items[e.key] = Rx(e.value);
+          items[ItemId(e.key)] = Rx(e.value);
         } else {
           item.value = e.value;
           item.refresh();

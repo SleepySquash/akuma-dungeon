@@ -18,7 +18,7 @@ import 'package:audioplayers/audioplayers.dart' show AssetSource;
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
-import '/domain/model/player.dart';
+import '/domain/repository/player.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
 import '/ui/worker/music.dart';
@@ -40,8 +40,8 @@ class ProfileController extends GetxController {
   final ItemService _itemService;
   final MusicWorker _musicWorker;
 
-  Rx<Player?> get player => _playerService.player;
-  RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
+  RxPlayer get player => _playerService.player;
+  RxObsMap<ItemId, Rx<MyItem>> get items => _itemService.items;
 
   void equip(MyItem item) {
     _playerService.equip(item);

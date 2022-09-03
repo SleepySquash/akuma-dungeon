@@ -25,9 +25,9 @@ class ItemService extends GetxService {
 
   final AbstractItemRepository _itemRepository;
 
-  RxObsMap<String, Rx<MyItem>> get items => _itemRepository.items;
+  RxObsMap<ItemId, Rx<MyItem>> get items => _itemRepository.items;
 
   void add(Item item) => _itemRepository.add(item);
-  void take(String id, [int amount = 1]) => _itemRepository.take(id, amount);
+  void take(ItemId id, [int amount = 1]) => _itemRepository.take(id, amount);
   int amount(Item item) => _itemRepository.amount(item);
 }

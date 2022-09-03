@@ -66,6 +66,7 @@ flutter:
     - assets/l10n/
     - assets/monster/slime/
     - assets/music/
+    - assets/skill/
     - assets/sound/
     - assets/voice/darknightprincess/
     - assets/voice/intro/

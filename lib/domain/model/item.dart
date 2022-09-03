@@ -14,10 +14,15 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
+import '/domain/model_type_id.dart';
+import '/util/new_type.dart';
 import 'rarity.dart';
 import 'stat.dart';
+
+part 'item.g.dart';
 
 /// Entity in the [Player]'s inventory.
 abstract class Item {
@@ -45,18 +50,9 @@ abstract class Item {
   final int count;
 }
 
-mixin ImpossibleItem on Item {}
-
-class NoopItem extends Item with ImpossibleItem {
-  const NoopItem(super.count);
-}
-
-class NoopWeapon extends Weapon with ImpossibleItem {
-  const NoopWeapon(super.count);
-}
-
-class NoopEquipable extends Equipable with ImpossibleItem {
-  const NoopEquipable(super.count);
+@HiveType(typeId: ModelTypeId.itemId)
+class ItemId extends NewType<String> {
+  const ItemId(String val) : super(val);
 }
 
 abstract class Artifact extends Item {
@@ -151,11 +147,13 @@ mixin Drinkable on Consumable {
 class MyItem {
   MyItem(
     this.item, {
+    ItemId? id,
     int? count,
   })  : count = count ?? item.count,
-        id = item.max == null ? item.id : const Uuid().v4();
+        id = id ??
+            (item.max == null ? ItemId(item.id) : ItemId(const Uuid().v4()));
 
-  final String id;
+  final ItemId id;
   final Item item;
 
   int count;
@@ -166,8 +164,9 @@ class MyEquipable extends MyItem {
     Equipable equipable, {
     int? defense,
     this.level = 1,
+    ItemId? id,
   })  : defense = defense ?? equipable.defense,
-        super(equipable, count: 1);
+        super(equipable, id: id, count: 1);
 
   int level;
 
@@ -179,8 +178,9 @@ class MyWeapon extends MyItem {
     Weapon weapon, {
     int? damage,
     this.level = 1,
+    ItemId? id,
   })  : damage = damage ?? weapon.damage,
-        super(weapon, count: 1);
+        super(weapon, id: id, count: 1);
 
   int level;
 
@@ -191,7 +191,8 @@ class MyArtifact extends MyItem {
   MyArtifact(
     Artifact artifact, {
     this.level = 1,
-  }) : super(artifact, count: 1);
+    ItemId? id,
+  }) : super(artifact, id: id, count: 1);
 
   int level;
 }

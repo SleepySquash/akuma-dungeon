@@ -78,7 +78,7 @@ class TaskService extends DisposableInterface {
     MyTask? task = queue.active ?? queue.execute();
 
     if (task != null) {
-      if (!task.task.criteriaMet(player: _playerService.player.value)) {
+      if (!task.task.criteriaMet(player: _playerService.player.player.value)) {
         return;
       }
 

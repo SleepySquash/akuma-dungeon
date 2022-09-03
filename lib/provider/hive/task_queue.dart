@@ -17,9 +17,11 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
-import '/domain/model/task/all.dart';
-import '/domain/model/task.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/task_queue.dart';
+import '/domain/model/task.dart';
+import '/domain/model/task/all.dart';
+import '/util/log.dart';
 import 'base.dart';
 import 'task.dart';
 
@@ -60,6 +62,12 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
   @override
   MyTaskQueue read(BinaryReader reader) {
     final id = reader.read() as String;
+    final TaskQueue? queue = TasksQueues.get(id);
+    if (queue == null) {
+      Log.print('Cannot find `TaskQueue` with id: $id');
+      return MyTaskQueue(queue: ImpossibleTaskQueue());
+    }
+
     final progress = reader.read() as int;
     final activeId = reader.read() as String?;
     final activeProgress = reader.read() as int?;
@@ -68,13 +76,12 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
     if (activeId != null) {
       active = Tasks.get(activeId);
       if (active == null) {
-        // ignore: avoid_print
-        print('Cannot find `Task` with id: $activeId');
+        Log.print('Cannot find `Task` with id: $activeId');
       }
     }
 
     return MyTaskQueue(
-      queue: TasksQueues.get(id),
+      queue: queue,
       active: active == null
           ? null
           : MyTask(task: active, progress: activeProgress ?? 0),

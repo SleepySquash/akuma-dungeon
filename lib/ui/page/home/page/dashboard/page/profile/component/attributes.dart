@@ -20,7 +20,7 @@ class ProfileAttributesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget _name() {
+    Widget name() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisSize: MainAxisSize.min,
@@ -36,7 +36,7 @@ class ProfileAttributesTab extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: DefaultTextStyle.merge(
                   style: const TextStyle(fontSize: 18),
-                  child: Text(c.player.value?.rank.toRank.name ?? '...'),
+                  child: Text(c.player.player.value.rank.toRank.name),
                 ),
               ),
             ),
@@ -52,13 +52,15 @@ class ProfileAttributesTab extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: DefaultTextStyle.merge(
                   style: const TextStyle(fontSize: 18),
-                  child: Text(c.player.value?.name ?? '...'),
+                  child: Text(c.player.player.value.name),
                 ),
               ),
             ),
           ),
           LevelWidget(
-            level: c.player.value?.level,
+            exp: c.player.player.value.exp,
+            level: c.player.level,
+            levels: c.player.levels,
             maxLevel: Player.maxLevel,
           ),
         ],
@@ -72,8 +74,8 @@ class ProfileAttributesTab extends StatelessWidget {
           return Align(
             alignment: FractionalOffset(context.isMobile ? 1 : 0.5, 0.5),
             child: DummyCharacter(
-              race: c.player.value!.race,
-              gender: c.player.value!.gender,
+              race: c.player.player.value.race,
+              gender: c.player.player.value.gender,
             ),
           );
         }),
@@ -86,45 +88,45 @@ class ProfileAttributesTab extends StatelessWidget {
               children: [
                 if (context.isMobile) const Spacer(),
                 Obx(() {
-                  MyEquipable? item = c.player.value?.equipped
-                      .where((e) => e.item is Head)
+                  Rx<MyItem>? item = c.player.equipped
+                      .where((e) => e.value.item is Head)
                       .firstOrNull;
                   return EquipmentTile(
                     type: EquipmentTileType.head,
-                    item: item,
+                    item: item?.value,
                     onEquipped: (e) =>
-                        e == null ? c.unequip(item!) : c.equip(e),
+                        e == null ? c.unequip(item!.value) : c.equip(e),
                   );
                 }),
                 Obx(() {
-                  MyEquipable? item = c.player.value?.equipped
-                      .where((e) => e.item is Armor)
+                  Rx<MyItem>? item = c.player.equipped
+                      .where((e) => e.value.item is Armor)
                       .firstOrNull;
                   return EquipmentTile(
                     type: EquipmentTileType.armor,
-                    item: item,
+                    item: item?.value,
                     onEquipped: (e) =>
-                        e == null ? c.unequip(item!) : c.equip(e),
+                        e == null ? c.unequip(item!.value) : c.equip(e),
                   );
                 }),
                 Obx(() {
-                  MyEquipable? item = c.player.value?.equipped
-                      .where((e) => e.item is Shoes)
+                  Rx<MyItem>? item = c.player.equipped
+                      .where((e) => e.value.item is Shoes)
                       .firstOrNull;
                   return EquipmentTile(
                     type: EquipmentTileType.shoes,
-                    item: item,
+                    item: item?.value,
                     onEquipped: (e) =>
-                        e == null ? c.unequip(item!) : c.equip(e),
+                        e == null ? c.unequip(item!.value) : c.equip(e),
                   );
                 }),
                 Obx(() {
-                  MyWeapon? item = c.player.value?.weapon.firstOrNull;
+                  Rx<MyItem>? item = c.player.weapons.firstOrNull;
                   return EquipmentTile(
                     type: EquipmentTileType.weapon,
-                    item: item,
+                    item: item?.value,
                     onEquipped: (e) =>
-                        e == null ? c.unequip(item!) : c.equip(e),
+                        e == null ? c.unequip(item!.value) : c.equip(e),
                   );
                 }),
                 Row(
@@ -133,15 +135,15 @@ class ProfileAttributesTab extends StatelessWidget {
                   children: [
                     Obx(() {
                       return StatsWidget(
-                        damage: c.player.value?.damage,
-                        defense: c.player.value?.defense,
-                        health: c.player.value?.health,
-                        critDamage: c.player.value?.critDamage,
-                        critRate: c.player.value?.critRate,
-                        ultCharge: c.player.value?.ultCharge,
+                        damage: c.player.damage,
+                        defense: c.player.defense,
+                        health: c.player.health,
+                        critDamage: c.player.critDamage,
+                        critRate: c.player.critRate,
+                        ultCharge: c.player.ultCharge,
                       );
                     }),
-                    Flexible(child: _name()),
+                    Flexible(child: name()),
                   ],
                 ),
               ],

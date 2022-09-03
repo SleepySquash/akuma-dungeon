@@ -17,7 +17,8 @@
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
-import '/domain/model/player.dart';
+import '/domain/repository/character.dart';
+import '/domain/repository/player.dart';
 import '/domain/service/character.dart';
 import '/domain/service/player.dart';
 import '/util/obs/obs.dart';
@@ -28,14 +29,15 @@ class PartyController extends GetxController {
   final PlayerService _playerService;
   final CharacterService _characterService;
 
-  Rx<Player?> get player => _playerService.player;
-  RxObsMap<String, MyCharacter> get characters => _characterService.characters;
+  RxPlayer get player => _playerService.player;
+  RxObsMap<CharacterId, RxMyCharacter> get characters =>
+      _characterService.characters;
 
-  bool contains(String id) => _characterService.contains(id);
+  bool contains(CharacterId id) => _characterService.contains(id);
 
-  void addToParty(MyCharacter character) =>
-      _playerService.addToParty(character);
+  void addToParty(RxMyCharacter character) =>
+      _playerService.addToParty(character.character.value);
 
-  void removeFromParty(MyCharacter character) =>
-      _playerService.removeFromParty(character);
+  void removeFromParty(RxMyCharacter character) =>
+      _playerService.removeFromParty(character.character.value);
 }

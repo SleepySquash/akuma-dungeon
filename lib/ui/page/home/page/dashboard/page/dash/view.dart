@@ -49,8 +49,8 @@ class DashView extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Obx(() {
                 return DummyCharacter(
-                  race: c.player.value!.race,
-                  gender: c.player.value!.gender,
+                  race: c.player.player.value.race,
+                  gender: c.player.player.value.gender,
                 );
               }),
             ),
@@ -95,7 +95,7 @@ class DashView extends StatelessWidget {
                               child: Center(
                                 widthFactor: 0,
                                 child: Text(
-                                  '${c.player.value?.name}',
+                                  c.player.player.value.name,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 17),

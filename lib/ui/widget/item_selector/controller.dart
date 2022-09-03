@@ -9,5 +9,5 @@ class ItemSelectorController extends GetxController {
 
   final ItemService _itemService;
 
-  RxObsMap<String, Rx<MyItem>> get items => _itemService.items;
+  RxObsMap<ItemId, Rx<MyItem>> get items => _itemService.items;
 }

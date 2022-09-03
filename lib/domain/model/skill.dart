@@ -14,23 +14,41 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:hive/hive.dart';
+
+import '/domain/model_type_id.dart';
+import '/util/new_type.dart';
+
+part 'skill.g.dart';
+
 abstract class Skill {
   const Skill();
 
+  static const maxLevel = 100;
+
   String get id => runtimeType.toString();
+  String get asset => id;
+  String get name => id;
+
+  String? get description => null;
+}
+
+@HiveType(typeId: ModelTypeId.itemId)
+class SkillId extends NewType<String> {
+  const SkillId(String val) : super(val);
 }
 
 class MySkill {
   MySkill(
     this.skill, {
     this.exp = 0,
-  });
+  }) : id = SkillId(skill.id);
 
   final Skill skill;
 
   int exp;
 
-  String get id => skill.id;
+  final SkillId id;
 
   int get level => exp ~/ 1000 + 1;
 }

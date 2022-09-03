@@ -14,10 +14,10 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/item.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/character.dart';
+import '/domain/model/item.dart';
 import '/domain/model/player.dart';
 import '/domain/repository/player.dart';
 
@@ -26,7 +26,7 @@ class PlayerService extends GetxService {
 
   final AbstractPlayerRepository _playerRepository;
 
-  Rx<Player?> get player => _playerRepository.player;
+  RxPlayer get player => _playerRepository.player;
 
   void set(Player player) => _playerRepository.set(player);
 
@@ -36,28 +36,24 @@ class PlayerService extends GetxService {
 
   void equip(MyItem item) {
     if (item is MyWeapon) {
-      if (player.value?.weapon.isEmpty == false) {
-        for (var e in List.from(player.value!.weapon, growable: false)) {
-          unequip(e);
-        }
+      for (Rx<MyItem> e in List.from(player.weapons, growable: false)) {
+        unequip(e.value);
       }
 
-      if (player.value?.weapon.isEmpty == true) {
-        _playerRepository.equip(item);
-      }
+      _playerRepository.equip(item);
     } else if (item is MyEquipable) {
       if (item.item is Head) {
-        if (player.value?.equipped.where((e) => e.item is Head).isEmpty ==
+        if (player.equipped.where((e) => e.value.item is Head).isEmpty ==
             true) {
           _playerRepository.equip(item);
         }
       } else if (item.item is Armor) {
-        if (player.value?.equipped.where((e) => e.item is Armor).isEmpty ==
+        if (player.equipped.where((e) => e.value.item is Armor).isEmpty ==
             true) {
           _playerRepository.equip(item);
         }
       } else if (item.item is Shoes) {
-        if (player.value?.equipped.where((e) => e.item is Shoes).isEmpty ==
+        if (player.equipped.where((e) => e.value.item is Shoes).isEmpty ==
             true) {
           _playerRepository.equip(item);
         }
@@ -70,9 +66,9 @@ class PlayerService extends GetxService {
   }
 
   void addToParty(MyCharacter character) {
-    if ((player.value?.party.length ?? 5) < 5) {
-      if (player.value?.party
-              .where((e) => e.character.id == character.character.id)
+    if (player.party.length < 5) {
+      if (player.party
+              .where((e) => e.character.value.id == character.id)
               .isEmpty ==
           true) {
         _playerRepository.addToParty(character);

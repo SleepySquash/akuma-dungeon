@@ -27,6 +27,9 @@ import '/domain/model/enemy.dart';
 import '/domain/model/item/standard.dart';
 import '/domain/model/player.dart';
 import '/domain/model/task.dart';
+import '/domain/repository/character.dart';
+import '/domain/repository/player.dart';
+import '/domain/service/character.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
 import '/router.dart';
@@ -38,6 +41,7 @@ class DungeonController extends GetxController {
   DungeonController(
     this._playerService,
     this._itemService,
+    this._characterService,
     this._musicWorker, {
     required this.settings,
     this.onClear,
@@ -75,6 +79,8 @@ class DungeonController extends GetxController {
 
   final ItemService _itemService;
 
+  final CharacterService _characterService;
+
   final MusicWorker _musicWorker;
 
   /// [DateTime] when the current [stage] has started.
@@ -92,11 +98,11 @@ class DungeonController extends GetxController {
   Source? _musicSource;
 
   /// Currently authenticated [Player].
-  Rx<Player?> get player => _playerService.player;
+  RxPlayer get player => _playerService.player;
 
   @override
   void onInit() {
-    hp = RxDouble(player.value?.health.toDouble() ?? 10);
+    hp = RxDouble(player.health.toDouble());
     mp = RxDouble(10);
 
     _nextStage();
@@ -134,13 +140,13 @@ class DungeonController extends GetxController {
   HitResult? hitEnemy() {
     if (!gameEnded.value) {
       if (enemy.value != null) {
-        int damage = player.value?.damage ?? 0;
+        int damage = player.damage;
         bool isCrit = false;
         bool isSlayed = false;
 
         int chance = Random().nextInt(100);
-        if (chance < (player.value?.critRate ?? 0)) {
-          damage = damage + damage * (player.value?.critRate ?? 0) ~/ 100;
+        if (chance < player.critRate) {
+          damage = damage + damage * player.critRate ~/ 100;
           isCrit = true;
         }
 
@@ -168,8 +174,8 @@ class DungeonController extends GetxController {
 
   void _hitPlayer(double amount) {
     if (!gameEnded.value) {
-      final int defense = max(player.value?.defense ?? 0, 1);
-      final double damage = max(amount - (defense / 9), 0);
+      final int defense = max(player.defense, 1);
+      final double damage = max(amount - (defense / 9), 0.1);
 
       hp.value -= damage;
 
@@ -207,8 +213,19 @@ class DungeonController extends GetxController {
     _enemyTimer?.cancel();
     _enemyTimer = null;
 
-    _playerService.addExperience(enemy.value!.exp);
-    _itemService.add(Dogecoin(enemy.value!.money));
+    int exp = enemy.value!.exp ~/ (player.party.length + 1);
+    if (exp > 0) {
+      _playerService.addExperience(exp);
+
+      for (RxMyCharacter p in player.party) {
+        _characterService.addExperience(p.character.value, exp);
+      }
+    }
+
+    if (enemy.value!.money > 0) {
+      _itemService.add(Dogecoin(enemy.value!.money));
+    }
+
     enemy.value = null;
     ++slayedEnemies.value;
 
@@ -319,4 +336,9 @@ class HitResult {
   final int damage;
   final bool isCrit;
   final bool isSlayed;
+}
+
+class PartyMember {
+  PartyMember(this.character);
+  final RxMyCharacter character;
 }
