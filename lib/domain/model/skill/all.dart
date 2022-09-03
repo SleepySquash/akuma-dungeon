@@ -14,18 +14,57 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:collection/collection.dart';
+
 import '/domain/model/skill.dart';
 
 // TODO: Make generator generating `Map`: `{'id': Skill()}`.
 abstract class Skills {
   static List<Skill> get all => [
         const HealingSkill(),
+        const HittingSkill(),
+        const ShieldSkill(),
       ];
 
-  static Skill get(String id) => all.firstWhere((e) => e.id == id);
+  static Skill? get(String id) => all.firstWhereOrNull((e) => e.id == id);
 }
 
 class HealingSkill extends Skill {
-  const HealingSkill({this.amount = 1});
-  final int amount;
+  const HealingSkill({
+    this.health = 1,
+    this.period = const Duration(seconds: 1),
+  });
+
+  final int health;
+  final Duration period;
+
+  List<int> get healths => List.generate(Skill.maxLevel, (i) => health + i);
+  List<Duration> get periods => List.generate(
+        Skill.maxLevel,
+        (i) => Duration(milliseconds: period.inMilliseconds - i * 5),
+      );
+}
+
+class HittingSkill extends Skill {
+  const HittingSkill({
+    this.damage = 20,
+    this.period = const Duration(seconds: 1),
+  });
+
+  final int damage;
+  final Duration period;
+
+  List<int> get damages => List.generate(Skill.maxLevel, (i) => damage + i);
+  List<Duration> get periods => List.generate(
+        Skill.maxLevel,
+        (i) => Duration(milliseconds: period.inMilliseconds - i * 5),
+      );
+}
+
+class ShieldSkill extends Skill {
+  const ShieldSkill({this.shield = 10});
+
+  final int shield;
+
+  List<int> get shields => List.generate(Skill.maxLevel, (i) => shield + i);
 }

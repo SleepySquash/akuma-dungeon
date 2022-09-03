@@ -55,20 +55,6 @@ class ItemId extends NewType<String> {
   const ItemId(String val) : super(val);
 }
 
-mixin ImpossibleItem on Item {}
-
-class NoopItem extends Item with ImpossibleItem {
-  const NoopItem(super.count);
-}
-
-class NoopWeapon extends Weapon with ImpossibleItem {
-  const NoopWeapon(super.count);
-}
-
-class NoopEquipable extends Equipable with ImpossibleItem {
-  const NoopEquipable(super.count);
-}
-
 abstract class Artifact extends Item {
   const Artifact(super.count);
 

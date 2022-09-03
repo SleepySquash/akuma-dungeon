@@ -19,6 +19,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/ui/page/home/widget/screen_switcher.dart';
 import '/ui/page/home/widget/wide_button.dart';
@@ -172,7 +173,7 @@ class _ItemViewState extends State<ItemView>
                             onPressed: () async {
                               dynamic selected = await ItemSelector.show(
                                 context: context,
-                                empty: const NoopItem(0),
+                                empty: const ImpossibleItem(0),
                                 category: c.exchangeItemSettings?.category,
                                 filter: c.exchangeItemSettings?.filter,
                               );
@@ -181,7 +182,7 @@ class _ItemViewState extends State<ItemView>
                                 c.exchangeItemSettings?.onExchange
                                     ?.call(selected.value);
                                 c.item.value = selected.value;
-                              } else if (selected is NoopItem) {
+                              } else if (selected is Impossible) {
                                 c.exchangeItemSettings?.onExchange?.call(null);
                                 _dismiss();
                               }
@@ -193,7 +194,7 @@ class _ItemViewState extends State<ItemView>
                             onPressed: () async {
                               dynamic selected = await ItemSelector.show(
                                 context: context,
-                                empty: const NoopItem(0),
+                                empty: const ImpossibleItem(0),
                                 category: c.exchangeItemSettings?.category,
                                 filter: c.exchangeItemSettings?.filter,
                               );
@@ -202,7 +203,7 @@ class _ItemViewState extends State<ItemView>
                                 c.exchangeItemSettings?.onExchange
                                     ?.call(selected.value);
                                 c.item.value = selected.value;
-                              } else if (selected is NoopItem) {
+                              } else if (selected is Impossible) {
                                 c.exchangeItemSettings?.onExchange?.call(null);
                                 _dismiss();
                               }

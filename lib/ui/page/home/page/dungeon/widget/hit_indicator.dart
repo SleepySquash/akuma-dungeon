@@ -97,7 +97,9 @@ class _HitIndicatorState extends State<HitIndicator>
       ..addStatusListener((s) {
         switch (s) {
           case AnimationStatus.completed:
-            widget.onEnd?.call();
+            if (mounted) {
+              widget.onEnd?.call();
+            }
             break;
 
           case AnimationStatus.dismissed:

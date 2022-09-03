@@ -28,6 +28,9 @@ abstract class AbstractCharacterRepository {
   void remove(CharacterId character);
   bool contains(CharacterId character);
 
+  void equip(CharacterId id, MyItem item);
+  void unequip(CharacterId id, MyItem item);
+
   void addExperience(CharacterId id, int amount);
 }
 

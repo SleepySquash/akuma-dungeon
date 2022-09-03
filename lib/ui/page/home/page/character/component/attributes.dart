@@ -1,11 +1,11 @@
-import 'package:akuma/ui/page/home/widget/backdrop_plate.dart';
-import 'package:akuma/util/platform_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../controller.dart';
 import '/domain/model/character.dart';
+import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/level.dart';
 import '/ui/page/home/widget/stats.dart';
+import '/util/platform_utils.dart';
 
 class CharacterAttributesTab extends StatelessWidget {
   const CharacterAttributesTab(this.c, {Key? key}) : super(key: key);
@@ -14,6 +14,8 @@ class CharacterAttributesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MyCharacter? character = c.myCharacter?.character.value;
+
     return Center(
       key: const Key('CharacterAttributesTab'),
       child: ConstrainedBox(
@@ -31,16 +33,14 @@ class CharacterAttributesTab extends StatelessWidget {
                   child: Row(
                     children: [
                       Icon(
-                        (c.myCharacter?.character ?? c.character)
-                            ?.role
-                            .toIcon(),
+                        (character?.character ?? c.character)?.role.toIcon(),
                         size: 21,
                         color: Colors.black,
                       ),
                       Expanded(
                         child: Center(
                           child: Text(
-                            (c.myCharacter?.character ?? c.character)?.name ??
+                            (character?.character ?? c.character)?.name ??
                                 '...',
                           ),
                         ),
@@ -48,22 +48,18 @@ class CharacterAttributesTab extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (c.myCharacter != null) ...[
+                if (character != null) ...[
                   LevelWidget(
-                    exp: c.myCharacter!.exp,
-                    level: c.myCharacter!.level,
-                    levels: c.myCharacter!.character.levels,
+                    exp: character.exp,
+                    level: character.level,
+                    levels: character.character.levels,
                     maxLevel: Character.maxLevel,
                   ),
                   StatsWidget(
-                    damage:
-                        c.myCharacter?.character.damages[c.myCharacter!.level],
-                    defense:
-                        c.myCharacter?.character.defenses[c.myCharacter!.level],
-                    health:
-                        c.myCharacter?.character.healths[c.myCharacter!.level],
-                    ultCharge: c.myCharacter?.character
-                        .ultCharges[c.myCharacter!.level],
+                    damage: character.character.damages[character.level],
+                    defense: character.character.defenses[character.level],
+                    health: character.character.healths[character.level],
+                    ultCharge: character.character.ultCharges[character.level],
                   ),
                 ],
                 if (!context.isMobile) const Spacer(),

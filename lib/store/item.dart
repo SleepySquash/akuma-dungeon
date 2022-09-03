@@ -19,6 +19,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/domain/repository/item.dart';
 import '/provider/hive/item.dart';
@@ -37,8 +38,8 @@ class ItemRepository extends DisposableInterface
 
   @override
   void onInit() {
-    for (var item in _itemHive.items) {
-      if (item.item is ImpossibleItem) {
+    for (MyItem item in _itemHive.items) {
+      if (item.item is Impossible) {
         _itemHive.remove(item.id);
       }
     }

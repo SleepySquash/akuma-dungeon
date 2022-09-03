@@ -19,6 +19,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '/domain/model/impossible.dart';
 import '/domain/model/progression.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
@@ -51,6 +52,18 @@ class TaskRepository extends DisposableInterface
 
   @override
   void onInit() {
+    for (MyTask task in _taskHive.items) {
+      if (task.task is Impossible) {
+        _taskHive.remove(task.task.id);
+      }
+    }
+
+    for (MyTaskQueue queue in _queueHive.items) {
+      if (queue.queue is Impossible) {
+        _queueHive.remove(queue.queue.id);
+      }
+    }
+
     tasks = RxObsMap(
       Map.fromEntries(_taskHive.items.map((e) => MapEntry(e.task.id, Rx(e)))),
     );

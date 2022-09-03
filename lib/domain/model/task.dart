@@ -45,16 +45,6 @@ abstract class Task {
   }
 }
 
-class NoopTask extends Task {
-  const NoopTask();
-
-  @override
-  String get id => 'noop';
-
-  @override
-  List<TaskStep> get steps => [];
-}
-
 mixin GuildTask on Task {}
 
 class MyTask {

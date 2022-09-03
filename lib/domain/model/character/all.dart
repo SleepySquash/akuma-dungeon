@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:collection/collection.dart';
+
 import '/domain/model/character.dart';
 import 'standard.dart';
 
@@ -22,5 +24,5 @@ abstract class Characters {
         ...StandardCharacters.characters,
       ];
 
-  static Character get(String id) => all.firstWhere((e) => e.id == id);
+  static Character? get(String id) => all.firstWhereOrNull((e) => e.id == id);
 }

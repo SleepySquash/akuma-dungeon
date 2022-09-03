@@ -17,8 +17,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
-import '/domain/model/item/all.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
+import '/domain/model/item/all.dart';
+import '/util/log.dart';
 import 'base.dart';
 
 /// [Hive] storage for the [MyItem]s.
@@ -60,9 +62,8 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
 
     Item? item = Items.get(itemId);
     if (item == null) {
-      // ignore: avoid_print
-      print('Cannot find `Item` with id: $itemId');
-      return MyItem(const NoopItem(0), count: 0);
+      Log.print('Cannot find `Item` with id: $itemId');
+      return MyItem(const ImpossibleItem(0), count: 0);
     }
 
     if (type == 'MyWeapon') {

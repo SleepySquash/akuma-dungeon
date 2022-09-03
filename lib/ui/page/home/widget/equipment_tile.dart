@@ -2,6 +2,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 import '/ui/page/home/page/item/controller.dart';
@@ -120,7 +121,7 @@ class EquipmentTile extends StatelessWidget {
       String title;
       switch (type) {
         case EquipmentTileType.artifact:
-          title = 'Артифакт';
+          title = 'Артефакт';
           break;
 
         case EquipmentTileType.weapon:
@@ -167,14 +168,14 @@ class EquipmentTile extends StatelessWidget {
               if (item == null) {
                 selected = await ItemSelector.show(
                   context: context,
-                  empty: const NoopItem(0),
+                  empty: const ImpossibleItem(0),
                   category: type.toCategory(),
                   filter: type.toFilter(),
                 );
 
                 if (selected is Rx<MyItem>) {
                   onEquipped?.call(selected.value);
-                } else if (selected is NoopItem && item != null) {
+                } else if (selected is Impossible && item != null) {
                   onEquipped?.call(null);
                 }
               } else {

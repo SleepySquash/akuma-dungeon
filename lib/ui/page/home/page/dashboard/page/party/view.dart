@@ -107,9 +107,7 @@ class PartyView extends StatelessWidget {
                                 child: const Icon(Icons.add),
                               ),
                             )
-                          : CharacterCard(
-                              myCharacter: character.character.value,
-                            ),
+                          : CharacterCard(myCharacter: character),
                     ),
                     childWhenDragging:
                         sized(const AspectRatio(aspectRatio: 0.7)),
@@ -127,9 +125,7 @@ class PartyView extends StatelessWidget {
                                 child: const Icon(Icons.add),
                               ),
                             )
-                          : CharacterCard(
-                              myCharacter: character.character.value,
-                            ),
+                          : CharacterCard(myCharacter: character),
                     ),
                   );
                 });
@@ -175,18 +171,12 @@ class PartyView extends StatelessWidget {
                       data: owned == null ? null : _AddToParty(owned),
                       maxSimultaneousDrags: owned == null ? 0 : 1,
                       feedback: sized(
-                        CharacterCard(
-                          myCharacter: owned?.character.value,
-                          character: e,
-                        ),
+                        CharacterCard(myCharacter: owned, character: e),
                       ),
                       childWhenDragging:
                           sized(const AspectRatio(aspectRatio: 0.7)),
                       child: sized(
-                        CharacterCard(
-                          myCharacter: owned?.character.value,
-                          character: e,
-                        ),
+                        CharacterCard(myCharacter: owned, character: e),
                       ),
                     );
                   }).toList(),

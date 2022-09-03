@@ -337,3 +337,8 @@ class HitResult {
   final bool isCrit;
   final bool isSlayed;
 }
+
+class PartyMember {
+  PartyMember(this.character);
+  final RxMyCharacter character;
+}

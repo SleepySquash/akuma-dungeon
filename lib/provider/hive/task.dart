@@ -17,8 +17,10 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
-import '/domain/model/task/all.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/task.dart';
+import '/domain/model/task/all.dart';
+import '/util/log.dart';
 import 'base.dart';
 
 /// [Hive] storage for the [MyTask]s.
@@ -61,9 +63,8 @@ class MyTaskAdapter extends TypeAdapter<MyTask> {
 
     final Task? task = Tasks.get(id);
     if (task == null) {
-      // ignore: avoid_print
-      print('Cannot find `Task` with id: $id');
-      return MyTask(task: const NoopTask());
+      Log.print('Cannot find `Task` with id: $id');
+      return MyTask(task: const ImpossibleTask());
     }
 
     return MyTask(task: task, progress: progress);

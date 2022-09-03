@@ -28,6 +28,7 @@ import '/domain/repository/player.dart';
 import '/provider/hive/player.dart';
 import '/store/character.dart';
 import '/store/item.dart';
+import '/util/log.dart';
 import '/util/obs/obs.dart';
 
 class PlayerRepository extends DisposableInterface
@@ -62,24 +63,33 @@ class PlayerRepository extends DisposableInterface
     List<Rx<MyItem>> weapons = [];
 
     if (stored != null) {
-      for (CharacterId a in stored.party) {
+      for (CharacterId a in List.from(stored.party, growable: false)) {
         RxMyCharacter? character = _characterRepository.characters[a];
         if (character != null) {
           party.add(character);
+        } else {
+          Log.print('Cannot find owned `MyCharacter` with id: $a');
+          stored.party.remove(a);
         }
       }
 
-      for (ItemId w in stored.equipped) {
+      for (ItemId w in List.from(stored.equipped, growable: false)) {
         Rx<MyItem>? item = _itemRepository.items[w];
         if (item?.value is MyEquipable) {
           equipped.add(item!);
+        } else {
+          Log.print('Cannot find owned `MyEquipable` with id: $w');
+          stored.equipped.remove(w);
         }
       }
 
-      for (ItemId w in stored.weapons) {
+      for (ItemId w in List.from(stored.weapons, growable: false)) {
         Rx<MyItem>? item = _itemRepository.items[w];
         if (item?.value is MyWeapon) {
           weapons.add(item!);
+        } else {
+          Log.print('Cannot find owned `MyWeapon` with id: $w');
+          stored.weapons.remove(w);
         }
       }
     }

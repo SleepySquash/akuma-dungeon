@@ -36,5 +36,5 @@ abstract class TasksQueues {
         ...MainTasks.queues,
       ];
 
-  static TaskQueue get(String id) => all.firstWhere((e) => e.id == id);
+  static TaskQueue? get(String id) => all.firstWhereOrNull((e) => e.id == id);
 }

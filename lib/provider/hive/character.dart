@@ -14,12 +14,16 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:collection/collection.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
 import '/domain/model/character.dart';
 import '/domain/model/character/all.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
+import '/domain/model/skill.dart';
+import '/util/log.dart';
 import 'base.dart';
 
 /// [Hive] storage for the [MyCharacter]s.
@@ -61,6 +65,13 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
   @override
   MyCharacter read(BinaryReader reader) {
     final String id = reader.read() as String;
+    final Character? character = Characters.get(id);
+
+    if (character == null) {
+      Log.print('Cannot find `Character` with id: $id');
+      return MyCharacter(character: const ImpossibleCharacter());
+    }
+
     final int affinity = reader.read() as int;
     final int exp = reader.read() as int;
 
@@ -76,11 +87,28 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
       weapons.add(ItemId(reader.read() as String));
     }
 
+    List<MySkill> skills = [];
+    final int skillsLength = reader.read() as int;
+    for (var i = 0; i < skillsLength; ++i) {
+      final String sk = reader.read() as String;
+      final int exp = reader.read() as int;
+      final Skill? skill = character.skills.firstWhereOrNull((e) => e.id == sk);
+
+      if (skill != null) {
+        skills.add(MySkill(skill, exp: exp));
+      } else {
+        Log.print(
+          'Cannot find `Skill` with id: $sk in `Character` with id: $id',
+        );
+      }
+    }
+
     return MyCharacter(
-      character: Characters.get(id),
+      character: character,
       affinity: affinity,
       artifacts: artifacts,
       weapons: weapons,
+      skills: skills,
       exp: exp,
     );
   }
@@ -99,6 +127,12 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
     writer.write(obj.weapons.length);
     for (ItemId a in obj.weapons) {
       writer.write(a.val);
+    }
+
+    writer.write(obj.skills.length);
+    for (MySkill s in obj.skills) {
+      writer.write(s.id.val);
+      writer.write(s.exp);
     }
   }
 }

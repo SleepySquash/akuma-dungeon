@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/rarity.dart';
+import '/domain/repository/character.dart';
 import '/ui/page/home/page/character/view.dart';
 import '/util/extensions.dart';
 
@@ -14,11 +15,11 @@ class CharacterCard extends StatelessWidget {
   }) : super(key: key);
 
   final Character? character;
-  final MyCharacter? myCharacter;
+  final RxMyCharacter? myCharacter;
 
   @override
   Widget build(BuildContext context) {
-    Character e = myCharacter?.character ?? character!;
+    Character e = myCharacter?.character.value.character ?? character!;
 
     return AspectRatio(
       aspectRatio: 0.7,
@@ -73,7 +74,7 @@ class CharacterCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8, right: 16),
                     child: BorderedText(
                       child: Text(
-                        'Lv. ${myCharacter!.level}',
+                        'Lv. ${myCharacter!.character.value.level}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,

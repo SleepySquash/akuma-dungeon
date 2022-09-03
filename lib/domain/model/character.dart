@@ -71,11 +71,13 @@ class MyCharacter {
     required this.character,
     List<ItemId>? artifacts,
     List<ItemId>? weapons,
+    List<MySkill>? skills,
     this.affinity = 0,
     this.exp = 0,
   })  : id = CharacterId(character.id),
         artifacts = artifacts ?? List.empty(growable: true),
-        weapons = weapons ?? List.empty(growable: true);
+        weapons = weapons ?? List.empty(growable: true),
+        skills = skills ?? character.skills.map((e) => MySkill(e)).toList();
 
   final CharacterId id;
 
@@ -87,6 +89,9 @@ class MyCharacter {
 
   /// [Weapon]s equipped to this [Character].
   final List<ItemId> weapons;
+
+  /// [MySkill]s this [MyCharacter] possess.
+  final List<MySkill> skills;
 
   /// Integer representation of how much this [character] loves or respects you.
   int affinity;

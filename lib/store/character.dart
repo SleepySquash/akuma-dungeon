@@ -20,10 +20,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model/character.dart';
+import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/domain/repository/character.dart';
 import '/provider/hive/character.dart';
 import '/store/item.dart';
+import '/util/log.dart';
 import '/util/obs/obs.dart';
 
 class CharacterRepository extends DisposableInterface
@@ -42,23 +44,35 @@ class CharacterRepository extends DisposableInterface
 
   @override
   void onInit() {
+    for (MyCharacter character in _characterHive.items) {
+      if (character.character is Impossible) {
+        _characterHive.remove(character.id);
+      }
+    }
+
     characters = RxObsMap(
       Map.fromEntries(
         _characterHive.items.map(
           (e) {
             List<Rx<MyItem>> artifacts = [];
-            for (ItemId a in e.artifacts) {
+            for (ItemId a in List.from(e.artifacts, growable: false)) {
               Rx<MyItem>? item = _itemRepository.items[a];
               if (item?.value is MyArtifact) {
                 artifacts.add(item!);
+              } else {
+                Log.print('Cannot find owned `MyArtifact` with id: $a');
+                e.artifacts.remove(a);
               }
             }
 
             List<Rx<MyItem>> weapons = [];
-            for (ItemId w in e.weapons) {
+            for (ItemId w in List.from(e.weapons, growable: false)) {
               Rx<MyItem>? item = _itemRepository.items[w];
               if (item?.value is MyWeapon) {
                 weapons.add(item!);
+              } else {
+                Log.print('Cannot find owned `MyWeapon` with id: $w');
+                e.weapons.remove(w);
               }
             }
 
