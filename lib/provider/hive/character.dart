@@ -103,6 +103,12 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
       }
     }
 
+    for (Skill skill in character.skills) {
+      if (skills.firstWhereOrNull((e) => e.id.val == skill.id) == null) {
+        skills.add(MySkill(skill));
+      }
+    }
+
     return MyCharacter(
       character: character,
       affinity: affinity,

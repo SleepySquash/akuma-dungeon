@@ -22,6 +22,7 @@ import '/ui/page/home/widget/menu_tile.dart';
 import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/dummy_character.dart';
 import '/ui/widget/locked.dart';
+import '/util/platform_utils.dart';
 import 'adventures/view.dart';
 import 'battle_pass/view.dart';
 import 'controller.dart';
@@ -43,21 +44,42 @@ class DashView extends StatelessWidget {
     return GetBuilder(
       init: DashController(Get.find(), Get.find(), Get.find()),
       builder: (DashController c) {
+        Widget secretary() {
+          return Obx(() {
+            if (c.secretary.value == null) {
+              return DummyCharacter(
+                race: c.player.player.value.race,
+                gender: c.player.player.value.gender,
+              );
+            }
+
+            return Image.asset(
+              'assets/character/${c.secretary.value?.character.value.character.asset}.png',
+            );
+          });
+        }
+
         return Stack(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Obx(() {
-                return DummyCharacter(
-                  race: c.player.player.value.race,
-                  gender: c.player.player.value.gender,
-                );
-              }),
-            ),
+            if (context.isMobile)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: FractionalTranslation(
+                  translation: const Offset(-0.3, 0),
+                  child: secretary(),
+                ),
+              )
+            else
+              Row(
+                children: [
+                  Expanded(child: Center(child: secretary())),
+                  Flexible(child: Container(width: 450)),
+                ],
+              ),
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                padding: const EdgeInsets.fromLTRB(96, 8, 16, 8),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,

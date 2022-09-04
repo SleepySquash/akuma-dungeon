@@ -25,10 +25,14 @@ class ResultModal extends StatelessWidget {
     this.c, {
     Key? key,
     this.won = false,
+    this.onDismissed,
   }) : super(key: key);
 
   final DungeonController c;
+
   final bool won;
+
+  final void Function()? onDismissed;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +70,12 @@ class ResultModal extends StatelessWidget {
                         Text('${e.item.count} ${e.item.name}'),
                       ],
                     );
+                  } else if (e is ControlReward) {
+                    icon = Icons.control_camera;
+                    title = Text('${e.amount} control');
+                  } else if (e is ReputationReward) {
+                    icon = Icons.people;
+                    title = Text('${e.amount} reputation');
                   }
 
                   return ListTile(
@@ -79,9 +89,14 @@ class ResultModal extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
-            router.home();
+
+            onDismissed?.call();
+            if (onDismissed == null) {
+              router.home();
+            }
           },
-          child: const Text('Home'),
+          child:
+              onDismissed == null ? const Text('Home') : const Text('Continue'),
         ),
       ],
     );

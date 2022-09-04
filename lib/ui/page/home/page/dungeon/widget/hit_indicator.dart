@@ -56,28 +56,32 @@ extension HitIndicatorFlowDirectionExtension on HitIndicatorFlowDirection {
   }
 }
 
-class HitIndicator extends StatefulWidget {
-  const HitIndicator({
+class NumberIndicator extends StatefulWidget {
+  const NumberIndicator({
     Key? key,
-    required this.position,
-    required this.damage,
-    this.isCrit = false,
+    this.position,
+    required this.number,
+    this.color,
+    this.fontSize,
     this.direction = HitIndicatorFlowDirection.any,
     this.onEnd,
   }) : super(key: key);
 
-  final Offset position;
-  final int damage;
-  final bool isCrit;
+  final Offset? position;
+  final int number;
+
+  final Color? color;
+  final double? fontSize;
+
   final HitIndicatorFlowDirection direction;
 
   final void Function()? onEnd;
 
   @override
-  State<HitIndicator> createState() => _HitIndicatorState();
+  State<NumberIndicator> createState() => _NumberIndicatorState();
 }
 
-class _HitIndicatorState extends State<HitIndicator>
+class _NumberIndicatorState extends State<NumberIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -124,8 +128,8 @@ class _HitIndicatorState extends State<HitIndicator>
     return Stack(
       children: [
         Positioned(
-          left: widget.position.dx,
-          top: widget.position.dy,
+          left: widget.position?.dx ?? MediaQuery.of(context).size.width / 2,
+          top: widget.position?.dy ?? MediaQuery.of(context).size.height / 2,
           child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
@@ -180,10 +184,10 @@ class _HitIndicatorState extends State<HitIndicator>
               translation: const Offset(-0.5, -0.5),
               child: BorderedText(
                 child: Text(
-                  '${widget.damage}',
+                  '${widget.number}',
                   style: TextStyle(
-                    color: widget.isCrit ? Colors.yellow : Colors.red,
-                    fontSize: widget.isCrit ? 48 : 36,
+                    color: widget.color ?? Colors.red,
+                    fontSize: widget.fontSize ?? 36,
                   ),
                 ),
               ),

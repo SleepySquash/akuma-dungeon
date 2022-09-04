@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
 
 import '/domain/model/progression.dart';
-import '/domain/service/task.dart';
+import '/domain/service/progression.dart';
 
 class GoddessController extends GetxController {
-  GoddessController(this._taskService);
+  GoddessController(this._progressionService);
 
-  final TaskService _taskService;
+  final ProgressionService _progressionService;
 
-  Rx<GameProgression> get progression => _taskService.progression;
+  Rx<GameProgression> get progression => _progressionService.progression;
 
-  void setGoddessTower(int to) => _taskService.setGoddessTower(to);
+  void setGoddessTower(int to) => _progressionService.setGoddessTower(to);
 }

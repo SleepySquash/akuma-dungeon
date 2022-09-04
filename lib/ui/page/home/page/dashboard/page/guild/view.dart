@@ -19,7 +19,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/rank.dart';
+import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/menu_tile.dart';
+import 'city/view.dart';
 import 'controller.dart';
 import 'task/view.dart';
 
@@ -29,21 +31,30 @@ class GuildView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: GuildController(Get.find()),
+      init: GuildController(Get.find(), Get.find()),
       builder: (GuildController c) {
         return Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(
-                'assets/background/location/guild.jpg',
-                alignment: Alignment.centerRight,
-                fit: BoxFit.cover,
-              ),
+              child: Obx(() {
+                return Image.asset(
+                  // 'assets/background/location/guild.jpg',
+                  'assets/background/${c.location.value.location.asset}.jpg',
+                  alignment: Alignment.centerRight,
+                  fit: BoxFit.cover,
+                );
+              }),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Image.asset('assets/character/Arda.png'),
-            ),
+            Obx(() {
+              if (!c.location.value.hasAdventurerGuild) {
+                return Container();
+              }
+
+              return Align(
+                alignment: Alignment.centerLeft,
+                child: Image.asset('assets/character/Arda.png'),
+              );
+            }),
             Align(
               alignment: Alignment.centerRight,
               child: Padding(
@@ -51,6 +62,24 @@ class GuildView extends StatelessWidget {
                 child: _menu(context, c),
               ),
             ),
+            Obx(() {
+              if (c.location.value.hasAdventurerGuild) {
+                return Container();
+              }
+
+              return const Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: BackdropPlate(
+                    width: null,
+                    child: Text(
+                      'В текущей локации отсутствует гильдия путешественников',
+                    ),
+                  ),
+                ),
+              );
+            }),
           ],
         );
       },
@@ -65,10 +94,13 @@ class GuildView extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,
-            child: MenuTile(
-              onPressed: () => TaskView.show(context),
-              child: const Text('Поручения'),
-            ),
+            child: Obx(() {
+              return MenuTile(
+                locked: !c.location.value.hasAdventurerGuild,
+                onPressed: () => TaskView.show(context),
+                child: const Text('Поручения'),
+              );
+            }),
           ),
           Expanded(
             flex: 3,
@@ -77,9 +109,8 @@ class GuildView extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: MenuTile(
-                    locked: true,
-                    onPressed: () {},
-                    child: const Text('Подземелья'),
+                    onPressed: () => CityView.show(context),
+                    child: Obx(() => Text(c.location.value.location.name)),
                   ),
                 ),
                 Expanded(

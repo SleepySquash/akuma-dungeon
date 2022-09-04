@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controller.dart';
+import '/domain/service/player.dart';
 
 class ProfileSkillsTab extends StatelessWidget {
   const ProfileSkillsTab(this.c, {Key? key}) : super(key: key);
@@ -9,9 +11,20 @@ class ProfileSkillsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      key: Key('ProfileSkillsTab'),
-      child: Text('Skill'),
+    return Center(
+      key: const Key('ProfileSkillsTab'),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Get.find<PlayerService>().addExperience(1000);
+            },
+            child: const Text('+1000 exp'),
+          ),
+        ],
+      ),
+      // child: Text('Skill'),
     );
   }
 }

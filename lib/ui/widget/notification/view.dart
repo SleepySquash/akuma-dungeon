@@ -60,7 +60,7 @@ class NotificationOverlayView extends StatelessWidget {
               ),
               IgnorePointer(
                 child: Obx(() {
-                  LocalNotification? notification = c.centered.firstOrNull;
+                  LocalNotification? notification = c.centered.lastOrNull;
                   return AnimatedSwitcher(
                     duration: 300.milliseconds,
                     child: notification == null

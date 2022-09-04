@@ -43,6 +43,8 @@ abstract class FDungeonTask extends Task with GuildTask {
   List<TaskReward> get rewards => const [
         MoneyReward(100),
         RankReward(4),
+        ControlReward(1),
+        ReputationReward(1),
         ItemReward(Ruby(2)),
       ];
 }

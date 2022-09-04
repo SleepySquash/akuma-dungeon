@@ -40,7 +40,7 @@ abstract class DpsCharacter extends Character {
 
   @override
   List<Skill> get skills =>
-      [const HittingSkill(damage: 1, period: Duration(seconds: 1))];
+      [const HittingSkill(damage: 20, period: Duration(seconds: 1))];
 }
 
 abstract class TankCharacter extends Character {
@@ -50,7 +50,10 @@ abstract class TankCharacter extends Character {
   Role get role => Role.tank;
 
   @override
-  List<Skill> get skills => [const ShieldSkill(shield: 10)];
+  List<Skill> get skills => [
+        const ShieldSkill(shield: 10),
+        const TankHittingSkill(damage: 1, period: Duration(seconds: 1))
+      ];
 }
 
 abstract class SupportCharacter extends Character {

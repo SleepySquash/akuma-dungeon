@@ -20,18 +20,16 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model/impossible.dart';
-import '/domain/model/progression.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/task.dart';
-import '/provider/hive/progression.dart';
 import '/provider/hive/task_queue.dart';
 import '/provider/hive/task.dart';
 import '/util/obs/obs.dart';
 
 class TaskRepository extends DisposableInterface
     implements AbstractTaskRepository {
-  TaskRepository(this._taskHive, this._queueHive, this._progressHive);
+  TaskRepository(this._taskHive, this._queueHive);
 
   @override
   late final RxObsMap<String, Rx<MyTask>> tasks;
@@ -39,12 +37,8 @@ class TaskRepository extends DisposableInterface
   @override
   late final RxObsMap<String, Rx<MyTaskQueue>> queues;
 
-  @override
-  late final Rx<GameProgression> progression;
-
   final TaskHiveProvider _taskHive;
   final TaskQueueHiveProvider _queueHive;
-  final ProgressionHiveProvider _progressHive;
 
   StreamIterator<BoxEvent>? _localSubscription;
   StreamIterator<BoxEvent>? _queueSubscription;
@@ -72,11 +66,8 @@ class TaskRepository extends DisposableInterface
       Map.fromEntries(_queueHive.items.map((e) => MapEntry(e.queue.id, Rx(e)))),
     );
 
-    progression = Rx(_progressHive.get() ?? GameProgression());
-
     _initLocalSubscription();
     _initQueueSubscription();
-    _initProgressSubscription();
 
     super.onInit();
   }
@@ -85,7 +76,6 @@ class TaskRepository extends DisposableInterface
   void onClose() {
     _localSubscription?.cancel();
     _queueSubscription?.cancel();
-    _progressSubscription?.cancel();
     super.onClose();
   }
 
@@ -106,20 +96,6 @@ class TaskRepository extends DisposableInterface
 
   @override
   void abandon(TaskQueue queue) => _queueHive.remove(queue.id);
-
-  @override
-  void setGoddessTower(int to) {
-    GameProgression progression = _progressHive.get() ?? GameProgression();
-    progression.goddessTowerLevel = to;
-    _progressHive.set(progression);
-  }
-
-  @override
-  void setChapter(int to) {
-    GameProgression progression = _progressHive.get() ?? GameProgression();
-    progression.storyChapter = to;
-    _progressHive.set(progression);
-  }
 
   Future<void> _initLocalSubscription() async {
     _localSubscription = StreamIterator(_taskHive.boxEvents);
@@ -153,19 +129,6 @@ class TaskRepository extends DisposableInterface
           queue.value = e.value;
           queue.refresh();
         }
-      }
-    }
-  }
-
-  Future<void> _initProgressSubscription() async {
-    _progressSubscription = StreamIterator(_progressHive.boxEvents);
-    while (await _progressSubscription!.moveNext()) {
-      BoxEvent e = _progressSubscription!.current;
-      if (e.deleted) {
-        // No-op.
-      } else {
-        progression.value = e.value;
-        progression.refresh();
       }
     }
   }

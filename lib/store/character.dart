@@ -99,6 +99,7 @@ class CharacterRepository extends DisposableInterface
               if (c.character.value.weapons.contains(id)) {
                 c.character.value.weapons.remove(id);
                 c.weapons.removeWhere((i) => i.value.id == id);
+                _characterHive.put(c.character.value);
               }
             }
           }
@@ -108,6 +109,7 @@ class CharacterRepository extends DisposableInterface
               if (c.character.value.artifacts.contains(id)) {
                 c.character.value.artifacts.remove(id);
                 c.artifacts.removeWhere((i) => i.value.id == id);
+                _characterHive.put(c.character.value);
               }
             }
           }
@@ -208,7 +210,7 @@ class CharacterRepository extends DisposableInterface
   }
 }
 
-class HiveRxMyCharacter implements RxMyCharacter {
+class HiveRxMyCharacter extends RxMyCharacter {
   HiveRxMyCharacter(
     MyCharacter character, {
     List<Rx<MyItem>> artifacts = const [],

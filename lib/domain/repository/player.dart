@@ -67,7 +67,7 @@ abstract class RxPlayer {
   }
 
   int get damage {
-    int dmg = player.value.damages[player.value.level];
+    int dmg = damages[level];
 
     for (Rx<MyItem> w in weapons) {
       dmg += (w.value as MyWeapon).damage;

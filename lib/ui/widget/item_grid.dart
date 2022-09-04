@@ -61,7 +61,19 @@ class ItemGrid extends StatelessWidget {
               break;
 
             case InventoryCategory.equip:
-              iterable = items.where((e) => e.value is MyEquipable);
+              iterable = items.where((e) => e.value is MyEquipable).toList()
+                ..sort((a, b) {
+                  int levels = (b.value as MyEquipable)
+                      .level
+                      .compareTo((a.value as MyEquipable).level);
+
+                  if (levels == 0) {
+                    return b.value.item.rarity.index
+                        .compareTo(a.value.item.rarity.index);
+                  }
+
+                  return levels;
+                });
               break;
 
             case InventoryCategory.artifact:

@@ -25,6 +25,7 @@ import 'domain/model/dungeon.dart';
 import 'domain/model/player.dart';
 import 'domain/repository/flag.dart';
 import 'domain/repository/player.dart';
+import 'domain/repository/progression.dart';
 import 'domain/repository/settings.dart';
 import 'domain/repository/task.dart';
 import 'domain/service/auth.dart';
@@ -32,19 +33,22 @@ import 'domain/service/character.dart';
 import 'domain/service/gacha.dart';
 import 'domain/service/item.dart';
 import 'domain/service/player.dart';
+import 'domain/service/progression.dart';
 import 'domain/service/task.dart';
 import 'provider/hive/application_settings.dart';
 import 'provider/hive/character.dart';
 import 'provider/hive/flag.dart';
 import 'provider/hive/item.dart';
+import 'provider/hive/location.dart';
 import 'provider/hive/player.dart';
 import 'provider/hive/progression.dart';
-import 'provider/hive/task.dart';
 import 'provider/hive/task_queue.dart';
+import 'provider/hive/task.dart';
 import 'store/character.dart';
 import 'store/flag.dart';
 import 'store/item.dart';
 import 'store/player.dart';
+import 'store/progression.dart';
 import 'store/settings.dart';
 import 'store/task.dart';
 import 'ui/page/auth/view.dart';
@@ -268,13 +272,14 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             ScopedDependencies deps = ScopedDependencies();
 
             await Future.wait([
-              deps.put(PlayerHiveProvider()).init(),
-              deps.put(ItemHiveProvider()).init(),
-              deps.put(CharacterHiveProvider()).init(),
               deps.put(ApplicationSettingsHiveProvider()).init(),
+              deps.put(CharacterHiveProvider()).init(),
               deps.put(FlagHiveProvider()).init(),
-              deps.put(TaskHiveProvider()).init(),
+              deps.put(ItemHiveProvider()).init(),
+              deps.put(LocationHiveProvider()).init(),
+              deps.put(PlayerHiveProvider()).init(),
               deps.put(ProgressionHiveProvider()).init(),
+              deps.put(TaskHiveProvider()).init(),
               deps.put(TaskQueueHiveProvider()).init(),
             ]);
 
@@ -302,6 +307,17 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
 
             deps.put(GachaService(itemService, characterService));
 
+            AbstractProgressionRepository progressionRepository =
+                deps.put<AbstractProgressionRepository>(
+              ProgressionRepository(
+                Get.find(),
+                Get.find(),
+                characterRepository,
+              ),
+            );
+            ProgressionService progressionService =
+                deps.put(ProgressionService(progressionRepository));
+
             AbstractPlayerRepository playerRepository =
                 deps.put<AbstractPlayerRepository>(
               PlayerRepository(
@@ -316,17 +332,14 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
 
             AbstractTaskRepository taskRepository =
                 deps.put<AbstractTaskRepository>(
-              TaskRepository(
-                Get.find(),
-                Get.find(),
-                Get.find(),
-              ),
+              TaskRepository(Get.find(), Get.find()),
             );
             TaskService taskService = deps.put(
               TaskService(
                 taskRepository,
                 playerService,
                 itemService,
+                progressionService,
               ),
             );
 

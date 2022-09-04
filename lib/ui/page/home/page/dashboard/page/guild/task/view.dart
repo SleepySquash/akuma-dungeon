@@ -112,6 +112,12 @@ class TaskView extends StatelessWidget {
                     Text('${e.item.count} ${e.item.name}'),
                   ],
                 );
+              } else if (e is ControlReward) {
+                icon = Icons.control_camera;
+                title = Text('${e.amount} control');
+              } else if (e is ReputationReward) {
+                icon = Icons.people;
+                title = Text('${e.amount} reputation');
               }
 
               return ListTile(

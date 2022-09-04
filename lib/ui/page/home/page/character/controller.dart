@@ -18,23 +18,33 @@ import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/item.dart';
+import '/domain/model/progression.dart';
 import '/domain/repository/character.dart';
 import '/domain/service/character.dart';
+import '/domain/service/progression.dart';
 
 class CharacterController extends GetxController {
   CharacterController(
-    this._characterService, {
+    this._characterService,
+    this._progressionService, {
     this.character,
     this.myCharacter,
   });
 
   final CharacterService _characterService;
+  final ProgressionService _progressionService;
 
   final Character? character;
   final RxMyCharacter? myCharacter;
+
+  Rx<GameProgression> get progression => _progressionService.progression;
 
   void equip(MyItem item) =>
       _characterService.equip(myCharacter!.character.value, item);
   void unequip(MyItem item) =>
       _characterService.unequip(myCharacter!.character.value, item);
+
+  void makeSecretary() =>
+      _progressionService.setSecretary(myCharacter!.character.value);
+  void removeSecretary() => _progressionService.setSecretary(null);
 }

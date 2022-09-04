@@ -114,6 +114,7 @@ class PlayerRepository extends DisposableInterface
             if (player.player.value.equipped.contains(id)) {
               player.player.value.equipped.remove(id);
               player.equipped.removeWhere((i) => i.value.id == id);
+              _playerLocal.set(player.player.value);
             }
           }
 
@@ -121,6 +122,7 @@ class PlayerRepository extends DisposableInterface
             if (player.player.value.weapons.contains(id)) {
               player.player.value.weapons.remove(id);
               player.weapons.removeWhere((i) => i.value.id == id);
+              _playerLocal.set(player.player.value);
             }
           }
           break;
@@ -140,6 +142,7 @@ class PlayerRepository extends DisposableInterface
           if (player.player.value.party.contains(id)) {
             player.player.value.party.remove(id);
             player.equipped.removeWhere((i) => i.value.id == id);
+            _playerLocal.set(player.player.value);
           }
 
           break;

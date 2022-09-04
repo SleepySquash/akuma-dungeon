@@ -33,7 +33,7 @@ class AdventuresView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: AdventuresController(Get.find(), Get.find()),
+      init: AdventuresController(Get.find(), Get.find(), Get.find()),
       builder: (AdventuresController c) {
         return Material(
           type: MaterialType.transparency,

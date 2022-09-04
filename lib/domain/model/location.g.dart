@@ -1,41 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'progression.dart';
+part of 'location.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GameProgressionAdapter extends TypeAdapter<GameProgression> {
+class LocationIdAdapter extends TypeAdapter<LocationId> {
   @override
-  final int typeId = 8;
+  final int typeId = 14;
 
   @override
-  GameProgression read(BinaryReader reader) {
+  LocationId read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return GameProgression(
-      goddessTowerLevel: fields[0] as int,
-      storyChapter: fields[1] as int,
-      location: fields[2] as LocationId,
-      secretary: fields[3] as CharacterId?,
+    return LocationId(
+      fields[0] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, GameProgression obj) {
+  void write(BinaryWriter writer, LocationId obj) {
     writer
-      ..writeByte(4)
-      ..writeByte(0)
-      ..write(obj.goddessTowerLevel)
       ..writeByte(1)
-      ..write(obj.storyChapter)
-      ..writeByte(2)
-      ..write(obj.location)
-      ..writeByte(3)
-      ..write(obj.secretary);
+      ..writeByte(0)
+      ..write(obj.val);
   }
 
   @override
@@ -44,7 +35,7 @@ class GameProgressionAdapter extends TypeAdapter<GameProgression> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GameProgressionAdapter &&
+      other is LocationIdAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
