@@ -25,16 +25,10 @@ dependencies:
   mutex: ^3.0.0
   novel:
     # path: ../novel
-<<<<<<< HEAD
-     git:
-       url: https://github.com/SleepySquash/novel.dart.git
-       ref: improve-implementation
-=======
     git:
       url: https://github.com/SleepySquash/novel.dart.git
       ref: improve-implementation
   page_transition: ^2.0.5
->>>>>>> upstream/main
   path_provider: ^2.0.10
   timezone: ^0.8.0
   universal_io: ^2.0.4

@@ -29,13 +29,6 @@ abstract class StandardCharacters {
         Rio(),
         Zahir(),
         Rozzi(),
-        Darcassan(),
-        Jayldrog(),
-        Yrlissa(),
-        Saeya(),
-        Nalra(),
-        Salvor(),
-        Turgon(),
       ];
 }
 
@@ -155,99 +148,4 @@ class Rozzi extends DpsCharacter {
 
   @override
   Rarity get rarity => Rarity.rare;
-}
-
-class Darcassan extends Character {
-  @override
-  String get id => 'Darcassan';
-
-  @override
-  Role get role => Role.tank;
-
-  @override
-  String get name => 'Darcassan';
-}
-
-class Jayldrog extends Character {
-  @override
-  String get id => 'Jayldrog';
-
-  @override
-  Role get role => Role.tank;
-
-  @override
-  String get name => 'Jayldrog';
-
-  @override
-  Rarity get rarity => Rarity.rare;
-}
-
-class Yrlissa extends Character {
-  @override
-  String get id => 'Yrlissa';
-
-  @override
-  Role get role => Role.support;
-
-  @override
-  String get name => 'Yrlissa';
-
-  @override
-  Rarity get rarity => Rarity.rare;
-}
-
-class Saeya extends Character {
-  @override
-  String get id => 'Saeya';
-
-  @override
-  Role get role => Role.dps;
-
-  @override
-  String get name => 'Saeya';
-
-  @override
-  Rarity get rarity => Rarity.ultraRare;
-}
-
-class Nalra extends Character {
-  @override
-  String get id => 'Nalra';
-
-  @override
-  Role get role => Role.dps;
-
-  @override
-  String get name => 'Nalra';
-
-  @override
-  Rarity get rarity => Rarity.superRare;
-}
-
-class Salvor extends Character {
-  @override
-  String get id => 'Salvor';
-
-  @override
-  Role get role => Role.dps;
-
-  @override
-  String get name => 'Salvor';
-
-  @override
-  Rarity get rarity => Rarity.useful;
-}
-
-class Turgon extends Character {
-  @override
-  String get id => 'Turgon';
-
-  @override
-  Role get role => Role.dps;
-
-  @override
-  String get name => 'Turgon';
-
-  @override
-  Rarity get rarity => Rarity.common;
 }
