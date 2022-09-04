@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 class BackdropPlate extends StatelessWidget {
   const BackdropPlate({
     Key? key,
+    this.width = 240,
     required this.child,
   }) : super(key: key);
 
+  final double? width;
   final Widget child;
 
   @override
@@ -16,7 +18,7 @@ class BackdropPlate extends StatelessWidget {
       child: ConditionalBackdropFilter(
         borderRadius: BorderRadius.circular(15),
         child: Container(
-          width: 240,
+          width: width,
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.4),
           ),

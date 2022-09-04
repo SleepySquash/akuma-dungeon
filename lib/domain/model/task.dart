@@ -103,6 +103,16 @@ class RankReward extends TaskReward {
   final int amount;
 }
 
+class ControlReward extends TaskReward {
+  const ControlReward(this.amount);
+  final int amount;
+}
+
+class ReputationReward extends TaskReward {
+  const ReputationReward(this.amount);
+  final int amount;
+}
+
 abstract class TaskCriteria {
   const TaskCriteria();
 }

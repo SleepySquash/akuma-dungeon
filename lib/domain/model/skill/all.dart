@@ -35,6 +35,9 @@ class HealingSkill extends Skill {
     this.period = const Duration(seconds: 1),
   });
 
+  @override
+  String get name => 'Лечение';
+
   final int health;
   final Duration period;
 
@@ -51,6 +54,9 @@ class HittingSkill extends Skill {
     this.period = const Duration(seconds: 1),
   });
 
+  @override
+  String get name => 'Атака';
+
   final int damage;
   final Duration period;
 
@@ -61,8 +67,36 @@ class HittingSkill extends Skill {
       );
 }
 
+class TankHittingSkill extends HittingSkill {
+  const TankHittingSkill({
+    super.damage = 20,
+    super.period = const Duration(seconds: 1),
+  });
+
+  @override
+  String get name => 'Атака';
+
+  @override
+  String get asset => 'HittingSkill';
+
+  @override
+  List<int> get damages => List.generate(
+        Skill.maxLevel,
+        (i) => damage + (i * 0.5).toInt(),
+      );
+
+  @override
+  List<Duration> get periods => List.generate(
+        Skill.maxLevel,
+        (i) => Duration(milliseconds: period.inMilliseconds - i * 5),
+      );
+}
+
 class ShieldSkill extends Skill {
   const ShieldSkill({this.shield = 10});
+
+  @override
+  String get name => 'Защита';
 
   final int shield;
 

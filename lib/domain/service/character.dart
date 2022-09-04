@@ -38,8 +38,28 @@ class CharacterService extends GetxService {
   void remove(CharacterId id) => _characterRepository.remove(id);
   bool contains(CharacterId id) => _characterRepository.contains(id);
 
-  void equip(MyCharacter character, MyItem item) =>
-      _characterRepository.equip(character.id, item);
+  void equip(MyCharacter character, MyItem item) {
+    RxMyCharacter? myCharacter = characters[character.id];
+
+    if (myCharacter != null) {
+      if (item is MyWeapon) {
+        for (Rx<MyItem> e in List.from(myCharacter.weapons, growable: false)) {
+          unequip(character, e.value);
+        }
+        _characterRepository.equip(character.id, item);
+      } else if (item is MyArtifact) {
+        if (myCharacter.artifacts.length < 5) {
+          _characterRepository.equip(character.id, item);
+        }
+      }
+    }
+  }
+
+  void reequip(MyCharacter character, MyItem current, MyItem to) {
+    unequip(character, current);
+    equip(character, current);
+  }
+
   void unequip(MyCharacter character, MyItem item) =>
       _characterRepository.unequip(character.id, item);
 

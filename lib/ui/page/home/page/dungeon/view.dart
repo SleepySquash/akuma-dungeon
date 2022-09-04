@@ -47,28 +47,9 @@ class DungeonView extends StatelessWidget {
         Get.find(),
         Get.find(),
         Get.find(),
+        Get.find(),
         settings: settings,
         onClear: onClear,
-        onHitTaken: (hit, entries) {
-          OverlayEntry? entry;
-          entry = OverlayEntry(
-            builder: (context) => IgnorePointer(
-              child: HitIndicator(
-                position: Offset(
-                  MediaQuery.of(context).size.width * 0.1,
-                  MediaQuery.of(context).size.height * 0.9,
-                ),
-                direction: HitIndicatorFlowDirection.up,
-                damage: hit.damage,
-                isCrit: hit.isCrit,
-                onEnd: entry?.remove,
-              ),
-            ),
-          );
-
-          entries.add(entry);
-          Overlay.of(context)?.insert(entry);
-        },
       ),
       tag: settings.hashCode.toString(),
       builder: (DungeonController c) {
@@ -116,6 +97,18 @@ class DungeonView extends StatelessWidget {
                       _bottom(c, context),
                     ],
                   ),
+                  IgnorePointer(
+                    child: Obx(() {
+                      return Stack(
+                        children: c.effects.entries.map((e) {
+                          return KeyedSubtree(
+                            key: Key(e.key),
+                            child: e.value,
+                          );
+                        }).toList(),
+                      );
+                    }),
+                  ),
                 ],
               ),
             ),
@@ -137,26 +130,7 @@ class DungeonView extends StatelessWidget {
         child: enemy != null
             ? PreciseButton(
                 key: Key(enemy.key),
-                onPressed: (p) {
-                  HitResult? hit = c.hitEnemy();
-
-                  if (hit != null) {
-                    OverlayEntry? entry;
-                    entry = OverlayEntry(
-                      builder: (context) => IgnorePointer(
-                        child: HitIndicator(
-                          position: p,
-                          damage: hit.damage,
-                          isCrit: hit.isCrit,
-                          onEnd: entry?.remove,
-                        ),
-                      ),
-                    );
-
-                    c.entries.add(entry);
-                    Overlay.of(context)?.insert(entry);
-                  }
-                },
+                onPressed: (p) => c.hitEnemy(at: p),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 400),
                   child: Image.asset('assets/monster/${enemy.enemy.asset}.png'),
@@ -329,27 +303,54 @@ class DungeonView extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 100),
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Obx(() {
-                        int hp = c.hp.value.ceil();
-                        int maxHp = c.player.health;
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Obx(() {
+                            if (c.sp.value <= 0) {
+                              return Container();
+                            }
 
-                        return Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: LinearProgressIndicator(
-                                minHeight: 20,
-                                value: 1 - c.hp.value / maxHp,
-                                backgroundColor: Colors.green,
-                                color: Colors.grey,
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Stack(
+                                children: [
+                                  Icon(
+                                    Icons.shield,
+                                    size: 48,
+                                    color: Colors.white.withOpacity(0.9),
+                                  ),
+                                  Positioned.fill(
+                                    child: Center(
+                                        child: Text('${c.sp.value.ceil()}')),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Positioned.fill(
-                              child: Center(child: Text('$hp/$maxHp')),
-                            ),
-                          ],
-                        );
-                      }),
+                            );
+                          }),
+                          Obx(() {
+                            int hp = c.hp.value.ceil();
+                            int maxHp = c.player.health;
+
+                            return Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: LinearProgressIndicator(
+                                    minHeight: 20,
+                                    value: 1 - c.hp.value / maxHp,
+                                    backgroundColor: Colors.green,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: Center(child: Text('$hp/$maxHp')),
+                                ),
+                              ],
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -363,7 +364,7 @@ class DungeonView extends StatelessWidget {
   }
 
   Widget _party(DungeonController c) {
-    if (c.player.party.isNotEmpty != true) {
+    if (c.party.isNotEmpty != true) {
       return Container();
     }
 
@@ -372,14 +373,15 @@ class DungeonView extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 300),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: c.player.party.map((e) {
+          children: c.party.map((e) {
             return Flexible(
               child: Container(
                 constraints: const BoxConstraints(maxHeight: 200),
                 child: FractionalTranslation(
                   translation: const Offset(0, 0.4),
                   child: Image.asset(
-                    'assets/character/${e.character.value.character.asset}.png',
+                    'assets/character/${e.character.character.value.character.asset}.png',
+                    key: e.key,
                   ),
                 ),
               ),

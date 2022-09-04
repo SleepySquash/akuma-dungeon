@@ -27,6 +27,7 @@ abstract class ModalPopup {
   static Future<T?> show<T>({
     required BuildContext context,
     required Widget child,
+    EdgeInsets mobilePadding = const EdgeInsets.fromLTRB(32, 0, 32, 0),
     double? maxWidth = 600,
     bool isDismissible = true,
   }) {
@@ -40,8 +41,8 @@ abstract class ModalPopup {
         enableDrag: isDismissible,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(8),
-            topRight: Radius.circular(8),
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
           ),
         ),
         builder: (context) {
@@ -65,7 +66,7 @@ abstract class ModalPopup {
                 ],
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(32, 0, 32, 0),
+                    padding: mobilePadding,
                     child: child,
                   ),
                 ),

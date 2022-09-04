@@ -1,5 +1,6 @@
 import 'character.dart';
 import 'item.dart';
+import 'location.dart';
 import 'task_queue.dart';
 import 'task.dart';
 
@@ -32,4 +33,11 @@ class ImpossibleCharacter extends Character with Impossible {
 
 class ImpossibleItem extends Item with Impossible {
   const ImpossibleItem(super.count);
+}
+
+class ImpossibleLocation extends Location with Impossible {
+  const ImpossibleLocation();
+
+  @override
+  String get id => 'noop';
 }

@@ -16,17 +16,13 @@
 
 import 'package:get/get.dart';
 
-import '/util/obs/obs.dart';
-
-import '/domain/model/progression.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
+import '/util/obs/obs.dart';
 
 abstract class AbstractTaskRepository {
   RxObsMap<String, Rx<MyTask>> get tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues;
-
-  Rx<GameProgression> get progression;
 
   void start(TaskQueue task);
   void progress(MyTaskQueue task);
@@ -35,7 +31,4 @@ abstract class AbstractTaskRepository {
   void accept(Task task);
   void update(MyTask task);
   void cancel(Task task);
-
-  void setGoddessTower(int to);
-  void setChapter(int to);
 }

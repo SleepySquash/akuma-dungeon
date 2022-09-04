@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/item/standard.dart';
-import '/domain/model/progression.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/domain/model/task/main/all.dart';
 import '/domain/repository/task.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
+import '/domain/service/progression.dart';
 import '/router.dart';
 import '/util/obs/obs.dart';
 
@@ -18,16 +18,17 @@ class TaskService extends DisposableInterface {
     this._taskRepository,
     this._playerService,
     this._itemService,
+    this._progressionService,
   );
 
   final AbstractTaskRepository _taskRepository;
 
   final PlayerService _playerService;
   final ItemService _itemService;
+  final ProgressionService _progressionService;
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskRepository.tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues => _taskRepository.queues;
-  Rx<GameProgression> get progression => _taskRepository.progression;
 
   @override
   void onInit() {
@@ -67,6 +68,16 @@ class TaskService extends DisposableInterface {
           _itemService.add(r.item);
         } else if (r is RankReward) {
           _playerService.addRank(r.amount);
+        } else if (r is ControlReward) {
+          _progressionService.setLocationControl(
+            _progressionService.location.value.location,
+            _progressionService.location.value.control + r.amount,
+          );
+        } else if (r is ReputationReward) {
+          _progressionService.setLocationReputation(
+            _progressionService.location.value.location,
+            _progressionService.location.value.reputation + r.amount,
+          );
         }
       }
 
@@ -155,7 +166,4 @@ class TaskService extends DisposableInterface {
       }
     }
   }
-
-  void setGoddessTower(int to) => _taskRepository.setGoddessTower(to);
-  void setChapter(int to) => _taskRepository.setChapter(to);
 }

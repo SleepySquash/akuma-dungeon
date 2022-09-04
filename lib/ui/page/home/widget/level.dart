@@ -28,7 +28,11 @@ class LevelWidget extends StatelessWidget {
       }
 
       if (level <= maxLevel) {
-        nextExp = levels![level - 1];
+        if (level > 2) {
+          nextExp = levels![level - 1] - levels![level - 2];
+        } else {
+          nextExp = levels![level - 1];
+        }
       }
     }
 

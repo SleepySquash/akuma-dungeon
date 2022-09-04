@@ -19,40 +19,45 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart' show OverlayEntry;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
 import '/domain/model/item/standard.dart';
 import '/domain/model/player.dart';
+import '/domain/model/skill.dart';
+import '/domain/model/skill/all.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/character.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
+import '/domain/service/progression.dart';
 import '/router.dart';
 import '/ui/widget/modal_popup.dart';
 import '/ui/worker/music.dart';
+import '/util/extensions.dart';
 import 'component/result.dart';
+import 'widget/hit_indicator.dart';
 
 class DungeonController extends GetxController {
   DungeonController(
     this._playerService,
     this._itemService,
     this._characterService,
+    this._progressionService,
     this._musicWorker, {
     required this.settings,
     this.onClear,
-    this.onHitTaken,
   });
 
   /// [DungeonSettings] controlling this [DungeonController].
   final DungeonSettings settings;
 
   final FutureOr<void> Function()? onClear;
-  final void Function(HitResult, List<OverlayEntry>)? onHitTaken;
 
   /// Indicator whether the game has ended.
   final RxBool gameEnded = RxBool(false);
@@ -72,7 +77,12 @@ class DungeonController extends GetxController {
   final List<OverlayEntry> entries = [];
 
   late final RxDouble hp;
+  final RxDouble sp = RxDouble(0);
   late final RxDouble mp;
+
+  late final List<PartyMember> party;
+
+  final RxMap<String, Widget> effects = RxMap();
 
   /// [PlayerService] maintaining the [Player].
   final PlayerService _playerService;
@@ -80,6 +90,8 @@ class DungeonController extends GetxController {
   final ItemService _itemService;
 
   final CharacterService _characterService;
+
+  final ProgressionService _progressionService;
 
   final MusicWorker _musicWorker;
 
@@ -105,6 +117,88 @@ class DungeonController extends GetxController {
     hp = RxDouble(player.health.toDouble());
     mp = RxDouble(10);
 
+    party = player.party.map((e) {
+      GlobalKey key = GlobalKey();
+      return PartyMember(
+        e,
+        key: key,
+        onEnemyHit: (hit) {
+          if (!gameEnded.value && enemy.value != null) {
+            Source? sound = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
+            if (sound != null) {
+              _musicWorker.once(sound);
+            }
+
+            enemy.value?.hit(hit.damage);
+            if (enemy.value!.isDead) {
+              _slayEnemy();
+            }
+
+            Rect? bounds = key.globalPaintBounds;
+
+            final String id = const Uuid().v4();
+            effects[id] = NumberIndicator(
+              direction: HitIndicatorFlowDirection.up,
+              position: Offset(
+                (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
+                (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+              ),
+              number: hit.damage,
+              onEnd: () => effects.remove(id),
+            );
+          }
+        },
+        onPlayerHeal: (health) {
+          hp.value += health;
+          hp.value = hp.value.clamp(0, player.health).toDouble();
+
+          Rect? bounds = key.globalPaintBounds;
+
+          final String id = const Uuid().v4();
+          effects[id] = NumberIndicator(
+            direction: HitIndicatorFlowDirection.up,
+            position: Offset(
+              (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
+              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+            ),
+            number: health,
+            color: Colors.green,
+            onEnd: () => effects.remove(id),
+          );
+        },
+        onShield: (defense) {
+          sp.value += defense;
+
+          int maxDefense = party
+              .map((e) => e.character.character.value.skills)
+              .expand((e) => e)
+              .map<int>((e) {
+            Skill skill = e.skill;
+            if (skill is ShieldSkill) {
+              return skill.shields[e.level - 1];
+            }
+            return 0;
+          }).fold<int>(0, (p, e) => p + e);
+
+          sp.value = sp.value.clamp(0, maxDefense.toDouble());
+
+          Rect? bounds = key.globalPaintBounds;
+
+          final String id = const Uuid().v4();
+          effects[id] = NumberIndicator(
+            direction: HitIndicatorFlowDirection.up,
+            position: Offset(
+              (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
+              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+            ),
+            number: defense,
+            color: const Color(0xFFDDDDDD),
+            onEnd: () => effects.remove(id),
+          );
+        },
+      );
+    }).toList();
+
     _nextStage();
     _nextEnemy();
 
@@ -119,14 +213,9 @@ class DungeonController extends GetxController {
 
   @override
   void onClose() {
-    gameEnded.value = true;
-    _fixedTimer?.cancel();
-    _enemyTimer?.cancel();
-    for (Timer e in _conditions) {
-      e.cancel();
-    }
+    _endGame();
 
-    for (var e in entries) {
+    for (OverlayEntry e in entries) {
       if (e.mounted) {
         e.remove();
       }
@@ -137,39 +226,40 @@ class DungeonController extends GetxController {
     super.onClose();
   }
 
-  HitResult? hitEnemy() {
-    if (!gameEnded.value) {
-      if (enemy.value != null) {
-        int damage = player.damage;
-        bool isCrit = false;
-        bool isSlayed = false;
+  void hitEnemy({Offset? at}) {
+    if (!gameEnded.value && enemy.value != null) {
+      int damage = player.damage;
+      bool isCrit = false;
 
-        int chance = Random().nextInt(100);
-        if (chance < player.critRate) {
-          damage = damage + damage * player.critRate ~/ 100;
-          isCrit = true;
-        }
-
-        Source? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
-        if (hit != null) {
-          _musicWorker.once(hit);
-        }
-
-        enemy.value?.hit(damage);
-        if (enemy.value!.isDead) {
-          isSlayed = true;
-          _slayEnemy();
-        }
-
-        return HitResult(
-          damage: damage,
-          isCrit: isCrit,
-          isSlayed: isSlayed,
-        );
+      int chance = Random().nextInt(100);
+      if (chance < player.critRate) {
+        damage = damage + damage * player.critRate ~/ 100;
+        isCrit = true;
       }
-    }
 
-    return null;
+      Source? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
+      if (hit != null) {
+        _musicWorker.once(hit);
+      }
+
+      enemy.value?.hit(damage);
+      if (enemy.value!.isDead) {
+        _slayEnemy();
+      }
+
+      final String id = const Uuid().v4();
+      effects[id] = NumberIndicator(
+        position: at ??
+            Offset(
+              MediaQuery.of(router.context!).size.width / 2,
+              MediaQuery.of(router.context!).size.height / 2,
+            ),
+        number: damage,
+        color: isCrit ? Colors.yellow : null,
+        fontSize: isCrit ? 48 : null,
+        onEnd: () => effects.remove(id),
+      );
+    }
   }
 
   void _hitPlayer(double amount) {
@@ -177,18 +267,38 @@ class DungeonController extends GetxController {
       final int defense = max(player.defense, 1);
       final double damage = max(amount - (defense / 9), 0.1);
 
-      hp.value -= damage;
-
-      if (hp.value <= 0) {
-        hp.value = 0;
-        _loseGame();
+      if (sp.value > 0) {
+        sp.value -= damage;
+        if (sp.value < 0) {
+          sp.value = 0;
+        }
+      } else {
+        hp.value -= damage;
+        if (hp.value <= 0) {
+          hp.value = 0;
+          _loseGame();
+        }
       }
 
-      onHitTaken?.call(HitResult(damage: damage.toInt()), entries);
+      final String id = const Uuid().v4();
+      effects[id] = NumberIndicator(
+        position: Offset(
+          MediaQuery.of(router.context!).size.width * 0.1,
+          MediaQuery.of(router.context!).size.height * 0.9,
+        ),
+        direction: HitIndicatorFlowDirection.up,
+        number: damage.toInt(),
+        color: Colors.orange,
+        onEnd: () => effects.remove(id),
+      );
     }
   }
 
   void _nextEnemy() {
+    for (PartyMember p in party) {
+      p.beforeEnemy();
+    }
+
     Enemy? sample = stage.value?.enemies.sample(1).first;
     MyEnemy? next = sample == null
         ? null
@@ -201,15 +311,29 @@ class DungeonController extends GetxController {
 
     if (next != null) {
       _enemyTimer?.cancel();
-      _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
-        if (!gameEnded.value) {
-          _hitPlayer(next.damage);
-        }
-      });
+      int milliseconds =
+          Random().nextInt(next.enemy.interval.inMilliseconds ~/ 2);
+      _enemyTimer = Timer(
+        Duration(milliseconds: milliseconds),
+        () {
+          if (!gameEnded.value) {
+            _hitPlayer(next.damage);
+            _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
+              if (!gameEnded.value) {
+                _hitPlayer(next.damage);
+              }
+            });
+          }
+        },
+      );
     }
   }
 
   void _slayEnemy() {
+    for (PartyMember p in party) {
+      p.afterEnemy();
+    }
+
     _enemyTimer?.cancel();
     _enemyTimer = null;
 
@@ -230,6 +354,9 @@ class DungeonController extends GetxController {
     ++slayedEnemies.value;
 
     if (_checkIfConditionsAreMet()) {
+      for (PartyMember p in party) {
+        p.afterStage();
+      }
       _nextStage();
     }
 
@@ -254,6 +381,10 @@ class DungeonController extends GetxController {
 
       slayedEnemies.value = 0;
       _stageStartedAt = DateTime.now();
+
+      for (PartyMember p in party) {
+        p.beforeStage();
+      }
 
       Source? source = stage.value?.music ?? settings.music;
       if (source != null) {
@@ -286,9 +417,22 @@ class DungeonController extends GetxController {
     return met;
   }
 
+  void _endGame() {
+    gameEnded.value = true;
+    for (var p in party) {
+      p.dispose();
+    }
+
+    _fixedTimer?.cancel();
+    _enemyTimer?.cancel();
+    for (Timer e in _conditions) {
+      e.cancel();
+    }
+  }
+
   Future<void> _winGame() async {
     if (!gameEnded.value) {
-      gameEnded.value = true;
+      _endGame();
 
       for (var r in settings.rewards ?? []) {
         if (r is MoneyReward) {
@@ -299,24 +443,34 @@ class DungeonController extends GetxController {
           _playerService.addExperience(r.amount);
         } else if (r is RankReward) {
           _playerService.addRank(r.amount);
+        } else if (r is ControlReward) {
+          _progressionService.setLocationControl(
+            _progressionService.location.value.location,
+            _progressionService.location.value.control + r.amount,
+          );
+        } else if (r is ReputationReward) {
+          _progressionService.setLocationReputation(
+            _progressionService.location.value.location,
+            _progressionService.location.value.reputation + r.amount,
+          );
         }
       }
 
-      if (onClear == null) {
-        await ModalPopup.show(
-          context: router.context!,
-          isDismissible: false,
-          child: ResultModal(this, won: true),
-        );
-      }
-
-      await onClear?.call();
+      await ModalPopup.show(
+        context: router.context!,
+        isDismissible: false,
+        child: ResultModal(
+          this,
+          won: true,
+          onDismissed: onClear?.call,
+        ),
+      );
     }
   }
 
   void _loseGame() {
     if (!gameEnded.value) {
-      gameEnded.value = true;
+      _endGame();
       ModalPopup.show(
         context: router.context!,
         isDismissible: false,
@@ -339,6 +493,87 @@ class HitResult {
 }
 
 class PartyMember {
-  PartyMember(this.character);
+  PartyMember(
+    this.character, {
+    GlobalKey? key,
+    this.onEnemyHit,
+    this.onPlayerHeal,
+    this.onShield,
+  })  : key = key ?? GlobalKey(),
+        hp = RxDouble(character.health.toDouble()) {
+    init();
+  }
+
+  final GlobalKey key;
+
   final RxMyCharacter character;
+  final RxDouble hp;
+
+  final void Function(HitResult hit)? onEnemyHit;
+  final void Function(int health)? onPlayerHeal;
+  final void Function(int shield)? onShield;
+
+  final List<Timer> _timers = [];
+
+  void init() {}
+  void dispose() {
+    for (Timer t in _timers) {
+      t.cancel();
+    }
+    _timers.clear();
+  }
+
+  void beforeStage() {
+    for (MySkill s in character.character.value.skills) {
+      if (s.skill is ShieldSkill) {
+        ShieldSkill skill = s.skill as ShieldSkill;
+        onShield?.call(skill.shields[s.level - 1]);
+      }
+    }
+  }
+
+  void afterStage() {}
+
+  void beforeEnemy() {
+    for (MySkill s in character.character.value.skills) {
+      if (s.skill is HittingSkill) {
+        HittingSkill skill = s.skill as HittingSkill;
+
+        int milliseconds =
+            Random().nextInt(skill.periods[s.level - 1].inMilliseconds);
+        _timers.add(
+          Timer(Duration(milliseconds: milliseconds), () {
+            _timers.add(
+              Timer.periodic(skill.periods[s.level - 1], (t) {
+                double damage =
+                    character.damage * (skill.damages[s.level - 1] / 100);
+                onEnemyHit?.call(HitResult(damage: max(damage.toInt(), 1)));
+              }),
+            );
+          }),
+        );
+      } else if (s.skill is HealingSkill) {
+        HealingSkill skill = s.skill as HealingSkill;
+
+        int milliseconds =
+            Random().nextInt(skill.periods[s.level - 1].inMilliseconds);
+        _timers.add(
+          Timer(Duration(milliseconds: milliseconds), () {
+            _timers.add(
+              Timer.periodic(skill.periods[s.level - 1], (t) {
+                onPlayerHeal?.call(skill.healths[s.level - 1]);
+              }),
+            );
+          }),
+        );
+      }
+    }
+  }
+
+  void afterEnemy() {
+    for (Timer t in _timers) {
+      t.cancel();
+    }
+    _timers.clear();
+  }
 }

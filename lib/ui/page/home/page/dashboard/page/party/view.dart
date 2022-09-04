@@ -139,9 +139,23 @@ class PartyView extends StatelessWidget {
 
   Widget _bottom(PartyController c) {
     Iterable<Character> all(Player? player) {
+      List<RxMyCharacter> myCharacters = c.characters.values.toList()
+        ..sort((a, b) {
+          int levels =
+              b.character.value.level.compareTo(a.character.value.level);
+
+          if (levels == 0) {
+            return b.character.value.character.rarity.index
+                .compareTo(a.character.value.character.rarity.index);
+          }
+
+          return levels;
+        });
+
       return [
-        ...c.characters.values.map((e) => e.character.value.character),
-        ...Characters.all.where((e) => !c.contains(CharacterId(e.id))),
+        ...myCharacters.map((e) => e.character.value.character),
+        ...Characters.all.where((e) => !c.contains(CharacterId(e.id))).toList()
+          ..sort((a, b) => b.rarity.index.compareTo(a.rarity.index)),
       ].where((e) => player?.party.where((m) => m.val == e.id).isEmpty == true);
     }
 

@@ -22,7 +22,9 @@ import 'package:get/get.dart';
 import '/domain/model/character.dart';
 import '/domain/repository/character.dart';
 import '/ui/page/home/widget/screen_switcher.dart';
+import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/backdrop.dart';
+import '/util/platform_utils.dart';
 import 'component/attributes.dart';
 import 'component/equipment.dart';
 import 'component/skill.dart';
@@ -125,6 +127,7 @@ class _CharacterViewState extends State<CharacterView>
         return GetBuilder(
           init: CharacterController(
             Get.find(),
+            Get.find(),
             character: widget.character,
             myCharacter: widget.myCharacter,
           ),
@@ -176,10 +179,49 @@ class _CharacterViewState extends State<CharacterView>
                     alignment: Alignment.bottomRight,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16, right: 16),
-                      child: FloatingActionButton(
-                        mini: false,
-                        onPressed: _dismiss,
-                        child: const Icon(Icons.close_rounded),
+                      child: Flex(
+                        direction:
+                            context.isMobile ? Axis.vertical : Axis.horizontal,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (c.myCharacter != null) ...[
+                            if (context.isMobile)
+                              Obx(() {
+                                return FloatingActionButton(
+                                  heroTag: 0,
+                                  onPressed: c.progression.value.secretary ==
+                                          c.myCharacter!.character.value.id
+                                      ? c.removeSecretary
+                                      : c.makeSecretary,
+                                  child: c.progression.value.secretary ==
+                                          c.myCharacter!.character.value.id
+                                      ? const Icon(Icons.person_off)
+                                      : const Icon(Icons.person_add),
+                                );
+                              })
+                            else
+                              Obx(() {
+                                return WideButton(
+                                  onPressed: c.progression.value.secretary ==
+                                          c.myCharacter!.character.value.id
+                                      ? c.removeSecretary
+                                      : c.makeSecretary,
+                                  child: Center(
+                                    child: c.progression.value.secretary ==
+                                            c.myCharacter!.character.value.id
+                                        ? const Text('Remove secretary')
+                                        : const Text('Make secretary'),
+                                  ),
+                                );
+                              }),
+                            const SizedBox(width: 10, height: 10),
+                          ],
+                          FloatingActionButton(
+                            mini: false,
+                            onPressed: _dismiss,
+                            child: const Icon(Icons.close_rounded),
+                          ),
+                        ],
                       ),
                     ),
                   ),

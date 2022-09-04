@@ -109,10 +109,7 @@ class InfiniteDungeon extends DungeonSettings {
   Source? music;
 
   List<NextStageCondition> get _conditions {
-    return const [
-      SlayedStageCondition(20),
-      TimerStageCondition(Duration(seconds: 120)),
-    ];
+    return const [SlayedStageCondition(20)];
   }
 
   List<NextStageCondition> get _bossConditions {

@@ -14,25 +14,23 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-/// Type ID's of all [Hive] models just to keep them in one place.
-///
-/// They should not change with time to not break on already stored data by
-/// previous versions of application. Add new entries to the end.
-class ModelTypeId {
-  static const credentials = 0;
-  static const applicationSettings = 1;
-  static const player = 2;
-  static const race = 3;
-  static const gender = 4;
-  static const item = 5;
-  static const character = 6;
-  static const task = 7;
-  static const gameProgression = 8;
-  static const skill = 9;
-  static const taskQueue = 10;
-  static const itemId = 11;
-  static const characterId = 12;
-  static const skillId = 13;
-  static const locationId = 14;
-  static const location = 15;
+import 'package:get/get.dart';
+
+import '/domain/model/character.dart';
+import '/domain/model/location.dart';
+import '/domain/model/progression.dart';
+import '/domain/repository/character.dart';
+
+abstract class AbstractProgressionRepository {
+  Rx<GameProgression> get progression;
+  Rx<RxMyCharacter?> get secretary;
+  Rx<MyLocation> get location;
+
+  void setGoddessTower(int to);
+  void setChapter(int to);
+  void setSecretary(CharacterId? character);
+
+  void setLocation(LocationId location);
+  void setLocationControl(LocationId id, int to);
+  void setLocationReputation(LocationId id, int to);
 }

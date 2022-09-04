@@ -28,7 +28,7 @@ class StoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: StoreController(Get.find(), Get.find()),
+      init: StoreController(Get.find(), Get.find(), Get.find()),
       builder: (StoreController c) {
         return DefaultTabController(
           length: 4,
@@ -74,16 +74,26 @@ class StoreView extends StatelessWidget {
                 ),
               ),
             ),
-            body: SafeArea(
-              child: TabBarView(
-                children: [
-                  // _featured(c, context),
-                  _event(c, context),
-                  _standard(c, context),
-                  _equipment(c, context),
-                  _items(c, context),
-                ],
-              ),
+            body: Stack(
+              children: [
+                Positioned.fill(child: Obx(() {
+                  return Image.asset(
+                    'assets/background/${c.location.value.location.asset}.jpg',
+                    fit: BoxFit.cover,
+                  );
+                })),
+                SafeArea(
+                  child: TabBarView(
+                    children: [
+                      // _featured(c, context),
+                      _event(c, context),
+                      _standard(c, context),
+                      _equipment(c, context),
+                      _items(c, context),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         );
