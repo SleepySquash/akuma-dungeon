@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/slime.dart';
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/task.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
@@ -27,14 +27,71 @@ class DungeonsView extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              // const ListTile(title: Text('Артефакты')),
-              // ListTile(
-              //   leading: const Icon(Icons.church),
-              //   title: const Text('Монастырь ушедшей цивилизации'),
-              //   subtitle: const Text('Очень холодное и мрачное место...'),
-              //   trailing: const Icon(Icons.ac_unit),
-              //   onTap: () {},
-              // ),
+              const ListTile(title: Text('Артефакты')),
+              ListTile(
+                leading: const Icon(Icons.church),
+                title: const Text('Монастырь ушедшей цивилизации'),
+                subtitle: const Text('Очень холодное и мрачное место...'),
+                trailing: const Icon(Icons.ac_unit),
+                onTap: () async {
+                  const List<NextStageCondition> conditions = [
+                    SlayedStageCondition(10),
+                    TimerStageCondition(Duration(seconds: 120)),
+                  ];
+
+                  const List<NextStageCondition> boss = [
+                    SlayedStageCondition(1),
+                    TimerStageCondition(Duration(seconds: 30)),
+                  ];
+
+                  bool? result = await DungeonPreviewView.show(
+                    context,
+                    name: 'Монастырь ушедшей цивилизации',
+                    description: 'Очень холодное и мрачное место...',
+                    background: 'dungeon/magic_forest_altar',
+                    difficulties: [
+                      DungeonDifficulty(
+                        level: 10,
+                        music:
+                            AssetSource('music/mixkit-forest-treasure-138.mp3'),
+                        background: 'magic_forest_altar',
+                        rewards: [
+                          RandomItemReward(
+                            const InitiateFeather(),
+                            chance: 0.4,
+                          ),
+                          RandomItemReward(
+                            const InitiateFlower(),
+                            chance: 0.4,
+                          ),
+                          const MoneyReward(100),
+                          const ExpReward(10),
+                          const RankReward(1),
+                        ],
+                        stages: [
+                          DungeonStage(
+                            name: 'Алтарь',
+                            enemies: SlimeEnemies.e,
+                            conditions: conditions,
+                            multiplier: 10,
+                          ),
+                          DungeonStage(
+                            name: 'Алтарь - Босс Битва',
+                            enemies: SlimeEnemies.ePlus,
+                            conditions: boss,
+                            multiplier: 10,
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+
+                  if (result == true) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
               // ListTile(
               //   leading: const Icon(Icons.auto_awesome),
               //   title: const Text('Секта лунатиков'),
@@ -44,9 +101,8 @@ class DungeonsView extends StatelessWidget {
               //   trailing: const Icon(Icons.whatshot),
               //   onTap: () {},
               // ),
-              // const Divider(),
+              const Divider(),
               const ListTile(title: Text('Ресурсы')),
-
               ListTile(
                 leading: const Icon(Icons.library_books),
                 title: const Text('Старая библиотека'),
@@ -78,7 +134,11 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(const SwordBookMinor(), 0, 3),
+                          RandomItemReward(
+                            const SwordBookMinor(),
+                            min: 0,
+                            max: 3,
+                          ),
                           const MoneyReward(100),
                           const ExpReward(10),
                           const RankReward(1),
@@ -116,8 +176,16 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(const SwordBookMinor(), 1, 3),
-                          RandomItemReward(const SwordBookMajor(), 0, 2),
+                          RandomItemReward(
+                            const SwordBookMinor(),
+                            min: 1,
+                            max: 3,
+                          ),
+                          RandomItemReward(
+                            const SwordBookMajor(),
+                            min: 0,
+                            max: 2,
+                          ),
                           const MoneyReward(500),
                           const ExpReward(20),
                           const RankReward(1),
@@ -127,25 +195,25 @@ class DungeonsView extends StatelessWidget {
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 30,
+                            multiplier: 60,
                           ),
                           DungeonStage(
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 30,
+                            multiplier: 60,
                           ),
                           DungeonStage(
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 30,
+                            multiplier: 60,
                           ),
                           DungeonStage(
                             name: 'Библиотека - Босс Битва',
                             enemies: SlimeEnemies.ePlus,
                             conditions: boss,
-                            multiplier: 30,
+                            multiplier: 60,
                           ),
                         ],
                       ),
@@ -155,9 +223,21 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(const SwordBookMinor(), 1, 3),
-                          RandomItemReward(const SwordBookMajor(), 1, 3),
-                          RandomItemReward(const SwordBookSuperior(), 0, 2),
+                          RandomItemReward(
+                            const SwordBookMinor(),
+                            min: 1,
+                            max: 3,
+                          ),
+                          RandomItemReward(
+                            const SwordBookMajor(),
+                            min: 1,
+                            max: 3,
+                          ),
+                          RandomItemReward(
+                            const SwordBookSuperior(),
+                            min: 0,
+                            max: 2,
+                          ),
                           const MoneyReward(1500),
                           const ExpReward(50),
                           const RankReward(2),
@@ -167,25 +247,25 @@ class DungeonsView extends StatelessWidget {
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 60,
+                            multiplier: 240,
                           ),
                           DungeonStage(
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 60,
+                            multiplier: 240,
                           ),
                           DungeonStage(
                             name: 'Библиотека',
                             enemies: SlimeEnemies.e,
                             conditions: conditions,
-                            multiplier: 60,
+                            multiplier: 240,
                           ),
                           DungeonStage(
                             name: 'Библиотека - Босс Битва',
                             enemies: SlimeEnemies.ePlus,
                             conditions: boss,
-                            multiplier: 60,
+                            multiplier: 240,
                           ),
                         ],
                       ),

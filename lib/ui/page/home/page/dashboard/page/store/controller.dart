@@ -16,7 +16,7 @@
 
 import 'package:get/get.dart';
 
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/location.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/item.dart';

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
 
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/domain/model/task/main/all.dart';

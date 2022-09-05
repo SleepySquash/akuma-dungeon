@@ -25,7 +25,7 @@ import 'package:uuid/uuid.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/player.dart';
 import '/domain/model/skill.dart';
 import '/domain/model/skill/all.dart';
@@ -453,11 +453,6 @@ class DungeonController extends GetxController {
             _progressionService.location.value.location,
             _progressionService.location.value.reputation + r.amount,
           );
-        } else if (r is RandomItemReward) {
-          int count = r.min + Random().nextInt(r.max - r.min);
-          if (count != 0) {
-            _itemService.add(r.item, count);
-          }
         }
       }
 

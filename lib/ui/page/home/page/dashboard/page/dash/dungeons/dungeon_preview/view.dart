@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/task.dart';
 import '/router.dart';
@@ -119,7 +119,8 @@ class DungeonPreviewView extends StatelessWidget {
                 child: Image.asset('assets/item/${r.item.asset}.png'),
               ),
             );
-            text = '${r.min}-${r.max}';
+            text =
+                r.chance != null ? '${r.chance! * 100}%' : '${r.min}-${r.max}';
             rarity = r.item.rarity;
           } else if (r is ItemReward) {
             expanded = WidgetButton(
