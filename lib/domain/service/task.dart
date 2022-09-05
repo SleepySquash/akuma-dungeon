@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
 
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/domain/model/task/main/all.dart';
@@ -65,7 +65,9 @@ class TaskService extends DisposableInterface {
         } else if (r is ExpReward) {
           _playerService.addExperience(r.amount);
         } else if (r is ItemReward) {
-          _itemService.add(r.item);
+          if (r.count != 0) {
+            _itemService.add(r.item, r.count);
+          }
         } else if (r is RankReward) {
           _playerService.addRank(r.amount);
         } else if (r is ControlReward) {

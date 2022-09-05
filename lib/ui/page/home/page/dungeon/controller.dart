@@ -25,7 +25,7 @@ import 'package:uuid/uuid.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/player.dart';
 import '/domain/model/skill.dart';
 import '/domain/model/skill/all.dart';

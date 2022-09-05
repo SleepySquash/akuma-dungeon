@@ -51,6 +51,9 @@ flutter:
     - assets/background/room/
     - assets/character/
     - assets/font/
+    - assets/item/artifact/adventurer/
+    - assets/item/artifact/initiate/
+    - assets/item/artifact/lucky_dog/
     - assets/item/consumable/
     - assets/item/equipable/
     - assets/item/misc/

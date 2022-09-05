@@ -17,32 +17,69 @@
 import 'package:collection/collection.dart';
 
 import '/domain/model/item.dart';
-import 'standard.dart';
+import 'artifact.dart';
+import 'consumable.dart';
+import 'equipable.dart';
+import 'resource.dart';
+import 'weapon.dart';
+
+export 'artifact.dart';
+export 'consumable.dart';
+export 'equipable.dart';
+export 'resource.dart';
+export 'weapon.dart';
 
 // TODO: Make generator generating `Map`: `{'id': Item()}`.
 abstract class Items {
   static List<Item> get all => [
-        ...StandardItems.all,
+        ...artifacts,
+        ...consumable,
+        ...equipable,
+        ...resource,
+        ...skills,
+        ...weapon,
       ];
 
-  static List<Item> get consumable => [
-        ...StandardItems.consumable,
+  static List<Item> get consumable => const [
+        AppleGreenItem(),
+        AppleRedItem(),
+        BananaItem(),
+        BeefItem(),
+        ChickenItem(),
+        RedPotionBigItem(),
+        RedPotionMediumItem(),
+        RedPotionSmallItem(),
       ];
 
-  static List<Item> get weapon => [
-        ...StandardItems.weapon,
+  static List<Item> get weapon => const [
+        BronzeDaggerItem(),
+        BronzeSwordItem(),
+        IronDaggerItem(),
+        PracticeOakSwordItem(),
+        PracticeWillowSwordItem(),
       ];
 
-  static List<Item> get equipable => [
-        ...StandardItems.equipable,
+  static List<Item> get equipable => const [
+        BootItem(),
+        ChainmailBronzeItem(),
+        HelmetLightBronzeItem(),
       ];
 
-  static List<Item> get resource => [
-        ...StandardItems.resource,
+  static List<Item> get resource => const [
+        Dogecoin(),
+        HeartCard(),
+        Ruby(),
       ];
 
-  static List<Item> get skills => [
-        ...StandardItems.skills,
+  static List<Item> get skills => const [
+        SwordBookMajor(),
+        SwordBookMinor(),
+        SwordBookSuperior(),
+      ];
+
+  static List<Item> get artifacts => const [
+        InitiateFeather(),
+        InitiateFlower(),
       ];
 
   static Item? get(String id) => all.firstWhereOrNull((e) => e.id == id);

@@ -35,17 +35,31 @@ class ItemAttributesTab extends StatelessWidget {
                 children: [
                   const Spacer(),
                   BackdropPlate(
-                    child:
-                        Obx(() => Center(child: Text(c.item.value.item.name))),
+                    child: Obx(
+                      () => Center(
+                        child: Text(
+                          c.myItem.value?.item.name ??
+                              c.item.value?.name ??
+                              '...',
+                        ),
+                      ),
+                    ),
                   ),
                   Obx(() {
-                    if (c.item.value.item.description == null) {
+                    if ((c.myItem.value?.item ?? c.item.value)?.description ==
+                        null) {
                       return Container();
                     }
 
                     return BackdropPlate(
-                      child: Obx(() =>
-                          Center(child: Text(c.item.value.item.description!))),
+                      child: Obx(
+                        () => Center(
+                          child: Text(
+                            (c.myItem.value?.item ?? c.item.value)!
+                                .description!,
+                          ),
+                        ),
+                      ),
                     );
                   }),
                   if (weapon != null || equipable != null) ...[

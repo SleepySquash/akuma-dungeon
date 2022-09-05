@@ -66,6 +66,8 @@ abstract class Artifact extends Item {
   @override
   int? get max => 1;
 
+  String? get set => null;
+
   /// Maximum allowed level for an [Artifact] to have.
   static const int maxLevel = 100;
 }

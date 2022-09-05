@@ -20,7 +20,7 @@ import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/slime.dart';
-import '/domain/model/item/standard.dart';
+import '/domain/model/item/all.dart';
 import '/domain/model/rank.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
@@ -189,7 +189,7 @@ class RestaurantDungeonTask extends FDungeonTask {
   @override
   List<TaskReward> get rewards => [
         ...super.rewards,
-        ItemReward(StandardItems.consumable.sample(1).first),
+        ItemReward(Items.consumable.sample(1).first),
       ];
 
   @override

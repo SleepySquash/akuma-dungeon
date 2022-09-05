@@ -103,13 +103,17 @@ class TaskView extends StatelessWidget {
                 icon = Icons.add_card;
                 title = Text('${e.amount} rank progression');
               } else if (e is ItemReward) {
+                if (e.count == 0) {
+                  return Container();
+                }
+
                 icon = Icons.check_box;
                 title = Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset('assets/item/${e.item.asset}.png', height: 30),
                     const SizedBox(width: 5),
-                    Text('${e.item.count} ${e.item.name}'),
+                    Text('${e.item.count * e.count} ${e.item.name}'),
                   ],
                 );
               } else if (e is ControlReward) {

@@ -20,12 +20,15 @@ import '/domain/model/item.dart';
 import '/ui/widget/item_grid.dart' show InventoryCategory;
 
 class ItemController extends GetxController {
-  ItemController(
-    MyItem item, {
+  ItemController({
+    MyItem? myItem,
+    Item? item,
     this.exchangeItemSettings,
-  }) : item = Rx(item);
+  })  : myItem = Rx(myItem),
+        item = Rx(item);
 
-  final Rx<MyItem> item;
+  final Rx<MyItem?> myItem;
+  final Rx<Item?> item;
   final ExchangeItemSettings? exchangeItemSettings;
 }
 
