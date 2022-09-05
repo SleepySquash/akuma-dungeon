@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
@@ -94,8 +95,17 @@ class ExpReward extends TaskReward {
 }
 
 class ItemReward extends TaskReward {
-  const ItemReward(this.item);
+  const ItemReward(this.item, [this.count = 1]);
   final Item item;
+  final int count;
+}
+
+class RandomItemReward extends ItemReward {
+  RandomItemReward(Item item, this.min, this.max)
+      : super(item, min + Random().nextInt(1 + max - min));
+
+  final int min;
+  final int max;
 }
 
 class RankReward extends TaskReward {

@@ -34,18 +34,24 @@ import 'controller.dart';
 class ItemView extends StatefulWidget {
   const ItemView({
     Key? key,
-    required this.item,
+    this.item,
+    this.myItem,
+    this.hero,
     this.exchangeItemSettings,
   }) : super(key: key);
 
   final ExchangeItemSettings? exchangeItemSettings;
-  final MyItem item;
+  final Item? item;
+  final MyItem? myItem;
+  final String? hero;
 
   /// Displays a dialog with the provided [character] above the current
   /// contents.
   static Future<T?> show<T extends Object?>({
     required BuildContext context,
-    required MyItem item,
+    Item? item,
+    MyItem? myItem,
+    String? hero,
     ExchangeItemSettings? exchangeItemSettings,
   }) {
     return Navigator.of(context).push(
@@ -54,7 +60,9 @@ class ItemView extends StatefulWidget {
         barrierDismissible: true,
         pageBuilder: (BuildContext context, _, __) {
           return ItemView(
+            myItem: myItem,
             item: item,
+            hero: hero,
             exchangeItemSettings: exchangeItemSettings,
           );
         },
@@ -106,7 +114,8 @@ class _ItemViewState extends State<ItemView>
 
     return GetBuilder(
       init: ItemController(
-        widget.item,
+        item: widget.item,
+        myItem: widget.myItem,
         exchangeItemSettings: widget.exchangeItemSettings,
       ),
       builder: (ItemController c) {
@@ -134,9 +143,12 @@ class _ItemViewState extends State<ItemView>
                   opacity: fade,
                   child: Obx(() {
                     return Hero(
-                      tag: c.item.value.id,
+                      tag: widget.hero ??
+                          c.myItem.value?.id ??
+                          c.item.value?.id ??
+                          '',
                       child: Image.asset(
-                        'assets/item/${c.item.value.item.asset}.png',
+                        'assets/item/${(c.myItem.value?.item ?? c.item.value)?.asset}.png',
                       ),
                     );
                   }),
@@ -181,7 +193,7 @@ class _ItemViewState extends State<ItemView>
                               if (selected is Rx<MyItem>) {
                                 c.exchangeItemSettings?.onExchange
                                     ?.call(selected.value);
-                                c.item.value = selected.value;
+                                c.myItem.value = selected.value;
                               } else if (selected is Impossible) {
                                 c.exchangeItemSettings?.onExchange?.call(null);
                                 _dismiss();
@@ -202,7 +214,7 @@ class _ItemViewState extends State<ItemView>
                               if (selected is Rx<MyItem>) {
                                 c.exchangeItemSettings?.onExchange
                                     ?.call(selected.value);
-                                c.item.value = selected.value;
+                                c.myItem.value = selected.value;
                               } else if (selected is Impossible) {
                                 c.exchangeItemSettings?.onExchange?.call(null);
                                 _dismiss();

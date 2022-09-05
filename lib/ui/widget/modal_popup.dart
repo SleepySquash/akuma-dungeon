@@ -27,8 +27,9 @@ abstract class ModalPopup {
   static Future<T?> show<T>({
     required BuildContext context,
     required Widget child,
-    EdgeInsets mobilePadding = const EdgeInsets.fromLTRB(32, 0, 32, 0),
+    EdgeInsets? mobilePadding = const EdgeInsets.fromLTRB(32, 0, 32, 0),
     double? maxWidth = 600,
+    bool noPadding = false,
     bool isDismissible = true,
   }) {
     if (context.isMobile) {
@@ -46,6 +47,40 @@ abstract class ModalPopup {
           ),
         ),
         builder: (context) {
+          if (noPadding) {
+            return SafeArea(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    child,
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 12),
+                        Center(
+                          child: Container(
+                            width: 60,
+                            height: 3,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFCCCCCC),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
+
           return SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -64,12 +99,7 @@ abstract class ModalPopup {
                   ),
                   const SizedBox(height: 12),
                 ],
-                Flexible(
-                  child: Padding(
-                    padding: mobilePadding,
-                    child: child,
-                  ),
-                ),
+                Flexible(child: Padding(padding: mobilePadding!, child: child)),
                 const SizedBox(height: 12),
               ],
             ),
@@ -82,14 +112,50 @@ abstract class ModalPopup {
         barrierColor: kCupertinoModalBarrierColor,
         barrierDismissible: isDismissible,
         builder: (context) {
+          if (noPadding) {
+            return Center(
+              child: Container(
+                constraints:
+                    BoxConstraints(maxWidth: maxWidth ?? double.infinity),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      child,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10, right: 10),
+                        child: InkResponse(
+                          onTap: Navigator.of(context).pop,
+                          radius: 11,
+                          child: const Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Color(0xBB818181),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+
           return Center(
             child: Container(
               constraints:
                   BoxConstraints(maxWidth: maxWidth ?? double.infinity),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

@@ -135,7 +135,9 @@ class ItemGrid extends StatelessWidget {
                             onPressed?.call(e);
                           } else {
                             await ItemView.show(
-                                context: context, item: e.value);
+                              context: context,
+                              myItem: e.value,
+                            );
                           }
                         },
                         child: Container(

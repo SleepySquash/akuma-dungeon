@@ -453,6 +453,11 @@ class DungeonController extends GetxController {
             _progressionService.location.value.location,
             _progressionService.location.value.reputation + r.amount,
           );
+        } else if (r is RandomItemReward) {
+          int count = r.min + Random().nextInt(r.max - r.min);
+          if (count != 0) {
+            _itemService.add(r.item, count);
+          }
         }
       }
 

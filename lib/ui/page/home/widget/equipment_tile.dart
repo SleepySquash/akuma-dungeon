@@ -181,7 +181,7 @@ class EquipmentTile extends StatelessWidget {
               } else {
                 await ItemView.show(
                   context: context,
-                  item: item!,
+                  myItem: item!,
                   exchangeItemSettings: ExchangeItemSettings(
                     onExchange: onEquipped,
                     category: type.toCategory(),

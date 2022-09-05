@@ -23,7 +23,7 @@ import '/domain/model/item.dart';
 abstract class AbstractItemRepository {
   RxObsMap<ItemId, Rx<MyItem>> get items;
 
-  void add(Item item);
+  void add(Item item, [int? amount]);
   void update(MyItem item);
   void take(ItemId id, [int? amount]);
   int amount(Item item);

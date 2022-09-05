@@ -60,10 +60,11 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void add(Item item) {
+  void add(Item item, [int? amount]) {
+    int count = (amount ?? 1) * item.count;
     MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
-      existing.count += item.count;
+      existing.count += count;
       _itemHive.put(existing);
     } else {
       if (item is Weapon) {
@@ -71,7 +72,7 @@ class ItemRepository extends DisposableInterface
       } else if (item is Equipable) {
         _itemHive.put(MyEquipable(item));
       } else {
-        _itemHive.put(MyItem(item));
+        _itemHive.put(MyItem(item, count: count));
       }
     }
   }
