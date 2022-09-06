@@ -249,7 +249,9 @@ class _ItemViewState extends State<ItemView>
           mobile: const Icon(Icons.person),
           child: ItemAttributesTab(c),
         ),
-        if (c.item.value is MyWeapon || c.item.value is MyEquipable) ...[
+        if (c.myItem.value is MyWeapon ||
+            c.myItem.value is MyEquipable ||
+            c.myItem.value is MyArtifact) ...[
           Screen(
             desktop: const Text('Enhance'),
             mobile: const Icon(Icons.plus_one),

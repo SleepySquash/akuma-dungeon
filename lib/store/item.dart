@@ -71,6 +71,8 @@ class ItemRepository extends DisposableInterface
         _itemHive.put(MyWeapon(item));
       } else if (item is Equipable) {
         _itemHive.put(MyEquipable(item));
+      } else if (item is Artifact) {
+        _itemHive.put(MyArtifact(item));
       } else {
         _itemHive.put(MyItem(item, count: count));
       }

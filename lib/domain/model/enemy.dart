@@ -15,8 +15,11 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:audioplayers/audioplayers.dart' show Source;
+import 'package:flutter/widgets.dart' show GlobalKey;
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
+
+import 'task.dart';
 
 /// Entity dealing damage to the [Player].
 abstract class Enemy {
@@ -49,6 +52,8 @@ abstract class Enemy {
   /// [Source] sounds played by this [Enemy] over some time periods.
   List<Source>? get idleSounds => null;
 
+  List<TaskReward> get drops => [];
+
   double get damage => 0.05;
   Duration get interval => const Duration(seconds: 1);
 }
@@ -57,6 +62,7 @@ class MyEnemy {
   MyEnemy(this.enemy, {this.multiplier = 1})
       : hp = RxInt((enemy.hp * multiplier).toInt());
 
+  final GlobalKey globalKey = GlobalKey();
   final String key = const Uuid().v4();
   final double multiplier;
 

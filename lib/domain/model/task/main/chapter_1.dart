@@ -63,9 +63,9 @@ class IntroductionTask extends Task {
         ]),
         DungeonStep(
           Dungeon(
+            background: 'fields',
             stages: [
               DungeonStage(
-                background: 'fields',
                 enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(1)],
               ),
@@ -103,9 +103,9 @@ class NeighborVillageTask extends Task {
         ]),
         DungeonStep(
           Dungeon(
+            background: 'fields',
             stages: [
               DungeonStage(
-                background: 'fields',
                 enemies: SlimeEnemies.all,
                 conditions: const [SlayedStageCondition(1)],
               ),

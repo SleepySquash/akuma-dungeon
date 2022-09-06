@@ -1,45 +1,73 @@
-abstract class Stat {
-  const Stat(this.amount, [int? max]) : max = max ?? amount * 5;
-  final int amount;
-  final int max;
+import 'package:collection/collection.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '/domain/model_type_id.dart';
+
+part 'stat.g.dart';
+
+@HiveType(typeId: ModelTypeId.statType)
+enum StatType {
+  @HiveField(0)
+  atk,
+
+  @HiveField(1)
+  atkPercent,
+
+  @HiveField(2)
+  critDamage,
+
+  @HiveField(3)
+  critRate,
+
+  @HiveField(4)
+  def,
+
+  @HiveField(5)
+  defPercent,
+
+  @HiveField(6)
+  hp,
+
+  @HiveField(7)
+  hpPercent,
+
+  @HiveField(8)
+  ult,
+
+  @HiveField(9)
+  ultPercent,
 }
 
-class AtkPercentStat extends Stat {
-  const AtkPercentStat(super.amount);
+@HiveType(typeId: ModelTypeId.stat)
+class Stat {
+  Stat(this.type, this.amount);
+
+  factory Stat.atk(int amount) => Stat(StatType.atk, amount);
+  factory Stat.atkPercent(int amount) => Stat(StatType.atkPercent, amount);
+  factory Stat.critDamage(int amount) => Stat(StatType.critDamage, amount);
+  factory Stat.critRate(int amount) => Stat(StatType.critRate, amount);
+  factory Stat.def(int amount) => Stat(StatType.def, amount);
+  factory Stat.defPercent(int amount) => Stat(StatType.defPercent, amount);
+  factory Stat.hp(int amount) => Stat(StatType.hp, amount);
+  factory Stat.hpPercent(int amount) => Stat(StatType.hpPercent, amount);
+  factory Stat.ult(int amount) => Stat(StatType.ult, amount);
+  factory Stat.ultPercent(int amount) => Stat(StatType.ultPercent, amount);
+
+  @HiveField(0)
+  final StatType type;
+
+  @HiveField(1)
+  int amount;
 }
 
-class DefPercentStat extends Stat {
-  const DefPercentStat(super.amount);
+class StatChance {
+  const StatChance(this.stat, [this.chance = 1]);
+  final Stat stat;
+  final double chance;
 }
 
-class AtkStat extends Stat {
-  const AtkStat(super.amount);
-}
-
-class DefStat extends Stat {
-  const DefStat(super.amount);
-}
-
-class HpStat extends Stat {
-  const HpStat(super.amount);
-}
-
-class HpPercentStat extends Stat {
-  const HpPercentStat(super.amount);
-}
-
-class CritRateStat extends Stat {
-  const CritRateStat(super.amount);
-}
-
-class CritDmgStat extends Stat {
-  const CritDmgStat(super.amount);
-}
-
-class UltStat extends Stat {
-  const UltStat(super.amount);
-}
-
-class UltPercentStat extends Stat {
-  const UltPercentStat(super.amount);
+extension ResolveStatChance on List<StatChance> {
+  List<Stat> resolve(int i) {
+    return sample(i).map((e) => e.stat).toList();
+  }
 }

@@ -102,3 +102,14 @@ class ShieldSkill extends Skill {
 
   List<int> get shields => List.generate(Skill.maxLevel, (i) => shield + i);
 }
+
+class ProvocationSkill extends Skill {
+  const ProvocationSkill({this.health = 10});
+
+  @override
+  String get name => 'Провокация';
+
+  final int health;
+
+  List<int> get healths => List.generate(Skill.maxLevel, (i) => health + i);
+}

@@ -20,6 +20,7 @@ import '/domain/model_type_id.dart';
 import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
 import '/domain/model/item/all.dart';
+import '/domain/model/stat.dart';
 import '/util/log.dart';
 import 'base.dart';
 
@@ -38,6 +39,8 @@ class ItemHiveProvider extends HiveBaseProvider<MyItem> {
   void registerAdapters() {
     Hive.maybeRegisterAdapter(ItemIdAdapter());
     Hive.maybeRegisterAdapter(MyItemAdapter());
+    Hive.maybeRegisterAdapter(StatAdapter());
+    Hive.maybeRegisterAdapter(StatTypeAdapter());
   }
 
   /// Puts the provided [MyItem] to the [Hive].
@@ -67,19 +70,14 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
     }
 
     if (type == 'MyWeapon') {
-      final damage = reader.read() as int;
-      return MyWeapon(
-        item as Weapon,
-        damage: damage,
-        id: id,
-      );
+      final exp = reader.read() as int;
+      return MyWeapon(item as Weapon, exp: exp, id: id);
     } else if (type == 'MyEquipable') {
-      final defense = reader.read() as int;
-      return MyEquipable(
-        item as Equipable,
-        defense: defense,
-        id: id,
-      );
+      final exp = reader.read() as int;
+      return MyEquipable(item as Equipable, exp: exp, id: id);
+    } else if (type == 'MyArtifact') {
+      final exp = reader.read() as int;
+      return MyArtifact(item as Artifact, exp: exp, id: id);
     } else {
       final count = reader.read() as int;
       return MyItem(item, id: id, count: count);
@@ -93,9 +91,11 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
     writer.write(obj.item.id);
 
     if (obj is MyWeapon) {
-      writer.write(obj.damage);
+      writer.write(obj.exp);
     } else if (obj is MyEquipable) {
-      writer.write(obj.defense);
+      writer.write(obj.exp);
+    } else if (obj is MyArtifact) {
+      writer.write(obj.exp);
     } else {
       writer.write(obj.count);
     }

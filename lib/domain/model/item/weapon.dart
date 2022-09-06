@@ -48,8 +48,8 @@ class IronDaggerItem extends Weapon with Dagger {
 
   @override
   List<Stat> get stats => [
-        const AtkPercentStat(5),
-        const DefPercentStat(5),
+        Stat.atkPercent(5),
+        Stat.defPercent(5),
       ];
 }
 

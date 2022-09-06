@@ -56,14 +56,8 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'magic_forest_altar',
                         rewards: [
-                          RandomItemReward(
-                            const InitiateFeather(),
-                            chance: 0.4,
-                          ),
-                          RandomItemReward(
-                            const InitiateFlower(),
-                            chance: 0.4,
-                          ),
+                          ChanceItemReward(const InitiateFeather(), 0.4),
+                          ChanceItemReward(const InitiateFlower(), 0.4),
                           const MoneyReward(100),
                           const ExpReward(10),
                           const RankReward(1),
@@ -134,11 +128,7 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(
-                            const SwordBookMinor(),
-                            min: 0,
-                            max: 3,
-                          ),
+                          MinMaxItemReward(const SwordBookMinor(), 0, 3),
                           const MoneyReward(100),
                           const ExpReward(10),
                           const RankReward(1),
@@ -176,16 +166,8 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(
-                            const SwordBookMinor(),
-                            min: 1,
-                            max: 3,
-                          ),
-                          RandomItemReward(
-                            const SwordBookMajor(),
-                            min: 0,
-                            max: 2,
-                          ),
+                          MinMaxItemReward(const SwordBookMinor(), 1, 3),
+                          MinMaxItemReward(const SwordBookMajor(), 0, 2),
                           const MoneyReward(500),
                           const ExpReward(20),
                           const RankReward(1),
@@ -223,21 +205,9 @@ class DungeonsView extends StatelessWidget {
                             AssetSource('music/mixkit-forest-treasure-138.mp3'),
                         background: 'library',
                         rewards: [
-                          RandomItemReward(
-                            const SwordBookMinor(),
-                            min: 1,
-                            max: 3,
-                          ),
-                          RandomItemReward(
-                            const SwordBookMajor(),
-                            min: 1,
-                            max: 3,
-                          ),
-                          RandomItemReward(
-                            const SwordBookSuperior(),
-                            min: 0,
-                            max: 2,
-                          ),
+                          MinMaxItemReward(const SwordBookMinor(), 1, 3),
+                          MinMaxItemReward(const SwordBookMajor(), 1, 3),
+                          MinMaxItemReward(const SwordBookSuperior(), 0, 2),
                           const MoneyReward(1500),
                           const ExpReward(50),
                           const RankReward(2),

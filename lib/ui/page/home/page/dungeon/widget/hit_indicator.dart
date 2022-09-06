@@ -64,6 +64,7 @@ class NumberIndicator extends StatefulWidget {
     this.color,
     this.fontSize,
     this.direction = HitIndicatorFlowDirection.any,
+    this.offsetMultiplier = 1,
     this.onEnd,
   }) : super(key: key);
 
@@ -72,6 +73,7 @@ class NumberIndicator extends StatefulWidget {
 
   final Color? color;
   final double? fontSize;
+  final double offsetMultiplier;
 
   final HitIndicatorFlowDirection direction;
 
@@ -90,8 +92,12 @@ class _NumberIndicatorState extends State<NumberIndicator>
   @override
   void initState() {
     _offset = Offset(
-      widget.direction.horizontal * Random().nextDouble() * 2,
-      widget.direction.vertical * Random().nextDouble() * 2,
+      widget.direction.horizontal *
+          Random().nextDouble() *
+          widget.offsetMultiplier,
+      widget.direction.vertical *
+          Random().nextDouble() *
+          widget.offsetMultiplier,
     );
 
     _controller = AnimationController(

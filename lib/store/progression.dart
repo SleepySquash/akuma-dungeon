@@ -169,11 +169,8 @@ class ProgressionRepository extends DisposableInterface
 
     if (my != null || place != null) {
       GameProgression stored = _progressHive.get() ?? progression.value;
-
-      if (place != null) {
-        stored.location = id;
-        _progressHive.set(stored);
-      }
+      stored.location = id;
+      _progressHive.set(stored);
     }
   }
 

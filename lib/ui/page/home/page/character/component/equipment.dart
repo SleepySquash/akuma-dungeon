@@ -32,18 +32,60 @@ class CharacterEquipmentTab extends StatelessWidget {
               children: [
                 const Spacer(),
                 if (c.myCharacter != null) ...[
-                  ...List.generate(5, (i) {
-                    return Obx(() {
-                      Rx<MyItem>? item = i < c.myCharacter!.artifacts.length
-                          ? c.myCharacter!.artifacts[i]
-                          : null;
-                      return EquipmentTile(
-                        type: EquipmentTileType.artifact,
-                        item: item?.value,
-                        onEquipped: (e) =>
-                            e == null ? c.unequip(item!.value) : c.equip(e),
-                      );
-                    });
+                  Obx(() {
+                    Rx<MyItem>? item = c.myCharacter!.artifacts
+                        .where((e) => e.value.item is Flower)
+                        .firstOrNull;
+                    return EquipmentTile(
+                      type: EquipmentTileType.flower,
+                      item: item?.value,
+                      onEquipped: (e) =>
+                          e == null ? c.unequip(item!.value) : c.equip(e),
+                    );
+                  }),
+                  Obx(() {
+                    Rx<MyItem>? item = c.myCharacter!.artifacts
+                        .where((e) => e.value.item is Feather)
+                        .firstOrNull;
+                    return EquipmentTile(
+                      type: EquipmentTileType.feather,
+                      item: item?.value,
+                      onEquipped: (e) =>
+                          e == null ? c.unequip(item!.value) : c.equip(e),
+                    );
+                  }),
+                  Obx(() {
+                    Rx<MyItem>? item = c.myCharacter!.artifacts
+                        .where((e) => e.value.item is Watch)
+                        .firstOrNull;
+                    return EquipmentTile(
+                      type: EquipmentTileType.watch,
+                      item: item?.value,
+                      onEquipped: (e) =>
+                          e == null ? c.unequip(item!.value) : c.equip(e),
+                    );
+                  }),
+                  Obx(() {
+                    Rx<MyItem>? item = c.myCharacter!.artifacts
+                        .where((e) => e.value.item is Goblet)
+                        .firstOrNull;
+                    return EquipmentTile(
+                      type: EquipmentTileType.goblet,
+                      item: item?.value,
+                      onEquipped: (e) =>
+                          e == null ? c.unequip(item!.value) : c.equip(e),
+                    );
+                  }),
+                  Obx(() {
+                    Rx<MyItem>? item = c.myCharacter!.artifacts
+                        .where((e) => e.value.item is Hat)
+                        .firstOrNull;
+                    return EquipmentTile(
+                      type: EquipmentTileType.hat,
+                      item: item?.value,
+                      onEquipped: (e) =>
+                          e == null ? c.unequip(item!.value) : c.equip(e),
+                    );
                   }),
                   Obx(() {
                     Rx<MyItem>? item = c.myCharacter!.weapons.firstOrNull;
@@ -55,13 +97,16 @@ class CharacterEquipmentTab extends StatelessWidget {
                     );
                   }),
                   if (character != null)
-                    StatsWidget(
-                      damage: character.character.damages[character.level],
-                      defense: character.character.defenses[character.level],
-                      health: character.character.healths[character.level],
-                      ultCharge:
-                          character.character.ultCharges[character.level],
-                    ),
+                    Obx(() {
+                      return StatsWidget(
+                        damage: c.myCharacter?.damage,
+                        defense: c.myCharacter?.defense,
+                        health: c.myCharacter?.health,
+                        critRate: c.myCharacter?.critRate,
+                        critDamage: c.myCharacter?.critDamage,
+                        ultCharge: c.myCharacter?.ultCharge,
+                      );
+                    }),
                 ],
                 if (!context.isMobile) const Spacer(),
               ],

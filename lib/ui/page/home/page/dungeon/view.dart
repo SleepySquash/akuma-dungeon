@@ -22,11 +22,11 @@ import 'package:get/get.dart';
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
 import '/ui/page/home/page/dungeon/component/menu.dart';
+import '/ui/widget/animated_scaley.dart';
 import '/ui/widget/button.dart';
 import '/ui/widget/dummy_character.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
-import 'widget/hit_indicator.dart';
 
 class DungeonView extends StatelessWidget {
   const DungeonView({
@@ -78,7 +78,7 @@ class DungeonView extends StatelessWidget {
                           key: Key(background),
                           fit: BoxFit.cover,
                         )
-                      : const SizedBox(),
+                      : const ColoredBox(color: Colors.blueGrey),
                 );
               }),
             ),
@@ -133,7 +133,22 @@ class DungeonView extends StatelessWidget {
                 onPressed: (p) => c.hitEnemy(at: p),
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 400),
-                  child: Image.asset('assets/monster/${enemy.enemy.asset}.png'),
+                  child: Obx(() {
+                    return AnimatedScaleY(
+                      duration: c.enemySlideDuration.value,
+                      scaleY: c.enemyScaleY.value,
+                      curve: Curves.ease,
+                      child: AnimatedSlide(
+                        duration: c.enemySlideDuration.value,
+                        offset: c.enemySlideOffset.value,
+                        curve: Curves.ease,
+                        key: enemy.globalKey,
+                        child: Image.asset(
+                          'assets/monster/${enemy.enemy.asset}.png',
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               )
             : Container(),
@@ -158,31 +173,37 @@ class DungeonView extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 300),
         child: Obx(() {
           MyEnemy? enemy = c.enemy.value;
-          if (enemy != null) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(enemy.enemy.name),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        minHeight: 20,
-                        value: 1 - enemy.hp.value / enemy.maxHp,
-                        backgroundColor: Colors.red,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text('${enemy.hp.value}/${enemy.maxHp}'),
-                  ],
-                ),
-              ],
-            );
-          }
 
-          return Container();
+          return AnimatedSwitcher(
+            duration: 300.milliseconds,
+            switchInCurve: Curves.easeOutQuad,
+            switchOutCurve: Curves.easeInQuad,
+            transitionBuilder: (child, animation) =>
+                ScaleTransition(scale: animation, child: child),
+            child: enemy != null
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(enemy.enemy.name),
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinearProgressIndicator(
+                              minHeight: 20,
+                              value: 1 - enemy.hp.value / enemy.maxHp,
+                              backgroundColor: Colors.red,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text('${enemy.hp.value}/${enemy.maxHp}'),
+                        ],
+                      ),
+                    ],
+                  )
+                : Container(),
+          );
         }),
       );
     }
@@ -307,25 +328,33 @@ class DungeonView extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Obx(() {
-                            if (c.sp.value <= 0) {
-                              return Container();
-                            }
-
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: Stack(
-                                children: [
-                                  Icon(
-                                    Icons.shield,
-                                    size: 48,
-                                    color: Colors.white.withOpacity(0.9),
-                                  ),
-                                  Positioned.fill(
-                                    child: Center(
-                                        child: Text('${c.sp.value.ceil()}')),
-                                  ),
-                                ],
-                              ),
+                            return AnimatedSwitcher(
+                              duration: 300.milliseconds,
+                              switchInCurve: Curves.easeOutQuad,
+                              switchOutCurve: Curves.easeInQuad,
+                              transitionBuilder: (child, animation) =>
+                                  ScaleTransition(
+                                      scale: animation, child: child),
+                              child: c.sp.value > 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(bottom: 5),
+                                      child: Stack(
+                                        children: [
+                                          Icon(
+                                            Icons.shield,
+                                            size: 48,
+                                            color:
+                                                Colors.white.withOpacity(0.9),
+                                          ),
+                                          Positioned.fill(
+                                            child: Center(
+                                                child: Text(
+                                                    '${c.sp.value.ceil()}')),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Container(),
                             );
                           }),
                           Obx(() {
@@ -379,10 +408,14 @@ class DungeonView extends StatelessWidget {
                 constraints: const BoxConstraints(maxHeight: 200),
                 child: FractionalTranslation(
                   translation: const Offset(0, 0.4),
-                  child: Image.asset(
-                    'assets/character/${e.character.character.value.character.asset}.png',
-                    key: e.key,
-                  ),
+                  child: Obx(() {
+                    return Image.asset(
+                      'assets/character/${e.character.character.value.character.asset}.png',
+                      key: e.key,
+                      opacity:
+                          e.isAlive ? null : const AlwaysStoppedAnimation(0.7),
+                    );
+                  }),
                 ),
               ),
             );

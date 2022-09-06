@@ -107,21 +107,6 @@ class DungeonPreviewView extends StatelessWidget {
           } else if (r is ReputationReward) {
             expanded = const Text('Rep');
             text = '${r.amount}';
-          } else if (r is RandomItemReward) {
-            expanded = WidgetButton(
-              onPressed: () => ItemView.show(
-                context: context,
-                hero: '${r.item.asset}_$i',
-                item: r.item,
-              ),
-              child: Hero(
-                tag: '${r.item.asset}_$i',
-                child: Image.asset('assets/item/${r.item.asset}.png'),
-              ),
-            );
-            text =
-                r.chance != null ? '${r.chance! * 100}%' : '${r.min}-${r.max}';
-            rarity = r.item.rarity;
           } else if (r is ItemReward) {
             expanded = WidgetButton(
               onPressed: () => ItemView.show(
@@ -134,8 +119,15 @@ class DungeonPreviewView extends StatelessWidget {
                 child: Image.asset('assets/item/${r.item.asset}.png'),
               ),
             );
-            text = '${r.count * r.item.count}';
             rarity = r.item.rarity;
+
+            if (r is MinMaxItemReward) {
+              text = '${r.min}-${r.max}';
+            } else if (r is ChanceItemReward) {
+              text = '${r.chance * 100}%';
+            } else {
+              text = '${r.count * r.item.count}';
+            }
           }
 
           return Container(

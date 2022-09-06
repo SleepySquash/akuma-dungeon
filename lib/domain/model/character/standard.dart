@@ -40,7 +40,7 @@ abstract class DpsCharacter extends Character {
 
   @override
   List<Skill> get skills =>
-      [const HittingSkill(damage: 20, period: Duration(seconds: 1))];
+      const [HittingSkill(damage: 20, period: Duration(seconds: 1))];
 }
 
 abstract class TankCharacter extends Character {
@@ -50,9 +50,9 @@ abstract class TankCharacter extends Character {
   Role get role => Role.tank;
 
   @override
-  List<Skill> get skills => [
-        const ShieldSkill(shield: 10),
-        const TankHittingSkill(damage: 1, period: Duration(seconds: 1))
+  List<Skill> get skills => const [
+        ShieldSkill(shield: 10),
+        TankHittingSkill(damage: 1, period: Duration(seconds: 1))
       ];
 }
 
@@ -64,7 +64,7 @@ abstract class SupportCharacter extends Character {
 
   @override
   List<Skill> get skills =>
-      [const HealingSkill(health: 1, period: Duration(seconds: 2))];
+      const [HealingSkill(health: 1, period: Duration(seconds: 2))];
 }
 
 class Zahir extends DpsCharacter {
@@ -128,6 +128,12 @@ class Magnus extends TankCharacter {
 
   @override
   String get id => 'Magnus';
+
+  @override
+  List<Skill> get skills => const [
+        ProvocationSkill(health: 1),
+        TankHittingSkill(damage: 1, period: Duration(seconds: 1))
+      ];
 }
 
 class Chiara extends SupportCharacter {

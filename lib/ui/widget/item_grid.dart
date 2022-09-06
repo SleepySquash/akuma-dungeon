@@ -77,7 +77,7 @@ class ItemGrid extends StatelessWidget {
               break;
 
             case InventoryCategory.artifact:
-              iterable = items.where((e) => e.value.item is Artifact);
+              iterable = items.where((e) => e.value is MyArtifact);
               break;
 
             case InventoryCategory.food:
@@ -88,7 +88,7 @@ class ItemGrid extends StatelessWidget {
               iterable = items.where((e) =>
                   e.value is! MyWeapon &&
                   e.value is! MyEquipable &&
-                  e.value.item is! Artifact &&
+                  e.value is! MyArtifact &&
                   e.value.item is! Consumable);
               break;
 
@@ -189,7 +189,11 @@ class ItemGrid extends StatelessWidget {
                                             ? Text(
                                                 'Lv. ${(e.value as MyEquipable).level}',
                                               )
-                                            : Text('${e.value.count}'),
+                                            : e.value is MyArtifact
+                                                ? Text(
+                                                    'Lv. ${(e.value as MyArtifact).level}',
+                                                  )
+                                                : Text('${e.value.count}'),
                                   ),
                                 )
                               ],

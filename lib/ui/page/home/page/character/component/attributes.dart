@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../controller.dart';
 import '/domain/model/character.dart';
@@ -55,12 +56,16 @@ class CharacterAttributesTab extends StatelessWidget {
                     levels: character.character.levels,
                     maxLevel: Character.maxLevel,
                   ),
-                  StatsWidget(
-                    damage: character.character.damages[character.level],
-                    defense: character.character.defenses[character.level],
-                    health: character.character.healths[character.level],
-                    ultCharge: character.character.ultCharges[character.level],
-                  ),
+                  Obx(() {
+                    return StatsWidget(
+                      damage: c.myCharacter?.damage,
+                      defense: c.myCharacter?.defense,
+                      health: c.myCharacter?.health,
+                      critRate: c.myCharacter?.critRate,
+                      critDamage: c.myCharacter?.critDamage,
+                      ultCharge: c.myCharacter?.ultCharge,
+                    );
+                  }),
                 ],
                 if (!context.isMobile) const Spacer(),
               ],

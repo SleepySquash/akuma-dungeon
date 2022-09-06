@@ -35,4 +35,6 @@ class ModelTypeId {
   static const skillId = 13;
   static const locationId = 14;
   static const location = 15;
+  static const statType = 16;
+  static const stat = 17;
 }

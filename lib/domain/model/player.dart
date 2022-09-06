@@ -70,14 +70,14 @@ class Player {
   /// Maximum allowed level for a [Player] to have.
   static const int maxLevel = 100;
 
-  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
+  List<int> get critDamages =>
+      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+  List<int> get critRates =>
+      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
   List<int> get damages =>
       List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
   List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
-  List<int> get critRates =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
-  List<int> get critDamages =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
   List<int> get ultCharges =>
       List.generate(maxLevel + 1, (i) => 4 + (1 * i / 10).floor());
 }

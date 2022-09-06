@@ -94,7 +94,10 @@ class InfiniteDungeon extends DungeonSettings {
   InfiniteDungeon({
     required this.floor,
     this.onProgress,
-  });
+  }) {
+    background = _next(floor).background;
+    music = _next(floor).music;
+  }
 
   /// Current floor of this [InfiniteDungeon].
   int floor;

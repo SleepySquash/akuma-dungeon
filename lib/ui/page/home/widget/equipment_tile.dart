@@ -12,11 +12,16 @@ import '/ui/widget/item_grid.dart';
 import '/ui/widget/item_selector/view.dart';
 
 enum EquipmentTileType {
-  artifact,
-  weapon,
-  head,
   armor,
+  artifact,
+  feather,
+  flower,
+  goblet,
+  hat,
+  head,
   shoes,
+  watch,
+  weapon,
 }
 
 class EquipmentTile extends StatelessWidget {
@@ -44,6 +49,11 @@ class EquipmentTile extends StatelessWidget {
 
       switch (type) {
         case EquipmentTileType.artifact:
+        case EquipmentTileType.hat:
+        case EquipmentTileType.feather:
+        case EquipmentTileType.flower:
+        case EquipmentTileType.goblet:
+        case EquipmentTileType.watch:
           artifact = item as MyArtifact;
           break;
 
@@ -139,6 +149,26 @@ class EquipmentTile extends StatelessWidget {
         case EquipmentTileType.shoes:
           title = 'Обувка';
           break;
+
+        case EquipmentTileType.feather:
+          title = 'Перо';
+          break;
+
+        case EquipmentTileType.flower:
+          title = 'Цветок';
+          break;
+
+        case EquipmentTileType.goblet:
+          title = 'Кубок';
+          break;
+
+        case EquipmentTileType.hat:
+          title = 'Шляпа';
+          break;
+
+        case EquipmentTileType.watch:
+          title = 'Часы';
+          break;
       }
 
       child = Row(
@@ -219,6 +249,11 @@ extension EquipmentTileTypeConversions on EquipmentTileType {
       case EquipmentTileType.head:
       case EquipmentTileType.armor:
       case EquipmentTileType.shoes:
+      case EquipmentTileType.feather:
+      case EquipmentTileType.flower:
+      case EquipmentTileType.hat:
+      case EquipmentTileType.goblet:
+      case EquipmentTileType.watch:
         return null;
     }
   }
@@ -237,6 +272,21 @@ extension EquipmentTileTypeConversions on EquipmentTileType {
 
       case EquipmentTileType.shoes:
         return (e) => e.where((e) => e.value.item is Shoes);
+
+      case EquipmentTileType.flower:
+        return (e) => e.where((e) => e.value.item is Flower);
+
+      case EquipmentTileType.feather:
+        return (e) => e.where((e) => e.value.item is Feather);
+
+      case EquipmentTileType.hat:
+        return (e) => e.where((e) => e.value.item is Hat);
+
+      case EquipmentTileType.goblet:
+        return (e) => e.where((e) => e.value.item is Goblet);
+
+      case EquipmentTileType.watch:
+        return (e) => e.where((e) => e.value.item is Watch);
     }
   }
 }

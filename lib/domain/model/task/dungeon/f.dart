@@ -72,9 +72,9 @@ class SlimeFieldsDungeonTask extends FDungeonTask {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
+            background: 'fields',
             stages: [
               DungeonStage(
-                background: 'fields',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
@@ -111,14 +111,13 @@ class SlimeForestDungeonTask extends FDungeonTask {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
+            background: 'forest',
             stages: [
               DungeonStage(
-                background: 'forest',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
-                background: 'forest',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
@@ -150,14 +149,13 @@ class SlimeSwampDungeonTask extends FDungeonTask {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
+            background: 'swamp',
             stages: [
               DungeonStage(
-                background: 'swamp',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
-                background: 'swamp',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),
@@ -200,14 +198,13 @@ class RestaurantDungeonTask extends FDungeonTask {
         ]),
         DungeonStep(
           Dungeon(
+            background: 'swamp',
             stages: [
               DungeonStage(
-                background: 'swamp',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(1)],
               ),
               DungeonStage(
-                background: 'swamp',
                 enemies: SlimeEnemies.enemies,
                 conditions: const [SlayedStageCondition(2)],
               ),

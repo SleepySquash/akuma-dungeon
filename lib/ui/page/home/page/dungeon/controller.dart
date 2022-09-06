@@ -42,6 +42,7 @@ import '/ui/worker/music.dart';
 import '/util/extensions.dart';
 import 'component/result.dart';
 import 'widget/hit_indicator.dart';
+import 'widget/money.dart';
 
 class DungeonController extends GetxController {
   DungeonController(
@@ -84,6 +85,10 @@ class DungeonController extends GetxController {
 
   final RxMap<String, Widget> effects = RxMap();
 
+  Rx<Duration> enemySlideDuration = Rx(const Duration(milliseconds: 150));
+  Rx<Offset> enemySlideOffset = Rx(Offset.zero);
+  RxDouble enemyScaleY = RxDouble(1);
+
   /// [PlayerService] maintaining the [Player].
   final PlayerService _playerService;
 
@@ -109,6 +114,10 @@ class DungeonController extends GetxController {
 
   Source? _musicSource;
 
+  Timer? _initTimer;
+
+  Timer? _enemySlideTimer;
+
   /// Currently authenticated [Player].
   RxPlayer get player => _playerService.player;
 
@@ -129,19 +138,19 @@ class DungeonController extends GetxController {
               _musicWorker.once(sound);
             }
 
+            _enemyAnimation();
             enemy.value?.hit(hit.damage);
             if (enemy.value!.isDead) {
               _slayEnemy();
             }
 
-            Rect? bounds = key.globalPaintBounds;
-
             final String id = const Uuid().v4();
+            Rect? bounds = key.globalPaintBounds;
             effects[id] = NumberIndicator(
               direction: HitIndicatorFlowDirection.up,
               position: Offset(
                 (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
-                (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+                (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
               ),
               number: hit.damage,
               onEnd: () => effects.remove(id),
@@ -159,7 +168,7 @@ class DungeonController extends GetxController {
             direction: HitIndicatorFlowDirection.up,
             position: Offset(
               (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
-              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
             ),
             number: health,
             color: Colors.green,
@@ -182,14 +191,13 @@ class DungeonController extends GetxController {
 
           sp.value = sp.value.clamp(0, maxDefense.toDouble());
 
-          Rect? bounds = key.globalPaintBounds;
-
           final String id = const Uuid().v4();
+          Rect? bounds = key.globalPaintBounds;
           effects[id] = NumberIndicator(
             direction: HitIndicatorFlowDirection.up,
             position: Offset(
               (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
-              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 2,
+              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
             ),
             number: defense,
             color: const Color(0xFFDDDDDD),
@@ -199,13 +207,15 @@ class DungeonController extends GetxController {
       );
     }).toList();
 
-    _nextStage();
-    _nextEnemy();
+    _initTimer = Timer(250.milliseconds, () {
+      _nextStage();
+      _nextEnemy();
 
-    _fixedTimer = Timer.periodic(1.seconds, (t) {
-      if (_stageStartedAt != null) {
-        duration.value = _stageStartedAt!.difference(DateTime.now());
-      }
+      _fixedTimer = Timer.periodic(1.seconds, (t) {
+        if (_stageStartedAt != null) {
+          duration.value = _stageStartedAt!.difference(DateTime.now());
+        }
+      });
     });
 
     super.onInit();
@@ -215,6 +225,7 @@ class DungeonController extends GetxController {
   void onClose() {
     _endGame();
 
+    _initTimer?.cancel();
     for (OverlayEntry e in entries) {
       if (e.mounted) {
         e.remove();
@@ -228,6 +239,8 @@ class DungeonController extends GetxController {
 
   void hitEnemy({Offset? at}) {
     if (!gameEnded.value && enemy.value != null) {
+      _enemyAnimation();
+
       int damage = player.damage;
       bool isCrit = false;
 
@@ -254,6 +267,7 @@ class DungeonController extends GetxController {
               MediaQuery.of(router.context!).size.width / 2,
               MediaQuery.of(router.context!).size.height / 2,
             ),
+        offsetMultiplier: 2,
         number: damage,
         color: isCrit ? Colors.yellow : null,
         fontSize: isCrit ? 48 : null,
@@ -262,35 +276,82 @@ class DungeonController extends GetxController {
     }
   }
 
+  void _enemyAnimation() {
+    enemySlideDuration.value = const Duration(milliseconds: 40);
+    enemySlideOffset.value = Offset(
+      0.05 - Random().nextDouble() * 0.1,
+      0.05 - Random().nextDouble() * 0.1,
+    );
+    enemyScaleY.value = 0.9;
+    _enemySlideTimer?.cancel();
+    _enemySlideTimer = Timer(40.milliseconds, () {
+      enemySlideDuration.value = const Duration(milliseconds: 200);
+      enemySlideOffset.value = Offset.zero;
+      enemyScaleY.value = 1;
+    });
+  }
+
   void _hitPlayer(double amount) {
     if (!gameEnded.value) {
-      final int defense = max(player.defense, 1);
-      final double damage = max(amount - (defense / 9), 0.1);
-
-      if (sp.value > 0) {
-        sp.value -= damage;
-        if (sp.value < 0) {
-          sp.value = 0;
+      PartyMember? target = party.firstWhereOrNull((e) {
+        if (e.isAlive) {
+          for (MySkill s in e.character.character.value.skills) {
+            if (s.skill is ProvocationSkill) {
+              Skill skill = s.skill as ProvocationSkill;
+              return true;
+            }
+          }
         }
+        return false;
+      });
+
+      if (target != null) {
+        target.hp.value -= amount;
+        if (target.hp.value <= 0) {
+          target.dispose();
+        }
+
+        final String id = const Uuid().v4();
+        Rect? bounds = target.key.globalPaintBounds;
+        effects[id] = NumberIndicator(
+          direction: HitIndicatorFlowDirection.up,
+          position: Offset(
+            (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
+            (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
+          ),
+          number: amount.toInt(),
+          color: Colors.orange,
+          onEnd: () => effects.remove(id),
+        );
       } else {
-        hp.value -= damage;
-        if (hp.value <= 0) {
-          hp.value = 0;
-          _loseGame();
-        }
-      }
+        final int defense = max(player.defense, 1);
+        final double damage = max(amount - (defense / 9), 0.1);
 
-      final String id = const Uuid().v4();
-      effects[id] = NumberIndicator(
-        position: Offset(
-          MediaQuery.of(router.context!).size.width * 0.1,
-          MediaQuery.of(router.context!).size.height * 0.9,
-        ),
-        direction: HitIndicatorFlowDirection.up,
-        number: damage.toInt(),
-        color: Colors.orange,
-        onEnd: () => effects.remove(id),
-      );
+        if (sp.value > 0) {
+          sp.value -= damage;
+          if (sp.value < 0) {
+            sp.value = 0;
+          }
+        } else {
+          hp.value -= damage;
+          if (hp.value <= 0) {
+            hp.value = 0;
+            _loseGame();
+          }
+        }
+
+        final String id = const Uuid().v4();
+        effects[id] = NumberIndicator(
+          position: Offset(
+            MediaQuery.of(router.context!).size.width * 0.1,
+            MediaQuery.of(router.context!).size.height * 0.9,
+          ),
+          direction: HitIndicatorFlowDirection.up,
+          number: damage.toInt(),
+          color: Colors.orange,
+          onEnd: () => effects.remove(id),
+        );
+      }
     }
   }
 
@@ -312,7 +373,7 @@ class DungeonController extends GetxController {
     if (next != null) {
       _enemyTimer?.cancel();
       int milliseconds =
-          Random().nextInt(next.enemy.interval.inMilliseconds ~/ 2);
+          Random().nextInt(150 + next.enemy.interval.inMilliseconds ~/ 2);
       _enemyTimer = Timer(
         Duration(milliseconds: milliseconds),
         () {
@@ -348,6 +409,31 @@ class DungeonController extends GetxController {
 
     if (enemy.value!.money > 0) {
       _itemService.add(Dogecoin(enemy.value!.money));
+    }
+
+    if (enemy.value!.enemy.drops.isNotEmpty) {
+      for (TaskReward r in enemy.value!.enemy.drops) {
+        if (r is ItemReward) {
+          if (r.count > 0) {
+            _itemService.add(r.item, r.count);
+
+            final Rect? bounds = enemy.value!.globalKey.globalPaintBounds;
+            final String id2 = const Uuid().v4();
+            effects[id2] = DroppedItem(
+              r.item,
+              from: Offset(
+                (bounds?.left ??
+                        MediaQuery.of(router.context!).size.width / 2) +
+                    (bounds?.width ?? 0) / 2,
+                (bounds?.top ??
+                        MediaQuery.of(router.context!).size.height / 2) +
+                    (bounds?.height ?? 0) / 2,
+              ),
+              onEnd: () => effects.remove(id2),
+            );
+          }
+        }
+      }
     }
 
     enemy.value = null;
@@ -509,6 +595,8 @@ class PartyMember {
   final RxMyCharacter character;
   final RxDouble hp;
 
+  bool get isAlive => hp.value > 0;
+
   final void Function(HitResult hit)? onEnemyHit;
   final void Function(int health)? onPlayerHeal;
   final void Function(int shield)? onShield;
@@ -524,6 +612,8 @@ class PartyMember {
   }
 
   void beforeStage() {
+    if (!isAlive) return;
+
     for (MySkill s in character.character.value.skills) {
       if (s.skill is ShieldSkill) {
         ShieldSkill skill = s.skill as ShieldSkill;
@@ -532,9 +622,15 @@ class PartyMember {
     }
   }
 
-  void afterStage() {}
+  void afterStage() {
+    if (!isAlive) {
+      hp.value = character.health.toDouble() / 2;
+    }
+  }
 
   void beforeEnemy() {
+    if (!isAlive) return;
+
     for (MySkill s in character.character.value.skills) {
       if (s.skill is HittingSkill) {
         HittingSkill skill = s.skill as HittingSkill;

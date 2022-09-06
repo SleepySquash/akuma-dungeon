@@ -87,44 +87,71 @@ class StatsWidget extends StatelessWidget {
                       Text('${ultCharge ?? 0}'),
                     ],
                   ),
-                if (stats.isNotEmpty) const Divider(),
+                if ((damage != null ||
+                        defense != null ||
+                        health != null ||
+                        critRate != null ||
+                        critDamage != null ||
+                        ultCharge != null) &&
+                    stats.isNotEmpty)
+                  const Divider(),
                 if (stats.isNotEmpty)
                   ...stats.map((e) {
                     String? name;
                     String prefix = '+';
                     String postfix = '';
 
-                    if (e is AtkStat) {
-                      name = 'ATK';
-                    } else if (e is DefStat) {
-                      name = 'DEF';
-                    } else if (e is HpStat) {
-                      name = 'HP';
-                    } else if (e is UltStat) {
-                      name = 'ULT Rate';
-                    } else if (e is AtkPercentStat) {
-                      name = 'ATK';
-                      postfix = '%';
-                    } else if (e is DefPercentStat) {
-                      name = 'DEF';
-                      postfix = '%';
-                    } else if (e is HpPercentStat) {
-                      name = 'HP';
-                      postfix = '%';
-                    } else if (e is CritRateStat) {
-                      name = 'Crit Rate';
-                      postfix = '%';
-                    } else if (e is CritDmgStat) {
-                      name = 'Crit DMG';
-                      postfix = '%';
-                    } else if (e is UltPercentStat) {
-                      name = 'ULT Rate';
-                      postfix = '%';
+                    switch (e.type) {
+                      case StatType.atk:
+                        name = 'ATK';
+                        break;
+
+                      case StatType.atkPercent:
+                        name = 'ATK';
+                        postfix = '%';
+                        break;
+
+                      case StatType.critDamage:
+                        name = 'Crit DMG';
+                        postfix = '%';
+                        break;
+
+                      case StatType.critRate:
+                        name = 'Crit Rate';
+                        postfix = '%';
+                        break;
+
+                      case StatType.def:
+                        name = 'DEF';
+                        break;
+
+                      case StatType.defPercent:
+                        name = 'DEF';
+                        postfix = '%';
+                        break;
+
+                      case StatType.hp:
+                        name = 'HP';
+                        break;
+
+                      case StatType.hpPercent:
+                        name = 'HP';
+                        postfix = '%';
+                        break;
+
+                      case StatType.ult:
+                        name = 'ULT Rate';
+                        break;
+
+                      case StatType.ultPercent:
+                        name = 'ULT Rate';
+                        postfix = '%';
+                        break;
                     }
 
                     return Row(
                       children: [
-                        Text(name ?? '...'),
+                        Text(name),
                         const Spacer(),
                         Text('$prefix${e.amount}$postfix'),
                       ],

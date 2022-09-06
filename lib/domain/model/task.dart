@@ -100,24 +100,19 @@ class ItemReward extends TaskReward {
   final int count;
 }
 
-class RandomItemReward extends ItemReward {
-  RandomItemReward(
-    Item item, {
-    this.chance,
-    this.min,
-    this.max,
-  }) : super(
-          item,
-          chance == null
-              ? min! + Random().nextInt(1 + max! - min)
-              : Random().nextDouble() > chance
-                  ? 1
-                  : 0,
-        );
+class MinMaxItemReward extends ItemReward {
+  MinMaxItemReward(Item item, this.min, this.max)
+      : super(item, min + Random().nextInt(1 + max - min));
 
-  final double? chance;
-  final int? min;
-  final int? max;
+  final int min;
+  final int max;
+}
+
+class ChanceItemReward extends ItemReward {
+  ChanceItemReward(Item item, this.chance)
+      : super(item, Random().nextDouble() > chance ? 1 : 0);
+
+  final double chance;
 }
 
 class RankReward extends TaskReward {

@@ -53,17 +53,24 @@ abstract class RxPlayer {
   List<int> get critDamages => player.value.critDamages;
   List<int> get ultCharges => player.value.ultCharges;
 
-  List<Stat> get stats {
-    List<Stat> list = [];
+  int get critDamage {
+    int damage = critRates[level];
 
-    for (Rx<MyItem> w in weapons) {
-      list.addAll((w.value.item as Weapon).stats);
-    }
-    for (Rx<MyItem> e in equipped) {
-      list.addAll((e.value.item as Equipable).stats);
+    for (Stat s in stats(StatType.critDamage)) {
+      damage += s.amount;
     }
 
-    return list;
+    return damage;
+  }
+
+  int get critRate {
+    int rate = critRates[level];
+
+    for (Stat s in stats(StatType.critRate)) {
+      rate += s.amount;
+    }
+
+    return rate;
   }
 
   int get damage {
@@ -73,11 +80,11 @@ abstract class RxPlayer {
       dmg += (w.value as MyWeapon).damage;
     }
 
-    for (AtkStat s in stats.whereType<AtkStat>()) {
+    for (Stat s in stats(StatType.atk)) {
       dmg += s.amount;
     }
 
-    for (AtkPercentStat s in stats.whereType<AtkPercentStat>()) {
+    for (Stat s in stats(StatType.atkPercent)) {
       double d = dmg * (1 + (s.amount / 100));
       dmg = d.floor();
     }
@@ -92,11 +99,11 @@ abstract class RxPlayer {
       def += (w.value as MyEquipable).defense;
     }
 
-    for (DefStat s in stats.whereType<DefStat>()) {
+    for (Stat s in stats(StatType.def)) {
       def += s.amount;
     }
 
-    for (DefPercentStat s in stats.whereType<DefPercentStat>()) {
+    for (Stat s in stats(StatType.defPercent)) {
       double d = def * (1 + (s.amount / 100));
       def = d.floor();
     }
@@ -107,11 +114,11 @@ abstract class RxPlayer {
   int get health {
     int hp = healths[level];
 
-    for (HpStat s in stats.whereType<HpStat>()) {
+    for (Stat s in stats(StatType.hp)) {
       hp += s.amount;
     }
 
-    for (HpPercentStat s in stats.whereType<HpPercentStat>()) {
+    for (Stat s in stats(StatType.hpPercent)) {
       double d = hp * (1 + (s.amount / 100));
       hp = d.floor();
     }
@@ -119,38 +126,32 @@ abstract class RxPlayer {
     return hp;
   }
 
-  int get critDamage {
-    int damage = critRates[level];
-
-    for (CritDmgStat s in stats.whereType<CritDmgStat>()) {
-      damage += s.amount;
-    }
-
-    return damage;
-  }
-
-  int get critRate {
-    int rate = critRates[level];
-
-    for (CritRateStat s in stats.whereType<CritRateStat>()) {
-      rate += s.amount;
-    }
-
-    return rate;
-  }
-
   int get ultCharge {
     int ult = ultCharges[level];
 
-    for (UltStat s in stats.whereType<UltStat>()) {
+    for (Stat s in stats(StatType.ult)) {
       ult += s.amount;
     }
 
-    for (UltPercentStat s in stats.whereType<UltPercentStat>()) {
+    for (Stat s in stats(StatType.ultPercent)) {
       double d = ult * (1 + (s.amount / 100));
       ult = d.floor();
     }
 
     return ult;
+  }
+
+  List<Stat> stats(StatType type) {
+    List<Stat> list = [];
+
+    for (Rx<MyItem> w in weapons) {
+      list.addAll((w.value.item as Weapon).stats.where((e) => e.type == type));
+    }
+    for (Rx<MyItem> e in equipped) {
+      list.addAll(
+          (e.value.item as Equipable).stats.where((e) => e.type == type));
+    }
+
+    return list;
   }
 }

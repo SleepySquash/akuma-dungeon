@@ -55,13 +55,44 @@ class ItemId extends NewType<String> {
   const ItemId(String val) : super(val);
 }
 
+enum ArtifactType {
+  flower,
+  feather,
+  watch,
+  goblet,
+  hat,
+}
+
 abstract class Artifact extends Item {
   const Artifact(super.count);
 
   @override
   String get asset => 'artifact/$id';
 
-  List<Stat> get stats => [];
+  /// Main [StatChance] of this [Artifact].
+  ///
+  /// [Artifact] is allowed to have only one main [Stat], so [Random] will
+  /// choose exactly one [Stat].
+  List<StatChance> get stat;
+
+  /// Maximum number of additional [stats] this [Artifact] might have.
+  int get maxStats => 1;
+
+  /// Additional [StatChance]s of this [Artifact].
+  ///
+  /// [Artifact] is allowed to have maximum [maxStats] of these [Stat]s.
+  List<StatChance> get stats => [
+        StatChance(Stat.hp(1), 1),
+        StatChance(Stat.hpPercent(1), 1),
+        StatChance(Stat.def(1), 1),
+        StatChance(Stat.defPercent(1), 1),
+        StatChance(Stat.atk(1), 1),
+        StatChance(Stat.atkPercent(1), 1),
+        StatChance(Stat.critDamage(1), 1),
+        StatChance(Stat.critRate(1), 1),
+        StatChance(Stat.ult(1), 1),
+        StatChance(Stat.ultPercent(1), 1),
+      ];
 
   @override
   int? get max => 1;
@@ -70,7 +101,16 @@ abstract class Artifact extends Item {
 
   /// Maximum allowed level for an [Artifact] to have.
   static const int maxLevel = 100;
+
+  List<int> get levels =>
+      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
 }
+
+mixin Flower on Artifact {}
+mixin Feather on Artifact {}
+mixin Watch on Artifact {}
+mixin Goblet on Artifact {}
+mixin Hat on Artifact {}
 
 /// [Item] equipable by the [Player].
 abstract class Equipable extends Item {
@@ -89,15 +129,14 @@ abstract class Equipable extends Item {
   /// Maximum allowed level for an [Equipable] to have.
   static const int maxLevel = 100;
 
+  List<int> get levels =>
+      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
   List<int> get defenses => List.generate(maxLevel + 1, (i) => defense * i);
 }
 
 mixin Head on Equipable {}
-
 mixin Armor on Equipable {}
-
 mixin Shoes on Equipable {}
-
 mixin Shield on Equipable {}
 
 abstract class Weapon extends Item {
@@ -116,6 +155,8 @@ abstract class Weapon extends Item {
   /// Maximum allowed level for a [Weapon] to have.
   static const int maxLevel = 100;
 
+  List<int> get levels =>
+      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
   List<int> get damages => List.generate(maxLevel + 1, (i) => damage * i);
 }
 
@@ -161,40 +202,103 @@ class MyItem {
   int count;
 }
 
+// TODO: Store [Stat]s
 class MyEquipable extends MyItem {
   MyEquipable(
     Equipable equipable, {
-    int? defense,
-    this.level = 1,
+    this.exp = 0,
     ItemId? id,
-  })  : defense = defense ?? equipable.defense,
-        super(equipable, id: id, count: 1);
+  }) : super(equipable, id: id, count: 1);
 
-  int level;
+  int exp;
 
-  int defense;
+  int get level => (item as Equipable).levels.indexWhere((e) => exp < e) + 1;
+
+  List<int> get defenses => (item as Equipable).defenses;
+  List<int> get levels => (item as Equipable).levels;
+
+  int get defense {
+    int def = defenses[level];
+
+    for (Stat s in stats(StatType.def)) {
+      def += s.amount;
+    }
+
+    for (Stat s in stats(StatType.defPercent)) {
+      double d = def * (1 + (s.amount / 100));
+      def = d.floor();
+    }
+
+    return def;
+  }
+
+  List<Stat> stats(StatType type) {
+    return [...(item as Equipable).stats].where((e) => e.type == type).toList();
+  }
 }
 
 class MyWeapon extends MyItem {
   MyWeapon(
     Weapon weapon, {
-    int? damage,
-    this.level = 1,
+    this.exp = 0,
     ItemId? id,
-  })  : damage = damage ?? weapon.damage,
-        super(weapon, id: id, count: 1);
+  }) : super(weapon, id: id, count: 1);
 
-  int level;
+  int exp;
 
-  int damage;
+  int get level => (item as Weapon).levels.indexWhere((e) => exp < e) + 1;
+
+  List<int> get damages => (item as Weapon).damages;
+  List<int> get levels => (item as Weapon).levels;
+
+  int get damage {
+    int dmg = damages[level];
+
+    for (Stat s in stats(StatType.atk)) {
+      dmg += s.amount;
+    }
+
+    for (Stat s in stats(StatType.atkPercent)) {
+      double d = dmg * (1 + (s.amount / 100));
+      dmg = d.floor();
+    }
+
+    return dmg;
+  }
+
+  List<Stat> stats(StatType type) {
+    return [...(item as Weapon).stats].where((e) => e.type == type).toList();
+  }
 }
 
 class MyArtifact extends MyItem {
   MyArtifact(
     Artifact artifact, {
-    this.level = 1,
+    this.exp = 0,
+    Stat? stat,
+    List<Stat>? stats,
     ItemId? id,
-  }) : super(artifact, id: id, count: 1);
+  }) : super(artifact, id: id, count: 1) {
+    if (stat != null) {
+      this.stat = stat;
+    } else {
+      this.stat = artifact.stat.resolve(1).first;
+    }
 
-  int level;
+    if (stats != null) {
+      this.stats = stats;
+    } else {
+      this.stats = artifact.stat.resolve(artifact.maxStats);
+    }
+  }
+
+  late Stat stat;
+  late List<Stat> stats;
+
+  int exp;
+
+  int get level => (item as Artifact).levels.indexWhere((e) => exp < e) + 1;
+
+  List<int> get levels => (item as Artifact).levels;
+  List<Stat> get allStats => [stat, ...stats];
 }

@@ -18,12 +18,21 @@ class ItemAttributesTab extends StatelessWidget {
     return Obx(() {
       MyWeapon? weapon;
       MyEquipable? equipable;
+      MyArtifact? artifact;
+      int? maxLevel;
 
-      if (c.item.value is MyWeapon) {
-        weapon = c.item.value as MyWeapon;
-      } else if (c.item.value is MyEquipable) {
-        equipable = c.item.value as MyEquipable;
+      if (c.myItem.value is MyWeapon) {
+        maxLevel = Weapon.maxLevel;
+        weapon = c.myItem.value as MyWeapon;
+      } else if (c.myItem.value is MyEquipable) {
+        maxLevel = Equipable.maxLevel;
+        equipable = c.myItem.value as MyEquipable;
+      } else if (c.myItem.value is MyArtifact) {
+        maxLevel = Artifact.maxLevel;
+        artifact = c.myItem.value as MyArtifact;
       }
+
+      maxLevel ??= 1;
 
       return Center(
         child: ConstrainedBox(
@@ -62,16 +71,26 @@ class ItemAttributesTab extends StatelessWidget {
                       ),
                     );
                   }),
-                  if (weapon != null || equipable != null) ...[
+                  if (weapon != null ||
+                      equipable != null ||
+                      artifact != null) ...[
                     LevelWidget(
-                      level: weapon?.level ?? equipable?.level ?? 1,
-                      maxLevel: Weapon.maxLevel,
+                      exp: weapon?.exp ?? equipable?.exp ?? artifact?.exp,
+                      level: weapon?.level ??
+                          equipable?.level ??
+                          artifact?.level ??
+                          1,
+                      levels: weapon?.levels ??
+                          equipable?.levels ??
+                          artifact?.levels,
+                      maxLevel: maxLevel,
                     ),
                     StatsWidget(
                       damage: weapon?.damage,
                       defense: equipable?.defense,
                       stats: (weapon?.item as Weapon?)?.stats ??
                           (equipable?.item as Equipable?)?.stats ??
+                          (artifact)?.allStats ??
                           [],
                     ),
                   ],
