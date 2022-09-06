@@ -31,6 +31,7 @@ abstract class FDungeonTasks {
         SlimeForestDungeonTask(),
         SlimeSwampDungeonTask(),
         RestaurantDungeonTask(),
+        SaveCaravanTask(),
       ];
 
   static List<TaskQueue> get queues => const [];
@@ -215,6 +216,109 @@ class RestaurantDungeonTask extends FDungeonTask {
           BackgroundLine('dungeon/akuma.jpg'),
           DialogueLine('Wow, you DID it!!!!!'),
           DialogueLine('Wowwwww!!'),
+        ]),
+      ];
+}
+
+class SaveCaravanTask extends FDungeonTask {
+  const SaveCaravanTask();
+
+  @override
+  String get id => 'save_caravan_task1';
+
+  @override
+  String get name => 'Спасти караван';
+
+  @override
+  String? get description => 'Спаси караван из Лахтабурга';
+
+  @override
+  IconData get icon => Icons.restaurant;
+
+  @override
+  Rank get rank => Rank.F;
+
+  @override
+  List<TaskReward> get rewards => [
+        ...super.rewards,
+        ItemReward(Items.consumable.sample(1).first),
+      ];
+
+  @override
+  List<TaskStep> get steps => [
+        NovelStep([
+          BackgroundLine('location/guild.jpg'),
+          CharacterLine('HyunWoo.png'),
+          DialogueLine(
+            'Привет, нам нужна твоя помощь!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/1.m4a',
+          ),
+          DialogueLine(
+            'Караван из Лахтабурга был отправлен к нам ещё джва года назад',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/2.m4a',
+          ),
+          DialogueLine(
+            'Но чёртовы эльф... то есть слаймы решили его ограбить!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/3.m4a',
+          ),
+          DialogueLine(
+            'Пожалуйста, помоги спасти его!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/4.m4a',
+          ),
+        ]),
+        DungeonStep(
+          Dungeon(
+            stages: [
+              DungeonStage(
+                background: 'forest',
+                enemies: SlimeEnemies.e,
+                conditions: const [SlayedStageCondition(10)],
+              ),
+            ],
+          ),
+        ),
+        NovelStep([
+          BackgroundLine('dungeon/forest.jpg'),
+          CharacterLine('HyunWoo.png'),
+          DialogueLine(
+            'Смотри, их становится больше!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/5.m4a',
+          ),
+          DialogueLine(
+            'Давай расправимся с ними здесь и сейчас!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/6.m4a',
+          ),
+        ]),
+        DungeonStep(
+          Dungeon(
+            stages: [
+              DungeonStage(
+                background: 'forest',
+                enemies: SlimeEnemies.ePlus,
+                conditions: const [SlayedStageCondition(20)],
+              ),
+            ],
+          ),
+        ),
+        NovelStep([
+          BackgroundLine('dungeon/forest.jpg'),
+          CharacterLine('HyunWoo.png'),
+          DialogueLine(
+            'Уф, славная была битва!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/7.m4a',
+          ),
+          DialogueLine(
+            'Спасибо что спас нас, гильдия выдаст тебе награду!',
+            by: 'Хозяин каравана',
+            voice: 'tasks/savecaravan1/8.m4a',
+          ),
         ]),
       ];
 }
