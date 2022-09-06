@@ -244,7 +244,7 @@ class SaveCaravanTask extends FDungeonTask {
   @override
   List<TaskReward> get rewards => [
         ...super.rewards,
-        ItemReward(StandardItems.consumable.sample(1).first),
+        ItemReward(Items.consumable.sample(1).first),
       ];
 
   @override
