@@ -12,6 +12,7 @@ class StatsWidget extends StatelessWidget {
     this.critRate,
     this.critDamage,
     this.ultCharge,
+    this.stat,
     this.stats = const [],
   }) : super(key: key);
 
@@ -21,6 +22,7 @@ class StatsWidget extends StatelessWidget {
   final int? critRate;
   final int? critDamage;
   final int? ultCharge;
+  final Stat? stat;
   final List<Stat> stats;
 
   @override
@@ -87,81 +89,84 @@ class StatsWidget extends StatelessWidget {
                       Text('${ultCharge ?? 0}'),
                     ],
                   ),
+                if (stat != null) _stat(stat!),
                 if ((damage != null ||
                         defense != null ||
                         health != null ||
                         critRate != null ||
                         critDamage != null ||
-                        ultCharge != null) &&
-                    stats.isNotEmpty)
+                        ultCharge != null ||
+                        stat != null) &&
+                    (stats.isNotEmpty))
                   const Divider(),
-                if (stats.isNotEmpty)
-                  ...stats.map((e) {
-                    String? name;
-                    String prefix = '+';
-                    String postfix = '';
-
-                    switch (e.type) {
-                      case StatType.atk:
-                        name = 'ATK';
-                        break;
-
-                      case StatType.atkPercent:
-                        name = 'ATK';
-                        postfix = '%';
-                        break;
-
-                      case StatType.critDamage:
-                        name = 'Crit DMG';
-                        postfix = '%';
-                        break;
-
-                      case StatType.critRate:
-                        name = 'Crit Rate';
-                        postfix = '%';
-                        break;
-
-                      case StatType.def:
-                        name = 'DEF';
-                        break;
-
-                      case StatType.defPercent:
-                        name = 'DEF';
-                        postfix = '%';
-                        break;
-
-                      case StatType.hp:
-                        name = 'HP';
-                        break;
-
-                      case StatType.hpPercent:
-                        name = 'HP';
-                        postfix = '%';
-                        break;
-
-                      case StatType.ult:
-                        name = 'ULT Rate';
-                        break;
-
-                      case StatType.ultPercent:
-                        name = 'ULT Rate';
-                        postfix = '%';
-                        break;
-                    }
-
-                    return Row(
-                      children: [
-                        Text(name),
-                        const Spacer(),
-                        Text('$prefix${e.amount}$postfix'),
-                      ],
-                    );
-                  }),
+                if (stats.isNotEmpty) ...stats.map(_stat),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _stat(Stat e) {
+    String? name;
+    String prefix = '+';
+    String postfix = '';
+
+    switch (e.type) {
+      case StatType.atk:
+        name = 'ATK';
+        break;
+
+      case StatType.atkPercent:
+        name = 'ATK';
+        postfix = '%';
+        break;
+
+      case StatType.critDamage:
+        name = 'Crit DMG';
+        postfix = '%';
+        break;
+
+      case StatType.critRate:
+        name = 'Crit Rate';
+        postfix = '%';
+        break;
+
+      case StatType.def:
+        name = 'DEF';
+        break;
+
+      case StatType.defPercent:
+        name = 'DEF';
+        postfix = '%';
+        break;
+
+      case StatType.hp:
+        name = 'HP';
+        break;
+
+      case StatType.hpPercent:
+        name = 'HP';
+        postfix = '%';
+        break;
+
+      case StatType.ult:
+        name = 'ULT Rate';
+        break;
+
+      case StatType.ultPercent:
+        name = 'ULT Rate';
+        postfix = '%';
+        break;
+    }
+
+    return Row(
+      children: [
+        Text(name),
+        const Spacer(),
+        Text('$prefix${e.amount}$postfix'),
+      ],
     );
   }
 }

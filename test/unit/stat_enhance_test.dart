@@ -14,41 +14,15 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:hive/hive.dart';
+import 'package:akuma/domain/model/rarity.dart';
+import 'package:akuma/domain/model/stat.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-import '/domain/model_type_id.dart';
-import '/util/new_type.dart';
+void main() {
+  void checkStat(StatType type) {
+    Stat stat = Stat(type);
+    print(stat.improve(Rarity.common));
+  }
 
-part 'skill.g.dart';
-
-abstract class Skill {
-  const Skill();
-
-  static const maxLevel = 100;
-
-  String get id => runtimeType.toString();
-  String get asset => id;
-  String get name => id;
-
-  String? get description => null;
-}
-
-@HiveType(typeId: ModelTypeId.itemId)
-class SkillId extends NewType<String> {
-  const SkillId(String val) : super(val);
-}
-
-class MySkill {
-  MySkill(
-    this.skill, {
-    this.exp = 0,
-  }) : id = SkillId(skill.id);
-
-  final Skill skill;
-
-  int exp;
-
-  final SkillId id;
-
-  int get level => exp ~/ 1000;
+  test('ATK', () => checkStat(StatType.atk));
 }

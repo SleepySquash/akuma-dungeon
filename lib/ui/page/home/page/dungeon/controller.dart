@@ -184,7 +184,7 @@ class DungeonController extends GetxController {
               .map<int>((e) {
             Skill skill = e.skill;
             if (skill is ShieldSkill) {
-              return skill.shields[e.level - 1];
+              return skill.shields[e.level];
             }
             return 0;
           }).fold<int>(0, (p, e) => p + e);
@@ -524,7 +524,9 @@ class DungeonController extends GetxController {
         if (r is MoneyReward) {
           _itemService.add(Dogecoin(r.amount));
         } else if (r is ItemReward) {
-          _itemService.add(r.item);
+          if (r.count > 0) {
+            _itemService.add(r.item);
+          }
         } else if (r is ExpReward) {
           _playerService.addExperience(r.amount);
         } else if (r is RankReward) {
@@ -617,7 +619,7 @@ class PartyMember {
     for (MySkill s in character.character.value.skills) {
       if (s.skill is ShieldSkill) {
         ShieldSkill skill = s.skill as ShieldSkill;
-        onShield?.call(skill.shields[s.level - 1]);
+        onShield?.call(skill.shields[s.level]);
       }
     }
   }
@@ -636,13 +638,13 @@ class PartyMember {
         HittingSkill skill = s.skill as HittingSkill;
 
         int milliseconds =
-            Random().nextInt(skill.periods[s.level - 1].inMilliseconds);
+            Random().nextInt(skill.periods[s.level].inMilliseconds);
         _timers.add(
           Timer(Duration(milliseconds: milliseconds), () {
             _timers.add(
-              Timer.periodic(skill.periods[s.level - 1], (t) {
+              Timer.periodic(skill.periods[s.level], (t) {
                 double damage =
-                    character.damage * (skill.damages[s.level - 1] / 100);
+                    character.damage * (skill.damages[s.level] / 100);
                 onEnemyHit?.call(HitResult(damage: max(damage.toInt(), 1)));
               }),
             );
@@ -652,12 +654,12 @@ class PartyMember {
         HealingSkill skill = s.skill as HealingSkill;
 
         int milliseconds =
-            Random().nextInt(skill.periods[s.level - 1].inMilliseconds);
+            Random().nextInt(skill.periods[s.level].inMilliseconds);
         _timers.add(
           Timer(Duration(milliseconds: milliseconds), () {
             _timers.add(
-              Timer.periodic(skill.periods[s.level - 1], (t) {
-                onPlayerHeal?.call(skill.healths[s.level - 1]);
+              Timer.periodic(skill.periods[s.level], (t) {
+                onPlayerHeal?.call(skill.healths[s.level]);
               }),
             );
           }),

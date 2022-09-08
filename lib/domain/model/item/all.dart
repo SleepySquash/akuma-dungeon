@@ -80,6 +80,7 @@ abstract class Items {
   static List<Item> get artifacts => const [
         InitiateFeather(),
         InitiateFlower(),
+        AdventurerWatch(),
       ];
 
   static Item? get(String id) => all.firstWhereOrNull((e) => e.id == id);

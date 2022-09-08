@@ -70,16 +70,30 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
     }
 
     if (type == 'MyWeapon') {
-      final exp = reader.read() as int;
+      final int exp = reader.read() as int;
       return MyWeapon(item as Weapon, exp: exp, id: id);
     } else if (type == 'MyEquipable') {
-      final exp = reader.read() as int;
+      final int exp = reader.read() as int;
       return MyEquipable(item as Equipable, exp: exp, id: id);
     } else if (type == 'MyArtifact') {
-      final exp = reader.read() as int;
-      return MyArtifact(item as Artifact, exp: exp, id: id);
+      final int exp = reader.read() as int;
+      final Stat stat = reader.read() as Stat;
+      final int statsLength = reader.read() as int;
+
+      final List<Stat> stats = [];
+      for (var i = 0; i < statsLength; ++i) {
+        stats.add(reader.read() as Stat);
+      }
+
+      return MyArtifact(
+        item as Artifact,
+        exp: exp,
+        stat: stat,
+        stats: stats,
+        id: id,
+      );
     } else {
-      final count = reader.read() as int;
+      final int count = reader.read() as int;
       return MyItem(item, id: id, count: count);
     }
   }
@@ -96,6 +110,11 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
       writer.write(obj.exp);
     } else if (obj is MyArtifact) {
       writer.write(obj.exp);
+      writer.write(obj.stat);
+      writer.write(obj.stats.length);
+      for (Stat s in obj.stats) {
+        writer.write(s);
+      }
     } else {
       writer.write(obj.count);
     }

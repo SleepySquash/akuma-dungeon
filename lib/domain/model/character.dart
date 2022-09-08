@@ -51,18 +51,17 @@ abstract class Character {
   List<Skill> get skills => [];
 
   List<int> get levels =>
-      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
+      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
 
   List<int> get critDamages =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).floor());
   List<int> get critRates =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
-  List<int> get damages =>
-      List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
-  List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
-  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
+      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).floor());
+  List<int> get damages => List.generate(maxLevel, (i) => 1 * (i + 1) + i * 2);
+  List<int> get defenses => List.generate(maxLevel, (i) => 1 * (i + 1));
+  List<int> get healths => List.generate(maxLevel, (i) => 10 * (i + 1));
   List<int> get ultCharges =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
 }
 
 @HiveType(typeId: ModelTypeId.characterId)
@@ -102,7 +101,27 @@ class MyCharacter {
 
   int exp;
 
-  int get level => character.levels.indexWhere((e) => exp < e) + 1;
+  int get currentExp {
+    if (level > 1) {
+      return exp - levels[level - 1];
+    }
+    return exp;
+  }
+
+  int? get nextExp {
+    if (level <= Character.maxLevel) {
+      if (level > 1) {
+        return levels[level] - levels[level - 1];
+      } else {
+        return levels[level];
+      }
+    }
+
+    return null;
+  }
+
+  int get level => levels.indexWhere((e) => exp < e);
+  List<int> get levels => character.levels;
 }
 
 /// Role a certain [Character] has in the battle.

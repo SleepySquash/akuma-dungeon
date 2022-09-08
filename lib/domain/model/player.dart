@@ -63,21 +63,39 @@ class Player {
   @HiveField(7)
   List<CharacterId> party;
 
+  int get currentExp {
+    if (level > 1) {
+      return exp - levels[level - 1];
+    }
+    return exp;
+  }
+
+  int? get nextExp {
+    if (level <= Player.maxLevel) {
+      if (level > 1) {
+        return levels[level] - levels[level - 1];
+      } else {
+        return levels[level];
+      }
+    }
+
+    return null;
+  }
+
   List<int> get levels =>
-      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
-  int get level => levels.indexWhere((e) => exp < e) + 1;
+      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  int get level => levels.indexWhere((e) => exp < e);
 
   /// Maximum allowed level for a [Player] to have.
   static const int maxLevel = 100;
 
   List<int> get critDamages =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
+      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
   List<int> get critRates =>
-      List.generate(maxLevel + 1, (i) => (1 * i / 10).floor());
-  List<int> get damages =>
-      List.generate(maxLevel + 1, (i) => 1 * i + (i - 1) * 2);
-  List<int> get defenses => List.generate(maxLevel + 1, (i) => 1 * i);
-  List<int> get healths => List.generate(maxLevel + 1, (i) => 10 * i);
+      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
+  List<int> get damages => List.generate(maxLevel, (i) => 1 * (i + 1) + i * 2);
+  List<int> get defenses => List.generate(maxLevel, (i) => 1 * (i + 1));
+  List<int> get healths => List.generate(maxLevel, (i) => 10 * (i + 1));
   List<int> get ultCharges =>
-      List.generate(maxLevel + 1, (i) => 4 + (1 * i / 10).floor());
+      List.generate(maxLevel, (i) => 4 + (1 * (i + 1) / 10).floor());
 }

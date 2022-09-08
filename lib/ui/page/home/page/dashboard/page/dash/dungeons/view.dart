@@ -34,15 +34,32 @@ class DungeonsView extends StatelessWidget {
                 subtitle: const Text('Очень холодное и мрачное место...'),
                 trailing: const Icon(Icons.ac_unit),
                 onTap: () async {
-                  const List<NextStageCondition> conditions = [
-                    SlayedStageCondition(10),
-                    TimerStageCondition(Duration(seconds: 120)),
-                  ];
+                  List<DungeonStage> stages(double multiplier) {
+                    const List<NextStageCondition> conditions = [
+                      SlayedStageCondition(10),
+                      TimerStageCondition(Duration(seconds: 120)),
+                    ];
 
-                  const List<NextStageCondition> boss = [
-                    SlayedStageCondition(1),
-                    TimerStageCondition(Duration(seconds: 30)),
-                  ];
+                    const List<NextStageCondition> boss = [
+                      SlayedStageCondition(1),
+                      TimerStageCondition(Duration(seconds: 30)),
+                    ];
+
+                    return [
+                      DungeonStage(
+                        name: 'Алтарь',
+                        enemies: SlimeEnemies.e,
+                        conditions: conditions,
+                        multiplier: multiplier,
+                      ),
+                      DungeonStage(
+                        name: 'Алтарь - Босс Битва',
+                        enemies: SlimeEnemies.ePlus,
+                        conditions: boss,
+                        multiplier: multiplier,
+                      ),
+                    ];
+                  }
 
                   bool? result = await DungeonPreviewView.show(
                     context,
@@ -58,24 +75,12 @@ class DungeonsView extends StatelessWidget {
                         rewards: [
                           ChanceItemReward(const InitiateFeather(), 0.4),
                           ChanceItemReward(const InitiateFlower(), 0.4),
+                          ChanceItemReward(const AdventurerWatch(), 0.4),
                           const MoneyReward(100),
                           const ExpReward(10),
                           const RankReward(1),
                         ],
-                        stages: [
-                          DungeonStage(
-                            name: 'Алтарь',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 10,
-                          ),
-                          DungeonStage(
-                            name: 'Алтарь - Босс Битва',
-                            enemies: SlimeEnemies.ePlus,
-                            conditions: boss,
-                            multiplier: 10,
-                          ),
-                        ],
+                        stages: stages(10),
                       ),
                     ],
                   );
@@ -105,15 +110,44 @@ class DungeonsView extends StatelessWidget {
                 ),
                 trailing: const Icon(Icons.book),
                 onTap: () async {
-                  const List<NextStageCondition> conditions = [
-                    SlayedStageCondition(10),
-                    TimerStageCondition(Duration(seconds: 120)),
-                  ];
+                  List<DungeonStage> stages(double multiplier) {
+                    const List<NextStageCondition> conditions = [
+                      SlayedStageCondition(10),
+                      TimerStageCondition(Duration(seconds: 120)),
+                    ];
 
-                  const List<NextStageCondition> boss = [
-                    SlayedStageCondition(1),
-                    TimerStageCondition(Duration(seconds: 30)),
-                  ];
+                    const List<NextStageCondition> boss = [
+                      SlayedStageCondition(1),
+                      TimerStageCondition(Duration(seconds: 30)),
+                    ];
+
+                    return [
+                      DungeonStage(
+                        name: 'Библиотека',
+                        enemies: SlimeEnemies.e,
+                        conditions: conditions,
+                        multiplier: multiplier,
+                      ),
+                      DungeonStage(
+                        name: 'Библиотека',
+                        enemies: SlimeEnemies.e,
+                        conditions: conditions,
+                        multiplier: multiplier,
+                      ),
+                      DungeonStage(
+                        name: 'Библиотека',
+                        enemies: SlimeEnemies.e,
+                        conditions: conditions,
+                        multiplier: multiplier,
+                      ),
+                      DungeonStage(
+                        name: 'Библиотека - Босс Битва',
+                        enemies: SlimeEnemies.ePlus,
+                        conditions: boss,
+                        multiplier: multiplier,
+                      ),
+                    ];
+                  }
 
                   bool? result = await DungeonPreviewView.show(
                     context,
@@ -133,32 +167,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(10),
                           const RankReward(1),
                         ],
-                        stages: [
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 10,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 10,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 10,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека - Босс Битва',
-                            enemies: SlimeEnemies.ePlus,
-                            conditions: boss,
-                            multiplier: 10,
-                          ),
-                        ],
+                        stages: stages(10),
                       ),
                       DungeonDifficulty(
                         level: 30,
@@ -172,32 +181,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(20),
                           const RankReward(1),
                         ],
-                        stages: [
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 60,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 60,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 60,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека - Босс Битва',
-                            enemies: SlimeEnemies.ePlus,
-                            conditions: boss,
-                            multiplier: 60,
-                          ),
-                        ],
+                        stages: stages(60),
                       ),
                       DungeonDifficulty(
                         level: 60,
@@ -212,32 +196,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(50),
                           const RankReward(2),
                         ],
-                        stages: [
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 240,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 240,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека',
-                            enemies: SlimeEnemies.e,
-                            conditions: conditions,
-                            multiplier: 240,
-                          ),
-                          DungeonStage(
-                            name: 'Библиотека - Босс Битва',
-                            enemies: SlimeEnemies.ePlus,
-                            conditions: boss,
-                            multiplier: 240,
-                          ),
-                        ],
+                        stages: stages(240),
                       ),
                     ],
                   );

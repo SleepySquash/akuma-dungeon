@@ -74,7 +74,7 @@ class CharacterCard extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8, right: 16),
                     child: BorderedText(
                       child: Text(
-                        'Lv. ${myCharacter!.character.value.level}',
+                        'Lv. ${myCharacter!.character.value.level + 1}',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,

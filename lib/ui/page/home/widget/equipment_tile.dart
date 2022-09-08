@@ -112,7 +112,7 @@ class EquipmentTile extends StatelessWidget {
                         strokeWidth: 6,
                         strokeColor: const Color(0xFF707070),
                         child: Text(
-                          'Lv. ${artifact?.level ?? weapon?.level ?? equipable?.level}',
+                          'Lv. ${(artifact?.level ?? weapon?.level ?? equipable?.level ?? 0) + 1}',
                           style: const TextStyle(
                             fontSize: 16,
                             color: Colors.white,

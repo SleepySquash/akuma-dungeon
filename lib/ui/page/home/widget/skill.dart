@@ -39,7 +39,8 @@ class SkillWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${(mySkill?.skill ?? skill)?.name}'),
-                      if (mySkill != null) Text('Lv. ${mySkill?.level ?? 1}'),
+                      if (mySkill != null)
+                        Text('Lv. ${(mySkill?.level ?? 0) + 1}'),
                     ],
                   ),
                 ),

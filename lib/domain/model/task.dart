@@ -19,7 +19,7 @@ abstract class Task {
   IconData get icon => Icons.abc;
 
   Rank get rank => Rank.F;
-  int get level => 1;
+  int get level => 0;
 
   List<TaskStep> get steps;
 

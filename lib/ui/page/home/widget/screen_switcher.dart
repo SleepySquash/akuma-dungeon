@@ -21,9 +21,11 @@ class ScreenSwitcher extends StatefulWidget {
   const ScreenSwitcher({
     Key? key,
     required this.tabs,
+    this.onSwitched,
   }) : super(key: key);
 
   final List<Screen> tabs;
+  final void Function()? onSwitched;
 
   @override
   State<ScreenSwitcher> createState() => _ScreenSwitcherState();
@@ -61,7 +63,10 @@ class _ScreenSwitcherState extends State<ScreenSwitcher> {
                         child: _SingleTab(
                           desktop: e.desktop,
                           mobile: e.mobile,
-                          onTap: () => setState(() => tab = i),
+                          onTap: () {
+                            widget.onSwitched?.call();
+                            setState(() => tab = i);
+                          },
                           selected: tab == i,
                         ),
                       );

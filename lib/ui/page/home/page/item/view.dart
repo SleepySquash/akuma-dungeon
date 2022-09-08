@@ -107,15 +107,18 @@ class _ItemViewState extends State<ItemView>
 
   @override
   Widget build(BuildContext context) {
-    var fade = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    Animation<double> fade =
+        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _fading,
       curve: const Interval(0, 0.3, curve: Curves.ease),
     ));
 
     return GetBuilder(
       init: ItemController(
+        Get.find(),
         item: widget.item,
         myItem: widget.myItem,
+        hero: widget.hero,
         exchangeItemSettings: widget.exchangeItemSettings,
       ),
       builder: (ItemController c) {
@@ -136,25 +139,25 @@ class _ItemViewState extends State<ItemView>
                 ),
               ),
             ),
-            AnimatedBuilder(
-              animation: _fading,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: fade,
-                  child: Obx(() {
-                    return Hero(
-                      tag: widget.hero ??
-                          c.myItem.value?.id ??
-                          c.item.value?.id ??
-                          '',
-                      child: Image.asset(
-                        'assets/item/${(c.myItem.value?.item ?? c.item.value)?.asset}.png',
-                      ),
-                    );
-                  }),
-                );
-              },
-            ),
+            // AnimatedBuilder(
+            //   animation: _fading,
+            //   builder: (context, child) {
+            //     return FadeTransition(
+            //       opacity: fade,
+            //       child: Obx(() {
+            //         return Hero(
+            //           tag: widget.hero ??
+            //               c.myItem.value?.id ??
+            //               c.item.value?.id ??
+            //               '',
+            //           child: Image.asset(
+            //             'assets/item/${(c.myItem.value?.item ?? c.item.value)?.asset}.png',
+            //           ),
+            //         );
+            //       }),
+            //     );
+            //   },
+            // ),
             AnimatedBuilder(
               animation: _fading,
               builder: (_, child) =>
@@ -242,12 +245,21 @@ class _ItemViewState extends State<ItemView>
   }
 
   Widget _screen(ItemController c) {
+    Animation<double> fade =
+        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _fading,
+      curve: const Interval(0, 0.3, curve: Curves.ease),
+    ));
+
     return ScreenSwitcher(
+      onSwitched: () {
+        c.selectedItems.clear();
+      },
       tabs: [
         Screen(
           desktop: const Text('Attributes'),
           mobile: const Icon(Icons.person),
-          child: ItemAttributesTab(c),
+          child: ItemAttributesTab(c, fade: fade, fading: _fading),
         ),
         if (c.myItem.value is MyWeapon ||
             c.myItem.value is MyEquipable ||
@@ -255,7 +267,7 @@ class _ItemViewState extends State<ItemView>
           Screen(
             desktop: const Text('Enhance'),
             mobile: const Icon(Icons.plus_one),
-            child: ItemEnhanceTab(c),
+            child: ItemEnhanceTab(c, fade: fade, fading: _fading),
           ),
           Screen(
             desktop: const Text('Upgrade'),

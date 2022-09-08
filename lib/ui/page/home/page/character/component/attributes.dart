@@ -51,9 +51,9 @@ class CharacterAttributesTab extends StatelessWidget {
                 ),
                 if (character != null) ...[
                   LevelWidget(
-                    exp: character.exp,
+                    exp: character.currentExp,
+                    maxExp: character.nextExp,
                     level: character.level,
-                    levels: character.character.levels,
                     maxLevel: Character.maxLevel,
                   ),
                   Obx(() {

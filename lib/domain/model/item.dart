@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'dart:math';
+
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -73,6 +75,9 @@ abstract class Artifact extends Item {
   ///
   /// [Artifact] is allowed to have only one main [Stat], so [Random] will
   /// choose exactly one [Stat].
+  ///
+  /// This [Stat] is constrained, meaning its min and max values can be
+  /// balanced.
   List<StatChance> get stat;
 
   /// Maximum number of additional [stats] this [Artifact] might have.
@@ -81,6 +86,8 @@ abstract class Artifact extends Item {
   /// Additional [StatChance]s of this [Artifact].
   ///
   /// [Artifact] is allowed to have maximum [maxStats] of these [Stat]s.
+  ///
+  /// These [Stat]s are not constrained, meaning no balancing is possible.
   List<StatChance> get stats => [
         StatChance(Stat.hp(1), 1),
         StatChance(Stat.hpPercent(1), 1),
@@ -103,7 +110,7 @@ abstract class Artifact extends Item {
   static const int maxLevel = 100;
 
   List<int> get levels =>
-      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
+      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
 }
 
 mixin Flower on Artifact {}
@@ -130,8 +137,8 @@ abstract class Equipable extends Item {
   static const int maxLevel = 100;
 
   List<int> get levels =>
-      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
-  List<int> get defenses => List.generate(maxLevel + 1, (i) => defense * i);
+      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  List<int> get defenses => List.generate(maxLevel, (i) => defense * (i + 1));
 }
 
 mixin Head on Equipable {}
@@ -156,8 +163,8 @@ abstract class Weapon extends Item {
   static const int maxLevel = 100;
 
   List<int> get levels =>
-      List.generate(maxLevel + 1, (i) => (1000 + i * 2000).floor());
-  List<int> get damages => List.generate(maxLevel + 1, (i) => damage * i);
+      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  List<int> get damages => List.generate(maxLevel, (i) => damage * (i + 1));
 }
 
 mixin Sword on Weapon {}
@@ -212,7 +219,26 @@ class MyEquipable extends MyItem {
 
   int exp;
 
-  int get level => (item as Equipable).levels.indexWhere((e) => exp < e) + 1;
+  int get currentExp {
+    if (level > 1) {
+      return exp - levels[level - 1];
+    }
+    return exp;
+  }
+
+  int? get nextExp {
+    if (level <= Equipable.maxLevel) {
+      if (level > 1) {
+        return levels[level] - levels[level - 1];
+      } else {
+        return levels[level];
+      }
+    }
+
+    return null;
+  }
+
+  int get level => (item as Equipable).levels.indexWhere((e) => exp < e);
 
   List<int> get defenses => (item as Equipable).defenses;
   List<int> get levels => (item as Equipable).levels;
@@ -246,7 +272,26 @@ class MyWeapon extends MyItem {
 
   int exp;
 
-  int get level => (item as Weapon).levels.indexWhere((e) => exp < e) + 1;
+  int get currentExp {
+    if (level > 1) {
+      return exp - levels[level - 1];
+    }
+    return exp;
+  }
+
+  int? get nextExp {
+    if (level <= Weapon.maxLevel) {
+      if (level > 1) {
+        return levels[level] - levels[level - 1];
+      } else {
+        return levels[level];
+      }
+    }
+
+    return null;
+  }
+
+  int get level => (item as Weapon).levels.indexWhere((e) => exp < e);
 
   List<int> get damages => (item as Weapon).damages;
   List<int> get levels => (item as Weapon).levels;
@@ -285,10 +330,17 @@ class MyArtifact extends MyItem {
       this.stat = artifact.stat.resolve(1).first;
     }
 
+    this.stat.amount =
+        this.stat.constrain(level, Artifact.maxLevel, artifact.rarity);
+
     if (stats != null) {
       this.stats = stats;
     } else {
-      this.stats = artifact.stat.resolve(artifact.maxStats);
+      int i = artifact.rarity.index ~/ 2;
+      while (i < artifact.maxStats && Random().nextBool()) {
+        ++i;
+      }
+      this.stats = artifact.stats.resolve(min(artifact.maxStats, i));
     }
   }
 
@@ -297,7 +349,26 @@ class MyArtifact extends MyItem {
 
   int exp;
 
-  int get level => (item as Artifact).levels.indexWhere((e) => exp < e) + 1;
+  int get currentExp {
+    if (level > 1) {
+      return exp - levels[level - 1];
+    }
+    return exp;
+  }
+
+  int? get nextExp {
+    if (level <= Artifact.maxLevel) {
+      if (level > 1) {
+        return levels[level] - levels[level - 1];
+      } else {
+        return levels[level];
+      }
+    }
+
+    return null;
+  }
+
+  int get level => (item as Artifact).levels.indexWhere((e) => exp < e);
 
   List<int> get levels => (item as Artifact).levels;
   List<Stat> get allStats => [stat, ...stats];

@@ -45,13 +45,13 @@ abstract class AdventurerArtifactSet extends Artifact with Flower {
   Rarity get rarity => Rarity.useful;
 
   @override
-  int get maxStats => 1;
+  int get maxStats => 2;
 
   @override
   String? get set => 'Adventurer';
 }
 
-class AdventurerFeather extends InitiateArtifactSet with Feather {
+class AdventurerFeather extends AdventurerArtifactSet with Feather {
   const AdventurerFeather([super.count = 1]);
 
   @override
@@ -61,10 +61,10 @@ class AdventurerFeather extends InitiateArtifactSet with Feather {
   String get name => 'Adventurer\'s feather';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.hp(2))];
+  List<StatChance> get stat => [StatChance(Stat.atk(2))];
 }
 
-class AdventurerFlower extends InitiateArtifactSet with Flower {
+class AdventurerFlower extends AdventurerArtifactSet with Flower {
   const AdventurerFlower([super.count = 1]);
 
   @override
@@ -74,10 +74,10 @@ class AdventurerFlower extends InitiateArtifactSet with Flower {
   String get name => 'Adventurer\'s flower';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.atk(1))];
+  List<StatChance> get stat => [StatChance(Stat.hp(2))];
 }
 
-class AdventurerWatch extends InitiateArtifactSet with Watch {
+class AdventurerWatch extends AdventurerArtifactSet with Watch {
   const AdventurerWatch([super.count = 1]);
 
   @override
@@ -87,5 +87,10 @@ class AdventurerWatch extends InitiateArtifactSet with Watch {
   String get name => 'Adventurer\'s watch';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.atk(1))];
+  List<StatChance> get stat => [
+        StatChance(Stat.atkPercent(1)),
+        StatChance(Stat.hpPercent(1)),
+        StatChance(Stat.defPercent(1)),
+        StatChance(Stat.ultPercent(1)),
+      ];
 }

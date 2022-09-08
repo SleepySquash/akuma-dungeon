@@ -59,7 +59,7 @@ class MusicWorker extends DisposableInterface {
     double volume = _settings.value?.soundVolume ?? 1;
     if (volume > 0) {
       final AudioPlayer player = AudioPlayer();
-      player.play(source, volume: volume, mode: PlayerMode.mediaPlayer);
+      player.play(source, volume: volume);
     }
   }
 
@@ -69,11 +69,7 @@ class MusicWorker extends DisposableInterface {
     double volume = _settings.value?.musicVolume ?? 1;
     if (volume > 0) {
       audio.setReleaseMode(ReleaseMode.loop);
-      audio.play(
-        source,
-        volume: volume * _volumeCorrections,
-        mode: PlayerMode.mediaPlayer,
-      );
+      audio.play(source, volume: volume * _volumeCorrections);
     }
 
     isPlaying = true;
@@ -84,11 +80,7 @@ class MusicWorker extends DisposableInterface {
       double volume = _settings.value?.musicVolume ?? 1;
       if (volume > 0) {
         audio.setReleaseMode(ReleaseMode.loop);
-        audio.play(
-          _source!,
-          volume: volume * _volumeCorrections,
-          mode: PlayerMode.mediaPlayer,
-        );
+        audio.play(_source!, volume: volume * _volumeCorrections);
       }
 
       isPlaying = true;

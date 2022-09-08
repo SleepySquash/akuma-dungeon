@@ -80,7 +80,13 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void update(MyItem item) => _itemHive.put(item);
+  void update(MyItem item) {
+    if (item is MyArtifact) {
+      item.stat.amount =
+          item.stat.constrain(item.level, Artifact.maxLevel, item.item.rarity);
+    }
+    _itemHive.put(item);
+  }
 
   @override
   void take(ItemId id, [int? amount]) {

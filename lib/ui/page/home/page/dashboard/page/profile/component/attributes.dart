@@ -58,9 +58,9 @@ class ProfileAttributesTab extends StatelessWidget {
             ),
           ),
           LevelWidget(
-            exp: c.player.player.value.exp,
+            exp: c.player.player.value.currentExp,
+            maxExp: c.player.player.value.nextExp,
             level: c.player.level,
-            levels: c.player.levels,
             maxLevel: Player.maxLevel,
           ),
         ],
