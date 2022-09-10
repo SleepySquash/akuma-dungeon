@@ -78,11 +78,16 @@ class DashboardView extends StatelessWidget {
                                     case MainTab.guild:
                                       return NavigationRailDestination(
                                         selectedIcon: Obx(() {
+                                          int commissions = c
+                                              .location.value.commissions
+                                              .where((e) => e.isCompleted)
+                                              .length;
+
                                           return Badge(
-                                            showBadge:
-                                                c.completedTasks.value != 0,
+                                            toAnimate: false,
+                                            showBadge: commissions != 0,
                                             badgeContent: Text(
-                                              '${c.completedTasks.value}',
+                                              '$commissions',
                                               style: const TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -91,11 +96,16 @@ class DashboardView extends StatelessWidget {
                                           );
                                         }),
                                         icon: Obx(() {
+                                          int commissions = c
+                                              .location.value.commissions
+                                              .where((e) => e.isCompleted)
+                                              .length;
+
                                           return Badge(
-                                            showBadge:
-                                                c.completedTasks.value != 0,
+                                            toAnimate: false,
+                                            showBadge: commissions != 0,
                                             badgeContent: Text(
-                                              '${c.completedTasks.value}',
+                                              '$commissions',
                                               style: const TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -187,10 +197,16 @@ class DashboardView extends StatelessWidget {
                               case MainTab.guild:
                                 return NavigationDestination(
                                   selectedIcon: Obx(() {
+                                    int commissions = c
+                                        .location.value.commissions
+                                        .where((e) => e.isCompleted)
+                                        .length;
+
                                     return Badge(
-                                      showBadge: c.completedTasks.value != 0,
+                                      toAnimate: false,
+                                      showBadge: commissions != 0,
                                       badgeContent: Text(
-                                        '${c.completedTasks.value}',
+                                        '$commissions',
                                         style: const TextStyle(
                                           color: Colors.white,
                                         ),
@@ -199,10 +215,16 @@ class DashboardView extends StatelessWidget {
                                     );
                                   }),
                                   icon: Obx(() {
+                                    int commissions = c
+                                        .location.value.commissions
+                                        .where((e) => e.isCompleted)
+                                        .length;
+
                                     return Badge(
-                                      showBadge: c.completedTasks.value != 0,
+                                      toAnimate: false,
+                                      showBadge: commissions != 0,
                                       badgeContent: Text(
-                                        '${c.completedTasks.value}',
+                                        '$commissions',
                                         style: const TextStyle(
                                           color: Colors.white,
                                         ),

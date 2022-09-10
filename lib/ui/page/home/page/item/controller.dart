@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/item/all.dart';
 import 'package:akuma/domain/service/item.dart';
 import 'package:akuma/util/obs/obs.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,8 @@ class ItemController extends GetxController {
   EnhanceResult? enhance() {
     return _itemService.enhance(myItem.value!, selectedItems.exp);
   }
+
+  bool hasMoney(int amount) => _itemService.amount(const Dogecoin()) >= amount;
 }
 
 class ExchangeItemSettings {
@@ -76,6 +79,23 @@ extension SelectedItemsExp on List<SelectedItem> {
         }
 
         return exp ~/ 2 + (100 + e.item.value.item.rarity.index * 400);
+      },
+    ).fold(0, (p, e) => p + e);
+  }
+
+  int get money {
+    return map(
+      (e) {
+        int exp = 0;
+        if (e.item.value is MyWeapon) {
+          exp = (e.item.value as MyWeapon).exp;
+        } else if (e.item.value is MyEquipable) {
+          exp = (e.item.value as MyEquipable).exp;
+        } else if (e.item.value is MyArtifact) {
+          exp = (e.item.value as MyArtifact).exp;
+        }
+
+        return exp + (100 + e.item.value.item.rarity.index * 400);
       },
     ).fold(0, (p, e) => p + e);
   }

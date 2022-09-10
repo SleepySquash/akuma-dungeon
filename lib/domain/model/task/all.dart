@@ -18,13 +18,15 @@ import 'package:collection/collection.dart';
 
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
+import 'commission/all.dart';
 import 'dungeon/all.dart';
-import 'main/all.dart';
+import 'queue/all.dart';
 
 abstract class Tasks {
   static List<Task> get all => [
-        ...DungeonTasks.tasks,
-        ...MainTasks.tasks,
+        ...Commissions.all,
+        ...Dungeons.all,
+        ...TaskQueues.tasks,
       ];
 
   static Task? get(String id) => all.firstWhereOrNull((e) => e.id == id);
@@ -32,8 +34,7 @@ abstract class Tasks {
 
 abstract class TasksQueues {
   static List<TaskQueue> get all => [
-        ...DungeonTasks.queues,
-        ...MainTasks.queues,
+        ...TaskQueues.queues,
       ];
 
   static TaskQueue? get(String id) => all.firstWhereOrNull((e) => e.id == id);

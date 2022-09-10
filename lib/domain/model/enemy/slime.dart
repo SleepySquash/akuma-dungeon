@@ -18,7 +18,7 @@ import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
 
 import '/domain/model/enemy.dart';
 import '/domain/model/item/all.dart';
-import '/domain/model/task.dart';
+import '/domain/model/reward.dart';
 
 abstract class SlimeEnemies {
   static List<Enemy> get all => [
@@ -103,7 +103,7 @@ abstract class Slime extends Enemy {
   List<Source>? get slayedSounds => null;
 
   @override
-  List<TaskReward> get drops => [
+  List<Reward> get drops => [
         ChanceItemReward(const AppleGreenItem(), 0.4),
         ChanceItemReward(const Dogecoin(), 0.6),
         ChanceItemReward(const Ruby(), 0.1),

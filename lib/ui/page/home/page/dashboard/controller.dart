@@ -18,7 +18,8 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/domain/service/task.dart';
+import '/domain/model/location.dart';
+import '/domain/service/location.dart';
 import '/ui/worker/music.dart';
 
 enum MainTab {
@@ -30,18 +31,19 @@ enum MainTab {
 }
 
 class DashboardController extends GetxController {
-  DashboardController(this._taskService, this._musicWorker);
+  DashboardController(this._locationService, this._musicWorker);
 
   final PageController pageController = PageController();
   final Rx<MainTab> selected = Rx(MainTab.dash);
 
-  final TaskService _taskService;
-  final MusicWorker _musicWorker;
+  final LocationService _locationService;
 
-  RxInt get completedTasks => RxInt(0);
+  final MusicWorker _musicWorker;
 
   final AssetSource _source =
       AssetSource('music/mixkit-driving-ambition-32.mp3');
+
+  Rx<MyLocation> get location => _locationService.location;
 
   @override
   void onReady() {

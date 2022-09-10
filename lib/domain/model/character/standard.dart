@@ -157,4 +157,10 @@ class Rozzi extends DpsCharacter {
 
   @override
   Rarity get rarity => Rarity.rare;
+
+  @override
+  List<Skill> get skills => [
+        ...super.skills,
+        const SilentShotSkill(),
+      ];
 }

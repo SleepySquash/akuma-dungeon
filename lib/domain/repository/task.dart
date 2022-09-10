@@ -31,4 +31,8 @@ abstract class AbstractTaskRepository {
   void accept(Task task);
   void update(MyTask task);
   void cancel(Task task);
+
+  void complete(CompletedTask task);
+  Future<CompletedTask?> getCompleted(String id);
+  bool isCompleted(String id);
 }

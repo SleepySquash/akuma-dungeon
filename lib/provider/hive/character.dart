@@ -68,7 +68,7 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
     final Character? character = Characters.get(id);
 
     if (character == null) {
-      Log.print('Cannot find `Character` with id: $id');
+      Log.print('[$runtimeType] Cannot find `Character` with id: $id');
       return MyCharacter(character: const ImpossibleCharacter());
     }
 
@@ -98,7 +98,7 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
         skills.add(MySkill(skill, exp: exp));
       } else {
         Log.print(
-          'Cannot find `Skill` with id: $sk in `Character` with id: $id',
+          '[$runtimeType] Cannot find `Skill` with id: $sk in `Character` with id: $id',
         );
       }
     }

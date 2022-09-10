@@ -65,7 +65,7 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
 
     Item? item = Items.get(itemId);
     if (item == null) {
-      Log.print('Cannot find `Item` with id: $itemId');
+      Log.print('[$runtimeType] Cannot find `Item` with id: $itemId');
       return MyItem(const ImpossibleItem(0), count: 0);
     }
 

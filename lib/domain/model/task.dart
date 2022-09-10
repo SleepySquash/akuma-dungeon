@@ -1,35 +1,34 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
 import 'dungeon.dart';
-import 'item.dart';
 import 'player.dart';
 import 'rank.dart';
+import 'reward.dart';
 
 abstract class Task {
   const Task();
 
-  String get id;
+  String get id => runtimeType.toString();
 
   String get name => id;
   String? get description => null;
+  String? get background => null;
   IconData get icon => Icons.abc;
 
   Rank get rank => Rank.F;
   int get level => 0;
+  String? get location => null;
 
   List<TaskStep> get steps;
 
-  List<TaskReward> get rewards => const [
-        MoneyReward(50),
-        ExpReward(10),
-        RankReward(1),
-      ];
+  List<Reward> get rewards => const [MoneyReward(50), ExpReward(10)];
 
   List<TaskCriteria> get criteria => const [];
+
+  Duration? get timeout => null;
 
   bool criteriaMet({Player? player}) {
     bool met = true;
@@ -46,19 +45,31 @@ abstract class Task {
   }
 }
 
-mixin GuildTask on Task {}
-
 class MyTask {
   MyTask({
     required this.task,
     this.progress = 0,
-  });
+    DateTime? acceptedAt,
+  }) : acceptedAt = acceptedAt ?? DateTime.now();
 
   final Task task;
 
   int progress;
+  DateTime acceptedAt;
 
   bool get isCompleted => progress >= task.steps.length;
+}
+
+class CompletedTask {
+  CompletedTask({
+    required this.id,
+    DateTime? completedAt,
+    this.count = 1,
+  }) : completedAt = completedAt ?? DateTime.now();
+
+  final String id;
+  final DateTime completedAt;
+  int count;
 }
 
 abstract class TaskStep {
@@ -78,56 +89,6 @@ class NovelStep extends TaskStep {
 class ExecuteStep extends TaskStep {
   const ExecuteStep(this.function);
   final FutureOr<void> Function() function;
-}
-
-abstract class TaskReward {
-  const TaskReward();
-}
-
-class MoneyReward extends TaskReward {
-  const MoneyReward(this.amount);
-  final int amount;
-}
-
-class ExpReward extends TaskReward {
-  const ExpReward(this.amount);
-  final int amount;
-}
-
-class ItemReward extends TaskReward {
-  const ItemReward(this.item, [this.count = 1]);
-  final Item item;
-  final int count;
-}
-
-class MinMaxItemReward extends ItemReward {
-  MinMaxItemReward(Item item, this.min, this.max)
-      : super(item, min + Random().nextInt(1 + max - min));
-
-  final int min;
-  final int max;
-}
-
-class ChanceItemReward extends ItemReward {
-  ChanceItemReward(Item item, this.chance)
-      : super(item, Random().nextDouble() > chance ? 1 : 0);
-
-  final double chance;
-}
-
-class RankReward extends TaskReward {
-  const RankReward(this.amount);
-  final int amount;
-}
-
-class ControlReward extends TaskReward {
-  const ControlReward(this.amount);
-  final int amount;
-}
-
-class ReputationReward extends TaskReward {
-  const ReputationReward(this.amount);
-  final int amount;
 }
 
 abstract class TaskCriteria {

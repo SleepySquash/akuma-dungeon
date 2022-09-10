@@ -125,7 +125,8 @@ class ItemEnhanceTab extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                const Text('EXP'),
+                const Text('EXP', style: TextStyle(fontSize: 13)),
+                const SizedBox(width: 5),
                 Expanded(
                   child: LinearProgressIndicator(
                     value: ((currentExp ?? 0) + additionalExp) / (maxExp ?? 1),
@@ -137,7 +138,7 @@ class ItemEnhanceTab extends StatelessWidget {
             ...stats.map((e) {
               return Row(
                 children: [
-                  Text(e.stat.type.name),
+                  Text(e.stat.type.localized),
                   const Spacer(),
                   if (e.stat.amount != e.amount)
                     Text('${e.stat.amount} -> ${e.amount}')
@@ -220,27 +221,76 @@ class ItemEnhanceTab extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Obx(() {
-                        return WideButton(
-                          onPressed: c.selectedItems.isNotEmpty
-                              ? () {
-                                  EnhanceSummary.show(
-                                    router.context!,
-                                    c.myItem.value!,
-                                    c.enhance(),
-                                  );
+                  const SizedBox(height: 10),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(4),
+                          child: ConditionalBackdropFilter(
+                            borderRadius: BorderRadius.circular(15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.4),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: DefaultTextStyle.merge(
+                                style: const TextStyle(fontSize: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text('Required'),
+                                    const SizedBox(height: 4),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Image.asset(
+                                          'assets/item/resource/Dogecoin.png',
+                                          width: 20,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Obx(() {
+                                          int amount = c.selectedItems.money;
+                                          return Text(
+                                            '$amount',
+                                            style: TextStyle(
+                                              color: c.hasMoney(amount)
+                                                  ? Colors.black
+                                                  : Colors.red,
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Obx(() {
+                          return WideButton(
+                            onPressed: c.selectedItems.isNotEmpty
+                                ? () {
+                                    EnhanceSummary.show(
+                                      router.context!,
+                                      c.myItem.value!,
+                                      c.enhance(),
+                                    );
 
-                                  c.selectedItems.clear();
-                                  c.enhanceKey.value = UniqueKey();
-                                }
-                              : null,
-                          child: const Center(child: Text('Enhance')),
-                        );
-                      }),
-                    ],
+                                    c.selectedItems.clear();
+                                    c.enhanceKey.value = UniqueKey();
+                                  }
+                                : null,
+                            child: const Text('Enhance'),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                   Expanded(child: grid()),
                 ],

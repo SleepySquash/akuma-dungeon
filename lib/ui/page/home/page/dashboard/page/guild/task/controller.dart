@@ -1,16 +1,36 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
-import '/domain/model/task.dart';
-import '/domain/service/task.dart';
-import '/util/obs/obs.dart';
+import '/domain/model/commission.dart';
+import '/domain/model/location.dart';
+import '/domain/service/location.dart';
 
 class TaskController extends GetxController {
-  TaskController(this._taskService);
+  TaskController(this._locationService);
 
-  final TaskService _taskService;
+  RxBool ticker = RxBool(false);
 
-  RxObsMap<String, Rx<MyTask>> get tasks => _taskService.tasks;
+  final LocationService _locationService;
 
-  void accept(Task task) => _taskService.accept(task);
-  void finish(MyTask task) => _taskService.finish(task);
+  late final Timer _ticker;
+
+  Rx<MyLocation> get location => _locationService.location;
+
+  @override
+  void onInit() {
+    _ticker = Timer.periodic(1.seconds, (_) => ticker.toggle());
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _ticker.cancel();
+    super.onClose();
+  }
+
+  void accept(MyCommission commission) =>
+      _locationService.acceptCommission(commission);
+  void finish(MyCommission commission) =>
+      _locationService.finishCommission(commission);
 }

@@ -19,14 +19,14 @@ import 'package:flutter/widgets.dart' show GlobalKey;
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-import 'task.dart';
+import 'reward.dart';
 
 /// Entity dealing damage to the [Player].
 abstract class Enemy {
   const Enemy();
 
   /// Unique ID of this [Enemy].
-  String get id;
+  String get id => runtimeType.toString();
 
   /// Visible name of this [Enemy].
   String get name => id;
@@ -52,7 +52,7 @@ abstract class Enemy {
   /// [Source] sounds played by this [Enemy] over some time periods.
   List<Source>? get idleSounds => null;
 
-  List<TaskReward> get drops => [];
+  List<Reward> get drops => [];
 
   double get damage => 0.05;
   Duration get interval => const Duration(seconds: 1);

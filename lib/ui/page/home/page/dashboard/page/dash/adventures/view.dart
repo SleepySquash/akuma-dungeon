@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/commission.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,17 +34,47 @@ class AdventuresView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: AdventuresController(Get.find(), Get.find(), Get.find()),
+      init: AdventuresController(
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+      ),
       builder: (AdventuresController c) {
         return Material(
           type: MaterialType.transparency,
           child: Obx(() {
-            Iterable<Rx<MyTask>> tasks =
-                c.tasks.values.where((e) => !e.value.isCompleted);
+            Iterable<MyCommission> tasks = c.location.value.commissions
+                .where((e) => e.accepted && !e.isCompleted);
 
             return ListView(
               shrinkWrap: true,
               children: [
+                if (c.queues.isEmpty && tasks.isEmpty)
+                  const ListTile(
+                    title: Center(
+                      child: Text('Чтобы взять задания, обратись в гильдию!'),
+                    ),
+                  ),
+                if (tasks.isNotEmpty) ...[
+                  const ListTile(title: Text('Поручения')),
+                  ...tasks.map((e) {
+                    return ListTile(
+                      leading: Icon(e.task.icon),
+                      title: Text(e.task.name),
+                      subtitle: e.task.description == null
+                          ? null
+                          : Text(e.task.description!),
+                      trailing: Text(
+                          '${e.task.rank.name} (${e.progress}/${e.task.steps.length})'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        c.executeCommission(e);
+                      },
+                    );
+                  }),
+                ],
+                if (c.queues.isNotEmpty && tasks.isNotEmpty) const Divider(),
                 if (c.queues.isNotEmpty) ...[
                   const ListTile(title: Text('Приключения')),
                   ...c.queues.values.map((m) {
@@ -110,37 +141,7 @@ class AdventuresView extends StatelessWidget {
                       ),
                     );
                   }),
-                  const Divider(),
                 ],
-                const ListTile(title: Text('Поручения')),
-                // const ListTile(
-                //   leading: Icon(Icons.auto_awesome),
-                //   title: Text('Начало пути'),
-                //   subtitle:
-                //       Text('Гильдмастер просил подойти к нему по готовности'),
-                //   trailing: Text('F'),
-                // ),
-                if (tasks.isEmpty)
-                  const ListTile(
-                    title: Center(
-                      child: Text('Чтобы взять задания, обратись в гильдию!'),
-                    ),
-                  ),
-                ...tasks.map((m) {
-                  Task e = m.value.task;
-                  return ListTile(
-                    leading: Icon(e.icon),
-                    title: Text(e.name),
-                    subtitle:
-                        e.description == null ? null : Text(e.description!),
-                    trailing: Text(
-                        '${e.rank.name} (${m.value.progress}/${e.steps.length})'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      c.executeTask(m.value);
-                    },
-                  );
-                }),
               ],
             );
           }),

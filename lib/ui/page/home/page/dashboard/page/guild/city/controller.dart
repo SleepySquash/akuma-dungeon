@@ -1,16 +1,17 @@
-import 'package:akuma/domain/model/location.dart';
-import 'package:akuma/domain/service/progression.dart';
 import 'package:get/get.dart';
 import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 
+import '/domain/model/location.dart';
+import '/domain/service/location.dart';
+
 class CityController extends GetxController {
-  CityController(this._progressionService);
+  CityController(this._locationService);
 
   final PanelController panelController = PanelController();
 
-  final ProgressionService _progressionService;
+  final LocationService _locationService;
 
-  Rx<MyLocation> get location => _progressionService.location;
+  Rx<MyLocation> get location => _locationService.location;
 
   @override
   void onReady() {
@@ -19,7 +20,7 @@ class CityController extends GetxController {
   }
 
   void setLocation(Location location) {
-    _progressionService.setLocation(location);
+    _locationService.goTo(location);
     panelController.open();
   }
 }

@@ -1,31 +1,33 @@
+import 'package:akuma/util/rewards.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/item/all.dart';
+import '/domain/model/reward.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
-import '/domain/model/task/main/all.dart';
+import '/domain/model/task/queue/main/all.dart';
 import '/domain/repository/task.dart';
 import '/domain/service/item.dart';
 import '/domain/service/player.dart';
-import '/domain/service/progression.dart';
 import '/router.dart';
 import '/util/obs/obs.dart';
+import 'location.dart';
 
 class TaskService extends DisposableInterface {
   TaskService(
     this._taskRepository,
     this._playerService,
     this._itemService,
-    this._progressionService,
+    this._locationService,
   );
 
   final AbstractTaskRepository _taskRepository;
 
   final PlayerService _playerService;
   final ItemService _itemService;
-  final ProgressionService _progressionService;
+  final LocationService _locationService;
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskRepository.tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues => _taskRepository.queues;
@@ -59,29 +61,21 @@ class TaskService extends DisposableInterface {
   void cancel(Task task) => _taskRepository.cancel(task);
   void finish(MyTask task) {
     if (task.isCompleted) {
-      for (var r in task.task.rewards) {
-        if (r is MoneyReward) {
-          _itemService.add(Dogecoin(r.amount));
-        } else if (r is ExpReward) {
-          _playerService.addExperience(r.amount);
-        } else if (r is ItemReward) {
-          if (r.count != 0) {
-            _itemService.add(r.item, r.count);
-          }
-        } else if (r is RankReward) {
-          _playerService.addRank(r.amount);
-        } else if (r is ControlReward) {
-          _progressionService.setLocationControl(
-            _progressionService.location.value.location,
-            _progressionService.location.value.control + r.amount,
-          );
-        } else if (r is ReputationReward) {
-          _progressionService.setLocationReputation(
-            _progressionService.location.value.location,
-            _progressionService.location.value.reputation + r.amount,
-          );
+      task.task.rewards.compute(
+        itemService: _itemService,
+        locationService: _locationService,
+        playerService: _playerService,
+      );
+
+      _taskRepository.getCompleted(task.task.id).then((v) {
+        if (v != null) {
+          ++v.count;
+        } else {
+          v = CompletedTask(id: task.task.id);
         }
-      }
+
+        _taskRepository.complete(v);
+      });
 
       cancel(task.task);
     }
@@ -147,9 +141,7 @@ class TaskService extends DisposableInterface {
 
     if (task.isCompleted) {
       router.home();
-      if (task.task is! GuildTask) {
-        finish(task);
-      }
+      finish(task);
     } else {
       int i = task.progress;
       TaskStep step = task.task.steps[i];

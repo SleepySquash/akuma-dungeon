@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
 
 import 'enemy.dart';
 import 'enemy/slime.dart';
-import 'task.dart';
+import 'reward.dart';
 
 /// Single stage of a dungeon.
 class DungeonStage {
@@ -31,15 +31,17 @@ class DungeonStage {
 abstract class DungeonSettings {
   const DungeonSettings();
 
+  String? get title;
   String? get background;
   Source? get music;
-  List<TaskReward>? get rewards => null;
+  List<Reward>? get rewards => null;
   DungeonStage? next();
 }
 
 class Dungeon extends DungeonSettings {
   Dungeon({
     required this.stages,
+    this.title,
     this.background,
     this.music,
     this.rewards,
@@ -48,13 +50,16 @@ class Dungeon extends DungeonSettings {
   final List<DungeonStage> stages;
 
   @override
+  final String? title;
+
+  @override
   final String? background;
 
   @override
   final Source? music;
 
   @override
-  final List<TaskReward>? rewards;
+  final List<Reward>? rewards;
 
   int _index = -1;
 
@@ -104,6 +109,9 @@ class InfiniteDungeon extends DungeonSettings {
 
   /// Callback, called when the [floor] increments.
   final void Function(int)? onProgress;
+
+  @override
+  String? title;
 
   @override
   String? background;

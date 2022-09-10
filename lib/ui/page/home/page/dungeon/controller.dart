@@ -17,6 +17,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:akuma/ui/page/home/page/dungeon/widget/skill2.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -27,29 +28,32 @@ import '/domain/model/dungeon.dart';
 import '/domain/model/enemy.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/player.dart';
+import '/domain/model/reward.dart';
 import '/domain/model/skill.dart';
 import '/domain/model/skill/all.dart';
-import '/domain/model/task.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/character.dart';
 import '/domain/service/item.dart';
+import '/domain/service/location.dart';
 import '/domain/service/player.dart';
-import '/domain/service/progression.dart';
 import '/router.dart';
 import '/ui/widget/modal_popup.dart';
 import '/ui/worker/music.dart';
 import '/util/extensions.dart';
+import '/util/rewards.dart';
 import 'component/result.dart';
 import 'widget/hit_indicator.dart';
 import 'widget/money.dart';
+import 'widget/skill.dart';
+import 'widget/title.dart';
 
 class DungeonController extends GetxController {
   DungeonController(
     this._playerService,
     this._itemService,
     this._characterService,
-    this._progressionService,
+    this._locationService,
     this._musicWorker, {
     required this.settings,
     this.onClear,
@@ -96,7 +100,7 @@ class DungeonController extends GetxController {
 
   final CharacterService _characterService;
 
-  final ProgressionService _progressionService;
+  final LocationService _locationService;
 
   final MusicWorker _musicWorker;
 
@@ -204,6 +208,31 @@ class DungeonController extends GetxController {
             onEnd: () => effects.remove(id),
           );
         },
+        onSkill: (Skill skill) {
+          Source? sound = skill.sounds?.sample(1).firstOrNull;
+          if (sound != null) {
+            _musicWorker.once(sound);
+          }
+
+          final String id = const Uuid().v4();
+          Rect? bounds = key.globalPaintBounds;
+          effects[id] = FloatingSkill(
+            direction: HitIndicatorFlowDirection.up,
+            position: Offset(
+              (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
+              (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
+            ),
+            asset: 'character/${e.character.value.character.asset}',
+            text: skill.name,
+            onEnd: () => effects.remove(id),
+          );
+
+          // effects[id] = SlidingSkill(
+          //   asset: 'character/${e.character.value.character.asset}',
+          //   text: skill.name,
+          //   onEnd: () => effects.remove(id),
+          // );
+        },
       );
     }).toList();
 
@@ -216,6 +245,14 @@ class DungeonController extends GetxController {
           duration.value = _stageStartedAt!.difference(DateTime.now());
         }
       });
+
+      if (settings.title != null) {
+        final String id = const Uuid().v4();
+        effects[id] = AnimatedTitle(
+          title: settings.title!,
+          onEnd: () => effects.remove(id),
+        );
+      }
     });
 
     super.onInit();
@@ -412,7 +449,7 @@ class DungeonController extends GetxController {
     }
 
     if (enemy.value!.enemy.drops.isNotEmpty) {
-      for (TaskReward r in enemy.value!.enemy.drops) {
+      for (Reward r in enemy.value!.enemy.drops) {
         if (r is ItemReward) {
           if (r.count > 0) {
             _itemService.add(r.item, r.count);
@@ -520,29 +557,11 @@ class DungeonController extends GetxController {
     if (!gameEnded.value) {
       _endGame();
 
-      for (var r in settings.rewards ?? []) {
-        if (r is MoneyReward) {
-          _itemService.add(Dogecoin(r.amount));
-        } else if (r is ItemReward) {
-          if (r.count > 0) {
-            _itemService.add(r.item);
-          }
-        } else if (r is ExpReward) {
-          _playerService.addExperience(r.amount);
-        } else if (r is RankReward) {
-          _playerService.addRank(r.amount);
-        } else if (r is ControlReward) {
-          _progressionService.setLocationControl(
-            _progressionService.location.value.location,
-            _progressionService.location.value.control + r.amount,
-          );
-        } else if (r is ReputationReward) {
-          _progressionService.setLocationReputation(
-            _progressionService.location.value.location,
-            _progressionService.location.value.reputation + r.amount,
-          );
-        }
-      }
+      settings.rewards?.compute(
+        itemService: _itemService,
+        locationService: _locationService,
+        playerService: _playerService,
+      );
 
       await ModalPopup.show(
         context: router.context!,
@@ -587,6 +606,7 @@ class PartyMember {
     this.onEnemyHit,
     this.onPlayerHeal,
     this.onShield,
+    this.onSkill,
   })  : key = key ?? GlobalKey(),
         hp = RxDouble(character.health.toDouble()) {
     init();
@@ -602,15 +622,51 @@ class PartyMember {
   final void Function(HitResult hit)? onEnemyHit;
   final void Function(int health)? onPlayerHeal;
   final void Function(int shield)? onShield;
+  final void Function(Skill)? onSkill;
 
-  final List<Timer> _timers = [];
+  final List<Timer> _primary = [];
+  final List<Timer> _cooldowns = [];
 
-  void init() {}
+  void init() {
+    for (MySkill s in character.character.value.skills) {
+      if (s.skill is CooldownSkill) {
+        CooldownSkill cooldown = s.skill as CooldownSkill;
+
+        int milliseconds = Random().nextInt(500);
+        _cooldowns.add(
+          Timer(Duration(milliseconds: milliseconds), () {
+            _cooldowns.add(
+              Timer.periodic(cooldown.cooldowns[s.level], (t) {
+                onSkill?.call(cooldown);
+                if (cooldown is SilentShotSkill) {
+                  for (int i = 0; i < cooldown.count; ++i) {
+                    _cooldowns.add(
+                      Timer(
+                        Duration(milliseconds: i * 200),
+                        () {
+                          double damage = character.damage *
+                              (cooldown.damages[s.level] / 100);
+                          onEnemyHit
+                              ?.call(HitResult(damage: max(damage.toInt(), 1)));
+                        },
+                      ),
+                    );
+                  }
+                }
+              }),
+            );
+          }),
+        );
+      }
+    }
+  }
+
   void dispose() {
-    for (Timer t in _timers) {
+    for (Timer t in [..._primary, ..._cooldowns]) {
       t.cancel();
     }
-    _timers.clear();
+    _primary.clear();
+    _cooldowns.clear();
   }
 
   void beforeStage() {
@@ -639,9 +695,9 @@ class PartyMember {
 
         int milliseconds =
             Random().nextInt(skill.periods[s.level].inMilliseconds);
-        _timers.add(
+        _primary.add(
           Timer(Duration(milliseconds: milliseconds), () {
-            _timers.add(
+            _primary.add(
               Timer.periodic(skill.periods[s.level], (t) {
                 double damage =
                     character.damage * (skill.damages[s.level] / 100);
@@ -655,9 +711,9 @@ class PartyMember {
 
         int milliseconds =
             Random().nextInt(skill.periods[s.level].inMilliseconds);
-        _timers.add(
+        _primary.add(
           Timer(Duration(milliseconds: milliseconds), () {
-            _timers.add(
+            _primary.add(
               Timer.periodic(skill.periods[s.level], (t) {
                 onPlayerHeal?.call(skill.healths[s.level]);
               }),
@@ -669,9 +725,9 @@ class PartyMember {
   }
 
   void afterEnemy() {
-    for (Timer t in _timers) {
+    for (Timer t in _primary) {
       t.cancel();
     }
-    _timers.clear();
+    _primary.clear();
   }
 }

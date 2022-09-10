@@ -37,4 +37,6 @@ class ModelTypeId {
   static const location = 15;
   static const statType = 16;
   static const stat = 17;
+  static const commission = 18;
+  static const completedTask = 19;
 }

@@ -1,17 +1,16 @@
 import 'package:audioplayers/audioplayers.dart' show Source;
 import 'package:collection/collection.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/rarity.dart';
-import '/domain/model/task.dart';
+import '/domain/model/reward.dart';
 import '/router.dart';
 import '/theme.dart';
 import '/ui/page/home/page/item/view.dart';
+import '/ui/page/home/widget/slivers.dart';
 import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/button.dart';
 import '/ui/widget/modal_popup.dart';
@@ -36,7 +35,7 @@ class DungeonDifficulty {
 
   final Source? music;
 
-  final List<TaskReward>? rewards;
+  final List<Reward>? rewards;
 }
 
 class DungeonPreviewView extends StatelessWidget {
@@ -77,7 +76,7 @@ class DungeonPreviewView extends StatelessWidget {
     return GetBuilder(
       init: DungeonPreviewController(),
       builder: (DungeonPreviewController c) {
-        Widget reward(int i, TaskReward r) {
+        Widget reward(int i, Reward r) {
           Widget? expanded;
           String? text;
           Rarity rarity = Rarity.common;
@@ -206,7 +205,7 @@ class DungeonPreviewView extends StatelessWidget {
                 slivers: [
                   SliverPersistentHeader(
                     pinned: true,
-                    delegate: _HeaderDelegate(title: name, asset: background),
+                    delegate: HeaderDelegate(title: name, asset: background),
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -268,110 +267,4 @@ class DungeonPreviewView extends StatelessWidget {
       },
     );
   }
-}
-
-class _HeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _HeaderDelegate({
-    this.title = '',
-    this.asset,
-  });
-
-  final String title;
-  final String? asset;
-
-  @override
-  double get maxExtent => 264;
-
-  @override
-  double get minExtent => 84;
-
-  @override
-  OverScrollHeaderStretchConfiguration get stretchConfiguration =>
-      OverScrollHeaderStretchConfiguration(
-        stretchTriggerOffset: maxExtent,
-        onStretchTrigger: () async {},
-      );
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    final progress = shrinkOffset / maxExtent;
-
-    return Material(
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 150),
-            opacity: progress,
-            child: const ColoredBox(color: Colors.blue),
-          ),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 150),
-            opacity: 1 - progress,
-            child:
-                Image.asset('assets/background/$asset.jpg', fit: BoxFit.cover),
-          ),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            alignment: Alignment.bottomCenter,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  const Color(0x00000000),
-                  const Color(0x00000000),
-                  Color.lerp(
-                    const Color(0x80000000),
-                    const Color(0x00000000),
-                    progress,
-                  )!,
-                ],
-              ),
-            ),
-          ),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            padding: EdgeInsets.lerp(
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              const EdgeInsets.only(bottom: 16),
-              progress,
-            ),
-            alignment: Alignment.lerp(
-              Alignment.bottomLeft,
-              Alignment.bottomCenter,
-              progress,
-            ),
-            child: Text(
-              title,
-              style: TextStyle.lerp(
-                Theme.of(context)
-                    .textTheme
-                    .headline4
-                    ?.copyWith(color: Colors.white),
-                Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Colors.white),
-                progress,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AllScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => PointerDeviceKind.values.toSet();
 }

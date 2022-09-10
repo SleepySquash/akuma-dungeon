@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/slime.dart';
 import '/domain/model/item/all.dart';
-import '/domain/model/task.dart';
+import '/domain/model/reward.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 import 'dungeon_preview/view.dart';

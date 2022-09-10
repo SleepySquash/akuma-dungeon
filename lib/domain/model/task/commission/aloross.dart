@@ -15,45 +15,51 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart' show IconData, Icons;
+import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
+import '/domain/model/commission.dart';
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/slime.dart';
 import '/domain/model/item/all.dart';
+import '/domain/model/location/all.dart';
 import '/domain/model/rank.dart';
-import '/domain/model/task_queue.dart';
+import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
 
-abstract class FDungeonTasks {
-  static List<Task> get tasks => const [
-        SlimeFieldsDungeonTask(),
-        SlimeForestDungeonTask(),
-        SlimeSwampDungeonTask(),
-        RestaurantDungeonTask(),
+abstract class AlorossCommissions {
+  static List<QuestCommission> get tasks => const [
+        AlorossSlimeFieldsCommission(),
+        AlorossSlimeForestCommission(),
+        AlorossSlimeSwampCommission(),
+        AlorossRestaurantCommission(),
       ];
-
-  static List<TaskQueue> get queues => const [];
 }
 
-abstract class FDungeonTask extends Task with GuildTask {
-  const FDungeonTask();
+abstract class AlorossCommission extends Task with QuestCommission {
+  const AlorossCommission();
 
   @override
-  List<TaskReward> get rewards => const [
-        MoneyReward(100),
-        RankReward(4),
-        ControlReward(1),
-        ReputationReward(1),
+  String? get location => 'aloross';
+
+  @override
+  Duration? get timeout => const Duration(minutes: 30);
+
+  @override
+  Rank get rank => Rank.F;
+
+  @override
+  List<Reward> get rewards => const [
+        MoneyReward(50),
+        ExpReward(100),
         ItemReward(Ruby(2)),
+        RankReward(1),
+        ReputationReward(AlorossLocation(), 1),
       ];
 }
 
-class SlimeFieldsDungeonTask extends FDungeonTask {
-  const SlimeFieldsDungeonTask();
-
-  @override
-  String get id => 'slime_fields_dungeon';
+class AlorossSlimeFieldsCommission extends AlorossCommission {
+  const AlorossSlimeFieldsCommission();
 
   @override
   String get name => 'Слаймы вокруг города';
@@ -66,7 +72,10 @@ class SlimeFieldsDungeonTask extends FDungeonTask {
   IconData get icon => Icons.landslide;
 
   @override
-  Rank get rank => Rank.F;
+  List<Reward> get rewards => [
+        ...super.rewards,
+        const ControlReward(AlorossLocation(), 1),
+      ];
 
   @override
   List<TaskStep> get steps => [
@@ -89,11 +98,8 @@ class SlimeFieldsDungeonTask extends FDungeonTask {
       ];
 }
 
-class SlimeForestDungeonTask extends FDungeonTask {
-  const SlimeForestDungeonTask();
-
-  @override
-  String get id => 'slime_forest_dungeon';
+class AlorossSlimeForestCommission extends AlorossCommission {
+  const AlorossSlimeForestCommission();
 
   @override
   String get name => 'Провести торговца через лес';
@@ -105,7 +111,10 @@ class SlimeForestDungeonTask extends FDungeonTask {
   IconData get icon => Icons.forest;
 
   @override
-  Rank get rank => Rank.F;
+  List<Reward> get rewards => [
+        ...super.rewards,
+        const ControlReward(AlorossLocation(), 1),
+      ];
 
   @override
   List<TaskStep> get steps => [
@@ -127,11 +136,8 @@ class SlimeForestDungeonTask extends FDungeonTask {
       ];
 }
 
-class SlimeSwampDungeonTask extends FDungeonTask {
-  const SlimeSwampDungeonTask();
-
-  @override
-  String get id => 'slime_swamp_dungeon';
+class AlorossSlimeSwampCommission extends AlorossCommission {
+  const AlorossSlimeSwampCommission();
 
   @override
   String get name => 'Слаймы на болоте';
@@ -143,7 +149,10 @@ class SlimeSwampDungeonTask extends FDungeonTask {
   IconData get icon => Icons.forest;
 
   @override
-  Rank get rank => Rank.F;
+  List<Reward> get rewards => [
+        ...super.rewards,
+        const ControlReward(AlorossLocation(), 1),
+      ];
 
   @override
   List<TaskStep> get steps => [
@@ -165,11 +174,8 @@ class SlimeSwampDungeonTask extends FDungeonTask {
       ];
 }
 
-class RestaurantDungeonTask extends FDungeonTask {
-  const RestaurantDungeonTask();
-
-  @override
-  String get id => 'restaurant_dungeon';
+class AlorossRestaurantCommission extends AlorossCommission {
+  const AlorossRestaurantCommission();
 
   @override
   String get name => 'Помощь на кухне';
@@ -181,10 +187,7 @@ class RestaurantDungeonTask extends FDungeonTask {
   IconData get icon => Icons.restaurant;
 
   @override
-  Rank get rank => Rank.F;
-
-  @override
-  List<TaskReward> get rewards => [
+  List<Reward> get rewards => [
         ...super.rewards,
         ItemReward(Items.consumable.sample(1).first),
       ];

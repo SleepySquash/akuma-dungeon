@@ -42,7 +42,7 @@ class DashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DashController(Get.find(), Get.find(), Get.find()),
+      init: DashController(Get.find(), Get.find(), Get.find(), Get.find()),
       builder: (DashController c) {
         Widget secretary() {
           return Obx(() {
@@ -114,14 +114,11 @@ class DashView extends StatelessWidget {
                             child: WideButton(
                               onPressed: () =>
                                   ProfileSettingsView.show(context),
-                              child: Center(
-                                widthFactor: 0,
-                                child: Text(
-                                  c.player.player.value.name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 17),
-                                ),
+                              child: Text(
+                                c.player.player.value.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 17),
                               ),
                             ),
                           ),
@@ -169,10 +166,17 @@ class DashView extends StatelessWidget {
           ),
           Expanded(
             flex: 4,
-            child: MenuTile(
-              onPressed: () => AdventuresView.show(context),
-              child: const Text('Приключения'),
-            ),
+            child: Obx(() {
+              int commissions = c.location.value.commissions
+                  .where((e) => e.accepted && !e.isCompleted)
+                  .length;
+
+              return MenuTile(
+                badge: commissions == 0 ? null : Text('$commissions'),
+                onPressed: () => AdventuresView.show(context),
+                child: const Text('Приключения и поручения'),
+              );
+            }),
           ),
           Expanded(
             flex: 3,

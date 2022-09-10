@@ -38,7 +38,7 @@ class InitiateFlower extends InitiateArtifactSet with Flower {
   List<StatChance> get stat => [StatChance(Stat.hp(1))];
 }
 
-abstract class AdventurerArtifactSet extends Artifact with Flower {
+abstract class AdventurerArtifactSet extends Artifact {
   const AdventurerArtifactSet(super.count);
 
   @override

@@ -58,21 +58,23 @@ class MyTaskAdapter extends TypeAdapter<MyTask> {
 
   @override
   MyTask read(BinaryReader reader) {
-    final id = reader.read() as String;
-    final progress = reader.read() as int;
+    final String id = reader.read() as String;
+    final int progress = reader.read() as int;
+    final DateTime acceptedAt = reader.read() as DateTime;
 
     final Task? task = Tasks.get(id);
     if (task == null) {
-      Log.print('Cannot find `Task` with id: $id');
+      Log.print('[$runtimeType] Cannot find `Task` with id: $id');
       return MyTask(task: const ImpossibleTask());
     }
 
-    return MyTask(task: task, progress: progress);
+    return MyTask(task: task, progress: progress, acceptedAt: acceptedAt);
   }
 
   @override
   void write(BinaryWriter writer, MyTask obj) {
     writer.write(obj.task.id);
     writer.write(obj.progress);
+    writer.write(obj.acceptedAt);
   }
 }

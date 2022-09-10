@@ -18,15 +18,15 @@ import 'package:get/get.dart';
 
 import '/domain/model/location.dart';
 import '/domain/repository/player.dart';
+import '/domain/service/location.dart';
 import '/domain/service/player.dart';
-import '/domain/service/progression.dart';
 
 class GuildController extends GetxController {
-  GuildController(this._playerService, this._progressionService);
+  GuildController(this._playerService, this._locationService);
 
   final PlayerService _playerService;
-  final ProgressionService _progressionService;
+  final LocationService _locationService;
 
   RxPlayer get player => _playerService.player;
-  Rx<MyLocation> get location => _progressionService.location;
+  Rx<MyLocation> get location => _locationService.location;
 }

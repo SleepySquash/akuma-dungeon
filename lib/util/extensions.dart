@@ -54,3 +54,29 @@ extension GlobalKeyExtension on GlobalKey {
     }
   }
 }
+
+extension LocalizedDurationExtension on Duration {
+  String hhMmSs() {
+    var microseconds = inMicroseconds;
+
+    var hours = microseconds ~/ Duration.microsecondsPerHour;
+    microseconds = microseconds.remainder(Duration.microsecondsPerHour);
+    var hoursPadding = hours < 10 ? '0' : '';
+
+    if (microseconds < 0) microseconds = -microseconds;
+
+    var minutes = microseconds ~/ Duration.microsecondsPerMinute;
+    microseconds = microseconds.remainder(Duration.microsecondsPerMinute);
+    var minutesPadding = minutes < 10 ? '0' : '';
+
+    var seconds = microseconds ~/ Duration.microsecondsPerSecond;
+    microseconds = microseconds.remainder(Duration.microsecondsPerSecond);
+    var secondsPadding = seconds < 10 ? '0' : '';
+
+    if (hours == 0) {
+      return '$minutesPadding$minutes:$secondsPadding$seconds';
+    }
+
+    return '$hoursPadding$hours:$minutesPadding$minutes:$secondsPadding$seconds';
+  }
+}

@@ -22,8 +22,8 @@ import 'package:page_transition/page_transition.dart';
 import '/domain/model/dungeon.dart';
 import '/router.dart';
 import 'page/dashboard/view.dart';
+import 'page/dungeon/entrance/view.dart';
 import 'page/dungeon/view.dart';
-import 'page/settings/view.dart';
 
 /// [Routes.home] page [RouterDelegate] that builds the nested [Navigator].
 ///
@@ -53,20 +53,16 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
           name: Routes.home,
           child: DashboardView(),
         ));
-      } else if (route == Routes.settings) {
-        pages.add(const MaterialPage(
-          key: ValueKey('SettingsPage'),
-          name: Routes.settings,
-          child: SettingsView(),
-        ));
       } else if (route == Routes.dungeon) {
         DungeonSettings? settings =
             _state.arguments?['args'] as DungeonSettings?;
         void Function()? onClear =
             _state.arguments?['onClear'] as FutureOr<void> Function()?;
+        PageTransitionType? transition =
+            _state.arguments?['transition'] as PageTransitionType?;
 
         if (settings == null) {
-          pages.add(MaterialPage(
+          pages.add(TransitionPage(
             child: Scaffold(
               appBar: AppBar(title: const Text('Error')),
               body: Center(
@@ -76,10 +72,47 @@ class HomeRouterDelegate extends RouterDelegate<RouteConfiguration>
             ),
           ));
         } else {
-          pages.add(MaterialPage(
-            key: const ValueKey('DungeonPage'),
-            name: Routes.dungeon,
-            child: DungeonView(settings: settings, onClear: onClear),
+          if (transition == null) {
+            pages.add(MaterialPage(
+              key: const ValueKey('DungeonPage'),
+              name: Routes.dungeon,
+              child: DungeonView(settings: settings, onClear: onClear),
+            ));
+          } else {
+            pages.add(TransitionPage(
+              key: const ValueKey('DungeonPage'),
+              type: transition,
+              name: Routes.dungeon,
+              child: DungeonView(settings: settings, onClear: onClear),
+            ));
+          }
+        }
+      } else if (route == Routes.entrance) {
+        DungeonSettings? settings =
+            _state.arguments?['args'] as DungeonSettings?;
+        String? asset = _state.arguments?['asset'] as String?;
+        void Function()? onClear =
+            _state.arguments?['onClear'] as FutureOr<void> Function()?;
+
+        if (settings == null || asset == null) {
+          pages.add(TransitionPage(
+            child: Scaffold(
+              appBar: AppBar(title: const Text('Error')),
+              body: Center(
+                child: Text(
+                    '${_state.arguments} is not a subtype of DungeonSettings, as it must be'),
+              ),
+            ),
+          ));
+        } else {
+          pages.add(TransitionPage(
+            key: const ValueKey('EntrancePage'),
+            name: Routes.entrance,
+            child: DungeonEntranceView(
+              settings: settings,
+              asset: asset,
+              onClear: onClear,
+            ),
           ));
         }
       } else if (route == Routes.nowhere) {
@@ -159,6 +192,9 @@ class TransitionPage<T> extends Page<T> {
   @override
   Route<T> createRoute(BuildContext context) {
     return PageTransition(
+      duration: const Duration(milliseconds: 300),
+      reverseDuration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
       type: type,
       settings: this,
       child: child,

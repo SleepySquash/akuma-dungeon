@@ -1,3 +1,4 @@
+import 'package:akuma/util/extensions.dart';
 import 'package:flutter/material.dart';
 
 class WideButton extends StatelessWidget {
@@ -37,7 +38,10 @@ class WideButton extends StatelessWidget {
       highlightElevation: 6.0,
       enableFeedback: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      fillColor: fillColor ?? Theme.of(context).colorScheme.primaryContainer,
+      fillColor: onPressed == null
+          ? (fillColor ?? Theme.of(context).colorScheme.primaryContainer)
+              .lighten(0.3)
+          : (fillColor ?? Theme.of(context).colorScheme.primaryContainer),
       splashColor:
           Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.12),
       focusColor:
@@ -53,7 +57,7 @@ class WideButton extends StatelessWidget {
         child: Container(
           height: mini ? 40 : 56,
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: child,
+          child: Center(widthFactor: 1, child: child),
         ),
       ),
     );

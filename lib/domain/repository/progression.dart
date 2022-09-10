@@ -17,20 +17,14 @@
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
-import '/domain/model/location.dart';
 import '/domain/model/progression.dart';
 import '/domain/repository/character.dart';
 
 abstract class AbstractProgressionRepository {
   Rx<GameProgression> get progression;
   Rx<RxMyCharacter?> get secretary;
-  Rx<MyLocation> get location;
 
   void setGoddessTower(int to);
   void setChapter(int to);
   void setSecretary(CharacterId? character);
-
-  void setLocation(LocationId location);
-  void setLocationControl(LocationId id, int to);
-  void setLocationReputation(LocationId id, int to);
 }

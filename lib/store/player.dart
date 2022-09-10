@@ -68,7 +68,8 @@ class PlayerRepository extends DisposableInterface
         if (character != null) {
           party.add(character);
         } else {
-          Log.print('Cannot find owned `MyCharacter` with id: $a');
+          Log.print(
+              '[$runtimeType] Cannot find owned `MyCharacter` with id: $a');
           stored.party.remove(a);
         }
       }
@@ -78,7 +79,8 @@ class PlayerRepository extends DisposableInterface
         if (item?.value is MyEquipable) {
           equipped.add(item!);
         } else {
-          Log.print('Cannot find owned `MyEquipable` with id: $w');
+          Log.print(
+              '[$runtimeType] Cannot find owned `MyEquipable` with id: $w');
           stored.equipped.remove(w);
         }
       }
@@ -88,7 +90,7 @@ class PlayerRepository extends DisposableInterface
         if (item?.value is MyWeapon) {
           weapons.add(item!);
         } else {
-          Log.print('Cannot find owned `MyWeapon` with id: $w');
+          Log.print('[$runtimeType] Cannot find owned `MyWeapon` with id: $w');
           stored.weapons.remove(w);
         }
       }

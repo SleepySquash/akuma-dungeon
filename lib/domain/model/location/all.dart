@@ -14,6 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/commission.dart';
+import 'package:akuma/domain/model/task/commission/aloross.dart';
+import 'package:akuma/domain/model/task/dungeon/aloross.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 
@@ -55,6 +58,12 @@ class AlorossLocation extends Location {
       ];
 
   @override
+  List<DungeonCommission> get dungeons => AlorossDungeons.all;
+
+  @override
+  List<QuestCommission> get commissions => AlorossCommissions.tasks;
+
+  @override
   IconData get icon => Icons.villa;
 }
 
@@ -72,6 +81,12 @@ class AlorossVillageLocation extends Location {
 
   @override
   String get asset => 'dungeon/fields';
+
+  @override
+  List<DungeonCommission> get dungeons => AlorossDungeons.all;
+
+  @override
+  List<QuestCommission> get commissions => AlorossCommissions.tasks;
 
   @override
   List<LocationFeature> get features => const [

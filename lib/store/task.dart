@@ -16,6 +16,8 @@
 
 import 'dart:async';
 
+import 'package:akuma/provider/hive/commission.dart';
+import 'package:akuma/provider/hive/completed_task.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -29,7 +31,12 @@ import '/util/obs/obs.dart';
 
 class TaskRepository extends DisposableInterface
     implements AbstractTaskRepository {
-  TaskRepository(this._taskHive, this._queueHive);
+  TaskRepository(
+    this._taskHive,
+    this._queueHive,
+    this._commissionHive,
+    this._completedTaskHive,
+  );
 
   @override
   late final RxObsMap<String, Rx<MyTask>> tasks;
@@ -39,10 +46,11 @@ class TaskRepository extends DisposableInterface
 
   final TaskHiveProvider _taskHive;
   final TaskQueueHiveProvider _queueHive;
+  final CommissionHiveProvider _commissionHive;
+  final CompletedTaskHiveProvider _completedTaskHive;
 
   StreamIterator<BoxEvent>? _localSubscription;
   StreamIterator<BoxEvent>? _queueSubscription;
-  StreamIterator<BoxEvent>? _progressSubscription;
 
   @override
   void onInit() {
@@ -97,6 +105,15 @@ class TaskRepository extends DisposableInterface
   @override
   void abandon(TaskQueue queue) => _queueHive.remove(queue.id);
 
+  @override
+  void complete(CompletedTask task) => _completedTaskHive.put(task);
+
+  @override
+  Future<CompletedTask?> getCompleted(String id) => _completedTaskHive.get(id);
+
+  @override
+  bool isCompleted(String id) => _completedTaskHive.contains(id);
+
   Future<void> _initLocalSubscription() async {
     _localSubscription = StreamIterator(_taskHive.boxEvents);
     while (await _localSubscription!.moveNext()) {
@@ -133,3 +150,37 @@ class TaskRepository extends DisposableInterface
     }
   }
 }
+
+/// Maximum `Commission`s for location `Aloross` is 4:
+/// [
+///   1. CommissionA [no timeout]
+///   2. CommissionB [timeout: 7 days]
+///   3. DungeonA    [timeout: 1 days]
+///   4. DungeonB    [timeout: 2 days]
+/// ]
+///
+/// => accept `CommissionB` => `MyTask` with `CommissionB.task` is created.
+///
+/// [
+///   1. CommissionA [no timeout]
+///   2. DungeonA    [timeout: 1 days]
+///   3. DungeonB    [timeout: 2 days]
+/// ]
+///
+/// Q: When a new `Commission` is placed?
+/// A: After `CommissionB` is completed (or failed) plus optional timeout.
+/// The same applies to `Dungeon`s.
+/// 
+/// Thus `MyCommission` should store its progress and accepted [DateTime].
+/// 
+/// So:
+/// [
+///   1. CommissionA [no timeout]
+///   2. CommissionB [ACCEPTED, at: 2022-09-10, progress: 1]
+///   3. DungeonA    [timeout: 1 days]
+///   4. DungeonB    [ACCEPTED, at: 2022-09-10, progress: 2]
+/// ]
+/// 
+/// Dungeon is a special `Commission`, whose `Task` is generated at CTOR.
+/// 
+/// Every `Location` has its own `Commission`s list.

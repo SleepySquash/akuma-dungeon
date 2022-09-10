@@ -14,9 +14,13 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/commission.dart';
+import 'package:akuma/ui/page/home/page/dashboard/page/guild/task/commission_preview/view.dart';
+import 'package:akuma/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
 import '/domain/model/task/dungeon/all.dart';
 import '/router.dart';
@@ -35,109 +39,69 @@ class TaskView extends StatelessWidget {
     return GetBuilder(
       init: TaskController(Get.find()),
       builder: (TaskController c) {
+        Widget commission(MyCommission e) {
+          return Obx(() {
+            // Used to update the durations every second.
+            // ignore: unused_local_variable
+            bool tick = c.ticker.value;
+
+            Duration? remaining;
+            if (!e.isCompleted && e.task.timeout != null) {
+              Duration diff = DateTime.now().difference(e.appearedAt);
+              if (diff > e.task.timeout!) {
+                remaining = Duration.zero;
+              } else {
+                remaining = e.task.timeout! - diff;
+              }
+            }
+
+            return ListTile(
+              leading: Icon(e.task.icon),
+              title: remaining == null
+                  ? Text(e.task.name)
+                  : Text('${e.task.name} [Осталось: ${remaining.hhMmSs()}]'),
+              subtitle:
+                  e.task.description == null ? null : Text(e.task.description!),
+              trailing: e.isCompleted
+                  ? const Icon(Icons.done_outline, color: Colors.green)
+                  : Text(e.task.rank.name),
+              onTap: () => CommissionPreviewView.show(
+                context,
+                commission: e,
+                onComplete: () => c.finish(e),
+                onAccept: () => c.accept(e),
+              ),
+            );
+          });
+        }
+
         return Material(
           type: MaterialType.transparency,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              ...DungeonTasks.tasks.map((e) {
-                return Obx(() {
-                  Rx<MyTask>? task = c.tasks[e.id];
-                  bool taken = task != null;
+          child: Obx(() {
+            Iterable<MyCommission> completed =
+                c.location.value.commissions.where((e) => e.isCompleted);
+            Iterable<MyCommission> available =
+                c.location.value.commissions.where((e) => !e.accepted);
+            Iterable<MyCommission> accepted = c.location.value.commissions
+                .where((e) => !e.isCompleted && e.accepted);
 
-                  bool done = false;
-                  if (task != null) {
-                    done = task.value.progress >= task.value.task.steps.length;
-                  }
-
-                  return ListTile(
-                    leading: done
-                        ? const Icon(Icons.check_circle)
-                        : taken
-                            ? const CircularProgressIndicator.adaptive()
-                            : Icon(e.icon),
-                    title: Text(e.name),
-                    subtitle:
-                        e.description == null ? null : Text(e.description!),
-                    trailing: Text(e.rank.name),
-                    onTap: done
-                        ? () {
-                            c.finish(task!.value);
-                            _rewards(task.value);
-                          }
-                        : taken
-                            ? null
-                            : () => c.accept(e),
-                  );
-                });
-              }),
-            ],
-          ),
+            return ListView(
+              shrinkWrap: true,
+              children: [
+                if (completed.isNotEmpty)
+                  const ListTile(title: Text('Завершённые')),
+                ...completed.map(commission),
+                if (available.isNotEmpty)
+                  const ListTile(title: Text('Доступные')),
+                ...available.map(commission),
+                if (accepted.isNotEmpty)
+                  const ListTile(title: Text('Принятые')),
+                ...accepted.map(commission),
+              ],
+            );
+          }),
         );
       },
-    );
-  }
-
-  void _rewards(MyTask task) {
-    ModalPopup.show(
-      context: router.context!,
-      maxWidth: 400,
-      child: Builder(builder: (context) {
-        return ListView(
-          shrinkWrap: true,
-          children: [
-            const ListTile(title: Text('Thank you for your work!')),
-            const Divider(),
-            const ListTile(title: Text('Rewards:')),
-            ...task.task.rewards.map((e) {
-              IconData? icon;
-              Widget? title;
-
-              if (e is MoneyReward) {
-                icon = Icons.money;
-                title = Text('${e.amount} gold');
-              } else if (e is ExpReward) {
-                icon = Icons.person;
-                title = Text('${e.amount} experience');
-              } else if (e is RankReward) {
-                icon = Icons.add_card;
-                title = Text('${e.amount} rank progression');
-              } else if (e is ItemReward) {
-                if (e.count == 0) {
-                  return Container();
-                }
-
-                icon = Icons.check_box;
-                title = Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset('assets/item/${e.item.asset}.png', height: 30),
-                    const SizedBox(width: 5),
-                    Text('${e.item.count * e.count} ${e.item.name}'),
-                  ],
-                );
-              } else if (e is ControlReward) {
-                icon = Icons.control_camera;
-                title = Text('${e.amount} control');
-              } else if (e is ReputationReward) {
-                icon = Icons.people;
-                title = Text('${e.amount} reputation');
-              }
-
-              return ListTile(
-                leading: icon == null ? null : Icon(icon),
-                title: title,
-              );
-            }),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Ok'),
-            ),
-          ],
-        );
-      }),
     );
   }
 }

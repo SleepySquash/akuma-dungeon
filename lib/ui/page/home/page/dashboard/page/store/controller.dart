@@ -20,25 +20,25 @@ import '/domain/model/item/all.dart';
 import '/domain/model/location.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/item.dart';
+import '/domain/service/location.dart';
 import '/domain/service/player.dart';
-import '/domain/service/progression.dart';
 
 class StoreController extends GetxController {
   StoreController(
     this._playerService,
     this._itemService,
-    this._progressionService,
+    this._locationService,
   );
 
   final RxBool eventTab = RxBool(false);
 
   final PlayerService _playerService;
   final ItemService _itemService;
-  final ProgressionService _progressionService;
+  final LocationService _locationService;
 
   RxPlayer get player => _playerService.player;
   int get rubies => _itemService.amount(const Ruby());
   int get heartCards => _itemService.amount(const HeartCard());
 
-  Rx<MyLocation> get location => _progressionService.location;
+  Rx<MyLocation> get location => _locationService.location;
 }

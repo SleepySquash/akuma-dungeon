@@ -63,7 +63,7 @@ class PlayerWorker extends DisposableInterface {
 
           _notificationService.notify(
             LocalNotification(
-              title: '$newLevel',
+              title: '${newLevel + 1}',
               subtitle: 'Новый уровень',
               type: LocalNotificationType.centered,
             ),

@@ -38,7 +38,6 @@ class GuildView extends StatelessWidget {
             Positioned.fill(
               child: Obx(() {
                 return Image.asset(
-                  // 'assets/background/location/guild.jpg',
                   'assets/background/${c.location.value.location.asset}.jpg',
                   alignment: Alignment.centerRight,
                   fit: BoxFit.cover,
@@ -95,10 +94,17 @@ class GuildView extends StatelessWidget {
           Expanded(
             flex: 4,
             child: Obx(() {
+              int commissions = c.location.value.commissions
+                  .where((e) => e.isCompleted)
+                  .length;
+
               return MenuTile(
-                locked: !c.location.value.hasAdventurerGuild,
+                badge: commissions == 0 ? null : Text('$commissions'),
+                locked: c.location.value.commissions.isEmpty,
                 onPressed: () => TaskView.show(context),
-                child: const Text('Поручения'),
+                child: c.location.value.hasAdventurerGuild
+                    ? const Text('Поручения')
+                    : const Text('Подземелья и задания'),
               );
             }),
           ),

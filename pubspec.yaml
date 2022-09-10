@@ -62,9 +62,12 @@ flutter:
     - assets/item/weapon/
     - assets/l10n/
     - assets/monster/slime/
+    - assets/monster/special/
     - assets/music/
     - assets/skill/
     - assets/sound/
+    - assets/sprite/
     - assets/voice/darknightprincess/
     - assets/voice/intro/
+    - assets/voice/Rozzi/
     - assets/voice/sfx/

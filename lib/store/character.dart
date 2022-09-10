@@ -60,7 +60,8 @@ class CharacterRepository extends DisposableInterface
               if (item?.value is MyArtifact) {
                 artifacts.add(item!);
               } else {
-                Log.print('Cannot find owned `MyArtifact` with id: $a');
+                Log.print(
+                    '[$runtimeType] Cannot find owned `MyArtifact` with id: $a');
                 e.artifacts.remove(a);
               }
             }
@@ -71,7 +72,8 @@ class CharacterRepository extends DisposableInterface
               if (item?.value is MyWeapon) {
                 weapons.add(item!);
               } else {
-                Log.print('Cannot find owned `MyWeapon` with id: $w');
+                Log.print(
+                    '[$runtimeType] Cannot find owned `MyWeapon` with id: $w');
                 e.weapons.remove(w);
               }
             }

@@ -20,10 +20,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'domain/model/dungeon.dart';
 import 'domain/model/player.dart';
 import 'domain/repository/flag.dart';
+import 'domain/repository/location.dart';
 import 'domain/repository/player.dart';
 import 'domain/repository/progression.dart';
 import 'domain/repository/settings.dart';
@@ -32,11 +34,14 @@ import 'domain/service/auth.dart';
 import 'domain/service/character.dart';
 import 'domain/service/gacha.dart';
 import 'domain/service/item.dart';
+import 'domain/service/location.dart';
 import 'domain/service/player.dart';
 import 'domain/service/progression.dart';
 import 'domain/service/task.dart';
 import 'provider/hive/application_settings.dart';
 import 'provider/hive/character.dart';
+import 'provider/hive/commission.dart';
+import 'provider/hive/completed_task.dart';
 import 'provider/hive/flag.dart';
 import 'provider/hive/item.dart';
 import 'provider/hive/location.dart';
@@ -47,6 +52,7 @@ import 'provider/hive/task.dart';
 import 'store/character.dart';
 import 'store/flag.dart';
 import 'store/item.dart';
+import 'store/location.dart';
 import 'store/player.dart';
 import 'store/progression.dart';
 import 'store/settings.dart';
@@ -69,10 +75,10 @@ late RouterState router;
 class Routes {
   static const auth = '/';
   static const dungeon = '/dungeon';
+  static const entrance = '/entrance';
   static const home = '/';
   static const introduction = '/introduction';
   static const nowhere = '/nowhere';
-  static const settings = '/settings';
 }
 
 /// Application's router state.
@@ -274,6 +280,9 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             await Future.wait([
               deps.put(ApplicationSettingsHiveProvider()).init(),
               deps.put(CharacterHiveProvider()).init(),
+              deps.put(CommissionHiveProvider()).init(),
+              deps.put(CompletedTaskHiveProvider()).init(),
+              deps.put(CurrentLocationHiveProvider()).init(),
               deps.put(FlagHiveProvider()).init(),
               deps.put(ItemHiveProvider()).init(),
               deps.put(LocationHiveProvider()).init(),
@@ -315,8 +324,7 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
                 characterRepository,
               ),
             );
-            ProgressionService progressionService =
-                deps.put(ProgressionService(progressionRepository));
+            deps.put(ProgressionService(progressionRepository));
 
             AbstractPlayerRepository playerRepository =
                 deps.put<AbstractPlayerRepository>(
@@ -330,16 +338,28 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             PlayerService playerService =
                 deps.put(PlayerService(playerRepository));
 
+            AbstractLocationRepository locationRepository =
+                deps.put<AbstractLocationRepository>(
+              LocationRepository(Get.find(), Get.find(), Get.find()),
+            );
+            LocationService locationService = deps.put(
+              LocationService(
+                locationRepository,
+                itemService,
+                playerService,
+              ),
+            );
+
             AbstractTaskRepository taskRepository =
                 deps.put<AbstractTaskRepository>(
-              TaskRepository(Get.find(), Get.find()),
+              TaskRepository(Get.find(), Get.find(), Get.find(), Get.find()),
             );
             TaskService taskService = deps.put(
               TaskService(
                 taskRepository,
                 playerService,
                 itemService,
-                progressionService,
+                locationService,
               ),
             );
 
@@ -399,16 +419,31 @@ extension RouteLinks on RouterState {
     arguments = {'args': player};
   }
 
-  /// Changes router location to the [Routes.settings] page.
-  void settings({bool push = true}) => (push ? this.push : go)(Routes.settings);
-
   /// Changes router location to the [Routes.introduction] page.
   void introduction() => go(Routes.introduction);
 
   /// Changes router location to the [Routes.dungeon] page.
-  void dungeon(DungeonSettings settings, {FutureOr<void> Function()? onClear}) {
+  void dungeon(
+    DungeonSettings settings, {
+    FutureOr<void> Function()? onClear,
+    PageTransitionType? transition,
+  }) {
     go(Routes.dungeon);
-    arguments = {'args': settings, 'onClear': onClear};
+    arguments = {
+      'args': settings,
+      'onClear': onClear,
+      'transition': transition,
+    };
+  }
+
+  /// Changes router location to the [Routes.entrance] page.
+  void entrance(
+    DungeonSettings settings,
+    String asset, {
+    FutureOr<void> Function()? onClear,
+  }) {
+    go(Routes.entrance);
+    arguments = {'args': settings, 'asset': asset, 'onClear': onClear};
   }
 
   /// Changes router location to the [Routes.nowhere] page.

@@ -1,3 +1,6 @@
+import 'package:akuma/domain/model/commission.dart';
+import 'package:akuma/domain/model/location.dart';
+import 'package:akuma/domain/service/location.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/progression.dart';
@@ -14,16 +17,19 @@ class AdventuresController extends GetxController {
     this._playerService,
     this._taskService,
     this._progressionService,
+    this._locationService,
   );
 
   final PlayerService _playerService;
   final TaskService _taskService;
   final ProgressionService _progressionService;
+  final LocationService _locationService;
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskService.tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues => _taskService.queues;
 
   Rx<GameProgression> get progression => _progressionService.progression;
+  Rx<MyLocation> get location => _locationService.location;
 
   RxPlayer get player => _playerService.player;
 
@@ -31,6 +37,8 @@ class AdventuresController extends GetxController {
   void executeTask(MyTask task) => _taskService.executeTask(task);
   void executeQueue(MyTaskQueue queue) => _taskService.executeQueue(queue);
   void restartQueue(MyTaskQueue queue) => _taskService.restartQueue(queue);
+  void executeCommission(MyCommission commission) =>
+      _locationService.executeCommission(commission);
   bool criteriaMet(Task task) =>
       task.criteriaMet(player: _playerService.player.player.value);
   void setGoddessTower(int to) => _progressionService.setGoddessTower(to);

@@ -64,7 +64,7 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
     final id = reader.read() as String;
     final TaskQueue? queue = TasksQueues.get(id);
     if (queue == null) {
-      Log.print('Cannot find `TaskQueue` with id: $id');
+      Log.print('[$runtimeType] Cannot find `TaskQueue` with id: $id');
       return MyTaskQueue(queue: ImpossibleTaskQueue());
     }
 
@@ -76,7 +76,7 @@ class MyTaskQueueAdapter extends TypeAdapter<MyTaskQueue> {
     if (activeId != null) {
       active = Tasks.get(activeId);
       if (active == null) {
-        Log.print('Cannot find `Task` with id: $activeId');
+        Log.print('[$runtimeType] Cannot find `Task` with id: $activeId');
       }
     }
 

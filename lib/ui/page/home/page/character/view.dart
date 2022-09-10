@@ -206,12 +206,10 @@ class _CharacterViewState extends State<CharacterView>
                                           c.myCharacter!.character.value.id
                                       ? c.removeSecretary
                                       : c.makeSecretary,
-                                  child: Center(
-                                    child: c.progression.value.secretary ==
-                                            c.myCharacter!.character.value.id
-                                        ? const Text('Remove secretary')
-                                        : const Text('Make secretary'),
-                                  ),
+                                  child: c.progression.value.secretary ==
+                                          c.myCharacter!.character.value.id
+                                      ? const Text('Remove secretary')
+                                      : const Text('Make secretary'),
                                 );
                               }),
                             const SizedBox(width: 10, height: 10),

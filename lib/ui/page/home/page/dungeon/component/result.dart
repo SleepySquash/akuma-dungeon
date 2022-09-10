@@ -16,7 +16,7 @@
 
 import 'package:flutter/material.dart';
 
-import '/domain/model/task.dart';
+import '/domain/model/reward.dart';
 import '/router.dart';
 import '/ui/page/home/page/dungeon/controller.dart';
 

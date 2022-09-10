@@ -17,7 +17,6 @@
 import 'package:hive_flutter/adapters.dart';
 
 import '/domain/model/character.dart';
-import '/domain/model/location.dart';
 import '/domain/model/progression.dart';
 import 'base.dart';
 
@@ -33,7 +32,6 @@ class ProgressionHiveProvider extends HiveBaseProvider<GameProgression> {
   void registerAdapters() {
     Hive.maybeRegisterAdapter(CharacterIdAdapter());
     Hive.maybeRegisterAdapter(GameProgressionAdapter());
-    Hive.maybeRegisterAdapter(LocationIdAdapter());
   }
 
   /// Returns the stored [GameProgression] from the [Hive].

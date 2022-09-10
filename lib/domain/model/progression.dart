@@ -10,7 +10,6 @@ class GameProgression extends HiveObject {
   GameProgression({
     this.goddessTowerLevel = 0,
     this.storyChapter = 1,
-    this.location = const LocationId('aloross'),
     this.secretary,
   });
 
@@ -21,8 +20,5 @@ class GameProgression extends HiveObject {
   int storyChapter;
 
   @HiveField(2)
-  LocationId location;
-
-  @HiveField(3)
   CharacterId? secretary;
 }

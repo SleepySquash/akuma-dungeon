@@ -20,8 +20,6 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
 import '/domain/model/character.dart';
-import '/domain/model/location.dart';
-import '/domain/model/location/all.dart';
 import '/domain/model/progression.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/progression.dart';
@@ -45,7 +43,6 @@ class ProgressionRepository extends DisposableInterface
   final CharacterRepository _characterRepository;
 
   StreamIterator? _localSubscription;
-  StreamIterator? _locationSubscription;
   StreamSubscription? _charactersSubscription;
 
   @override
@@ -53,9 +50,6 @@ class ProgressionRepository extends DisposableInterface
 
   @override
   late final Rx<RxMyCharacter?> secretary;
-
-  @override
-  late final Rx<MyLocation> location;
 
   @override
   void onInit() {
@@ -68,7 +62,7 @@ class ProgressionRepository extends DisposableInterface
         secretary = Rx(character);
       } else {
         Log.print(
-          'Cannot find owned `MyCharacter` with id: ${stored.secretary}',
+          '[$runtimeType] Cannot find owned `MyCharacter` with id: ${stored.secretary}',
         );
         secretary = Rx(null);
       }
@@ -77,15 +71,6 @@ class ProgressionRepository extends DisposableInterface
     }
 
     progression = Rx(stored ?? GameProgression());
-
-    MyLocation? my = _locationHive.get(progression.value.location);
-    if (my != null) {
-      location = Rx(my);
-    } else {
-      Location place = Locations.get(progression.value.location.val) ??
-          const AlorossLocation();
-      location = Rx(MyLocation(place));
-    }
 
     _charactersSubscription =
         _characterRepository.characters.changes.listen((e) {
@@ -108,7 +93,6 @@ class ProgressionRepository extends DisposableInterface
     });
 
     _initLocalSubscription();
-    _initLocationSubscription();
 
     super.onInit();
   }
@@ -116,7 +100,6 @@ class ProgressionRepository extends DisposableInterface
   @override
   void onClose() {
     _localSubscription?.cancel();
-    _locationSubscription?.cancel();
     _charactersSubscription?.cancel();
     super.onClose();
   }
@@ -153,57 +136,6 @@ class ProgressionRepository extends DisposableInterface
     }
   }
 
-  @override
-  void setLocation(LocationId id) {
-    Location? place;
-    MyLocation? my = _locationHive.get(id);
-
-    if (my != null) {
-      location.value = my;
-    } else {
-      place = Locations.get(id.val);
-      if (place != null) {
-        location.value = MyLocation(place);
-      }
-    }
-
-    if (my != null || place != null) {
-      GameProgression stored = _progressHive.get() ?? progression.value;
-      stored.location = id;
-      _progressHive.set(stored);
-    }
-  }
-
-  @override
-  void setLocationControl(LocationId id, int to) {
-    MyLocation? stored = _locationHive.get(id)?..control = to;
-    if (stored == null) {
-      Location? location = Locations.get(id.val);
-      if (location != null) {
-        stored = MyLocation(location, control: to);
-      }
-    }
-
-    if (stored != null) {
-      _locationHive.put(stored);
-    }
-  }
-
-  @override
-  void setLocationReputation(LocationId id, int to) {
-    MyLocation? stored = _locationHive.get(id)?..reputation = to;
-    if (stored == null) {
-      Location? location = Locations.get(id.val);
-      if (location != null) {
-        stored = MyLocation(location, reputation: to);
-      }
-    }
-
-    if (stored != null) {
-      _locationHive.put(stored);
-    }
-  }
-
   void _initLocalSubscription() async {
     _localSubscription = StreamIterator(_progressHive.boxEvents);
     while (await _localSubscription!.moveNext()) {
@@ -213,21 +145,6 @@ class ProgressionRepository extends DisposableInterface
       } else {
         progression.value = e.value;
         progression.refresh();
-      }
-    }
-  }
-
-  void _initLocationSubscription() async {
-    _locationSubscription = StreamIterator(_locationHive.boxEvents);
-    while (await _locationSubscription!.moveNext()) {
-      BoxEvent e = _locationSubscription!.current;
-      if (location.value.id.val == e.key) {
-        if (e.deleted) {
-          // No-op.
-        } else {
-          location.value = e.value;
-          location.refresh();
-        }
       }
     }
   }

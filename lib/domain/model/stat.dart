@@ -193,3 +193,30 @@ extension ResolveStatChance on List<StatChance> {
     return stats;
   }
 }
+
+extension StatTypeLocalized on StatType {
+  String get localized {
+    switch (this) {
+      case StatType.atk:
+        return 'ATK';
+      case StatType.atkPercent:
+        return 'ATK%';
+      case StatType.critDamage:
+        return 'Crit DMG';
+      case StatType.critRate:
+        return 'Crit Rate';
+      case StatType.def:
+        return 'DEF';
+      case StatType.defPercent:
+        return 'DEF%';
+      case StatType.hp:
+        return 'HP';
+      case StatType.hpPercent:
+        return 'HP%';
+      case StatType.ult:
+        return 'ULT';
+      case StatType.ultPercent:
+        return 'ULT%';
+    }
+  }
+}

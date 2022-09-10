@@ -223,7 +223,7 @@ class _ItemViewState extends State<ItemView>
                                 _dismiss();
                               }
                             },
-                            child: const Center(child: Text('Switch')),
+                            child: const Text('Switch'),
                           ),
                         const SizedBox(width: 10, height: 10),
                       ],

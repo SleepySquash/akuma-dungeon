@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 import '/domain/model_type_id.dart';
 import '/util/new_type.dart';
+import 'commission.dart';
 
 part 'location.g.dart';
 
@@ -19,6 +20,9 @@ abstract class Location {
   IconData get icon => Icons.help;
 
   List<LocationFeature> get features => const [];
+
+  List<QuestCommission> get commissions => const [];
+  List<DungeonCommission> get dungeons => const [];
 }
 
 @HiveType(typeId: ModelTypeId.locationId)
@@ -50,12 +54,16 @@ class MyLocation {
     this.location, {
     this.control = 0,
     this.reputation = 0,
-  }) : id = LocationId(location.id);
+    List<MyCommission>? commissions,
+  })  : id = LocationId(location.id),
+        commissions = commissions ?? List.empty(growable: true);
 
   final Location location;
   final LocationId id;
   int control;
   int reputation;
+
+  List<MyCommission> commissions;
 
   bool get hasAdventurerGuild =>
       location.features.whereType<AdventurerGuildFeature>().isNotEmpty;

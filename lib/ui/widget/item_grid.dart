@@ -337,21 +337,20 @@ class ItemGridState extends State<ItemGrid> {
                   ),
                 ),
                 child: Obx(() {
-                  return Center(
-                    child: e.value is MyWeapon
-                        ? Text(
-                            'Lv. ${(e.value as MyWeapon).level + 1}',
-                          )
-                        : e.value is MyEquipable
-                            ? Text(
-                                'Lv. ${(e.value as MyEquipable).level + 1}',
-                              )
-                            : e.value is MyArtifact
-                                ? Text(
-                                    'Lv. ${(e.value as MyArtifact).level + 1}',
-                                  )
-                                : Text('${e.value.count}'),
-                  );
+                  MyItem item = e.value;
+
+                  String subtitle;
+                  if (item is MyWeapon) {
+                    subtitle = 'Lv. ${item.level + 1}';
+                  } else if (item is MyEquipable) {
+                    subtitle = 'Lv. ${item.level + 1}';
+                  } else if (item is MyArtifact) {
+                    subtitle = 'Lv. ${item.level + 1}';
+                  } else {
+                    subtitle = '${e.value.count}';
+                  }
+
+                  return Center(child: Text(subtitle));
                 }),
               )
             ],
