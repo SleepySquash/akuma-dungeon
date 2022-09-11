@@ -28,8 +28,6 @@ class MyTaskQueue {
         next = queue.tasks[progress + 1];
       }
     }
-
-    print('active: ${active?.task.id}, next is ${next?.id}');
   }
 
   final TaskQueue queue;

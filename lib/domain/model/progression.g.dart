@@ -20,19 +20,25 @@ class GameProgressionAdapter extends TypeAdapter<GameProgression> {
       goddessTowerLevel: fields[0] as int,
       storyChapter: fields[1] as int,
       secretary: fields[2] as CharacterId?,
+      questsDone: fields[3] as int,
+      dungeonsCleared: fields[4] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, GameProgression obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.goddessTowerLevel)
       ..writeByte(1)
       ..write(obj.storyChapter)
       ..writeByte(2)
-      ..write(obj.secretary);
+      ..write(obj.secretary)
+      ..writeByte(3)
+      ..write(obj.questsDone)
+      ..writeByte(4)
+      ..write(obj.dungeonsCleared);
   }
 
   @override

@@ -136,6 +136,20 @@ class ProgressionRepository extends DisposableInterface
     }
   }
 
+  @override
+  void setDungeonsCleared(int to) {
+    GameProgression stored = _progressHive.get() ?? progression.value;
+    stored.dungeonsCleared = to;
+    _progressHive.set(stored);
+  }
+
+  @override
+  void setQuestsDone(int to) {
+    GameProgression stored = _progressHive.get() ?? progression.value;
+    stored.questsDone = to;
+    _progressHive.set(stored);
+  }
+
   void _initLocalSubscription() async {
     _localSubscription = StreamIterator(_progressHive.boxEvents);
     while (await _localSubscription!.moveNext()) {

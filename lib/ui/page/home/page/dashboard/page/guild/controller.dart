@@ -16,17 +16,26 @@
 
 import 'package:get/get.dart';
 
+import '/domain/model/flag.dart';
 import '/domain/model/location.dart';
 import '/domain/repository/player.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/location.dart';
 import '/domain/service/player.dart';
+import '/util/obs/obs.dart';
 
 class GuildController extends GetxController {
-  GuildController(this._playerService, this._locationService);
+  GuildController(
+    this._flagService,
+    this._playerService,
+    this._locationService,
+  );
 
-  final PlayerService _playerService;
+  final FlagService _flagService;
   final LocationService _locationService;
+  final PlayerService _playerService;
 
   RxPlayer get player => _playerService.player;
   Rx<MyLocation> get location => _locationService.location;
+  RxObsMap<Flag, bool> get flags => _flagService.flags;
 }

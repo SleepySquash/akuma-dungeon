@@ -7,12 +7,14 @@ class MenuTile extends StatelessWidget {
   const MenuTile({
     Key? key,
     this.locked = false,
+    this.lockedReason = const [],
     this.onPressed,
     this.badge,
     this.child,
   }) : super(key: key);
 
   final bool locked;
+  final List<Widget> lockedReason;
 
   final void Function()? onPressed;
 
@@ -38,6 +40,7 @@ class MenuTile extends StatelessWidget {
         toAnimate: false,
         child: LockedWidget(
           locked: locked,
+          additional: lockedReason,
           borderRadius: BorderRadius.circular(12),
           child: RawMaterialButton(
             elevation: 6.0,

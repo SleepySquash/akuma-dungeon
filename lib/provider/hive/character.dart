@@ -29,9 +29,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyCharacter]s.
 class CharacterHiveProvider extends HiveBaseProvider<MyCharacter> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'character';
 
   /// Returns the list of [MyCharacter]s from the [Hive].

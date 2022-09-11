@@ -27,4 +27,6 @@ abstract class AbstractProgressionRepository {
   void setGoddessTower(int to);
   void setChapter(int to);
   void setSecretary(CharacterId? character);
+  void setDungeonsCleared(int to);
+  void setQuestsDone(int to);
 }

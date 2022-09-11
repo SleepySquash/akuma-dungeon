@@ -18,6 +18,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/domain/model/flag.dart';
 import '/domain/model/rank.dart';
 import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/menu_tile.dart';
@@ -31,7 +32,7 @@ class GuildView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: GuildController(Get.find(), Get.find()),
+      init: GuildController(Get.find(), Get.find(), Get.find()),
       builder: (GuildController c) {
         return Stack(
           children: [
@@ -100,7 +101,8 @@ class GuildView extends StatelessWidget {
 
               return MenuTile(
                 badge: commissions == 0 ? null : Text('$commissions'),
-                locked: c.location.value.commissions.isEmpty,
+                locked: c.location.value.commissions.isEmpty ||
+                    !c.flags.commissionUnlocked,
                 onPressed: () => TaskView.show(context),
                 child: c.location.value.hasAdventurerGuild
                     ? const Text('Поручения')
@@ -114,10 +116,13 @@ class GuildView extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: MenuTile(
-                    onPressed: () => CityView.show(context),
-                    child: Obx(() => Text(c.location.value.location.name)),
-                  ),
+                  child: Obx(() {
+                    return MenuTile(
+                      locked: !c.flags.locationsUnlocked,
+                      onPressed: () => CityView.show(context),
+                      child: Obx(() => Text(c.location.value.location.name)),
+                    );
+                  }),
                 ),
                 Expanded(
                   flex: 1,

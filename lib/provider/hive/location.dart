@@ -29,9 +29,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyLocation]s.
 class LocationHiveProvider extends HiveBaseProvider<MyLocation> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'location';
 
   @override
@@ -55,13 +52,7 @@ class LocationHiveProvider extends HiveBaseProvider<MyLocation> {
 
 class CurrentLocationHiveProvider extends HiveBaseProvider<LocationId> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'current_location';
-
-  @override
-  void registerAdapters() {}
 
   /// Puts the provided [LocationId] to the [Hive].
   Future<void> put(LocationId location) => putSafe(0, location);

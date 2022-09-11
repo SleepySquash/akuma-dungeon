@@ -65,6 +65,12 @@ class ItemRepository extends DisposableInterface
     MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
       existing.count += count;
+      items.emit(MapChangeNotification.updated(
+        existing.id,
+        existing.id,
+        items[existing.id],
+      ));
+
       _itemHive.put(existing);
     } else {
       if (item is Weapon) {
@@ -98,6 +104,12 @@ class ItemRepository extends DisposableInterface
       } else {
         _itemHive.put(existing);
       }
+
+      items.emit(MapChangeNotification.updated(
+        existing.id,
+        existing.id,
+        items[existing.id],
+      ));
     }
   }
 

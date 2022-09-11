@@ -25,34 +25,41 @@ import '/util/obs/obs.dart';
 class NotificationOverlayController extends GetxController {
   NotificationOverlayController(
     this._notificationService, {
-    required this.builder,
+    required this.commonBuilder,
+    required this.additionBuilder,
   });
 
-  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+  final GlobalKey<AnimatedListState> commonKey = GlobalKey<AnimatedListState>();
+  final Widget Function(BuildContext, LocalNotification, Animation<double>)
+      commonBuilder;
+
+  final GlobalKey<AnimatedListState> additionsKey =
+      GlobalKey<AnimatedListState>();
+  final Widget Function(BuildContext, LocalNotification, Animation<double>)
+      additionBuilder;
 
   final NotificationService _notificationService;
-  final Widget Function(BuildContext, LocalNotification, Animation<double>)
-      builder;
 
-  StreamSubscription? _notificationsSubscription;
+  StreamSubscription? _commonSubscription;
+  StreamSubscription? _additionSubscription;
 
-  RxObsList<LocalNotification> get notifications =>
-      _notificationService.notifications;
+  RxObsList<LocalNotification> get common => _notificationService.notifications;
   RxObsList<LocalNotification> get centered => _notificationService.centered;
   RxObsList<LocalNotification> get additions => _notificationService.additions;
 
   @override
   void onInit() {
-    _notificationsSubscription = notifications.changes.listen((e) {
+    _commonSubscription = common.changes.listen((e) {
       switch (e.op) {
         case OperationKind.added:
-          listKey.currentState?.insertItem(e.pos);
+          commonKey.currentState?.insertItem(e.pos);
           break;
 
         case OperationKind.removed:
-          listKey.currentState?.removeItem(
+          commonKey.currentState?.removeItem(
             e.pos,
-            (context, animation) => builder(context, e.element, animation),
+            (context, animation) =>
+                commonBuilder(context, e.element, animation),
           );
           break;
 
@@ -61,12 +68,34 @@ class NotificationOverlayController extends GetxController {
           break;
       }
     });
+
+    _additionSubscription = additions.changes.listen((e) {
+      switch (e.op) {
+        case OperationKind.added:
+          additionsKey.currentState?.insertItem(e.pos);
+          break;
+
+        case OperationKind.removed:
+          additionsKey.currentState?.removeItem(
+            e.pos,
+            (context, animation) =>
+                additionBuilder(context, e.element, animation),
+          );
+          break;
+
+        case OperationKind.updated:
+          // No-op.
+          break;
+      }
+    });
+
     super.onInit();
   }
 
   @override
   void onClose() {
-    _notificationsSubscription?.cancel();
+    _commonSubscription?.cancel();
+    _additionSubscription?.cancel();
     super.onClose();
   }
 }

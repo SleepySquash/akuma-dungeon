@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:akuma/domain/model/item.dart';
+import 'package:akuma/domain/model/progression.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
@@ -30,7 +33,10 @@ abstract class Task {
 
   Duration? get timeout => null;
 
-  bool criteriaMet({Player? player}) {
+  bool criteriaMet({
+    Player? player,
+    GameProgression? progression,
+  }) {
     bool met = true;
 
     for (var c in criteria) {
@@ -38,6 +44,18 @@ abstract class Task {
         met = met && (player?.level ?? 0) >= c.level;
       } else if (c is RankCriteria) {
         met = met && (player?.rank ?? 0) >= c.rank.index;
+      } else if (c is WeaponEquippedCriteria) {
+        if (c.weapon == null) {
+          met = met && player?.weapons.isNotEmpty == true;
+        } else {
+          met = met &&
+              player?.weapons.firstWhereOrNull((e) => e.val == c.weapon!.id) !=
+                  null;
+        }
+      } else if (c is DungeonCommissionsCompletedCriteria) {
+        met = met && (progression?.dungeonsCleared ?? 0) >= c.amount;
+      } else if (c is QuestCommissionsCompletedCriteria) {
+        met = met && (progression?.questsDone ?? 0) >= c.amount;
       }
     }
 
@@ -77,8 +95,9 @@ abstract class TaskStep {
 }
 
 class DungeonStep extends TaskStep {
-  const DungeonStep(this.settings);
+  const DungeonStep(this.settings, {this.withEntrance = false});
   final DungeonSettings settings;
+  final bool withEntrance;
 }
 
 class NovelStep extends TaskStep {
@@ -103,4 +122,20 @@ class LevelCriteria extends TaskCriteria {
 class RankCriteria extends TaskCriteria {
   const RankCriteria(this.rank);
   final Rank rank;
+}
+
+class QuestCommissionsCompletedCriteria extends TaskCriteria {
+  const QuestCommissionsCompletedCriteria(this.amount);
+  final int amount;
+}
+
+class DungeonCommissionsCompletedCriteria extends TaskCriteria {
+  const DungeonCommissionsCompletedCriteria(this.amount);
+  final int amount;
+}
+
+/// `null` means any [Weapon] should be equipped.
+class WeaponEquippedCriteria extends TaskCriteria {
+  const WeaponEquippedCriteria(this.weapon);
+  final Weapon? weapon;
 }

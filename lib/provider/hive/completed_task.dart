@@ -23,9 +23,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyTask]s.
 class CompletedTaskHiveProvider extends HiveLazyProvider<CompletedTask> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'completed_task';
 
   @override

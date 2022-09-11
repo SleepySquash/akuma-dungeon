@@ -17,4 +17,8 @@ class ProgressionService extends DisposableInterface {
   void setChapter(int to) => _progressRepository.setChapter(to);
   void setSecretary(MyCharacter? character) =>
       _progressRepository.setSecretary(character?.id);
+  void addDungeonsCleared() => _progressRepository
+      .setDungeonsCleared(progression.value.dungeonsCleared + 1);
+  void addQuestsDone() =>
+      _progressRepository.setQuestsDone(progression.value.questsDone + 1);
 }

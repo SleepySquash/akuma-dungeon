@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/rank.dart';
@@ -16,6 +17,7 @@ abstract class AkumaDungeon {
       ]),
       DungeonStep(
         Dungeon(
+          music: AssetSource('music/mixkit-driving-ambition-32.mp3'),
           title: 'Akuma Dungeon',
           background: 'akuma',
           stages: [
@@ -46,6 +48,7 @@ abstract class RedDungeon {
       ]),
       DungeonStep(
         Dungeon(
+          music: AssetSource('music/mixkit-driving-ambition-32.mp3'),
           title: 'Red Dungeon',
           background: 'destructed_city',
           stages: [

@@ -11,6 +11,8 @@ class GameProgression extends HiveObject {
     this.goddessTowerLevel = 0,
     this.storyChapter = 1,
     this.secretary,
+    this.questsDone = 0,
+    this.dungeonsCleared = 0,
   });
 
   @HiveField(0)
@@ -21,4 +23,10 @@ class GameProgression extends HiveObject {
 
   @HiveField(2)
   CharacterId? secretary;
+
+  @HiveField(3)
+  int questsDone;
+
+  @HiveField(4)
+  int dungeonsCleared;
 }

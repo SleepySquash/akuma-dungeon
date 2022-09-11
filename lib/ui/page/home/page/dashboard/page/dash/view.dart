@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,7 +43,13 @@ class DashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: DashController(Get.find(), Get.find(), Get.find(), Get.find()),
+      init: DashController(
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+        Get.find(),
+      ),
       builder: (DashController c) {
         Widget secretary() {
           return Obx(() {
@@ -184,30 +191,36 @@ class DashView extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 2,
-                  child: MenuTile(
-                    onPressed: () => DungeonsView.show(context),
-                    child: const Text('Подземелья'),
-                  ),
+                  child: Obx(() {
+                    return MenuTile(
+                      locked: !c.flags.dungeonsUnlocked,
+                      onPressed: () => DungeonsView.show(context),
+                      child: const Text('Подземелья'),
+                    );
+                  }),
                 ),
                 Expanded(
                   flex: 1,
-                  child: MenuTile(
-                    onPressed: () => GoddessView.show(context),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Flexible(child: Text('Путь к Богине')),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${c.progression.value.goddessTowerLevel}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
+                  child: Obx(() {
+                    return MenuTile(
+                      locked: !c.flags.goddessTowerUnlocked,
+                      onPressed: () => GoddessView.show(context),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Flexible(child: Text('Путь к Богине')),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${c.progression.value.goddessTowerLevel}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),

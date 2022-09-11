@@ -27,9 +27,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyItem]s.
 class ItemHiveProvider extends HiveBaseProvider<MyItem> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'item';
 
   /// Returns a list of [MyItem]s from the [Hive].

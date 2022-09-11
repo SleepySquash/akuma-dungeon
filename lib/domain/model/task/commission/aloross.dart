@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
@@ -158,6 +159,7 @@ class AlorossSlimeSwampCommission extends AlorossCommission {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
+            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
             background: 'swamp',
             stages: [
               DungeonStage(
@@ -201,6 +203,7 @@ class AlorossRestaurantCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
+            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
             background: 'swamp',
             stages: [
               DungeonStage(

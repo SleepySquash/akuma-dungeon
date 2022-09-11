@@ -48,6 +48,7 @@ class DungeonView extends StatelessWidget {
         Get.find(),
         Get.find(),
         Get.find(),
+        Get.find(),
         settings: settings,
         onClear: onClear,
       ),

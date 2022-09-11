@@ -35,7 +35,7 @@ abstract class HiveBaseProvider<T> extends DisposableInterface {
   bool get isEmpty => box.isEmpty;
 
   /// Returns a broadcast stream of Hive [Box] change events.
-  Stream<BoxEvent> get boxEvents;
+  Stream<BoxEvent> get boxEvents => box.watch();
 
   /// Name of the underlying [Box].
   @protected
@@ -51,7 +51,7 @@ abstract class HiveBaseProvider<T> extends DisposableInterface {
   }
 
   @protected
-  void registerAdapters();
+  void registerAdapters() {}
 
   /// Opens a [Box] and changes [isReady] to true.
   ///
@@ -136,7 +136,7 @@ abstract class HiveLazyProvider<T> extends DisposableInterface {
 
   bool get isEmpty => box.isEmpty;
 
-  Stream<BoxEvent> get boxEvents;
+  Stream<BoxEvent> get boxEvents => box.watch();
 
   @protected
   String get boxName;

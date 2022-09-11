@@ -16,6 +16,9 @@
 
 import 'dart:math';
 
+import 'package:akuma/domain/model/flag.dart';
+import 'package:akuma/ui/page/home/widget/backdrop_plate.dart';
+import 'package:akuma/ui/widget/locked.dart';
 import 'package:flutter/material.dart' hide Characters;
 import 'package:get/get.dart';
 
@@ -33,25 +36,42 @@ class PartyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: PartyController(Get.find(), Get.find()),
+      init: PartyController(Get.find(), Get.find(), Get.find()),
       builder: (PartyController c) {
-        return Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            title: const Text('Party'),
-          ),
-          body: Column(
-            children: [
-              Container(
-                color: Colors.white,
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Center(child: _top(c)),
+        return Obx(() {
+          return LockedWidget(
+            locked: !c.flags.partyUnlocked,
+            borderRadius: BorderRadius.zero,
+            additional: const [
+              Flexible(
+                child: BackdropPlate(
+                  width: 500,
+                  child: Text(
+                    'Выполни `Первое подземелье` основной сюжетной линии',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
-              Expanded(child: _bottom(c)),
             ],
-          ),
-        );
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                backgroundColor: Colors.white,
+                title: const Text('Party'),
+              ),
+              body: Column(
+                children: [
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Center(child: _top(c)),
+                  ),
+                  Expanded(child: _bottom(c)),
+                ],
+              ),
+            ),
+          );
+        });
       },
     );
   }

@@ -16,24 +16,29 @@
 
 import 'package:get/get.dart';
 
+import '/domain/model/flag.dart';
 import '/domain/model/location.dart';
 import '/domain/model/progression.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/auth.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/location.dart';
 import '/domain/service/player.dart';
 import '/domain/service/progression.dart';
 import '/router.dart';
+import '/util/obs/obs.dart';
 
 class DashController extends GetxController {
   DashController(
+    this._flagService,
     this._authService,
     this._playerService,
     this._progressionService,
     this._locationService,
   );
 
+  final FlagService _flagService;
   final AuthService _authService;
   final PlayerService _playerService;
   final ProgressionService _progressionService;
@@ -43,6 +48,7 @@ class DashController extends GetxController {
   Rx<GameProgression> get progression => _progressionService.progression;
   Rx<RxMyCharacter?> get secretary => _progressionService.secretary;
   Rx<MyLocation> get location => _locationService.location;
+  RxObsMap<Flag, bool> get flags => _flagService.flags;
 
   void logout() {
     _authService.logout();

@@ -35,7 +35,8 @@ class NotificationOverlayView extends StatelessWidget {
     return GetBuilder(
       init: NotificationOverlayController(
         Get.find(),
-        builder: (context, e, animation) => _notification(e, animation),
+        commonBuilder: (context, e, animation) => _common(e, animation),
+        additionBuilder: (context, e, animation) => _addition(e, animation),
       ),
       builder: (NotificationOverlayController c) {
         return SafeArea(
@@ -48,12 +49,30 @@ class NotificationOverlayView extends StatelessWidget {
                     padding:
                         const EdgeInsets.only(top: 10, right: 10, bottom: 10),
                     child: AnimatedList(
-                      key: c.listKey,
+                      key: c.commonKey,
                       shrinkWrap: true,
-                      initialItemCount: c.notifications.length,
+                      initialItemCount: c.common.length,
                       itemBuilder: (context, i, animation) {
-                        return _notification(c.notifications[i], animation);
+                        return _common(c.common[i], animation);
                       },
+                    ),
+                  );
+                }),
+              ),
+              IgnorePointer(
+                child: Obx(() {
+                  return Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: AnimatedList(
+                        key: c.additionsKey,
+                        shrinkWrap: true,
+                        initialItemCount: c.additions.length,
+                        itemBuilder: (context, i, animation) {
+                          return _addition(c.additions[i], animation);
+                        },
+                      ),
                     ),
                   );
                 }),
@@ -76,12 +95,53 @@ class NotificationOverlayView extends StatelessWidget {
     );
   }
 
-  Widget _notification(LocalNotification item, Animation<double> animation) {
+  Widget _common(LocalNotification item, Animation<double> animation) {
     return Align(
       alignment: Alignment.topRight,
       child: SlideTransition(
         position:
             Tween(begin: const Offset(1, 0), end: const Offset(0, 0)).animate(
+          CurvedAnimation(
+            parent: animation,
+            curve: Curves.linearToEaseOut,
+          ),
+        ),
+        child: Card(
+          margin: const EdgeInsets.fromLTRB(0, 2, 0, 2),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () {},
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (item.icon != null) Icon(item.icon, size: 24),
+                      if (item.icon != null && item.title != null)
+                        const SizedBox(width: 5),
+                      if (item.title != null) Text(item.title!),
+                    ],
+                  ),
+                  if (item.subtitle != null) Text(item.subtitle!),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _addition(LocalNotification item, Animation<double> animation) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: SlideTransition(
+        position:
+            Tween(begin: const Offset(-1, 0), end: const Offset(0, 0)).animate(
           CurvedAnimation(
             parent: animation,
             curve: Curves.linearToEaseOut,

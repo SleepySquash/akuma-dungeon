@@ -15,6 +15,8 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:akuma/domain/model/commission.dart';
+import 'package:akuma/domain/model/item.dart';
+import 'package:akuma/domain/model/item/all.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -96,6 +98,10 @@ class AdventuresView extends StatelessWidget {
                     Task task = e.active?.task ?? e.next!;
                     bool met = c.criteriaMet(task);
 
+                    String? name = e.active?.task.name ?? e.next?.name;
+                    String? description =
+                        e.active?.task.description ?? e.next?.description;
+
                     return LockedWidget(
                       locked: !met,
                       additional: [
@@ -106,20 +112,54 @@ class AdventuresView extends StatelessWidget {
                             if (e is LevelCriteria) {
                               if (c.player.player.value.level < e.level) {
                                 return Text(
-                                  'Level: ${e.level} or higher',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                  'Level: ${e.level + 1} or higher',
+                                  style: const TextStyle(color: Colors.white),
                                 );
                               }
                             } else if (e is RankCriteria) {
                               if (c.player.player.value.rank < e.rank.index) {
                                 return Text(
                                   'Rank: ${e.rank.name} or higher',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                  ),
+                                  style: const TextStyle(color: Colors.white),
                                 );
+                              }
+                            } else if (e
+                                is DungeonCommissionsCompletedCriteria) {
+                              if (c.progression.value.dungeonsCleared <
+                                  e.amount) {
+                                return Text(
+                                  'Dungeons cleared: ${c.progression.value.questsDone} out of ${e.amount}',
+                                  style: const TextStyle(color: Colors.white),
+                                );
+                              }
+                            } else if (e is QuestCommissionsCompletedCriteria) {
+                              if (c.progression.value.questsDone < e.amount) {
+                                return Text(
+                                  'Quests done: ${c.progression.value.questsDone} out of ${e.amount}',
+                                  style: const TextStyle(color: Colors.white),
+                                );
+                              }
+                            } else if (e is WeaponEquippedCriteria) {
+                              if (e.weapon == null) {
+                                if (c.player.weapons.isEmpty) {
+                                  return const Text(
+                                    'Weapon equipped: any',
+                                    style: TextStyle(color: Colors.white),
+                                  );
+                                }
+                              } else {
+                                if (c.player.weapons.firstWhereOrNull((m) =>
+                                        m.value.item.id == e.weapon!.id) ==
+                                    null) {
+                                  Item? item = Items.get(e.weapon!.id);
+                                  if (item != null) {
+                                    return Text(
+                                      'Weapon equipped: ${item.name}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    );
+                                  }
+                                }
                               }
                             }
 
@@ -129,8 +169,21 @@ class AdventuresView extends StatelessWidget {
                       ],
                       child: ListTile(
                         leading: Icon(task.icon),
-                        title: Text(e.queue.name),
-                        subtitle: Text(task.description ?? task.name),
+                        title: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(e.queue.name),
+                            if (name != null)
+                              Text(
+                                name,
+                                style: const TextStyle(color: Colors.blue),
+                              ),
+                          ],
+                        ),
+                        subtitle: (description ?? name) != null
+                            ? Text(description ?? name!)
+                            : null,
                         trailing: const Icon(Icons.forward),
                         onTap: met
                             ? () {

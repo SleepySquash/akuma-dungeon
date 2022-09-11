@@ -14,17 +14,15 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/commission.dart';
-import 'package:akuma/ui/page/home/page/dashboard/page/guild/task/commission_preview/view.dart';
-import 'package:akuma/util/extensions.dart';
+import 'package:akuma/domain/model/flag.dart';
+import 'package:akuma/ui/widget/locked.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '/domain/model/reward.dart';
-import '/domain/model/task.dart';
-import '/domain/model/task/dungeon/all.dart';
-import '/router.dart';
+import '/domain/model/commission.dart';
 import '/ui/widget/modal_popup.dart';
+import '/util/extensions.dart';
+import 'commission_preview/view.dart';
 import 'controller.dart';
 
 class TaskView extends StatelessWidget {
@@ -37,7 +35,7 @@ class TaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: TaskController(Get.find()),
+      init: TaskController(Get.find(), Get.find()),
       builder: (TaskController c) {
         Widget commission(MyCommission e) {
           return Obx(() {
@@ -55,21 +53,30 @@ class TaskView extends StatelessWidget {
               }
             }
 
-            return ListTile(
-              leading: Icon(e.task.icon),
-              title: remaining == null
-                  ? Text(e.task.name)
-                  : Text('${e.task.name} [Осталось: ${remaining.hhMmSs()}]'),
-              subtitle:
-                  e.task.description == null ? null : Text(e.task.description!),
-              trailing: e.isCompleted
-                  ? const Icon(Icons.done_outline, color: Colors.green)
-                  : Text(e.task.rank.name),
-              onTap: () => CommissionPreviewView.show(
-                context,
-                commission: e,
-                onComplete: () => c.finish(e),
-                onAccept: () => c.accept(e),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1),
+              child: LockedWidget(
+                locked: e.task is DungeonCommission &&
+                    !c.flags.dungeonCommissionsUnlocked,
+                child: ListTile(
+                  leading: Icon(e.task.icon),
+                  title: remaining == null
+                      ? Text(e.task.name)
+                      : Text(
+                          '${e.task.name} [Осталось: ${remaining.hhMmSs()}]'),
+                  subtitle: e.task.description == null
+                      ? null
+                      : Text(e.task.description!),
+                  trailing: e.isCompleted
+                      ? const Icon(Icons.done_outline, color: Colors.green)
+                      : Text(e.task.rank.name),
+                  onTap: () => CommissionPreviewView.show(
+                    context,
+                    commission: e,
+                    onComplete: () => c.finish(e),
+                    onAccept: () => c.accept(e),
+                  ),
+                ),
               ),
             );
           });

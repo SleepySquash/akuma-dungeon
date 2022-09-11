@@ -14,6 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/flag.dart';
+import 'package:akuma/ui/page/home/widget/backdrop_plate.dart';
+import 'package:akuma/ui/widget/locked.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,75 +31,92 @@ class StoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: StoreController(Get.find(), Get.find(), Get.find()),
+      init: StoreController(Get.find(), Get.find(), Get.find(), Get.find()),
       builder: (StoreController c) {
-        return DefaultTabController(
-          length: 4,
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: PreferredSize(
-              preferredSize: const Size(double.infinity, 56),
-              child: ConditionalBackdropFilter(
-                child: AppBar(
-                  backgroundColor: Colors.white.withOpacity(0.4),
-                  automaticallyImplyLeading: false,
-                  title: const TabBar(
-                    unselectedLabelColor: Colors.black54,
-                    labelColor: Colors.black,
-                    tabs: [
-                      // Tab(
-                      //   text: 'Featured',
-                      //   icon: Icon(Icons.star),
-                      //   iconMargin: EdgeInsets.zero,
-                      // ),
-                      Tab(
-                        text: 'Event',
-                        icon: Icon(Icons.event),
-                        iconMargin: EdgeInsets.zero,
-                      ),
-                      Tab(
-                        text: 'Standard',
-                        icon: Icon(Icons.face),
-                        iconMargin: EdgeInsets.zero,
-                      ),
-                      Tab(
-                        text: 'Equipment',
-                        icon: Icon(Icons.extension),
-                        iconMargin: EdgeInsets.zero,
-                      ),
-                      Tab(
-                        text: 'Items',
-                        icon: Icon(Icons.warehouse),
-                        iconMargin: EdgeInsets.zero,
-                      ),
-                    ],
+        return Obx(() {
+          return LockedWidget(
+            locked: !c.flags.storeUnlocked,
+            borderRadius: BorderRadius.zero,
+            additional: const [
+              Flexible(
+                child: BackdropPlate(
+                  width: 500,
+                  child: Text(
+                    'Выполни `Первое подземелье` основной сюжетной линии',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
-            ),
-            body: Stack(
-              children: [
-                Positioned.fill(child: Obx(() {
-                  return Image.asset(
-                    'assets/background/${c.location.value.location.asset}.jpg',
-                    fit: BoxFit.cover,
-                  );
-                })),
-                SafeArea(
-                  child: TabBarView(
-                    children: [
-                      // _featured(c, context),
-                      _event(c, context),
-                      _standard(c, context),
-                      _equipment(c, context),
-                      _items(c, context),
-                    ],
+            ],
+            child: DefaultTabController(
+              length: 4,
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: PreferredSize(
+                  preferredSize: const Size(double.infinity, 56),
+                  child: ConditionalBackdropFilter(
+                    child: AppBar(
+                      backgroundColor: Colors.white.withOpacity(0.4),
+                      automaticallyImplyLeading: false,
+                      title: const TabBar(
+                        unselectedLabelColor: Colors.black54,
+                        labelColor: Colors.black,
+                        tabs: [
+                          // Tab(
+                          //   text: 'Featured',
+                          //   icon: Icon(Icons.star),
+                          //   iconMargin: EdgeInsets.zero,
+                          // ),
+                          Tab(
+                            text: 'Event',
+                            icon: Icon(Icons.event),
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                          Tab(
+                            text: 'Standard',
+                            icon: Icon(Icons.face),
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                          Tab(
+                            text: 'Equipment',
+                            icon: Icon(Icons.extension),
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                          Tab(
+                            text: 'Items',
+                            icon: Icon(Icons.warehouse),
+                            iconMargin: EdgeInsets.zero,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ],
+                body: Stack(
+                  children: [
+                    Positioned.fill(child: Obx(() {
+                      return Image.asset(
+                        'assets/background/${c.location.value.location.asset}.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    })),
+                    SafeArea(
+                      child: TabBarView(
+                        children: [
+                          // _featured(c, context),
+                          _event(c, context),
+                          _standard(c, context),
+                          _equipment(c, context),
+                          _items(c, context),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        );
+          );
+        });
       },
     );
   }

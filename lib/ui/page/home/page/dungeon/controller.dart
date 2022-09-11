@@ -17,7 +17,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:akuma/ui/page/home/page/dungeon/widget/skill2.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +33,7 @@ import '/domain/model/skill/all.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/character.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/item.dart';
 import '/domain/service/location.dart';
 import '/domain/service/player.dart';
@@ -45,12 +45,13 @@ import '/util/rewards.dart';
 import 'component/result.dart';
 import 'widget/hit_indicator.dart';
 import 'widget/money.dart';
-import 'widget/skill.dart';
+import 'widget/skill2.dart';
 import 'widget/title.dart';
 
 class DungeonController extends GetxController {
   DungeonController(
     this._playerService,
+    this._flagService,
     this._itemService,
     this._characterService,
     this._locationService,
@@ -95,13 +96,10 @@ class DungeonController extends GetxController {
 
   /// [PlayerService] maintaining the [Player].
   final PlayerService _playerService;
-
   final ItemService _itemService;
-
+  final FlagService _flagService;
   final CharacterService _characterService;
-
   final LocationService _locationService;
-
   final MusicWorker _musicWorker;
 
   /// [DateTime] when the current [stage] has started.
@@ -561,6 +559,7 @@ class DungeonController extends GetxController {
         itemService: _itemService,
         locationService: _locationService,
         playerService: _playerService,
+        flagService: _flagService,
       );
 
       await ModalPopup.show(

@@ -153,7 +153,7 @@ class NotificationService extends DisposableInterface {
     switch (notification.type) {
       case LocalNotificationType.common:
         notifications.add(notification);
-        timer = Timer(notificationDuration, () {
+        timer = Timer(notification.duration ?? notificationDuration, () {
           notifications.remove(notification);
           _timers.remove(timer);
         });
@@ -161,7 +161,7 @@ class NotificationService extends DisposableInterface {
 
       case LocalNotificationType.centered:
         centered.add(notification);
-        timer = Timer(notificationDuration, () {
+        timer = Timer(notification.duration ?? notificationDuration, () {
           centered.remove(notification);
           _timers.remove(timer);
         });
@@ -169,7 +169,7 @@ class NotificationService extends DisposableInterface {
 
       case LocalNotificationType.addition:
         additions.add(notification);
-        timer = Timer(notificationDuration, () {
+        timer = Timer(notification.duration ?? notificationDuration, () {
           additions.remove(notification);
           _timers.remove(timer);
         });
@@ -192,10 +192,12 @@ class LocalNotification {
     this.subtitle,
     this.icon,
     this.type = LocalNotificationType.common,
+    this.duration,
   });
 
   final String? title;
   final String? subtitle;
   final IconData? icon;
   final LocalNotificationType type;
+  final Duration? duration;
 }

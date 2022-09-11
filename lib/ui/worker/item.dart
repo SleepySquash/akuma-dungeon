@@ -18,6 +18,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
+import '/domain/model/item.dart';
 import '/domain/service/item.dart';
 import '/domain/service/notification.dart';
 import '/util/obs/obs.dart';
@@ -31,13 +32,20 @@ class ItemWorker extends DisposableInterface {
   final ItemService _itemService;
   final NotificationService _notificationService;
 
+  final Map<ItemId, int> counts = {};
+
   StreamSubscription? _subscription;
 
   @override
   void onInit() {
+    for (var entry in _itemService.items.entries) {
+      counts[entry.key] = entry.value.value.count;
+    }
+
     _subscription = _itemService.items.changes.listen((e) {
       switch (e.op) {
         case OperationKind.added:
+          counts[e.key!] = e.value!.value.count;
           _notificationService.notify(
             LocalNotification(
               title: '${e.value?.value.count}x ${e.value?.value.item.name}',
@@ -47,6 +55,7 @@ class ItemWorker extends DisposableInterface {
           break;
 
         case OperationKind.removed:
+          counts.remove(e.key);
           _notificationService.notify(
             LocalNotification(
               title: '-${e.value?.value.count}x ${e.value?.value.item.name}',
@@ -56,7 +65,18 @@ class ItemWorker extends DisposableInterface {
           break;
 
         case OperationKind.updated:
-          // No-op.
+          int prev = counts[e.key] ?? 0;
+
+          if (prev != e.value?.value.count) {
+            counts[e.key!] = e.value!.value.count;
+            _notificationService.notify(
+              LocalNotification(
+                title:
+                    '${e.value!.value.count - prev}x ${e.value?.value.item.name}',
+                type: LocalNotificationType.addition,
+              ),
+            );
+          }
           break;
       }
     });

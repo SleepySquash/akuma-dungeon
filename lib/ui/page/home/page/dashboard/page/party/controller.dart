@@ -17,21 +17,29 @@
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
+import '/domain/model/flag.dart';
 import '/domain/repository/character.dart';
 import '/domain/repository/player.dart';
 import '/domain/service/character.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/player.dart';
 import '/util/obs/obs.dart';
 
 class PartyController extends GetxController {
-  PartyController(this._playerService, this._characterService);
+  PartyController(
+    this._flagService,
+    this._playerService,
+    this._characterService,
+  );
 
+  final FlagService _flagService;
   final PlayerService _playerService;
   final CharacterService _characterService;
 
   RxPlayer get player => _playerService.player;
   RxObsMap<CharacterId, RxMyCharacter> get characters =>
       _characterService.characters;
+  RxObsMap<Flag, bool> get flags => _flagService.flags;
 
   bool contains(CharacterId id) => _characterService.contains(id);
 

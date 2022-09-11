@@ -1,5 +1,6 @@
 import '/domain/model/item/resource.dart';
 import '/domain/model/reward.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/item.dart';
 import '/domain/service/location.dart';
 import '/domain/service/player.dart';
@@ -9,6 +10,7 @@ extension ComputeRewardsExtension on List<Reward> {
     ItemService? itemService,
     PlayerService? playerService,
     LocationService? locationService,
+    FlagService? flagService,
   }) {
     for (Reward r in this) {
       if (r is MoneyReward) {
@@ -25,6 +27,8 @@ extension ComputeRewardsExtension on List<Reward> {
         locationService?.addControl(r.location, r.amount);
       } else if (r is ReputationReward) {
         locationService?.addReputation(r.location, r.amount);
+      } else if (r is FlagReward) {
+        flagService?.set(r.flag, r.value);
       }
     }
   }

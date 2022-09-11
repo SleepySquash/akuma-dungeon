@@ -27,9 +27,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyCommission]s.
 class CommissionHiveProvider extends HiveBaseProvider<MyCommission> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'commission';
 
   /// Returns the list of [MyCommission]s from the [Hive].

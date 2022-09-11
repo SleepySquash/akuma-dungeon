@@ -14,13 +14,12 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-enum Flag {
-  storeUnlocked,
-  guildUnlocked,
-  partyUnlocked,
-}
+import '/domain/model/flag.dart';
+import '/util/obs/obs.dart';
 
 abstract class AbstractFlagRepository {
-  bool? get(Flag flag);
+  RxObsMap<Flag, bool> get flags;
+
+  bool get(Flag flag);
   Future<void> set(Flag flag, bool value);
 }

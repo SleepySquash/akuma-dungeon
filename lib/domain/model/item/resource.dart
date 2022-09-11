@@ -16,7 +16,6 @@
 
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
-import '/domain/model/stat.dart';
 
 class Dogecoin extends Item {
   const Dogecoin([super.count = 1]);

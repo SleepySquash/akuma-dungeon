@@ -3,19 +3,24 @@ import 'dart:async';
 import 'package:get/get.dart';
 
 import '/domain/model/commission.dart';
+import '/domain/model/flag.dart';
 import '/domain/model/location.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/location.dart';
+import '/util/obs/obs.dart';
 
 class TaskController extends GetxController {
-  TaskController(this._locationService);
+  TaskController(this._flagService, this._locationService);
 
   RxBool ticker = RxBool(false);
 
+  final FlagService _flagService;
   final LocationService _locationService;
 
   late final Timer _ticker;
 
   Rx<MyLocation> get location => _locationService.location;
+  RxObsMap<Flag, bool> get flags => _flagService.flags;
 
   @override
   void onInit() {

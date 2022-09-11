@@ -38,6 +38,35 @@ class MessagePopup {
     );
   }
 
+  static Future<void> info({
+    required Widget title,
+    Icon? icon,
+    List<Widget> description = const [],
+    BoxConstraints constraints = const BoxConstraints.expand(),
+  }) async {
+    await showDialog(
+      context: router.context!,
+      builder: (context) => ConstrainedBox(
+        constraints: constraints,
+        child: AlertDialog(
+          icon: icon,
+          title: title,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: description,
+          ),
+          contentTextStyle: const TextStyle(fontSize: 17, color: Colors.black),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(router.context!).pop(),
+              child: Text('btn_ok'.l10n),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Shows an alert popup with [title], [description] and `yes`/`no` buttons
   /// that returns `true`, `false` or `null` based on the button that was
   /// pressed.

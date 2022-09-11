@@ -16,15 +16,19 @@
 
 import 'package:get/get.dart';
 
+import '/domain/model/flag.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/location.dart';
 import '/domain/repository/player.dart';
+import '/domain/service/flag.dart';
 import '/domain/service/item.dart';
 import '/domain/service/location.dart';
 import '/domain/service/player.dart';
+import '/util/obs/obs.dart';
 
 class StoreController extends GetxController {
   StoreController(
+    this._flagService,
     this._playerService,
     this._itemService,
     this._locationService,
@@ -32,6 +36,7 @@ class StoreController extends GetxController {
 
   final RxBool eventTab = RxBool(false);
 
+  final FlagService _flagService;
   final PlayerService _playerService;
   final ItemService _itemService;
   final LocationService _locationService;
@@ -39,6 +44,7 @@ class StoreController extends GetxController {
   RxPlayer get player => _playerService.player;
   int get rubies => _itemService.amount(const Ruby());
   int get heartCards => _itemService.amount(const HeartCard());
+  RxObsMap<Flag, bool> get flags => _flagService.flags;
 
   Rx<MyLocation> get location => _locationService.location;
 }

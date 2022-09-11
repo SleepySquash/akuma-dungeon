@@ -14,6 +14,11 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/flag.dart';
+import 'package:akuma/domain/model/item.dart';
+import 'package:akuma/domain/model/item/all.dart';
+import 'package:akuma/domain/service/flag.dart';
+import 'package:akuma/domain/service/item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -103,6 +108,46 @@ class SettingsView extends StatelessWidget {
                   onChanged: (d) => c.setVoiceVolume(d),
                 );
               }),
+            ),
+            const ListTile(title: Text('Developer')),
+            ListTile(
+              title: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.find<ItemService>().add(const AppleRedItem());
+                    },
+                    child: const Text('Add `RedApple`'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.find<ItemService>()
+                          .take(ItemId(const AppleRedItem().id));
+                    },
+                    child: const Text('Take 1 `RedApple`'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FlagService s = Get.find<FlagService>();
+                      s.set(Flag.storeUnlocked, true);
+                      s.set(Flag.goddessTowerUnlocked, true);
+                      s.set(Flag.locationsUnlocked, true);
+                      s.set(Flag.dungeonsUnlocked, true);
+                    },
+                    child: const Text('Unlock everything'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      FlagService s = Get.find<FlagService>();
+                      s.set(Flag.storeUnlocked, false);
+                      s.set(Flag.goddessTowerUnlocked, false);
+                      s.set(Flag.locationsUnlocked, false);
+                      s.set(Flag.dungeonsUnlocked, false);
+                    },
+                    child: const Text('Lock impossible'),
+                  )
+                ].map((e) => Expanded(child: e)).toList(),
+              ),
             ),
           ],
         );

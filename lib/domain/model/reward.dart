@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'flag.dart';
 import 'item.dart';
 import 'location.dart';
 
@@ -33,7 +34,7 @@ class MinMaxItemReward extends ItemReward {
 
 class ChanceItemReward extends ItemReward {
   ChanceItemReward(Item item, this.chance)
-      : super(item, Random().nextDouble() > chance ? 1 : 0);
+      : super(item, Random().nextDouble() < chance ? 1 : 0);
 
   final double chance;
 }
@@ -53,4 +54,10 @@ class ReputationReward extends Reward {
   const ReputationReward(this.location, this.amount);
   final Location location;
   final int amount;
+}
+
+class FlagReward extends Reward {
+  const FlagReward(this.flag, [this.value = true]);
+  final Flag flag;
+  final bool value;
 }

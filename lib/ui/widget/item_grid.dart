@@ -362,7 +362,7 @@ class ItemGridState extends State<ItemGrid> {
 
   Widget _unequip() {
     return WidgetButton(
-      onPressed: () => widget.onPressed?.call(e),
+      onPressed: () => widget.onPressed?.call(widget.first),
       child: Container(
         margin: EdgeInsets.all(context.isMobile ? 2 : 4),
         decoration: BoxDecoration(

@@ -1,9 +1,5 @@
 import 'dart:async';
 
-import 'package:akuma/domain/service/item.dart';
-import 'package:akuma/domain/service/player.dart';
-import 'package:akuma/util/log.dart';
-import 'package:akuma/util/rewards.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
@@ -13,25 +9,52 @@ import '/domain/model/location.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/location.dart';
 import '/router.dart';
+import '/util/log.dart';
+import '/util/rewards.dart';
+import 'flag.dart';
+import 'item.dart';
+import 'player.dart';
+import 'progression.dart';
 
 class LocationService extends DisposableInterface {
   LocationService(
     this._locationRepository,
+    this._flagService,
     this._itemService,
     this._playerService,
+    this._progressionService,
   );
 
   final AbstractLocationRepository _locationRepository;
-
+  final FlagService _flagService;
   final ItemService _itemService;
   final PlayerService _playerService;
+  final ProgressionService _progressionService;
+
+  late final Timer _fixedUpdate;
+  final Map<String, Timer> _timers = {};
 
   Rx<MyLocation> get location => _locationRepository.location;
 
   @override
   void onInit() {
     _populateCommissions();
+
+    _fixedUpdate = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _populateCommissions(),
+    );
+
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    _fixedUpdate.cancel();
+    for (Timer t in _timers.values) {
+      t.cancel();
+    }
+    super.onClose();
   }
 
   void goTo(Location to) {
@@ -83,6 +106,7 @@ class LocationService extends DisposableInterface {
         itemService: _itemService,
         locationService: this,
         playerService: _playerService,
+        flagService: _flagService,
       );
 
       location.commissions.remove(commission);
@@ -91,6 +115,12 @@ class LocationService extends DisposableInterface {
       this.location.refresh();
       _locationRepository.done(commission);
       _locationRepository.put(location);
+
+      if (commission.task is DungeonCommission) {
+        _progressionService.addDungeonsCleared();
+      } else {
+        _progressionService.addQuestsDone();
+      }
 
       _populateCommissions();
     } else {
@@ -159,12 +189,7 @@ class LocationService extends DisposableInterface {
     }
   }
 
-  final Map<String, Timer> _timers = {};
-
   void _populateCommissions() {
-    const Duration rewardTimeout = Duration(minutes: 1);
-    const Duration nextCommissionTimeout = Duration(minutes: 1);
-
     MyLocation location = this.location.value;
 
     for (MyCommission commission
@@ -185,7 +210,7 @@ class LocationService extends DisposableInterface {
     int dungeons = location.commissions
         .where((e) => !e.isCompleted && e.task is DungeonCommission)
         .length;
-    const int maxDungeons = 2;
+    const int maxDungeons = 4;
 
     for (int i = dungeons; i < maxDungeons; ++i) {
       Task? random = location.location.dungeons

@@ -32,6 +32,7 @@ import 'domain/repository/settings.dart';
 import 'domain/repository/task.dart';
 import 'domain/service/auth.dart';
 import 'domain/service/character.dart';
+import 'domain/service/flag.dart';
 import 'domain/service/gacha.dart';
 import 'domain/service/item.dart';
 import 'domain/service/location.dart';
@@ -62,6 +63,8 @@ import 'ui/page/home/view.dart';
 import 'ui/page/introduction/view.dart';
 import 'ui/widget/context_menu/overlay.dart';
 import 'ui/widget/notification/view.dart';
+import 'ui/worker/flag.dart';
+import 'ui/worker/item.dart';
 import 'ui/worker/music.dart';
 import 'ui/worker/player.dart';
 import 'ui/worker/settings.dart';
@@ -301,7 +304,9 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             // it sets the stored [Language] from the [SettingsRepository].
             await deps.put(SettingsWorker(settingsRepository)).init();
 
-            deps.put<AbstractFlagRepository>(FlagRepository(Get.find()));
+            AbstractFlagRepository flagRepository =
+                deps.put<AbstractFlagRepository>(FlagRepository(Get.find()));
+            FlagService flagService = deps.put(FlagService(flagRepository));
 
             ItemRepository itemRepository =
                 deps.put<ItemRepository>(ItemRepository(Get.find()));
@@ -324,7 +329,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
                 characterRepository,
               ),
             );
-            deps.put(ProgressionService(progressionRepository));
+            ProgressionService progressionService =
+                deps.put(ProgressionService(progressionRepository));
 
             AbstractPlayerRepository playerRepository =
                 deps.put<AbstractPlayerRepository>(
@@ -345,8 +351,10 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             LocationService locationService = deps.put(
               LocationService(
                 locationRepository,
+                flagService,
                 itemService,
                 playerService,
+                progressionService,
               ),
             );
 
@@ -357,15 +365,19 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             TaskService taskService = deps.put(
               TaskService(
                 taskRepository,
+                flagService,
                 playerService,
                 itemService,
                 locationService,
+                progressionService,
               ),
             );
 
             MusicWorker musicWorker = deps.put(MusicWorker(settingsRepository));
             deps.put(TaskWorker(taskService, Get.find()));
             deps.put(PlayerWorker(playerService, Get.find(), musicWorker));
+            deps.put(ItemWorker(itemService, Get.find()));
+            deps.put(FlagWorker(flagService, Get.find()));
 
             return deps;
           },

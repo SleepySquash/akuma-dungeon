@@ -62,6 +62,7 @@ class PlayerService extends GetxService {
   }
 
   void unequip(MyItem item) {
+    print('unequip');
     _playerRepository.unequip(item);
   }
 

@@ -26,9 +26,6 @@ import 'base.dart';
 /// [Hive] storage for the [MyTask]s.
 class TaskHiveProvider extends HiveBaseProvider<MyTask> {
   @override
-  Stream<BoxEvent> get boxEvents => box.watch();
-
-  @override
   String get boxName => 'task';
 
   /// Returns the list of [MyTask]s from the [Hive].
