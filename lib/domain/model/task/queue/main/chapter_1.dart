@@ -109,7 +109,7 @@ class IntroductionTask extends Task {
             by: 'Мастер',
           ),
           HideCharacterLine('Arda.png'),
-          BackgroundLine('dungeon/library.jpg'),
+          BackgroundLine('location/library.jpg'),
           DialogueLine('Вы заходите в библиотеку.'),
           CharacterLine('Arda.png'),
           DialogueLine(
@@ -358,6 +358,10 @@ class IntroductionTask extends Task {
             'Когда закончишь, не забудь обязательно отчитаться мне и сдать эти поручения, чтобы получить награду!',
             by: 'Мастер',
           ),
+          DialogueLine(
+            'И не забудь надеть деревянный меч!',
+            by: 'Мастер',
+          ),
         ]),
       ];
 }
@@ -447,7 +451,7 @@ class FirstDungeonTask extends Task {
           DialogueLine(
               'Видимо, ты был слишком занят, чтобы разглядеть её раньше.'),
           DialogueLine('Уверенно ты входишь внутрь.'),
-          BackgroundLine('dungeon/living_room_pink.jpg'),
+          BackgroundLine('location/living_room_pink.jpg'),
           DialogueLine('Вау, вот это роскошь!'),
           DialogueLine(
               'Ладно, шучу, на самом деле бэкграунда под таверну тоже пока нет, поэтому представь её себе, пожалуйста.'),
@@ -467,7 +471,7 @@ class FirstDungeonTask extends Task {
             context: router.context!,
             scenario: [
               const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-              BackgroundLine('dungeon/living_room_pink.jpg'),
+              BackgroundLine('location/living_room_pink.jpg'),
               DialogueLine('Ты уверенно подходишь к ${character.name}.'),
               CharacterLine('${character.asset}.png'),
               DialogueLine('Ты говоришь, что хотел бы побыть вместе в пати.'),
@@ -557,27 +561,23 @@ class FirstDungeonTask extends Task {
         DungeonStep(
           Dungeon(
             music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
-            background: 'fields',
+            background: 'mines',
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
+                conditions: const [SlayedStageCondition(20)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
+                conditions: const [SlayedStageCondition(20)],
               ),
               DungeonStage(
+                background: 'underground_waterfall',
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
+                conditions: const [SlayedStageCondition(20)],
               ),
               DungeonStage(
-                background: 'forest',
-                enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
-              ),
-              DungeonStage(
-                background: 'forest',
+                background: 'underground_waterfall',
                 enemies: SlimeEnemies.fPlus,
                 conditions: const [SlayedStageCondition(1)],
               ),

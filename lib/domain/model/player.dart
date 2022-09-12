@@ -95,7 +95,7 @@ class Player {
       List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
   List<int> get damages => List.generate(maxLevel, (i) => 1 * (i + 1) + i * 2);
   List<int> get defenses => List.generate(maxLevel, (i) => 1 * (i + 1));
-  List<int> get healths => List.generate(maxLevel, (i) => 10 * (i + 1));
+  List<int> get healths => List.generate(maxLevel, (i) => 100 + 50 * i);
   List<int> get ultCharges =>
       List.generate(maxLevel, (i) => 4 + (1 * (i + 1) / 10).floor());
 }

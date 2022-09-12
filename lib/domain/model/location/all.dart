@@ -80,7 +80,7 @@ class AlorossVillageLocation extends Location {
   String? get description => 'Деревня недалеко от Алоросса близ озера.';
 
   @override
-  String get asset => 'dungeon/fields';
+  String get asset => 'location/fields';
 
   @override
   List<DungeonCommission> get dungeons => AlorossDungeons.all;
@@ -110,7 +110,7 @@ class CapitalLocation extends Location {
   String? get description => 'Мегаполис-столица государства.';
 
   @override
-  String get asset => 'dungeon/city_street';
+  String get asset => 'location/city_street';
 
   @override
   List<LocationFeature> get features => const [
@@ -133,7 +133,7 @@ class DarkLandsLocation extends Location {
   String get name => 'Тёмные земли';
 
   @override
-  String get asset => 'dungeon/destructed_city';
+  String get asset => 'location/destructed_city';
 
   @override
   IconData get icon => Icons.dark_mode;
@@ -149,7 +149,7 @@ class LahtaburgLocation extends Location {
   String get name => 'Лахтабург';
 
   @override
-  String get asset => 'dungeon/urban_street';
+  String get asset => 'location/urban_street';
 
   @override
   IconData get icon => Icons.sailing;

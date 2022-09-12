@@ -94,7 +94,8 @@ class MessagePopup {
   }
 
   static void snackbar(String content) {
-    ScaffoldMessenger.of(router.context!)
-        .showSnackBar(SnackBar(content: Text(content)));
+    ScaffoldMessenger.of(router.context!).showSnackBar(
+      SnackBar(duration: const Duration(seconds: 1), content: Text(content)),
+    );
   }
 }

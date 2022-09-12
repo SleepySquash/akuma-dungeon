@@ -45,7 +45,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/background/dungeon/
     - assets/background/location/
     - assets/background/misc/
     - assets/background/room/
@@ -63,6 +62,7 @@ flutter:
     - assets/l10n/
     - assets/monster/slime/
     - assets/monster/special/
+    - assets/monster/veggies/
     - assets/music/
     - assets/skill/
     - assets/sound/

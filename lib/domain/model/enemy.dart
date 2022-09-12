@@ -41,7 +41,7 @@ abstract class Enemy {
   int get exp => 1;
 
   /// Money to give the [Player] upon slaying this [Enemy].
-  int get money => 10;
+  int get money => 0;
 
   /// [Source] sounds to play when hitting this [Enemy].
   List<Source>? get hitSounds => null;

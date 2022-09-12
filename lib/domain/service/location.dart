@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
@@ -207,6 +208,16 @@ class LocationService extends DisposableInterface {
       }
     }
 
+    bool empty = location.commissions.isEmpty;
+    DateTime? appearedAt(Duration? timeout) {
+      if (!empty || timeout == null) {
+        return null;
+      }
+
+      int random = Random().nextInt(timeout.inSeconds ~/ 2);
+      return DateTime.now().subtract(Duration(seconds: random));
+    }
+
     int dungeons = location.commissions
         .where((e) => !e.isCompleted && e.task is DungeonCommission)
         .length;
@@ -220,7 +231,10 @@ class LocationService extends DisposableInterface {
           .sample(1)
           .firstOrNull;
       if (random != null) {
-        location.commissions.add(MyCommission(task: random));
+        location.commissions.add(MyCommission(
+          task: random,
+          appearedAt: appearedAt(random.timeout),
+        ));
       }
     }
 
@@ -237,7 +251,10 @@ class LocationService extends DisposableInterface {
           .sample(1)
           .firstOrNull;
       if (random != null) {
-        location.commissions.add(MyCommission(task: random));
+        location.commissions.add(MyCommission(
+          task: random,
+          appearedAt: appearedAt(random.timeout),
+        ));
       }
     }
 

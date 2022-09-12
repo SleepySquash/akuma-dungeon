@@ -22,6 +22,13 @@ class ProfileSkillsTab extends StatelessWidget {
             },
             child: const Text('+1000 exp'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              var s = Get.find<PlayerService>();
+              s.addExperience(-s.player.player.value.exp);
+            },
+            child: const Text('Reset to first level'),
+          ),
         ],
       ),
       // child: Text('Skill'),

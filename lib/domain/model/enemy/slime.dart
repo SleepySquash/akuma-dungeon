@@ -104,8 +104,6 @@ abstract class Slime extends Enemy {
 
   @override
   List<Reward> get drops => [
-        // ChanceItemReward(const AppleGreenItem(), 0.4),
-        // ChanceItemReward(const Dogecoin(), 0.6),
         ChanceItemReward(const Ruby(), 0.05),
       ];
 
@@ -146,9 +144,6 @@ class CatSlimeEnemy extends Slime {
   @override
   String get id => 'Cat Slime';
 
-  // @override
-  // int get money => 10;
-
   @override
   int get exp => 2;
 
@@ -161,9 +156,6 @@ class RedLongSlimeEnemy extends Slime {
 
   @override
   String get id => 'Red Long Slime';
-
-  // @override
-  // int get money => 20;
 
   @override
   int get exp => 5;
@@ -333,9 +325,6 @@ abstract class SlimeChan extends Slime {
 
   @override
   int get exp => 100;
-
-  // @override
-  // int get money => 100;
 
   @override
   List<Source>? get hitSounds => [

@@ -75,7 +75,7 @@ class DungeonView extends StatelessWidget {
                   },
                   child: background != null
                       ? Image.asset(
-                          'assets/background/dungeon/$background.jpg',
+                          'assets/background/location/$background.jpg',
                           key: Key(background),
                           fit: BoxFit.cover,
                         )

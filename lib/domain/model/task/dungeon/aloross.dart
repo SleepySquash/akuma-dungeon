@@ -51,7 +51,7 @@ abstract class AlorossDungeon extends Task with DungeonCommission {
   String? get location => 'aloross';
 
   @override
-  Duration? get timeout => const Duration(minutes: 5);
+  Duration? get timeout => const Duration(days: 2);
 
   @override
   Rank get rank => Rank.F;
@@ -397,7 +397,7 @@ class AlorossRedDungeon extends AlorossDungeon {
 
   @override
   String? get background =>
-      ['dungeon/mines', 'dungeon/ice_cave'].sample(1).first;
+      ['location/mines', 'location/ice_cave'].sample(1).first;
 
   @override
   Rank get rank => [Rank.F, Rank.E, Rank.D].sample(1).first;

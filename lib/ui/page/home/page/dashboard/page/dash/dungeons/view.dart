@@ -65,7 +65,7 @@ class DungeonsView extends StatelessWidget {
                     context,
                     name: 'Монастырь ушедшей цивилизации',
                     description: 'Очень холодное и мрачное место...',
-                    background: 'dungeon/magic_forest_altar',
+                    background: 'location/magic_forest_altar',
                     difficulties: [
                       DungeonDifficulty(
                         level: 10,
@@ -154,7 +154,7 @@ class DungeonsView extends StatelessWidget {
                     name: 'Древняя Библиотека',
                     description:
                         'Под руинами некогда величавого города остаются погребёнными тысячи книг, древней литературы неизвестного языка.',
-                    background: 'dungeon/library',
+                    background: 'location/library',
                     difficulties: [
                       DungeonDifficulty(
                         level: 10,

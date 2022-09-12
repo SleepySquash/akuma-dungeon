@@ -61,10 +61,7 @@ class PlayerService extends GetxService {
     }
   }
 
-  void unequip(MyItem item) {
-    print('unequip');
-    _playerRepository.unequip(item);
-  }
+  void unequip(MyItem item) => _playerRepository.unequip(item);
 
   void addToParty(MyCharacter character) {
     if (player.party.length < 5) {

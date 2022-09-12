@@ -1,22 +1,20 @@
-import 'package:akuma/domain/model/commission.dart';
-import 'package:akuma/domain/model/task.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-import '/domain/model/dungeon.dart';
+import '/domain/model/commission.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/reward.dart';
+import '/domain/model/task.dart';
 import '/router.dart';
 import '/theme.dart';
 import '/ui/page/home/page/item/view.dart';
-import '/ui/page/home/widget/wide_button.dart';
 import '/ui/page/home/widget/slivers.dart';
+import '/ui/page/home/widget/wide_button.dart';
 import '/ui/widget/button.dart';
 import '/ui/widget/modal_popup.dart';
+import '/util/message_popup.dart';
 import 'controller.dart';
 
 class CommissionPreviewView extends StatelessWidget {
@@ -153,7 +151,7 @@ class CommissionPreviewView extends StatelessWidget {
             if (step is DungeonStep) {
               background = step.settings.background;
               if (background != null) {
-                background = 'dungeon/$background';
+                background = 'location/$background';
               }
             }
           }
@@ -213,19 +211,11 @@ class CommissionPreviewView extends StatelessWidget {
                     : () {
                         if (!commission.accepted) {
                           onAccept?.call();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Поручение принято')),
-                          );
-
+                          MessagePopup.snackbar('Поручение принято');
                           Navigator.of(context).pop(true);
                         } else if (commission.isCompleted) {
                           onComplete?.call();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Поручение выполнено'),
-                            ),
-                          );
-
+                          MessagePopup.snackbar('Поручение выполнено');
                           Navigator.of(context).pop(true);
                           _rewards(commission.task.rewards);
                         }
