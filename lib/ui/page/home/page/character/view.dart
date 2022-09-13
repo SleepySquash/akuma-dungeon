@@ -160,6 +160,7 @@ class _CharacterViewState extends State<CharacterView>
                             '',
                         child: Image.asset(
                           'assets/character/${widget.myCharacter?.character.value.character.asset ?? widget.character?.asset}.png',
+                          fit: BoxFit.fitHeight,
                         ),
                       ),
                     );

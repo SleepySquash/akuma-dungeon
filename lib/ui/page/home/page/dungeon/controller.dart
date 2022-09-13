@@ -332,7 +332,6 @@ class DungeonController extends GetxController {
         if (e.isAlive) {
           for (MySkill s in e.character.character.value.skills) {
             if (s.skill is ProvocationSkill) {
-              Skill skill = s.skill as ProvocationSkill;
               return true;
             }
           }
@@ -360,7 +359,7 @@ class DungeonController extends GetxController {
         );
       } else {
         final int defense = max(player.defense, 1);
-        final double damage = max(amount - (defense / 9), 0.1);
+        final double damage = max(amount - (defense / 9), 0.05);
 
         if (sp.value > 0) {
           sp.value -= damage;
@@ -413,12 +412,14 @@ class DungeonController extends GetxController {
         Duration(milliseconds: milliseconds),
         () {
           if (!gameEnded.value) {
-            _hitPlayer(next.damage);
-            _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
-              if (!gameEnded.value) {
-                _hitPlayer(next.damage);
-              }
-            });
+            if (next.damage != 0) {
+              _hitPlayer(next.damage);
+              _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
+                if (!gameEnded.value) {
+                  _hitPlayer(next.damage);
+                }
+              });
+            }
           }
         },
       );

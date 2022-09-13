@@ -52,18 +52,22 @@ class DashView extends StatelessWidget {
       ),
       builder: (DashController c) {
         Widget secretary() {
-          return Obx(() {
-            if (c.secretary.value == null) {
-              return DummyCharacter(
-                race: c.player.player.value.race,
-                gender: c.player.player.value.gender,
-              );
-            }
+          return SizedBox(
+            height: double.infinity,
+            child: Obx(() {
+              if (c.secretary.value == null) {
+                return DummyCharacter(
+                  race: c.player.player.value.race,
+                  gender: c.player.player.value.gender,
+                );
+              }
 
-            return Image.asset(
-              'assets/character/${c.secretary.value?.character.value.character.asset}.png',
-            );
-          });
+              return Image.asset(
+                'assets/character/${c.secretary.value?.character.value.character.asset}.png',
+                fit: BoxFit.fitHeight,
+              );
+            }),
+          );
         }
 
         return Stack(

@@ -59,7 +59,10 @@ class GachaView extends StatelessWidget {
                 );
                 rarity = loot.rarity;
               } else if (loot is Character) {
-                child = Image.asset('assets/character/${loot.asset}.png');
+                child = Image.asset(
+                  'assets/character/${loot.asset}.png',
+                  fit: BoxFit.fitHeight,
+                );
                 text = BorderedText(
                   child: Text(
                     loot.name,

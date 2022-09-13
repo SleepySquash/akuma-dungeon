@@ -248,7 +248,7 @@ class ItemEnhanceTab extends StatelessWidget {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Image.asset(
-                                          'assets/item/resource/Dogecoin.png',
+                                          'assets/item/resource/dogecoin.png',
                                           width: 20,
                                         ),
                                         const SizedBox(width: 4),

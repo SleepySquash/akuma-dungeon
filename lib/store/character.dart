@@ -137,10 +137,23 @@ class CharacterRepository extends DisposableInterface
   }
 
   @override
-  void add(MyCharacter character) => _characterHive.put(character);
+  void add(MyCharacter character) {
+    _characterHive.put(character);
+
+    final HiveRxMyCharacter? rxCharacter = characters[character.id];
+    if (rxCharacter == null) {
+      characters[character.id] = HiveRxMyCharacter(character);
+    } else {
+      rxCharacter.character.value = character;
+      rxCharacter.character.refresh();
+    }
+  }
 
   @override
-  void remove(CharacterId id) => _characterHive.remove(id);
+  void remove(CharacterId id) {
+    _characterHive.remove(id);
+    characters.remove(id);
+  }
 
   @override
   bool contains(CharacterId id) => _characterHive.contains(id);

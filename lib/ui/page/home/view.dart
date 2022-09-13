@@ -48,14 +48,14 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    super.initState();
     widget._depsFactory().then((v) => setState(() => _deps = v));
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _deps?.dispose();
+    super.dispose();
   }
 
   /// Called when a dependency of this [State] object changes.

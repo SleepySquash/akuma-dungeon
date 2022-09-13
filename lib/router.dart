@@ -62,6 +62,7 @@ import 'ui/page/auth/view.dart';
 import 'ui/page/home/view.dart';
 import 'ui/page/introduction/view.dart';
 import 'ui/widget/context_menu/overlay.dart';
+import 'ui/widget/lifecycle_observer.dart';
 import 'ui/widget/notification/view.dart';
 import 'ui/worker/flag.dart';
 import 'ui/worker/item.dart';
@@ -402,18 +403,21 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
 
   @override
   Widget build(BuildContext context) {
-    return ContextMenuOverlay(
-      child: NotificationOverlayView(
-        child: Navigator(
-          key: navigatorKey,
-          pages: _pages,
-          onPopPage: (Route<dynamic> route, dynamic result) {
-            final bool success = route.didPop(result);
-            if (success) {
-              _state.pop();
-            }
-            return success;
-          },
+    return LifecycleObserver(
+      didChangeAppLifecycleState: (v) => _state.lifecycle.value = v,
+      child: ContextMenuOverlay(
+        child: NotificationOverlayView(
+          child: Navigator(
+            key: navigatorKey,
+            pages: _pages,
+            onPopPage: (Route<dynamic> route, dynamic result) {
+              final bool success = route.didPop(result);
+              if (success) {
+                _state.pop();
+              }
+              return success;
+            },
+          ),
         ),
       ),
     );

@@ -73,9 +73,12 @@ class ProfileAttributesTab extends StatelessWidget {
         Obx(() {
           return Align(
             alignment: FractionalOffset(context.isMobile ? 1 : 0.5, 0.5),
-            child: DummyCharacter(
-              race: c.player.player.value.race,
-              gender: c.player.player.value.gender,
+            child: SizedBox(
+              height: double.infinity,
+              child: DummyCharacter(
+                race: c.player.player.value.race,
+                gender: c.player.player.value.gender,
+              ),
             ),
           );
         }),

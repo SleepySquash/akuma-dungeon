@@ -21,7 +21,7 @@ import '/domain/model/item.dart';
 import '/domain/repository/character.dart';
 import '/util/obs/obs.dart';
 
-class CharacterService extends GetxService {
+class CharacterService extends DisposableInterface {
   CharacterService(this._characterRepository);
 
   final AbstractCharacterRepository _characterRepository;

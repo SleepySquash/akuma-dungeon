@@ -23,7 +23,7 @@ import '/domain/model/item.dart';
 import '/domain/repository/item.dart';
 import '/util/obs/obs.dart';
 
-class ItemService extends GetxService {
+class ItemService extends DisposableInterface {
   ItemService(this._itemRepository);
 
   final AbstractItemRepository _itemRepository;

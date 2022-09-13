@@ -63,7 +63,7 @@ abstract class Veggie extends Enemy {
       ];
 
   @override
-  double get damage => 1;
+  double get damage => 0;
 }
 
 class BroccoliEnemy extends Veggie {

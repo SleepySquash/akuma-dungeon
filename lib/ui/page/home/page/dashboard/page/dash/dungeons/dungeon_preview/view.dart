@@ -93,7 +93,7 @@ class DungeonPreviewView extends StatelessWidget {
               ),
               child: Hero(
                 tag: 'Dogecoin_$i',
-                child: Image.asset('assets/item/resource/Dogecoin.png'),
+                child: Image.asset('assets/item/resource/dogecoin.png'),
               ),
             );
             text = '${r.amount}';

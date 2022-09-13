@@ -52,7 +52,10 @@ class GuildView extends StatelessWidget {
 
               return Align(
                 alignment: Alignment.centerLeft,
-                child: Image.asset('assets/character/Arda.png'),
+                child: Image.asset(
+                  'assets/character/Arda.png',
+                  fit: BoxFit.fitHeight,
+                ),
               );
             }),
             Align(

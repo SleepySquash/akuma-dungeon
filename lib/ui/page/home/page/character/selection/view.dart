@@ -47,7 +47,10 @@ class CharacterSelectionView extends StatelessWidget {
                 height: double.infinity,
                 color:
                     c.selected.value == e ? Colors.green : Colors.transparent,
-                child: Image.asset('assets/character/${e.asset}.png'),
+                child: Image.asset(
+                  'assets/character/${e.asset}.png',
+                  fit: BoxFit.fitHeight,
+                ),
               );
             }),
           );

@@ -94,6 +94,12 @@ extension HiveClean on HiveInterface {
     if (GetPlatform.isWeb) {
       await WebUtils.cleanIndexedDb();
     } else {
+      try {
+        await Hive.deleteFromDisk();
+      } catch (_) {
+        // No-op.
+      }
+
       var documents = (await getApplicationDocumentsDirectory()).path;
       try {
         await Directory('$documents/$path').delete(recursive: true);

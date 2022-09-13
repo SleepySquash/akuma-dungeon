@@ -50,6 +50,7 @@ class CharacterCard extends StatelessWidget {
                 tag: e.id,
                 child: Image.asset(
                   'assets/character/${e.asset}.png',
+                  fit: BoxFit.fitHeight,
                 ),
               ),
               Align(

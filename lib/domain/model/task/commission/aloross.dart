@@ -52,11 +52,11 @@ abstract class AlorossCommission extends Task with QuestCommission {
 
   @override
   List<Reward> get rewards => const [
-        MoneyReward(50),
-        ExpReward(100),
-        ItemReward(Ruby(2)),
-        RankReward(1),
-        ReputationReward(AlorossLocation(), 1),
+        MoneyReward(12000),
+        ExpReward(250),
+        ItemReward(Ruby(20)),
+        RankReward(5),
+        ReputationReward(AlorossLocation(), 3),
       ];
 }
 
@@ -210,10 +210,6 @@ class AlorossMerchantForestCommission extends AlorossCommission {
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
-              ),
-              DungeonStage(
-                enemies: SlimeEnemies.f,
                 conditions: const [SlayedStageCondition(35)],
               ),
             ],
@@ -288,21 +284,16 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(30)],
+                conditions: const [SlayedStageCondition(15)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,
-                conditions: const [SlayedStageCondition(5)],
+                conditions: const [SlayedStageCondition(4)],
               ),
               DungeonStage(
                 background: 'forest2',
                 enemies: SlimeEnemies.e,
-                conditions: const [SlayedStageCondition(30)],
-              ),
-              DungeonStage(
-                background: 'forest2',
-                enemies: SlimeEnemies.e,
-                conditions: const [SlayedStageCondition(30)],
+                conditions: const [SlayedStageCondition(25)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.ePlus,

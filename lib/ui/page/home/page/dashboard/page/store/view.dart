@@ -163,7 +163,12 @@ class StoreView extends StatelessWidget {
               color: Colors.blue,
               child: Row(
                 children: [
-                  Expanded(child: Image.asset('assets/character/Arda.png')),
+                  Expanded(
+                    child: Image.asset(
+                      'assets/character/Arda.png',
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
                   Expanded(
                     child: ListView(
                       shrinkWrap: true,
