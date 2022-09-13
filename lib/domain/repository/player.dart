@@ -45,6 +45,7 @@ abstract class RxPlayer {
 
   List<int> get levels => player.value.levels;
   int get level => player.value.level;
+  int get rank => player.value.rank;
 
   List<int> get healths => player.value.healths;
   List<int> get damages => player.value.damages;

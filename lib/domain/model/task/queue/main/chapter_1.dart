@@ -52,7 +52,7 @@ class ChapterOne extends TaskQueue {
   List<Task> get tasks => const [
         IntroductionTask(),
         FirstDungeonTask(),
-        // NextMissionTask(),
+        ShopUnlockedTask(),
       ];
 }
 
@@ -66,7 +66,7 @@ class IntroductionTask extends Task {
   String get name => 'Знакомство';
 
   @override
-  String? get description => 'Гильдмастер просил подойти по готовности...';
+  String? get subtitle => 'Гильдмастер просил подойти по готовности...';
 
   @override
   IconData get icon => Icons.interests;
@@ -382,7 +382,7 @@ class FirstDungeonTask extends Task {
   String get name => 'Первый данж';
 
   @override
-  String? get description => 'Поручения сделаны, что дальше?';
+  String? get subtitle => 'Поручения сделаны, что дальше?';
 
   @override
   IconData get icon => Icons.dangerous_rounded;
@@ -613,23 +613,42 @@ class FirstDungeonTask extends Task {
       ];
 }
 
-class NextMissionTask extends Task {
-  const NextMissionTask();
+class ShopUnlockedTask extends Task {
+  const ShopUnlockedTask();
 
   @override
-  String get id => 'chapter1_next_mission';
+  String get id => 'chapter1_shop_unlocked';
 
   @override
-  List<TaskCriteria> get criteria => [const LevelCriteria(12)];
+  String? get subtitle => 'Монстров вокруг города стало меньше';
+
+  @override
+  List<TaskCriteria> get criteria => const [
+        LevelCriteria(2),
+        DungeonCommissionsCompletedCriteria(3),
+      ];
 
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          BackgroundLine('location/forest_house.jpg'),
-          DialogueLine('Ебать, ты дожил до этого момента!!'),
-          DialogueLine('Я покажу тебе свою ПИСЬКУ!'),
-          DialogueLine('ТЫ ГОТОВ, СПАНЧ БОБ?????'),
-          DialogueLine('ЖОПА ТЕБЕ БУДЕТ...'),
+          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine('location/town.jpg'),
+          DialogueLine(
+              'Закрыв очередной данж с слаймами, ты возвращаешься в Алоросс.'),
+          DialogueLine(
+              'Погода стояла отличная, даже казалось, что с тех пор, как ты начал выполнять поручения, город стал живее.'),
+          DialogueLine(
+              'Обидно, что тебе дают только слаймов - город терроризируют явно более опасные формы жизни.'),
+          DialogueLine(
+              'Твоя текущая цель - достичь следующего ранга путешественника, тогда тебе доверят более опасные поручения.'),
+          DialogueLine(
+              'С этими мыслями ты двигался в сторону гильдии, но путь твой прервал знакомый голос.'),
+          DialogueLine('Путешественник!', by: 'Майя'),
+          CharacterLine('Mai.png'),
+          DialogueLine(
+            'Благодаря тому, что кто-то (естественно, ты) начал закрывать подземелья, торговцы стали активнее нас посещать!',
+            by: 'Майя',
+          ),
         ]),
         DungeonStep(
           Dungeon(
@@ -638,7 +657,7 @@ class NextMissionTask extends Task {
                 background: 'fields',
                 enemies: SlimeEnemies.unique,
                 conditions: const [SlayedStageCondition(1)],
-                multiplier: 1478024712421,
+                multiplier: 1,
               ),
             ],
           ),

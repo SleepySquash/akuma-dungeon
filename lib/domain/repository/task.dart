@@ -23,6 +23,7 @@ import '/util/obs/obs.dart';
 abstract class AbstractTaskRepository {
   RxObsMap<String, Rx<MyTask>> get tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues;
+  Iterable<String> get completedTasks;
 
   void start(TaskQueue task);
   void progress(MyTaskQueue task);
@@ -32,7 +33,8 @@ abstract class AbstractTaskRepository {
   void update(MyTask task);
   void cancel(Task task);
 
-  void complete(CompletedTask task);
+  void complete(Task task);
+  void uncomplete(String id);
   Future<CompletedTask?> getCompleted(String id);
   bool isCompleted(String id);
 }

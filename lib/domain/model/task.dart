@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:akuma/domain/model/item.dart';
-import 'package:akuma/domain/model/progression.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
+import '/domain/repository/player.dart';
 import 'dungeon.dart';
-import 'player.dart';
+import 'executable.dart';
+import 'item.dart';
+import 'progression.dart';
 import 'rank.dart';
 import 'reward.dart';
 
@@ -17,7 +18,8 @@ abstract class Task {
   String get id => runtimeType.toString();
 
   String get name => id;
-  String? get description => null;
+  String? get subtitle => null;
+  String? get description => subtitle;
   String? get background => null;
   IconData get icon => Icons.abc;
 
@@ -34,8 +36,9 @@ abstract class Task {
   Duration? get timeout => null;
 
   bool criteriaMet({
-    Player? player,
+    RxPlayer? player,
     GameProgression? progression,
+    bool Function(String id)? isTaskCompleted,
   }) {
     bool met = true;
 
@@ -49,13 +52,18 @@ abstract class Task {
           met = met && player?.weapons.isNotEmpty == true;
         } else {
           met = met &&
-              player?.weapons.firstWhereOrNull((e) => e.val == c.weapon!.id) !=
+              player?.weapons.firstWhereOrNull(
+                      (e) => e.value.item.id == c.weapon!.id) !=
                   null;
         }
       } else if (c is DungeonCommissionsCompletedCriteria) {
         met = met && (progression?.dungeonsCleared ?? 0) >= c.amount;
       } else if (c is QuestCommissionsCompletedCriteria) {
         met = met && (progression?.questsDone ?? 0) >= c.amount;
+      } else if (c is NotCompletedCriteria) {
+        met = met && !(isTaskCompleted?.call(id) ?? false);
+      } else if (c is CompletedCriteria) {
+        met = met && (isTaskCompleted?.call(c.task.id) ?? false);
       }
     }
 
@@ -63,26 +71,27 @@ abstract class Task {
   }
 }
 
-class MyTask {
+class MyTask extends ExecutableTask {
   MyTask({
     required this.task,
     this.progress = 0,
     DateTime? acceptedAt,
   }) : acceptedAt = acceptedAt ?? DateTime.now();
 
+  @override
   final Task task;
 
+  @override
   int progress;
-  DateTime acceptedAt;
 
-  bool get isCompleted => progress >= task.steps.length;
+  DateTime acceptedAt;
 }
 
 class CompletedTask {
   CompletedTask({
     required this.id,
     DateTime? completedAt,
-    this.count = 1,
+    this.count = 0,
   }) : completedAt = completedAt ?? DateTime.now();
 
   final String id;
@@ -138,4 +147,13 @@ class DungeonCommissionsCompletedCriteria extends TaskCriteria {
 class WeaponEquippedCriteria extends TaskCriteria {
   const WeaponEquippedCriteria(this.weapon);
   final Weapon? weapon;
+}
+
+class NotCompletedCriteria extends TaskCriteria {
+  const NotCompletedCriteria();
+}
+
+class CompletedCriteria extends TaskCriteria {
+  const CompletedCriteria(this.task);
+  final Task task;
 }

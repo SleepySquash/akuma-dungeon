@@ -16,8 +16,6 @@
 
 import 'dart:async';
 
-import 'package:akuma/provider/hive/commission.dart';
-import 'package:akuma/provider/hive/completed_task.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -25,6 +23,7 @@ import '/domain/model/impossible.dart';
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/task.dart';
+import '/provider/hive/completed_task.dart';
 import '/provider/hive/task_queue.dart';
 import '/provider/hive/task.dart';
 import '/util/obs/obs.dart';
@@ -34,7 +33,6 @@ class TaskRepository extends DisposableInterface
   TaskRepository(
     this._taskHive,
     this._queueHive,
-    this._commissionHive,
     this._completedTaskHive,
   );
 
@@ -46,11 +44,15 @@ class TaskRepository extends DisposableInterface
 
   final TaskHiveProvider _taskHive;
   final TaskQueueHiveProvider _queueHive;
-  final CommissionHiveProvider _commissionHive;
+
   final CompletedTaskHiveProvider _completedTaskHive;
 
   StreamIterator<BoxEvent>? _localSubscription;
   StreamIterator<BoxEvent>? _queueSubscription;
+
+  @override
+  Iterable<String> get completedTasks =>
+      _completedTaskHive.keysSafe.cast<String>();
 
   @override
   void onInit() {
@@ -106,7 +108,20 @@ class TaskRepository extends DisposableInterface
   void abandon(TaskQueue queue) => _queueHive.remove(queue.id);
 
   @override
-  void complete(CompletedTask task) => _completedTaskHive.put(task);
+  void complete(Task task) {
+    if (isCompleted(task.id)) {
+      _completedTaskHive.get(task.id).then((completed) {
+        completed ??= CompletedTask(id: task.id);
+        completed.count++;
+        _completedTaskHive.put(completed);
+      });
+    } else {
+      _completedTaskHive.put(CompletedTask(id: task.id));
+    }
+  }
+
+  @override
+  void uncomplete(String id) => _completedTaskHive.deleteSafe(id);
 
   @override
   Future<CompletedTask?> getCompleted(String id) => _completedTaskHive.get(id);

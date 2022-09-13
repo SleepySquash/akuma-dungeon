@@ -90,6 +90,8 @@ class DungeonController extends GetxController {
 
   final RxMap<String, Widget> effects = RxMap();
 
+  final Map<String?, int> damages = {};
+
   Rx<Duration> enemySlideDuration = Rx(const Duration(milliseconds: 150));
   Rx<Offset> enemySlideOffset = Rx(Offset.zero);
   RxDouble enemyScaleY = RxDouble(1);
@@ -145,6 +147,9 @@ class DungeonController extends GetxController {
             if (enemy.value!.isDead) {
               _slayEnemy();
             }
+
+            damages[e.character.value.id.val] =
+                (damages[e.character.value.id.val] ?? 0) + hit.damage;
 
             final String id = const Uuid().v4();
             Rect? bounds = key.globalPaintBounds;
@@ -209,7 +214,7 @@ class DungeonController extends GetxController {
         onSkill: (Skill skill) {
           Source? sound = skill.sounds?.sample(1).firstOrNull;
           if (sound != null) {
-            _musicWorker.once(sound);
+            _musicWorker.voice(sound);
           }
 
           final String id = const Uuid().v4();
@@ -224,12 +229,6 @@ class DungeonController extends GetxController {
             text: skill.name,
             onEnd: () => effects.remove(id),
           );
-
-          // effects[id] = SlidingSkill(
-          //   asset: 'character/${e.character.value.character.asset}',
-          //   text: skill.name,
-          //   onEnd: () => effects.remove(id),
-          // );
         },
       );
     }).toList();
@@ -294,6 +293,8 @@ class DungeonController extends GetxController {
       if (enemy.value!.isDead) {
         _slayEnemy();
       }
+
+      damages[null] = (damages[null] ?? 0) + damage;
 
       final String id = const Uuid().v4();
       effects[id] = NumberIndicator(
@@ -659,6 +660,8 @@ class PartyMember {
         );
       }
     }
+
+    _primaryAttack();
   }
 
   void dispose() {
@@ -683,18 +686,26 @@ class PartyMember {
   void afterStage() {
     if (!isAlive) {
       hp.value = character.health.toDouble() / 2;
+
+      for (Timer t in _primary) {
+        t.cancel();
+      }
+      _primary.clear();
+      _primaryAttack();
     }
   }
 
-  void beforeEnemy() {
-    if (!isAlive) return;
+  void beforeEnemy() {}
 
+  void afterEnemy() {}
+
+  void _primaryAttack() {
     for (MySkill s in character.character.value.skills) {
       if (s.skill is HittingSkill) {
         HittingSkill skill = s.skill as HittingSkill;
 
         int milliseconds =
-            Random().nextInt(skill.periods[s.level].inMilliseconds);
+            Random().nextInt(skill.periods[s.level].inMilliseconds ~/ 2);
         _primary.add(
           Timer(Duration(milliseconds: milliseconds), () {
             _primary.add(
@@ -722,12 +733,5 @@ class PartyMember {
         );
       }
     }
-  }
-
-  void afterEnemy() {
-    for (Timer t in _primary) {
-      t.cancel();
-    }
-    _primary.clear();
   }
 }

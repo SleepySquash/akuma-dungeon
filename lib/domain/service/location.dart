@@ -3,13 +3,13 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:novel/novel.dart';
 
 import '/domain/model/commission.dart';
 import '/domain/model/location.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/location.dart';
-import '/router.dart';
+import '/domain/repository/task.dart';
+
 import '/util/log.dart';
 import '/util/rewards.dart';
 import 'flag.dart';
@@ -24,6 +24,7 @@ class LocationService extends DisposableInterface {
     this._itemService,
     this._playerService,
     this._progressionService,
+    this._taskRepository,
   );
 
   final AbstractLocationRepository _locationRepository;
@@ -31,9 +32,12 @@ class LocationService extends DisposableInterface {
   final ItemService _itemService;
   final PlayerService _playerService;
   final ProgressionService _progressionService;
+  final AbstractTaskRepository _taskRepository;
 
   late final Timer _fixedUpdate;
   final Map<String, Timer> _timers = {};
+
+  final List<String> _completed = [];
 
   Rx<MyLocation> get location => _locationRepository.location;
 
@@ -123,6 +127,9 @@ class LocationService extends DisposableInterface {
         _progressionService.addQuestsDone();
       }
 
+      _completed.add(commission.task.id);
+      _taskRepository.complete(commission.task);
+
       _populateCommissions();
     } else {
       if (commission == null) {
@@ -138,56 +145,10 @@ class LocationService extends DisposableInterface {
     MyLocation location = this.location.value;
     MyCommission? commission =
         location.commissions.firstWhereOrNull((e) => e.id == suggested.id);
-
-    if (commission?.isCompleted == true) {
-      return;
-    }
-
-    if (commission != null) {
-      void execute() {
-        void next() {
-          commission.progress++;
-          _locationRepository.put(location);
-
-          if (commission.isCompleted) {
-            (onEnd ?? router.home).call();
-            this.location.refresh();
-            // generate new commission after timeout.
-          } else {
-            execute();
-          }
-        }
-
-        int i = commission.progress;
-        TaskStep step = commission.task.steps[i];
-        if (step is NovelStep) {
-          router.nowhere();
-          Novel.show(context: router.context!, scenario: step.scenario)
-              .then((_) => next());
-        } else if (step is DungeonStep) {
-          if (suggested.task is DungeonCommission) {
-            router.entrance(
-              step.settings,
-              location.location.asset,
-              onClear: () {
-                router.nowhere();
-                next();
-              },
-            );
-          } else {
-            router.dungeon(
-              step.settings,
-              onClear: () {
-                router.nowhere();
-                next();
-              },
-            );
-          }
-        }
-      }
-
-      execute();
-    }
+    commission?.execute(
+      save: () => _locationRepository.put(location),
+      location: location.location,
+    );
   }
 
   void _populateCommissions() {
@@ -195,7 +156,13 @@ class LocationService extends DisposableInterface {
 
     for (MyCommission commission
         in List.from(location.commissions, growable: false)) {
-      if (commission.task.timeout != null) {
+      if (!commission.task.criteriaMet(
+        player: _playerService.player,
+        progression: _progressionService.progression.value,
+        isTaskCompleted: _taskRepository.isCompleted,
+      )) {
+        failCommission(commission);
+      } else if (commission.task.timeout != null) {
         Duration diff = DateTime.now().difference(commission.appearedAt);
         if (diff > commission.task.timeout!) {
           location.commissions.remove(commission);
@@ -238,25 +205,41 @@ class LocationService extends DisposableInterface {
       }
     }
 
-    int commissions = location.commissions
-        .where((e) => !e.isCompleted && e.task is QuestCommission)
-        .length;
-    const int maxCommissions = 2;
-
-    for (int i = commissions; i < maxCommissions; ++i) {
-      Task? random = location.location.commissions
-          .where((e) =>
-              location.commissions.firstWhereOrNull((m) => m.task.id == e.id) ==
-              null)
-          .sample(1)
-          .firstOrNull;
-      if (random != null) {
-        location.commissions.add(MyCommission(
-          task: random,
-          appearedAt: appearedAt(random.timeout),
-        ));
+    for (QuestCommission c in location.location.commissions.where(
+      (e) =>
+          e.criteriaMet(
+            player: _playerService.player,
+            progression: _progressionService.progression.value,
+            isTaskCompleted: _taskRepository.isCompleted,
+          ) &&
+          !_completed.contains(e.id),
+    )) {
+      if (location.commissions.firstWhereOrNull((m) => m.task.id == c.id) ==
+          null) {
+        location.commissions
+            .add(MyCommission(task: c, appearedAt: appearedAt(c.timeout)));
       }
     }
+
+    // int commissions = location.commissions
+    //     .where((e) => !e.isCompleted && e.task is QuestCommission)
+    //     .length;
+    // const int maxCommissions = 2;
+
+    // for (int i = commissions; i < maxCommissions; ++i) {
+    //   Task? random = location.location.commissions
+    //       .where((e) =>
+    //           location.commissions.firstWhereOrNull((m) => m.task.id == e.id) ==
+    //           null)
+    //       .sample(1)
+    //       .firstOrNull;
+    //   if (random != null) {
+    // location.commissions.add(MyCommission(
+    //   task: random,
+    //   appearedAt: appearedAt(random.timeout),
+    // ));
+    //   }
+    // }
 
     _locationRepository.put(location);
     this.location.refresh();

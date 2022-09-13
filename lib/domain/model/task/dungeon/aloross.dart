@@ -132,6 +132,7 @@ abstract class AlorossSlimeMinesDungeon extends AlorossDungeon with Slimes {
               ),
             ],
           ),
+          withEntrance: true,
         ),
       ];
 }
@@ -212,6 +213,7 @@ abstract class AlorossIceCaveDungeon extends AlorossDungeon with Slimes {
               ),
             ],
           ),
+          withEntrance: true,
         ),
       ];
 }
@@ -313,6 +315,7 @@ abstract class AlorossSlimeExtendedMinesDungeon extends AlorossDungeon
               ),
             ],
           ),
+          withEntrance: true,
         ),
       ];
 }

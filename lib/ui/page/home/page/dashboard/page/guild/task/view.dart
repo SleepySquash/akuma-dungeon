@@ -14,16 +14,18 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/flag.dart';
-import 'package:akuma/ui/widget/locked.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/commission.dart';
+import '/domain/model/flag.dart';
+import '/ui/widget/locked.dart';
 import '/ui/widget/modal_popup.dart';
 import '/util/extensions.dart';
 import 'commission_preview/view.dart';
 import 'controller.dart';
+import 'developer/view.dart';
 
 class TaskView extends StatelessWidget {
   const TaskView({Key? key}) : super(key: key);
@@ -64,9 +66,8 @@ class TaskView extends StatelessWidget {
                       ? Text(e.task.name)
                       : Text(
                           '${e.task.name} [Осталось: ${remaining.hhMmSs()}]'),
-                  subtitle: e.task.description == null
-                      ? null
-                      : Text(e.task.description!),
+                  subtitle:
+                      e.task.subtitle == null ? null : Text(e.task.subtitle!),
                   trailing: e.isCompleted
                       ? const Icon(Icons.done_outline, color: Colors.green)
                       : Text(e.task.rank.name),
@@ -95,6 +96,12 @@ class TaskView extends StatelessWidget {
             return ListView(
               shrinkWrap: true,
               children: [
+                if (kDebugMode)
+                  ListTile(
+                    leading: const Icon(Icons.developer_mode),
+                    title: const Text('Developer'),
+                    onTap: () => AllTasksView.show(context),
+                  ),
                 if (completed.isNotEmpty)
                   const ListTile(title: Text('Завершённые')),
                 ...completed.map(commission),

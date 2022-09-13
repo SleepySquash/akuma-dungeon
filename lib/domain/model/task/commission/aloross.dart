@@ -32,6 +32,7 @@ import '/domain/model/task.dart';
 abstract class AlorossCommissions {
   static List<QuestCommission> get tasks => const [
         AlorossSlimeFieldsCommission(),
+        AlorossSlimeFields2Commission(),
         AlorossMerchantForestCommission(),
         AlorossSlimeSwampCommission(),
         AlorossRestaurantCommission(),
@@ -45,10 +46,10 @@ abstract class AlorossCommission extends Task with QuestCommission {
   String? get location => 'aloross';
 
   @override
-  Duration? get timeout => const Duration(days: 7);
+  Rank get rank => Rank.F;
 
   @override
-  Rank get rank => Rank.F;
+  List<TaskCriteria> get criteria => const [NotCompletedCriteria()];
 
   @override
   List<Reward> get rewards => const [
@@ -67,8 +68,49 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
   String get name => 'Слаймы вокруг города';
 
   @override
-  String? get description =>
-      'Вокруг города поселились слаймы, разберись с ними';
+  String? get subtitle => 'Вокруг города поселились слаймы, разберись с ними';
+
+  @override
+  IconData get icon => Icons.landslide;
+
+  @override
+  List<TaskCriteria> get criteria => [];
+
+  @override
+  List<Reward> get rewards => [
+        ...super.rewards,
+        const ControlReward(AlorossLocation(), 1),
+      ];
+
+  @override
+  List<TaskStep> get steps => [
+        DungeonStep(
+          Dungeon(
+            background: 'fields',
+            stages: [
+              DungeonStage(
+                enemies: SlimeEnemies.f,
+                conditions: const [SlayedStageCondition(1)],
+              ),
+              DungeonStage(
+                background: 'forest',
+                enemies: SlimeEnemies.f,
+                conditions: const [SlayedStageCondition(2)],
+              ),
+            ],
+          ),
+        ),
+      ];
+}
+
+class AlorossSlimeFields2Commission extends AlorossCommission {
+  const AlorossSlimeFields2Commission();
+
+  @override
+  String get name => 'Слаймы снова вокруг города';
+
+  @override
+  String? get subtitle => 'Вокруг города поселились слаймы, разберись с ними';
 
   @override
   IconData get icon => Icons.landslide;
@@ -77,6 +119,12 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
   List<Reward> get rewards => [
         ...super.rewards,
         const ControlReward(AlorossLocation(), 1),
+      ];
+
+  @override
+  List<TaskCriteria> get criteria => [
+        ...super.criteria,
+        const CompletedCriteria(AlorossSlimeFieldsCommission()),
       ];
 
   @override
@@ -107,7 +155,12 @@ class AlorossMerchantForestCommission extends AlorossCommission {
   String get name => 'Провести торговца через лес';
 
   @override
-  String? get description => 'В лесу бродят слаймы, нужно защитить торговца';
+  String? get subtitle =>
+      'Нужно провести торговца через лес, полный слаймов и прочей живности.';
+
+  @override
+  String? get description =>
+      'Прошу найтись того путешественника, который сможет провести меня и защитить товары от монстров, что поселились в лесу! Дорога опасная, но награда соответствующая.\n\nЛоренц, 25 лет, буду ждать на площади.';
 
   @override
   IconData get icon => Icons.forest;
@@ -132,71 +185,71 @@ class AlorossMerchantForestCommission extends AlorossCommission {
               'Приблизившись, ты спрашиваешь у деда, он ли торговец из записки.'),
           DialogueLine(
             'Чел, мне 25.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'И да, я торговец.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine('Он сразу понимает, что ты пришёл по делу.'),
           DialogueLine(
             'Готов отправляться?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
               'Ты кивнул, а торговец бодро запряг лошадь и прыгнул на повозку, приглашая тебя.'),
           HideCharacterLine('Lawrence.webp'),
           DialogueLine(
-              'Ты садишься рядом, Лоренс даёт команду, и вот вы уже отправились в сторону леса.'),
+              'Ты садишься рядом, Лоуренс даёт команду, и вот вы уже отправились в сторону леса.'),
           const WaitLine(Duration(seconds: 1)),
           BackgroundLine('location/fields.jpg'),
           CharacterLine('Lawrence.webp'),
           DialogueLine(
             'Можно задам личный вопрос, пока едем?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Как ты думаешь, если твоя вайфу не человек, это делает тебя зоофилом?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Ну, то есть, она как бы человек, но с приколом.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'И прикол не только в штанах - допустим, у неё есть уши и вообще она превращается в ВОЛЧАРУ огромного.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Как бы с одной стороны это ВОЛЧАРА огромный, а не тян, а с другой - как бы вроде и человек.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Вот сколько не путешествую, никак не могу понять.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Кстати о путешествиях, ты любишь путешествовать?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Ты ведь путешественник, а я торговец.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Не находишь некой особой связи между нами?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Ты не хочешь быть м-моим телохранителем?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Ну, если ты не против, что у меня фетиш на ВОЛЧАР огромных?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
-              'Ты снимаешь наушники и спрашиваешь, о чём говорил Лоренс.'),
+              'Ты снимаешь наушники и спрашиваешь, о чём говорил Лоуренс.'),
           DialogueLine('Однако он не успевает ответить, на вас напали слаймы!'),
         ]),
         DungeonStep(
@@ -222,7 +275,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           CharacterLine('Lawrence.webp'),
           DialogueLine(
             'Мы ещё до леса даже не добрались, а они сразу напрыгнули...',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           HideCharacterLine('Lawrence.webp'),
           DialogueLine('Вы продолжили свой путь до леса.'),
@@ -237,42 +290,42 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           CharacterLine('Lawrence.webp'),
           DialogueLine(
             'Алоросс - единственный лес, в котором такое безумное количество монстров.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Они тут создали свою биосферу и живут как обычные животные.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Даже странно осознавать, что существа из другого измерения смогли адаптироваться в такую необычную для них жизнь.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'И такую ли необычную? Я, вот, не знаю, что находится по ту сторону врат.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Вдруг там живут девочки, способные превращаться в ВОЛЧАР огромных?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Если это так, то я был бы первым, кто прыгнул бы в данж.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Ты ведь уже был там, каково это?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
               'Ты рассказываешь, что данжах в основном закрытые помещения.'),
           DialogueLine('Но сказать, почему, ты не можешь.'),
           DialogueLine(
             'Эльфиечки-то родом из того измерения, значит, и волкодевочки реальны.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'И если половые акты с эльфиечками не считаются зоофилией, то и с ВОЛЧАРОЙ не будет, правда?',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
               'Ваши разговоры о высокой культуре прерывает массивная группировка слаймов.'),
@@ -309,19 +362,19 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           CharacterLine('Lawrence.webp'),
           DialogueLine(
             'Уф, и так каждый раз...',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Что ж, ты меня сильно выручил!',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Спасибо большое за помощь, дальше уже безопасно, в этих краях уже спокойно.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           DialogueLine(
             'Удачи тебе вернуться.',
-            by: 'Лоренс',
+            by: 'Лоуренс',
           ),
           HideCharacterLine('Lawrence.webp'),
           DialogueLine(
@@ -337,7 +390,7 @@ class AlorossSlimeSwampCommission extends AlorossCommission {
   String get name => 'Слаймы на болоте';
 
   @override
-  String? get description => 'Победи слаймов на болоте';
+  String? get subtitle => 'Победи слаймов на болоте';
 
   @override
   IconData get icon => Icons.forest;
@@ -376,7 +429,11 @@ class AlorossRestaurantCommission extends AlorossCommission {
   String get name => 'Помощь на кухне';
 
   @override
-  String? get description => 'Ресторану нужна смешная нарезка продуктов';
+  String? get subtitle => 'Ресторану нужна смешная нарезка продуктов.';
+
+  @override
+  String? get description =>
+      'ВСЁ ОЧЕНЬ ПЛОХО, СРОЧНО НУЖЕН КТО-НИБУДЬ, КТО ПОМОЖЕТ МНЕ С ПРОДУКТАМИ!!!';
 
   @override
   IconData get icon => Icons.restaurant;

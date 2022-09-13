@@ -73,7 +73,6 @@ class MusicWorker extends DisposableInterface {
     }
 
     _lifecycleWorker = ever(router.lifecycle, (AppLifecycleState state) {
-      print(state);
       switch (state) {
         case AppLifecycleState.resumed:
           if (_soundStream != null) {

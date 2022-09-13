@@ -64,9 +64,9 @@ class AdventuresView extends StatelessWidget {
                     return ListTile(
                       leading: Icon(e.task.icon),
                       title: Text(e.task.name),
-                      subtitle: e.task.description == null
+                      subtitle: e.task.subtitle == null
                           ? null
-                          : Text(e.task.description!),
+                          : Text(e.task.subtitle!),
                       trailing: Text(
                           '${e.task.rank.name} (${e.progress}/${e.task.steps.length})'),
                       onTap: () {
@@ -100,7 +100,7 @@ class AdventuresView extends StatelessWidget {
 
                     String? name = e.active?.task.name ?? e.next?.name;
                     String? description =
-                        e.active?.task.description ?? e.next?.description;
+                        e.active?.task.subtitle ?? e.next?.subtitle;
 
                     return LockedWidget(
                       locked: !met,
@@ -128,7 +128,7 @@ class AdventuresView extends StatelessWidget {
                               if (c.progression.value.dungeonsCleared <
                                   e.amount) {
                                 return Text(
-                                  'Dungeons cleared: ${c.progression.value.questsDone} out of ${e.amount}',
+                                  'Dungeons cleared: ${c.progression.value.dungeonsCleared} out of ${e.amount}',
                                   style: const TextStyle(color: Colors.white),
                                 );
                               }

@@ -30,6 +30,7 @@ abstract class AkumaDungeon {
             ),
           ],
         ),
+        withEntrance: true,
       ),
     ];
   }
@@ -61,6 +62,7 @@ abstract class RedDungeon {
             ),
           ],
         ),
+        withEntrance: true,
       ),
     ];
   }

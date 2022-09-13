@@ -40,8 +40,9 @@ class AdventuresController extends GetxController {
   void executeCommission(MyCommission commission) =>
       _locationService.executeCommission(commission);
   bool criteriaMet(Task task) => task.criteriaMet(
-        player: _playerService.player.player.value,
+        player: _playerService.player,
         progression: progression.value,
+        isTaskCompleted: _taskService.isCompleted,
       );
   void setGoddessTower(int to) => _progressionService.setGoddessTower(to);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import 'executable.dart';
 import 'task.dart';
 
 mixin Commission on Task {}
@@ -12,12 +13,12 @@ mixin DungeonCommission implements Commission {
   String get name => 'Портал в подземелье';
 
   @override
-  String? get description =>
+  String? get subtitle =>
       'Рядом с городом открылся портал, из которого вот-вот выйдут монстры';
 }
 mixin QuestCommission implements Commission {}
 
-class MyCommission {
+class MyCommission extends ExecutableTask {
   MyCommission({
     String? id,
     required this.task,
@@ -28,12 +29,14 @@ class MyCommission {
         appearedAt = appearedAt ?? DateTime.now();
 
   final String id;
+
+  @override
   final Task task;
+
   final DateTime appearedAt;
 
   bool accepted;
 
+  @override
   int progress;
-
-  bool get isCompleted => progress >= task.steps.length;
 }

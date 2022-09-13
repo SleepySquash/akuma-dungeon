@@ -345,6 +345,11 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
             PlayerService playerService =
                 deps.put(PlayerService(playerRepository));
 
+            AbstractTaskRepository taskRepository =
+                deps.put<AbstractTaskRepository>(
+              TaskRepository(Get.find(), Get.find(), Get.find()),
+            );
+
             AbstractLocationRepository locationRepository =
                 deps.put<AbstractLocationRepository>(
               LocationRepository(Get.find(), Get.find(), Get.find()),
@@ -356,13 +361,10 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
                 itemService,
                 playerService,
                 progressionService,
+                taskRepository,
               ),
             );
 
-            AbstractTaskRepository taskRepository =
-                deps.put<AbstractTaskRepository>(
-              TaskRepository(Get.find(), Get.find(), Get.find(), Get.find()),
-            );
             TaskService taskService = deps.put(
               TaskService(
                 taskRepository,

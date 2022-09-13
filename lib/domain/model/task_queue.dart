@@ -24,6 +24,10 @@ class MyTaskQueue {
         next = queue.tasks[progress];
       }
     } else {
+      if (active?.isCompleted == true) {
+        complete();
+      }
+
       if (progress < queue.tasks.length - 1) {
         next = queue.tasks[progress + 1];
       }

@@ -36,6 +36,7 @@ class TaskService extends DisposableInterface {
 
   RxObsMap<String, Rx<MyTask>> get tasks => _taskRepository.tasks;
   RxObsMap<String, Rx<MyTaskQueue>> get queues => _taskRepository.queues;
+  Iterable<String> get completedTasks => _taskRepository.completedTasks;
 
   @override
   void onInit() {
@@ -73,15 +74,7 @@ class TaskService extends DisposableInterface {
         flagService: _flagService,
       );
 
-      _taskRepository.getCompleted(task.task.id).then((v) {
-        if (v != null) {
-          ++v.count;
-        } else {
-          v = CompletedTask(id: task.task.id);
-        }
-
-        _taskRepository.complete(v);
-      });
+      _taskRepository.complete(task.task);
 
       cancel(task.task);
     }
@@ -90,66 +83,28 @@ class TaskService extends DisposableInterface {
   void executeQueue(MyTaskQueue queue) {
     MyTask? task = queue.active ?? queue.execute();
 
-    if (task != null) {
+    if (queue.isCompleted) {
+      complete(queue);
+    } else if (task != null) {
       if (!task.task.criteriaMet(
-        player: _playerService.player.player.value,
+        player: _playerService.player,
         progression: _progressionService.progression.value,
+        isTaskCompleted: _taskRepository.isCompleted,
       )) {
         return;
       }
 
-      void execute(MyTask task) {
-        void next() {
-          task.progress++;
-          _taskRepository.progress(queue);
-          execute(task);
-        }
-
-        if (task.isCompleted) {
+      queue.active!.execute(
+        save: () => _taskRepository.progress(queue),
+        onEnd: () {
           finish(task);
           if (queue.complete()) {
             complete(queue);
           }
           router.home();
-        } else {
-          int i = task.progress;
-          TaskStep step = task.task.steps[i];
-          if (step is NovelStep) {
-            router.nowhere();
-            Novel.show(context: router.context!, scenario: step.scenario)
-                .then((_) => next());
-          } else if (step is DungeonStep) {
-            if (step.withEntrance) {
-              router.entrance(
-                step.settings,
-                _locationService.location.value.location.asset,
-                onClear: () {
-                  router.nowhere();
-                  next();
-                },
-              );
-            } else {
-              router.dungeon(
-                step.settings,
-                onClear: () {
-                  router.nowhere();
-                  next();
-                },
-              );
-            }
-          } else if (step is ExecuteStep) {
-            router.nowhere();
-            FutureOr future = step.function.call();
-            if (future is Future) {
-              future.then((_) => next());
-            }
-          }
-        }
-      }
-
-      execute(queue.active!);
-    } else if (queue.isCompleted) {
-      complete(queue);
+        },
+        location: _locationService.location.value.location,
+      );
     }
   }
 
@@ -158,32 +113,15 @@ class TaskService extends DisposableInterface {
     queues[queue.queue.id]?.refresh();
   }
 
-  void executeTask(MyTask task) async {
-    void next() {
-      task.progress++;
-      _taskRepository.update(task);
-      executeTask(task);
-    }
-
-    if (task.isCompleted) {
-      router.home();
-      finish(task);
-    } else {
-      int i = task.progress;
-      TaskStep step = task.task.steps[i];
-      if (step is NovelStep) {
-        router.nowhere();
-        Novel.show(context: router.context!, scenario: step.scenario)
-            .then((_) => next());
-      } else if (step is DungeonStep) {
-        router.dungeon(
-          step.settings,
-          onClear: () {
-            router.nowhere();
-            next();
-          },
-        );
-      }
-    }
+  void executeTask(MyTask task) {
+    task.execute(
+      save: () => _taskRepository.update(task),
+      location: _locationService.location.value.location,
+    );
   }
+
+  bool isCompleted(String id) => _taskRepository.isCompleted(id);
+  Future<CompletedTask?> getCompleted(String id) =>
+      _taskRepository.getCompleted(id);
+  void uncomplete(String id) => _taskRepository.uncomplete(id);
 }
