@@ -1,7 +1,8 @@
-import 'package:akuma/ui/page/home/page/dashboard/page/guild/task/developer/controller.dart';
-import 'package:akuma/ui/widget/modal_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '/ui/widget/modal_popup.dart';
+import 'controller.dart';
 
 class AllTasksView extends StatelessWidget {
   const AllTasksView({Key? key}) : super(key: key);
@@ -63,6 +64,16 @@ class AllTasksView extends StatelessWidget {
       return ListView(
         shrinkWrap: true,
         children: [
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text('Remove all quests'),
+            onTap: c.removeQuests,
+          ),
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text('Remove all dungeons'),
+            onTap: c.removeDungeons,
+          ),
           ...c.location.value.location.commissions.map((e) {
             return FutureBuilder(
                 future: c.criteriaMet(e),

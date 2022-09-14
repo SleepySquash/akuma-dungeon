@@ -1,10 +1,12 @@
-import 'package:akuma/domain/model/location.dart';
-import 'package:akuma/domain/model/task.dart';
-import 'package:akuma/domain/service/location.dart';
-import 'package:akuma/domain/service/player.dart';
-import 'package:akuma/domain/service/progression.dart';
-import 'package:akuma/domain/service/task.dart';
 import 'package:get/get.dart';
+
+import '/domain/model/commission.dart';
+import '/domain/model/location.dart';
+import '/domain/model/task.dart';
+import '/domain/service/location.dart';
+import '/domain/service/player.dart';
+import '/domain/service/progression.dart';
+import '/domain/service/task.dart';
 
 class AllTasksController extends GetxController {
   AllTasksController(
@@ -41,6 +43,24 @@ class AllTasksController extends GetxController {
       _taskService.uncomplete(id);
     }
     completedTasks.clear();
+  }
+
+  void removeQuests() {
+    for (var e in List.from(
+      _locationService.location.value.commissions,
+      growable: false,
+    ).where((e) => e.task is QuestCommission)) {
+      _locationService.removeCommission(e);
+    }
+  }
+
+  void removeDungeons() {
+    for (var e in List.from(
+      _locationService.location.value.commissions,
+      growable: false,
+    ).where((e) => e.task is DungeonCommission)) {
+      _locationService.removeCommission(e);
+    }
   }
 
   void _populateCompleted() async {

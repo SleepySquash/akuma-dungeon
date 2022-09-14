@@ -513,7 +513,7 @@ packages:
     description:
       path: "."
       ref: improve-implementation
-      resolved-ref: "4fdeb0ea5e9a26d8dba0cf60e29b26bb3692e904"
+      resolved-ref: "87e0aed82f5b027cf90eb042b1b5a1bdb8273a0d"
       url: "https://github.com/SleepySquash/novel.dart.git"
     source: git
     version: "0.0.1"

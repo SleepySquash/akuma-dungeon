@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 
 import '/domain/model/commission.dart';
 import '/domain/model/location.dart';
+import '/domain/model/rank.dart';
 import '/domain/model/task.dart';
 import '/domain/repository/location.dart';
 import '/domain/repository/task.dart';
-
 import '/util/log.dart';
 import '/util/rewards.dart';
 import 'flag.dart';
@@ -80,6 +80,19 @@ class LocationService extends DisposableInterface {
 
     _locationRepository.put(location);
     this.location.refresh();
+  }
+
+  void removeCommission(MyCommission suggested) {
+    MyLocation location = this.location.value;
+    MyCommission? commission =
+        location.commissions.firstWhereOrNull((e) => e.id == suggested.id);
+
+    if (commission != null) {
+      location.commissions.remove(commission);
+      _timers.remove(commission.id)?.cancel();
+      this.location.refresh();
+      _locationRepository.put(location);
+    }
   }
 
   void failCommission(MyCommission suggested) {
@@ -191,12 +204,26 @@ class LocationService extends DisposableInterface {
     const int maxDungeons = 4;
 
     for (int i = dungeons; i < maxDungeons; ++i) {
-      Task? random = location.location.dungeons
-          .where((e) =>
-              location.commissions.firstWhereOrNull((m) => m.task.id == e.id) ==
-              null)
-          .sample(1)
-          .firstOrNull;
+      List<DungeonCommission> ranked = location.location.dungeons.where((e) {
+        return location.commissions
+                    .firstWhereOrNull((m) => m.task.id == e.id) ==
+                null &&
+            e.rank == _playerService.player.rank.toRank;
+      }).toList();
+
+      Task? random;
+      if (ranked.isNotEmpty) {
+        random = ranked.sample(1).first;
+      } else {
+        random = location.location.dungeons
+            .where((e) =>
+                location.commissions
+                    .firstWhereOrNull((m) => m.task.id == e.id) ==
+                null)
+            .sample(1)
+            .firstOrNull;
+      }
+
       if (random != null) {
         location.commissions.add(MyCommission(
           task: random,

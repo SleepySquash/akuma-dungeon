@@ -624,7 +624,7 @@ class ShopUnlockedTask extends Task {
 
   @override
   List<TaskCriteria> get criteria => const [
-        LevelCriteria(2),
+        LevelCriteria(1),
         DungeonCommissionsCompletedCriteria(3),
       ];
 

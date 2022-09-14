@@ -39,8 +39,8 @@ abstract class AlorossDungeons {
         AlorossSlimeExtendedMinesFDungeon(),
         AlorossSlimeExtendedMinesEDungeon(),
         AlorossSlimeExtendedMinesDDungeon(),
-        AlorossAkumaDungeon(),
-        AlorossRedDungeon(),
+        // AlorossAkumaDungeon(),
+        // AlorossRedDungeon(),
       ];
 }
 
