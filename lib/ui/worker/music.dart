@@ -1,24 +1,23 @@
 import 'dart:async';
 
-import 'package:akuma/router.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:soundpool/soundpool.dart';
 
+import '/router.dart';
 import '/domain/model/application_settings.dart';
 import '/domain/repository/settings.dart';
 
 class MusicWorker extends DisposableInterface {
   MusicWorker(this._settingsRepository);
 
-  final AudioPlayer audio = AudioPlayer(playerId: 'music');
-
   bool isPlaying = false;
 
   final AbstractSettingsRepository _settingsRepository;
 
+  static const bool usePool = false;
   Soundpool? _soundpool, _voicepool;
   int? _soundStream, _voiceStream;
   final Map<String, int> _pooledSounds = {}, _voiceSounds = {};
@@ -27,7 +26,9 @@ class MusicWorker extends DisposableInterface {
   double? _lastMusicVolume;
   late final Worker _settingsWorker;
 
-  Source? _source;
+  final AudioPlayer _audio = AudioPlayer();
+
+  String? _asset;
 
   static const double _volumeCorrections = 0.5;
 
@@ -38,27 +39,7 @@ class MusicWorker extends DisposableInterface {
 
   @override
   void onInit() {
-    _settingsWorker = ever(_settings, (ApplicationSettings? settings) {
-      double musicVolume = _settings.value?.musicVolume ?? 1;
-      if (_lastMusicVolume != musicVolume) {
-        if (isPlaying) {
-          if (musicVolume > 0) {
-            if ((_lastMusicVolume ?? 0) <= 0) {
-              resume();
-            } else {
-              audio.setVolume(musicVolume * _volumeCorrections);
-            }
-          } else {
-            stop();
-            isPlaying = true;
-          }
-        }
-
-        _lastMusicVolume = musicVolume;
-      }
-    });
-
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+    if (usePool) {
       try {
         _soundpool = Soundpool.fromOptions(
           options: const SoundpoolOptions(streamType: StreamType.notification),
@@ -72,7 +53,28 @@ class MusicWorker extends DisposableInterface {
       }
     }
 
-    _lifecycleWorker = ever(router.lifecycle, (AppLifecycleState state) {
+    _settingsWorker = ever(_settings, (ApplicationSettings? settings) async {
+      double musicVolume = _settings.value?.musicVolume ?? 1;
+      if (_lastMusicVolume != musicVolume) {
+        if (isPlaying) {
+          if (musicVolume > 0) {
+            if ((_lastMusicVolume ?? 0) <= 0) {
+              _lastMusicVolume = musicVolume;
+              await resume();
+            } else {
+              await _audio.setVolume(musicVolume * _volumeCorrections);
+            }
+          } else {
+            await stop();
+            isPlaying = true;
+          }
+        }
+
+        _lastMusicVolume = musicVolume;
+      }
+    });
+
+    _lifecycleWorker = ever(router.lifecycle, (AppLifecycleState state) async {
       switch (state) {
         case AppLifecycleState.resumed:
           if (_soundStream != null) {
@@ -83,7 +85,7 @@ class MusicWorker extends DisposableInterface {
             _voicepool?.resume(_voiceStream!);
           }
 
-          audio.resume();
+          _audio.play();
           break;
 
         case AppLifecycleState.inactive:
@@ -97,7 +99,7 @@ class MusicWorker extends DisposableInterface {
             _voicepool?.pause(_voiceStream!);
           }
 
-          audio.pause();
+          await _audio.pause();
           break;
       }
     });
@@ -107,7 +109,7 @@ class MusicWorker extends DisposableInterface {
 
   @override
   void onClose() {
-    audio.dispose();
+    _audio.dispose();
     _settingsWorker.dispose();
     _lifecycleWorker.dispose();
     _soundpool?.dispose();
@@ -115,95 +117,107 @@ class MusicWorker extends DisposableInterface {
     super.onClose();
   }
 
-  void once(Source source) async {
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      if (source is AssetSource) {
-        if (_pooledSounds.containsKey(source.path)) {
-          _soundStream = await _soundpool!.play(_pooledSounds[source.path]!);
-        } else {
-          _pooledSounds[source.path] = -1;
-          _pooledSounds[source.path] = await _soundpool!
-              .load(await rootBundle.load('assets/${source.path}'));
-          _soundStream = await _soundpool!.play(_pooledSounds[source.path]!);
-        }
-
-        _pooledTimers[source.path]?.cancel();
-        _pooledTimers[source.path] = Timer(
-          const Duration(minutes: 1),
-          () {
-            // Release the unused sound?
-            // soundpool.unload();
-          },
-        );
-      }
-    } else {
-      _playOnce(source);
-    }
-  }
-
-  void voice(Source source) async {
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      if (source is AssetSource) {
-        if (_voiceSounds.containsKey(source.path)) {
-          _voiceStream = await _voicepool!.play(_voiceSounds[source.path]!);
-        } else {
-          _voiceSounds[source.path] = -1;
-          _voiceSounds[source.path] = await _voicepool!
-              .load(await rootBundle.load('assets/${source.path}'));
-          _voiceStream = await _soundpool!.play(_pooledSounds[source.path]!);
-        }
-
-        _pooledTimers[source.path]?.cancel();
-        _pooledTimers[source.path] = Timer(
-          const Duration(minutes: 1),
-          () {
-            // Release the unused sound?
-            // soundpool.unload();
-          },
-        );
-      }
-    } else {
-      _playOnce(source);
-    }
-  }
-
-  void play(Source source) {
-    _source = source;
-
-    double volume = _settings.value?.musicVolume ?? 1;
+  Future<void> once(String asset) async {
+    double volume = _settings.value?.soundVolume ?? 1;
     if (volume > 0) {
-      audio.setReleaseMode(ReleaseMode.loop);
-      audio.play(source, volume: volume * _volumeCorrections);
+      if (usePool) {
+        _soundStream = await _playPool(
+          asset,
+          pool: _soundpool!,
+          sounds: _pooledSounds,
+          timers: _pooledTimers,
+        );
+      } else {
+        final AudioPlayer player = AudioPlayer();
+        await player.setVolume(volume);
+        await player.setAsset('assets/$asset');
+        await player.play();
+        await player.dispose();
+      }
     }
-
-    isPlaying = true;
   }
 
-  void resume() {
-    if (_source != null) {
+  Future<void> voice(String asset) async {
+    double volume = _settings.value?.soundVolume ?? 1;
+    if (volume > 0) {
+      if (usePool) {
+        _voiceStream = await _playPool(
+          asset,
+          pool: _voicepool!,
+          sounds: _voiceSounds,
+          timers: _pooledTimers,
+        );
+      } else {
+        final AudioPlayer player = AudioPlayer();
+        await player.setVolume(volume);
+        await player.setAsset('assets/$asset');
+        await player.play();
+        await player.dispose();
+      }
+    }
+  }
+
+  Future<void> play(String asset) async {
+    if (_asset != asset || !isPlaying) {
+      _asset = asset;
+
       double volume = _settings.value?.musicVolume ?? 1;
       if (volume > 0) {
-        audio.setReleaseMode(ReleaseMode.loop);
-        audio.play(_source!, volume: volume * _volumeCorrections);
+        await _audio.setLoopMode(LoopMode.one);
+        await _audio.setAsset('assets/$asset');
+        await _audio.setVolume(volume * _volumeCorrections);
+        _audio.play();
       }
 
       isPlaying = true;
     }
   }
 
-  void stop([Source? source]) {
-    if (_source == source || source == null) {
-      audio.setReleaseMode(ReleaseMode.release);
-      audio.stop();
+  Future<void> resume() async {
+    if (_asset != null) {
+      double volume = _settings.value?.musicVolume ?? 1;
+      if (volume > 0) {
+        await _audio.setVolume(volume * _volumeCorrections);
+        await _audio.setAsset('assets/$_asset');
+        _audio.play();
+      }
+
+      isPlaying = true;
+    }
+  }
+
+  Future<void> stop([String? asset]) async {
+    if (_asset == asset || asset == null) {
+      await _audio.stop();
       isPlaying = false;
     }
   }
 
-  void _playOnce(Source source) {
-    double volume = _settings.value?.soundVolume ?? 1;
-    if (volume > 0) {
-      final AudioPlayer player = AudioPlayer();
-      player.play(source, volume: volume);
+  Future<int> _playPool(
+    String asset, {
+    required Soundpool pool,
+    required Map<String, int> sounds,
+    required Map<String, Timer> timers,
+  }) async {
+    int stream;
+
+    if (sounds.containsKey(asset)) {
+      stream = await pool.play(sounds[asset]!);
+    } else {
+      sounds[asset] = -1;
+      sounds[asset] = await pool.load(await rootBundle.load('assets/$asset'));
+      stream = await pool.play(sounds[asset]!);
     }
+
+    timers[asset]?.cancel();
+    timers[asset] = Timer(
+      const Duration(minutes: 1),
+      () {
+        // Release the unused sound?
+        // soundpool.unload();
+      },
+    );
+
+    return stream;
   }
 }

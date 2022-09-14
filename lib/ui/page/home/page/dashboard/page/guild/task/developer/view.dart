@@ -64,10 +64,15 @@ class AllTasksView extends StatelessWidget {
         shrinkWrap: true,
         children: [
           ...c.location.value.location.commissions.map((e) {
-            return ListTile(
-              title: Text(e.name),
-              subtitle: Text('Criteria met: ${c.criteriaMet(e)}'),
-            );
+            return FutureBuilder(
+                future: c.criteriaMet(e),
+                builder: (context, snapshot) {
+                  bool met = snapshot.data == true;
+                  return ListTile(
+                    title: Text(e.name),
+                    subtitle: Text('Criteria met: $met'),
+                  );
+                });
           }),
         ],
       );

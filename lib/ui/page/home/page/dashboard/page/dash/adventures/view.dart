@@ -96,102 +96,113 @@ class AdventuresView extends StatelessWidget {
                     }
 
                     Task task = e.active?.task ?? e.next!;
-                    bool met = c.criteriaMet(task);
-
                     String? name = e.active?.task.name ?? e.next?.name;
                     String? description =
                         e.active?.task.subtitle ?? e.next?.subtitle;
 
-                    return LockedWidget(
-                      locked: !met,
-                      additional: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: task.criteria.map((e) {
-                            if (e is LevelCriteria) {
-                              if (c.player.player.value.level < e.level) {
-                                return Text(
-                                  'Level: ${e.level + 1} or higher',
-                                  style: const TextStyle(color: Colors.white),
-                                );
-                              }
-                            } else if (e is RankCriteria) {
-                              if (c.player.player.value.rank < e.rank.index) {
-                                return Text(
-                                  'Rank: ${e.rank.name} or higher',
-                                  style: const TextStyle(color: Colors.white),
-                                );
-                              }
-                            } else if (e
-                                is DungeonCommissionsCompletedCriteria) {
-                              if (c.progression.value.dungeonsCleared <
-                                  e.amount) {
-                                return Text(
-                                  'Dungeons cleared: ${c.progression.value.dungeonsCleared} out of ${e.amount}',
-                                  style: const TextStyle(color: Colors.white),
-                                );
-                              }
-                            } else if (e is QuestCommissionsCompletedCriteria) {
-                              if (c.progression.value.questsDone < e.amount) {
-                                return Text(
-                                  'Quests done: ${c.progression.value.questsDone} out of ${e.amount}',
-                                  style: const TextStyle(color: Colors.white),
-                                );
-                              }
-                            } else if (e is WeaponEquippedCriteria) {
-                              if (e.weapon == null) {
-                                if (c.player.weapons.isEmpty) {
-                                  return const Text(
-                                    'Weapon equipped: any',
-                                    style: TextStyle(color: Colors.white),
-                                  );
-                                }
-                              } else {
-                                if (c.player.weapons.firstWhereOrNull((m) =>
-                                        m.value.item.id == e.weapon!.id) ==
-                                    null) {
-                                  Item? item = Items.get(e.weapon!.id);
-                                  if (item != null) {
+                    return FutureBuilder(
+                      future: c.criteriaMet(task),
+                      builder: (context, snapshot) {
+                        bool met = snapshot.data == true;
+                        return LockedWidget(
+                          locked: !met,
+                          additional: [
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: task.criteria.map((e) {
+                                if (e is LevelCriteria) {
+                                  if (c.player.player.value.level < e.level) {
                                     return Text(
-                                      'Weapon equipped: ${item.name}',
+                                      'Level: ${e.level + 1} or higher',
                                       style:
                                           const TextStyle(color: Colors.white),
                                     );
                                   }
+                                } else if (e is RankCriteria) {
+                                  if (c.player.player.value.rank <
+                                      e.rank.index) {
+                                    return Text(
+                                      'Rank: ${e.rank.name} or higher',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    );
+                                  }
+                                } else if (e
+                                    is DungeonCommissionsCompletedCriteria) {
+                                  if (c.progression.value.dungeonsCleared <
+                                      e.amount) {
+                                    return Text(
+                                      'Dungeons cleared: ${c.progression.value.dungeonsCleared} out of ${e.amount}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    );
+                                  }
+                                } else if (e
+                                    is QuestCommissionsCompletedCriteria) {
+                                  if (c.progression.value.questsDone <
+                                      e.amount) {
+                                    return Text(
+                                      'Quests done: ${c.progression.value.questsDone} out of ${e.amount}',
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    );
+                                  }
+                                } else if (e is WeaponEquippedCriteria) {
+                                  if (e.weapon == null) {
+                                    if (c.player.weapons.isEmpty) {
+                                      return const Text(
+                                        'Weapon equipped: any',
+                                        style: TextStyle(color: Colors.white),
+                                      );
+                                    }
+                                  } else {
+                                    if (c.player.weapons.firstWhereOrNull((m) =>
+                                            m.value.item.id == e.weapon!.id) ==
+                                        null) {
+                                      Item? item = Items.get(e.weapon!.id);
+                                      if (item != null) {
+                                        return Text(
+                                          'Weapon equipped: ${item.name}',
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        );
+                                      }
+                                    }
+                                  }
                                 }
-                              }
-                            }
 
-                            return Container();
-                          }).toList(),
-                        ),
-                      ],
-                      child: ListTile(
-                        leading: Icon(task.icon),
-                        title: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(e.queue.name),
-                            if (name != null)
-                              Text(
-                                name,
-                                style: const TextStyle(color: Colors.blue),
-                              ),
+                                return Container();
+                              }).toList(),
+                            ),
                           ],
-                        ),
-                        subtitle: (description ?? name) != null
-                            ? Text(description ?? name!)
-                            : null,
-                        trailing: const Icon(Icons.forward),
-                        onTap: met
-                            ? () {
-                                Navigator.of(context).pop();
-                                c.executeQueue(m.value);
-                              }
-                            : null,
-                      ),
+                          child: ListTile(
+                            leading: Icon(task.icon),
+                            title: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(e.queue.name),
+                                if (name != null)
+                                  Text(
+                                    name,
+                                    style: const TextStyle(color: Colors.blue),
+                                  ),
+                              ],
+                            ),
+                            subtitle: (description ?? name) != null
+                                ? Text(description ?? name!)
+                                : null,
+                            trailing: const Icon(Icons.forward),
+                            onTap: met
+                                ? () {
+                                    Navigator.of(context).pop();
+                                    c.executeQueue(m.value);
+                                  }
+                                : null,
+                          ),
+                        );
+                      },
                     );
                   }),
                 ],

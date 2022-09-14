@@ -70,7 +70,6 @@ class MyCommissionAdapter extends TypeAdapter<MyCommission> {
     }
 
     return MyCommission(
-      id: id,
       task: task,
       appearedAt: appearedAt,
       accepted: accepted,
@@ -80,7 +79,6 @@ class MyCommissionAdapter extends TypeAdapter<MyCommission> {
 
   @override
   void write(BinaryWriter writer, MyCommission obj) {
-    writer.write(obj.id);
     writer.write(obj.task.id);
     writer.write(obj.appearedAt);
     writer.write(obj.accepted);

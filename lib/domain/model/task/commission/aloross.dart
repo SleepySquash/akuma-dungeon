@@ -15,7 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:akuma/domain/model/enemy/veggies.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
@@ -74,9 +74,6 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
   IconData get icon => Icons.landslide;
 
   @override
-  List<TaskCriteria> get criteria => [];
-
-  @override
   List<Reward> get rewards => [
         ...super.rewards,
         const ControlReward(AlorossLocation(), 1),
@@ -124,7 +121,7 @@ class AlorossSlimeFields2Commission extends AlorossCommission {
   @override
   List<TaskCriteria> get criteria => [
         ...super.criteria,
-        const CompletedCriteria(AlorossSlimeFieldsCommission()),
+        const CompletedCriteria(task: AlorossSlimeFieldsCommission()),
       ];
 
   @override
@@ -254,7 +251,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+            music: 'music/mixkit-games-worldbeat-466.mp3',
             background: 'fields',
             stages: [
               DungeonStage(
@@ -332,7 +329,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+            music: 'music/mixkit-forest-treasure-138.mp3',
             background: 'forest',
             stages: [
               DungeonStage(
@@ -396,6 +393,14 @@ class AlorossSlimeSwampCommission extends AlorossCommission {
   IconData get icon => Icons.forest;
 
   @override
+  List<TaskCriteria> get criteria => const [
+        OrCriteria([
+          NotCompletedCriteria(),
+          CompletedCriteria(sinceLast: Duration(seconds: 10)),
+        ]),
+      ];
+
+  @override
   List<Reward> get rewards => [
         ...super.rewards,
         const ControlReward(AlorossLocation(), 1),
@@ -405,7 +410,7 @@ class AlorossSlimeSwampCommission extends AlorossCommission {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+            music: 'music/mixkit-games-worldbeat-466.mp3',
             background: 'swamp',
             stages: [
               DungeonStage(
@@ -498,7 +503,7 @@ class AlorossRestaurantCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+            music: 'music/mixkit-games-worldbeat-466.mp3',
             background: 'kitchen',
             stages: [
               DungeonStage(
@@ -547,7 +552,7 @@ class AlorossRestaurantCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/juhani-junkala-epic-boss-battle.mp3'),
+            music: 'music/juhani-junkala-epic-boss-battle.mp3',
             background: 'akuma',
             stages: [
               const DungeonStage(

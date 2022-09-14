@@ -37,8 +37,6 @@ class LocationService extends DisposableInterface {
   late final Timer _fixedUpdate;
   final Map<String, Timer> _timers = {};
 
-  final List<String> _completed = [];
-
   Rx<MyLocation> get location => _locationRepository.location;
 
   @override
@@ -46,7 +44,7 @@ class LocationService extends DisposableInterface {
     _populateCommissions();
 
     _fixedUpdate = Timer.periodic(
-      const Duration(seconds: 10),
+      const Duration(minutes: 1),
       (_) => _populateCommissions(),
     );
 
@@ -127,7 +125,6 @@ class LocationService extends DisposableInterface {
         _progressionService.addQuestsDone();
       }
 
-      _completed.add(commission.task.id);
       _taskRepository.complete(commission.task);
 
       _populateCommissions();
@@ -151,16 +148,19 @@ class LocationService extends DisposableInterface {
     );
   }
 
-  void _populateCommissions() {
+  Future<void> _populateCommissions() async {
     MyLocation location = this.location.value;
 
     for (MyCommission commission
         in List.from(location.commissions, growable: false)) {
-      if (!commission.task.criteriaMet(
+      bool met = await commission.task.criteriaMet(
         player: _playerService.player,
         progression: _progressionService.progression.value,
         isTaskCompleted: _taskRepository.isCompleted,
-      )) {
+        getCompleted: _taskRepository.getCompleted,
+      );
+
+      if (!met) {
         failCommission(commission);
       } else if (commission.task.timeout != null) {
         Duration diff = DateTime.now().difference(commission.appearedAt);
@@ -176,7 +176,7 @@ class LocationService extends DisposableInterface {
     }
 
     bool empty = location.commissions.isEmpty;
-    DateTime? appearedAt(Duration? timeout) {
+    DateTime? withTimeout(Duration? timeout) {
       if (!empty || timeout == null) {
         return null;
       }
@@ -200,24 +200,24 @@ class LocationService extends DisposableInterface {
       if (random != null) {
         location.commissions.add(MyCommission(
           task: random,
-          appearedAt: appearedAt(random.timeout),
+          appearedAt: withTimeout(random.timeout),
         ));
       }
     }
 
-    for (QuestCommission c in location.location.commissions.where(
-      (e) =>
-          e.criteriaMet(
-            player: _playerService.player,
-            progression: _progressionService.progression.value,
-            isTaskCompleted: _taskRepository.isCompleted,
-          ) &&
-          !_completed.contains(e.id),
-    )) {
-      if (location.commissions.firstWhereOrNull((m) => m.task.id == c.id) ==
-          null) {
-        location.commissions
-            .add(MyCommission(task: c, appearedAt: appearedAt(c.timeout)));
+    for (QuestCommission c in location.location.commissions) {
+      if (location.commissions.firstWhereOrNull((m) => m.id == c.id) == null) {
+        bool met = await c.criteriaMet(
+          player: _playerService.player,
+          progression: _progressionService.progression.value,
+          isTaskCompleted: _taskRepository.isCompleted,
+          getCompleted: _taskRepository.getCompleted,
+        );
+
+        if (met) {
+          location.commissions
+              .add(MyCommission(task: c, appearedAt: withTimeout(c.timeout)));
+        }
       }
     }
 

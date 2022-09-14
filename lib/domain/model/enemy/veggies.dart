@@ -1,5 +1,3 @@
-import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
-
 import '/domain/model/enemy.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -46,16 +44,16 @@ abstract class Veggie extends Enemy {
   int get exp => 2;
 
   @override
-  List<Source>? get hitSounds => [
-        AssetSource('sound/veggie1.wav'),
-        AssetSource('sound/veggie2.wav'),
-        AssetSource('sound/crunch1.wav'),
-        AssetSource('sound/crunch2.wav'),
-        AssetSource('sound/crunch3.wav'),
+  List<String>? get hitSounds => [
+        'sound/veggie1.wav',
+        'sound/veggie2.wav',
+        'sound/crunch1.wav',
+        'sound/crunch2.wav',
+        'sound/crunch3.wav',
       ];
 
   @override
-  List<Source>? get slayedSounds => null;
+  List<String>? get slayedSounds => null;
 
   @override
   List<Reward> get drops => [

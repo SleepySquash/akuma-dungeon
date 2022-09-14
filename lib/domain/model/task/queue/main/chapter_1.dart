@@ -17,7 +17,7 @@
 import 'package:akuma/domain/model/flag.dart';
 import 'package:akuma/router.dart';
 import 'package:akuma/ui/page/home/page/character/selection/view.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
@@ -560,7 +560,7 @@ class FirstDungeonTask extends Task {
         }),
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+            music: 'music/mixkit-games-worldbeat-466.mp3',
             background: 'mines',
             stages: [
               DungeonStage(

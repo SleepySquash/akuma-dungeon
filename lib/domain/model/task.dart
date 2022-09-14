@@ -35,36 +35,69 @@ abstract class Task {
 
   Duration? get timeout => null;
 
-  bool criteriaMet({
+  Future<bool> criteriaMet({
     RxPlayer? player,
     GameProgression? progression,
     bool Function(String id)? isTaskCompleted,
-  }) {
+    Future<CompletedTask?> Function(String id)? getCompleted,
+  }) async {
     bool met = true;
 
-    for (var c in criteria) {
-      if (c is LevelCriteria) {
-        met = met && (player?.level ?? 0) >= c.level;
+    Future<bool> resolve(TaskCriteria c) async {
+      if (c is OrCriteria) {
+        for (TaskCriteria m in c.criteria) {
+          bool result = await resolve(m);
+          if (result) {
+            return true;
+          }
+        }
+
+        return false;
+      } else if (c is LevelCriteria) {
+        return (player?.level ?? 0) >= c.level;
       } else if (c is RankCriteria) {
-        met = met && (player?.rank ?? 0) >= c.rank.index;
+        return (player?.rank ?? 0) >= c.rank.index;
       } else if (c is WeaponEquippedCriteria) {
         if (c.weapon == null) {
-          met = met && player?.weapons.isNotEmpty == true;
+          return player?.weapons.isNotEmpty == true;
         } else {
-          met = met &&
-              player?.weapons.firstWhereOrNull(
-                      (e) => e.value.item.id == c.weapon!.id) !=
-                  null;
+          return player?.weapons
+                  .firstWhereOrNull((e) => e.value.item.id == c.weapon!.id) !=
+              null;
         }
       } else if (c is DungeonCommissionsCompletedCriteria) {
-        met = met && (progression?.dungeonsCleared ?? 0) >= c.amount;
+        return (progression?.dungeonsCleared ?? 0) >= c.amount;
       } else if (c is QuestCommissionsCompletedCriteria) {
-        met = met && (progression?.questsDone ?? 0) >= c.amount;
+        return (progression?.questsDone ?? 0) >= c.amount;
       } else if (c is NotCompletedCriteria) {
-        met = met && !(isTaskCompleted?.call(id) ?? false);
+        return !(isTaskCompleted?.call((c.task ?? this).id) ?? false);
       } else if (c is CompletedCriteria) {
-        met = met && (isTaskCompleted?.call(c.task.id) ?? false);
+        bool met = (isTaskCompleted?.call((c.task ?? this).id) ?? false);
+        if (met) {
+          if (c.sinceFirst != null || c.sinceLast != null) {
+            CompletedTask? task = await getCompleted?.call((c.task ?? this).id);
+            if (task != null) {
+              if (c.sinceFirst != null) {
+                met = met &&
+                    DateTime.now().difference(task.completedAt) > c.sinceFirst!;
+              } else if (c.sinceLast != null) {
+                met = met &&
+                    DateTime.now().difference(task.completedAt) > c.sinceLast!;
+              }
+            } else {
+              return false;
+            }
+          }
+        }
+
+        return met;
+      } else {
+        return true;
       }
+    }
+
+    for (TaskCriteria c in criteria) {
+      met = met && await resolve(c);
     }
 
     return met;
@@ -91,11 +124,14 @@ class CompletedTask {
   CompletedTask({
     required this.id,
     DateTime? completedAt,
+    DateTime? updatedAt,
     this.count = 0,
-  }) : completedAt = completedAt ?? DateTime.now();
+  })  : completedAt = completedAt ?? DateTime.now(),
+        updatedAt = updatedAt ?? DateTime.now();
 
   final String id;
   final DateTime completedAt;
+  DateTime updatedAt;
   int count;
 }
 
@@ -121,6 +157,11 @@ class ExecuteStep extends TaskStep {
 
 abstract class TaskCriteria {
   const TaskCriteria();
+}
+
+class OrCriteria extends TaskCriteria {
+  const OrCriteria(this.criteria);
+  final List<TaskCriteria> criteria;
 }
 
 class LevelCriteria extends TaskCriteria {
@@ -149,11 +190,28 @@ class WeaponEquippedCriteria extends TaskCriteria {
   final Weapon? weapon;
 }
 
+/// [TaskCriteria] whether the specified [task] has not been completed.
+///
+/// If [task] is `null`, this task will be used.
 class NotCompletedCriteria extends TaskCriteria {
-  const NotCompletedCriteria();
+  const NotCompletedCriteria({this.task});
+  final Task? task;
 }
 
+/// [TaskCriteria] whether the specified [task] has been completed.
+///
+/// If [task] is `null`, this task will be used.
+///
+/// [sinceFirst] may be specified to add requirement for the
+/// [MyCommission.completedAt] difference with [DateTime.now] to exceed the
+/// specified [sinceFirst].
+///
+/// [sinceLast] may be specified to add requirement for the
+/// [MyCommission.updatedAt] difference with [DateTime.now] to exceed the
+/// specified [sinceFirst].
 class CompletedCriteria extends TaskCriteria {
-  const CompletedCriteria(this.task);
-  final Task task;
+  const CompletedCriteria({this.task, this.sinceFirst, this.sinceLast});
+  final Task? task;
+  final Duration? sinceFirst;
+  final Duration? sinceLast;
 }

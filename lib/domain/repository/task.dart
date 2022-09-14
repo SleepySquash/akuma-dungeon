@@ -33,8 +33,8 @@ abstract class AbstractTaskRepository {
   void update(MyTask task);
   void cancel(Task task);
 
-  void complete(Task task);
-  void uncomplete(String id);
+  Future<void> complete(Task task);
+  Future<void> uncomplete(String id);
   Future<CompletedTask?> getCompleted(String id);
   bool isCompleted(String id);
 }

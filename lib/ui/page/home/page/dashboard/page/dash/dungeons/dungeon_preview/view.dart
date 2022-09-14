@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart' show Source;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,7 +32,7 @@ class DungeonDifficulty {
 
   final String? background;
 
-  final Source? music;
+  final String? music;
 
   final List<Reward>? rewards;
 }

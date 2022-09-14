@@ -1,5 +1,3 @@
-import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
-
 import 'enemy.dart';
 import 'enemy/slime.dart';
 import 'reward.dart';
@@ -20,7 +18,7 @@ class DungeonStage {
   final List<Enemy> enemies;
   final List<NextStageCondition> conditions;
   final String? background;
-  final Source? music;
+  final String? music;
   final double multiplier;
   final void Function()? onPass;
 }
@@ -33,7 +31,7 @@ abstract class DungeonSettings {
 
   String? get title;
   String? get background;
-  Source? get music;
+  String? get music;
   List<Reward>? get rewards => null;
   DungeonStage? next();
 }
@@ -56,7 +54,7 @@ class Dungeon extends DungeonSettings {
   final String? background;
 
   @override
-  final Source? music;
+  final String? music;
 
   @override
   final List<Reward>? rewards;
@@ -117,7 +115,7 @@ class InfiniteDungeon extends DungeonSettings {
   String? background;
 
   @override
-  Source? music;
+  String? music;
 
   List<NextStageCondition> get _conditions {
     return const [SlayedStageCondition(20)];
@@ -150,7 +148,7 @@ class InfiniteDungeon extends DungeonSettings {
 
     if (stage >= 12) {
       return Dungeon(
-        music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+        music: 'music/mixkit-forest-treasure-138.mp3',
         background: 'swamp',
         stages: [
           DungeonStage(
@@ -169,7 +167,7 @@ class InfiniteDungeon extends DungeonSettings {
       );
     } else if (stage >= 8) {
       return Dungeon(
-        music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+        music: 'music/mixkit-forest-treasure-138.mp3',
         background: 'forest2',
         stages: [
           DungeonStage(
@@ -188,7 +186,7 @@ class InfiniteDungeon extends DungeonSettings {
       );
     } else if (stage >= 4) {
       return Dungeon(
-        music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+        music: 'music/mixkit-games-worldbeat-466.mp3',
         background: 'forest',
         stages: [
           DungeonStage(
@@ -208,7 +206,7 @@ class InfiniteDungeon extends DungeonSettings {
     }
 
     return Dungeon(
-      music: AssetSource('music/mixkit-games-worldbeat-466.mp3'),
+      music: 'music/mixkit-games-worldbeat-466.mp3',
       background: 'fields',
       stages: [
         DungeonStage(

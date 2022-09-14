@@ -29,16 +29,18 @@ class AllTasksController extends GetxController {
     super.onInit();
   }
 
-  bool criteriaMet(Task task) => task.criteriaMet(
+  Future<void> criteriaMet(Task task) => task.criteriaMet(
         player: _playerService.player,
         progression: _progressionService.progression.value,
         isTaskCompleted: _taskService.isCompleted,
+        getCompleted: _taskService.getCompleted,
       );
 
   void uncompleteAll() {
     for (String id in List.from(_taskService.completedTasks, growable: false)) {
       _taskService.uncomplete(id);
     }
+    completedTasks.clear();
   }
 
   void _populateCompleted() async {

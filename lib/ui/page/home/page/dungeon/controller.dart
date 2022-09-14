@@ -17,7 +17,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -116,7 +115,7 @@ class DungeonController extends GetxController {
   /// [Timer] updating every second (fixed interval of time).
   Timer? _fixedTimer;
 
-  Source? _musicSource;
+  String? _musicSource;
 
   Timer? _initTimer;
 
@@ -137,7 +136,7 @@ class DungeonController extends GetxController {
         key: key,
         onEnemyHit: (hit) {
           if (!gameEnded.value && enemy.value != null) {
-            Source? sound = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
+            String? sound = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
             if (sound != null) {
               _musicWorker.once(sound);
             }
@@ -212,7 +211,7 @@ class DungeonController extends GetxController {
           );
         },
         onSkill: (Skill skill) {
-          Source? sound = skill.sounds?.sample(1).firstOrNull;
+          String? sound = skill.sounds?.sample(1).firstOrNull;
           if (sound != null) {
             _musicWorker.voice(sound);
           }
@@ -284,7 +283,7 @@ class DungeonController extends GetxController {
         isCrit = true;
       }
 
-      Source? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
+      String? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
       if (hit != null) {
         _musicWorker.once(hit);
       }
@@ -509,7 +508,7 @@ class DungeonController extends GetxController {
         p.beforeStage();
       }
 
-      Source? source = stage.value?.music ?? settings.music;
+      String? source = stage.value?.music ?? settings.music;
       if (source != null) {
         _musicSource = source;
         _musicWorker.play(_musicSource!);

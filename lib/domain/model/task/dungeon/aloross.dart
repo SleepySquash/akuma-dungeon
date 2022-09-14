@@ -16,7 +16,7 @@
 
 import 'package:akuma/domain/model/enemy.dart';
 import 'package:akuma/domain/model/task/dungeon/special.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:collection/collection.dart';
 
 import '/domain/model/commission.dart';
@@ -108,7 +108,7 @@ abstract class AlorossSlimeMinesDungeon extends AlorossDungeon with Slimes {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+            music: 'music/mixkit-forest-treasure-138.mp3',
             background: 'mines',
             stages: [
               DungeonStage(
@@ -189,7 +189,7 @@ abstract class AlorossIceCaveDungeon extends AlorossDungeon with Slimes {
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+            music: 'music/mixkit-forest-treasure-138.mp3',
             background: 'ice_cave',
             stages: [
               DungeonStage(
@@ -271,7 +271,7 @@ abstract class AlorossSlimeExtendedMinesDungeon extends AlorossDungeon
   List<TaskStep> get steps => [
         DungeonStep(
           Dungeon(
-            music: AssetSource('music/mixkit-forest-treasure-138.mp3'),
+            music: 'music/mixkit-forest-treasure-138.mp3',
             background: 'mines',
             stages: [
               DungeonStage(

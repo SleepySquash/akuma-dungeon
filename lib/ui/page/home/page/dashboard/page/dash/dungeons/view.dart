@@ -69,8 +69,7 @@ class DungeonsView extends StatelessWidget {
                     difficulties: [
                       DungeonDifficulty(
                         level: 10,
-                        music:
-                            AssetSource('music/mixkit-forest-treasure-138.mp3'),
+                        music: 'music/mixkit-forest-treasure-138.mp3',
                         background: 'magic_forest_altar',
                         rewards: [
                           ChanceItemReward(const InitiateFeather(), 0.4),
@@ -158,8 +157,7 @@ class DungeonsView extends StatelessWidget {
                     difficulties: [
                       DungeonDifficulty(
                         level: 10,
-                        music:
-                            AssetSource('music/mixkit-forest-treasure-138.mp3'),
+                        music: 'music/mixkit-forest-treasure-138.mp3',
                         background: 'library',
                         rewards: [
                           MinMaxItemReward(const SwordBookMinor(), 0, 3),
@@ -171,8 +169,7 @@ class DungeonsView extends StatelessWidget {
                       ),
                       DungeonDifficulty(
                         level: 30,
-                        music:
-                            AssetSource('music/mixkit-forest-treasure-138.mp3'),
+                        music: 'music/mixkit-forest-treasure-138.mp3',
                         background: 'library',
                         rewards: [
                           MinMaxItemReward(const SwordBookMinor(), 1, 3),
@@ -185,8 +182,7 @@ class DungeonsView extends StatelessWidget {
                       ),
                       DungeonDifficulty(
                         level: 60,
-                        music:
-                            AssetSource('music/mixkit-forest-treasure-138.mp3'),
+                        music: 'music/mixkit-forest-treasure-138.mp3',
                         background: 'library',
                         rewards: [
                           MinMaxItemReward(const SwordBookMinor(), 1, 3),

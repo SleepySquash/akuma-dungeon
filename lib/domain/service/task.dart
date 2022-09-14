@@ -80,17 +80,20 @@ class TaskService extends DisposableInterface {
     }
   }
 
-  void executeQueue(MyTaskQueue queue) {
+  Future<void> executeQueue(MyTaskQueue queue) async {
     MyTask? task = queue.active ?? queue.execute();
 
     if (queue.isCompleted) {
       complete(queue);
     } else if (task != null) {
-      if (!task.task.criteriaMet(
+      bool met = await task.task.criteriaMet(
         player: _playerService.player,
         progression: _progressionService.progression.value,
         isTaskCompleted: _taskRepository.isCompleted,
-      )) {
+        getCompleted: _taskRepository.getCompleted,
+      );
+
+      if (!met) {
         return;
       }
 

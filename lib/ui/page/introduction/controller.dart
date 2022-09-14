@@ -14,10 +14,10 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/gender.dart';
@@ -44,21 +44,20 @@ class IntroductionController extends GetxController {
   final Rx<Race> race = Rx(Race.ningen);
 
   final AuthService _authService;
-  final AudioPlayer _player = AudioPlayer(playerId: 'introduction');
+  final AudioPlayer _player = AudioPlayer();
 
   @override
-  void onReady() {
+  Future<void> onReady() async {
     if (kDebugMode) {
       name.text = 'Test';
       race.value = Race.usagi;
       gender.value = Gender.female;
       _register();
     } else {
-      _player.play(
-        AssetSource('music/MOSAICWAV_she_already_gone.mp3'),
-        volume: 0.4,
-      );
-      _player.setReleaseMode(ReleaseMode.loop);
+      await _player.setLoopMode(LoopMode.one);
+      await _player.setVolume(0.4);
+      await _player.setAsset('music/MOSAICWAV_she_already_gone.mp3');
+      await _player.play();
 
       _novel();
     }
@@ -68,8 +67,7 @@ class IntroductionController extends GetxController {
 
   @override
   void onClose() {
-    _player.stop();
-    _player.release();
+    _player.dispose();
     super.onClose();
   }
 
@@ -82,8 +80,6 @@ class IntroductionController extends GetxController {
 
   Future<void> _register() async {
     await _authService.register();
-    _player.stop();
-    _player.release();
     router.home(
       player: Player(
         name: name.text,

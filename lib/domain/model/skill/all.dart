@@ -14,7 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:collection/collection.dart';
 
 import '/domain/model/skill.dart';
@@ -140,7 +139,7 @@ class SilentShotSkill extends CooldownSkill {
   String get name => 'Тихий выстрел';
 
   @override
-  List<Source>? get sounds => [AssetSource('voice/Rozzi/skill.wav')];
+  List<String>? get sounds => ['voice/Rozzi/skill.wav'];
 
   List<int> get damages => List.generate(Skill.maxLevel, (i) => damage + i);
   List<int> get counts =>

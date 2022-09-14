@@ -83,7 +83,6 @@ class MyLocationAdapter extends TypeAdapter<MyLocation> {
     final List<MyCommission> commissions = [];
     final int commissionsLength = reader.read() as int;
     for (int i = 0; i < commissionsLength; ++i) {
-      final String id = reader.read() as String;
       final String taskId = reader.read() as String;
       final DateTime appearedAt = reader.read() as DateTime;
       final int progress = reader.read() as int;
@@ -94,7 +93,6 @@ class MyLocationAdapter extends TypeAdapter<MyLocation> {
         Log.print('[$runtimeType] Cannot find `Task` with id: $taskId');
       } else {
         commissions.add(MyCommission(
-          id: id,
           task: task,
           appearedAt: appearedAt,
           progress: progress,
@@ -119,7 +117,6 @@ class MyLocationAdapter extends TypeAdapter<MyLocation> {
 
     writer.write(obj.commissions.length);
     for (MyCommission commission in obj.commissions) {
-      writer.write(commission.id);
       writer.write(commission.task.id);
       writer.write(commission.appearedAt);
       writer.write(commission.progress);

@@ -7,7 +7,6 @@ environment:
   sdk: ">=2.17.6 <3.0.0"
 
 dependencies:
-  audioplayers: ^1.0.1
   badges: ^2.0.3
   bordered_text: ^2.0.0
   collection: ^1.16.0
@@ -21,6 +20,9 @@ dependencies:
   hive_flutter: ^1.1.0
   hive: ^2.1.0
   js: ^0.6.4
+  just_audio_mpv: ^0.1.4
+  just_audio_windows: ^0.1.0
+  just_audio: ^0.9.28
   mutex: ^3.0.0
   novel:
     # path: ../novel

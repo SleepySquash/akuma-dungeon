@@ -52,7 +52,13 @@ class CompletedTaskAdapter extends TypeAdapter<CompletedTask> {
     final String id = reader.read() as String;
     final int count = reader.read() as int;
     final DateTime completedAt = reader.read() as DateTime;
-    return CompletedTask(id: id, count: count, completedAt: completedAt);
+    final DateTime updatedAt = reader.read() as DateTime;
+    return CompletedTask(
+      id: id,
+      count: count,
+      completedAt: completedAt,
+      updatedAt: updatedAt,
+    );
   }
 
   @override
@@ -60,5 +66,6 @@ class CompletedTaskAdapter extends TypeAdapter<CompletedTask> {
     writer.write(obj.id);
     writer.write(obj.count);
     writer.write(obj.completedAt);
+    writer.write(obj.updatedAt);
   }
 }

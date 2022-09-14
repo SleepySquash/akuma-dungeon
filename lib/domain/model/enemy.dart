@@ -14,7 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart' show Source;
 import 'package:flutter/widgets.dart' show GlobalKey;
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -43,14 +42,14 @@ abstract class Enemy {
   /// Money to give the [Player] upon slaying this [Enemy].
   int get money => 0;
 
-  /// [Source] sounds to play when hitting this [Enemy].
-  List<Source>? get hitSounds => null;
+  /// Sounds to play when hitting this [Enemy].
+  List<String>? get hitSounds => null;
 
-  /// [Source] sounds to play when slaying this [Enemy].
-  List<Source>? get slayedSounds => null;
+  /// Sounds to play when slaying this [Enemy].
+  List<String>? get slayedSounds => null;
 
-  /// [Source] sounds played by this [Enemy] over some time periods.
-  List<Source>? get idleSounds => null;
+  /// Sounds played by this [Enemy] over some time periods.
+  List<String>? get idleSounds => null;
 
   List<Reward> get drops => [];
 

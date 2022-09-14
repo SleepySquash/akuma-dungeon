@@ -20,15 +20,11 @@ mixin QuestCommission implements Commission {}
 
 class MyCommission extends ExecutableTask {
   MyCommission({
-    String? id,
     required this.task,
     this.accepted = false,
     DateTime? appearedAt,
     this.progress = 0,
-  })  : id = id ?? const Uuid().v4(),
-        appearedAt = appearedAt ?? DateTime.now();
-
-  final String id;
+  }) : appearedAt = appearedAt ?? DateTime.now();
 
   @override
   final Task task;

@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:akuma/domain/model/dungeon.dart';
 import 'package:akuma/router.dart';
 import 'package:akuma/ui/worker/music.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
@@ -55,7 +55,7 @@ class _DungeonEntranceViewState extends State<DungeonEntranceView>
       ..forward();
 
     MusicWorker music = Get.find();
-    music.once(AssetSource('sound/portal.wav'));
+    music.once('sound/portal.wav');
 
     super.initState();
   }

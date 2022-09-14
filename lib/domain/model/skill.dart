@@ -14,7 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart' show Source;
 import 'package:hive/hive.dart';
 
 import '/domain/model_type_id.dart';
@@ -33,8 +32,8 @@ abstract class Skill {
 
   String? get description => null;
 
-  /// [Source] sounds to play when this [Skill] is activated.
-  List<Source>? get sounds => null;
+  /// Sounds to play when this [Skill] is activated.
+  List<String>? get sounds => null;
 }
 
 @HiveType(typeId: ModelTypeId.itemId)

@@ -88,8 +88,10 @@ class TaskView extends StatelessWidget {
           child: Obx(() {
             Iterable<MyCommission> completed =
                 c.location.value.commissions.where((e) => e.isCompleted);
-            Iterable<MyCommission> available =
-                c.location.value.commissions.where((e) => !e.accepted);
+            Iterable<MyCommission> quests = c.location.value.commissions
+                .where((e) => !e.accepted && e.task is! DungeonCommission);
+            Iterable<MyCommission> dungeons = c.location.value.commissions
+                .where((e) => !e.accepted && e.task is DungeonCommission);
             Iterable<MyCommission> accepted = c.location.value.commissions
                 .where((e) => !e.isCompleted && e.accepted);
 
@@ -105,9 +107,10 @@ class TaskView extends StatelessWidget {
                 if (completed.isNotEmpty)
                   const ListTile(title: Text('Завершённые')),
                 ...completed.map(commission),
-                if (available.isNotEmpty)
-                  const ListTile(title: Text('Доступные')),
-                ...available.map(commission),
+                if (quests.isNotEmpty) const ListTile(title: Text('Квесты')),
+                ...quests.map(commission),
+                if (dungeons.isNotEmpty) const ListTile(title: Text('Данжи')),
+                ...dungeons.map(commission),
                 if (accepted.isNotEmpty)
                   const ListTile(title: Text('Принятые')),
                 ...accepted.map(commission),

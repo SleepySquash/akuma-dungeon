@@ -11,6 +11,7 @@ abstract class ExecutableTask {
   int get progress;
   set progress(int i);
 
+  String get id => task.id;
   bool get isCompleted => progress >= task.steps.length;
 
   void execute({

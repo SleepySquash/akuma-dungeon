@@ -14,8 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart' show Source, AssetSource;
-
 import '/domain/model/enemy.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -94,13 +92,13 @@ abstract class Slime extends Enemy {
   int get money => 0;
 
   @override
-  List<Source>? get hitSounds => [
-        AssetSource('sound/slime1.mp3'),
-        AssetSource('sound/slime2.wav'),
+  List<String>? get hitSounds => [
+        'sound/slime1.mp3',
+        'sound/slime2.wav',
       ];
 
   @override
-  List<Source>? get slayedSounds => null;
+  List<String>? get slayedSounds => null;
 
   @override
   List<Reward> get drops => [
@@ -327,14 +325,14 @@ abstract class SlimeChan extends Slime {
   int get exp => 100;
 
   @override
-  List<Source>? get hitSounds => [
-        AssetSource('voice/darknightprincess/ah.mp3'),
-        AssetSource('voice/darknightprincess/oh.mp3'),
-        AssetSource('voice/darknightprincess/woah.mp3'),
+  List<String>? get hitSounds => [
+        'voice/darknightprincess/ah.mp3',
+        'voice/darknightprincess/oh.mp3',
+        'voice/darknightprincess/woah.mp3',
       ];
 
   @override
-  List<Source>? get slayedSounds => null;
+  List<String>? get slayedSounds => null;
 
   @override
   double get damage => 100;

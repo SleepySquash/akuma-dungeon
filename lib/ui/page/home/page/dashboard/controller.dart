@@ -14,7 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,8 +39,7 @@ class DashboardController extends GetxController {
 
   final MusicWorker _musicWorker;
 
-  final AssetSource _source =
-      AssetSource('music/mixkit-driving-ambition-32.mp3');
+  final String _source = 'music/mixkit-driving-ambition-32.mp3';
 
   Rx<MyLocation> get location => _locationService.location;
 

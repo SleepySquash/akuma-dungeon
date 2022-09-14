@@ -44,8 +44,9 @@ class TaskRepository extends DisposableInterface
 
   final TaskHiveProvider _taskHive;
   final TaskQueueHiveProvider _queueHive;
-
   final CompletedTaskHiveProvider _completedTaskHive;
+
+  final Map<String, CompletedTask> _completed = {};
 
   StreamIterator<BoxEvent>? _localSubscription;
   StreamIterator<BoxEvent>? _queueSubscription;
@@ -108,26 +109,38 @@ class TaskRepository extends DisposableInterface
   void abandon(TaskQueue queue) => _queueHive.remove(queue.id);
 
   @override
-  void complete(Task task) {
+  Future<void> complete(Task task) {
+    _completed[task.id] = CompletedTask(id: task.id);
+
     if (isCompleted(task.id)) {
-      _completedTaskHive.get(task.id).then((completed) {
+      return Future(() async {
+        CompletedTask? completed = await _completedTaskHive.get(task.id);
         completed ??= CompletedTask(id: task.id);
         completed.count++;
-        _completedTaskHive.put(completed);
+        completed.updatedAt = DateTime.now();
+        await _completedTaskHive.put(completed);
+        _completed.remove(task.id);
       });
     } else {
-      _completedTaskHive.put(CompletedTask(id: task.id));
+      return Future(() async {
+        await _completedTaskHive.put(CompletedTask(id: task.id, count: 1));
+        _completed.remove(task.id);
+      });
     }
   }
 
   @override
-  void uncomplete(String id) => _completedTaskHive.deleteSafe(id);
+  Future<void> uncomplete(String id) => _completedTaskHive.deleteSafe(id);
 
   @override
-  Future<CompletedTask?> getCompleted(String id) => _completedTaskHive.get(id);
+  Future<CompletedTask?> getCompleted(String id) async {
+    CompletedTask? task = _completed[id] ?? await _completedTaskHive.get(id);
+    return task;
+  }
 
   @override
-  bool isCompleted(String id) => _completedTaskHive.contains(id);
+  bool isCompleted(String id) =>
+      _completedTaskHive.contains(id) || _completed.containsKey(id);
 
   Future<void> _initLocalSubscription() async {
     _localSubscription = StreamIterator(_taskHive.boxEvents);
