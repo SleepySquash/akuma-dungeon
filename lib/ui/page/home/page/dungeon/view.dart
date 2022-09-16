@@ -17,6 +17,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/dungeon.dart';
@@ -54,66 +55,75 @@ class DungeonView extends StatelessWidget {
       ),
       tag: settings.hashCode.toString(),
       builder: (DungeonController c) {
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            // Background.
-            Positioned.fill(
-              child: Obx(() {
-                String? background =
-                    c.stage.value?.background ?? c.settings.background;
+        return Focus(
+          onKeyEvent: (_, event) {
+            if (event is KeyDownEvent) {
+              c.hitEnemy();
+            }
+            return KeyEventResult.handled;
+          },
+          autofocus: true,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // Background.
+              Positioned.fill(
+                child: Obx(() {
+                  String? background =
+                      c.stage.value?.background ?? c.settings.background;
 
-                return AnimatedSwitcher(
-                  duration: 300.milliseconds,
-                  layoutBuilder: (child, previous) {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: [...previous, if (child != null) child]
-                          .map((e) => Positioned.fill(child: e))
-                          .toList(),
-                    );
-                  },
-                  child: background != null
-                      ? Image.asset(
-                          'assets/background/location/$background.jpg',
-                          key: Key(background),
-                          fit: BoxFit.cover,
-                        )
-                      : const ColoredBox(color: Colors.blueGrey),
-                );
-              }),
-            ),
-
-            // Game itself.
-            Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Stack(
-                alignment: Alignment.center,
-                children: [
-                  _enemy(c, context),
-                  Column(
-                    children: [
-                      _top(c, context),
-                      Expanded(child: _middle(c, context)),
-                      _bottom(c, context),
-                    ],
-                  ),
-                  IgnorePointer(
-                    child: Obx(() {
+                  return AnimatedSwitcher(
+                    duration: 300.milliseconds,
+                    layoutBuilder: (child, previous) {
                       return Stack(
-                        children: c.effects.entries.map((e) {
-                          return KeyedSubtree(
-                            key: Key(e.key),
-                            child: e.value,
-                          );
-                        }).toList(),
+                        alignment: Alignment.center,
+                        children: [...previous, if (child != null) child]
+                            .map((e) => Positioned.fill(child: e))
+                            .toList(),
                       );
-                    }),
-                  ),
-                ],
+                    },
+                    child: background != null
+                        ? Image.asset(
+                            'assets/background/location/$background.jpg',
+                            key: Key(background),
+                            fit: BoxFit.cover,
+                          )
+                        : const ColoredBox(color: Colors.blueGrey),
+                  );
+                }),
               ),
-            ),
-          ],
+
+              // Game itself.
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    _enemy(c, context),
+                    Column(
+                      children: [
+                        _top(c, context),
+                        Expanded(child: _middle(c, context)),
+                        _bottom(c, context),
+                      ],
+                    ),
+                    IgnorePointer(
+                      child: Obx(() {
+                        return Stack(
+                          children: c.effects.entries.map((e) {
+                            return KeyedSubtree(
+                              key: Key(e.key),
+                              child: e.value,
+                            );
+                          }).toList(),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

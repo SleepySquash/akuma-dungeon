@@ -65,9 +65,13 @@ abstract class ExecutableTask {
       }
     } else if (step is ExecuteStep) {
       router.nowhere();
-      FutureOr<void> future = step.function.call();
-      if (future is Future) {
-        future.then((_) => next());
+      FutureOr<bool> future = step.function.call();
+      if (future is Future<bool>) {
+        future.then((b) {
+          if (b) {
+            next();
+          }
+        });
       }
     }
   }

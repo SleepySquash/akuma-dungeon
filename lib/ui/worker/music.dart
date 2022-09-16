@@ -17,11 +17,10 @@ class MusicWorker extends DisposableInterface {
 
   final AbstractSettingsRepository _settingsRepository;
 
-  static const bool usePool = false;
+  late final bool usePool;
   Soundpool? _soundpool, _voicepool;
   int? _soundStream, _voiceStream;
   final Map<String, int> _pooledSounds = {}, _voiceSounds = {};
-  final Map<String, Timer> _pooledTimers = {};
 
   double? _lastMusicVolume;
   late final Worker _settingsWorker;
@@ -39,7 +38,12 @@ class MusicWorker extends DisposableInterface {
 
   @override
   void onInit() {
+    usePool =
+        (GetPlatform.isAndroid || GetPlatform.isIOS || GetPlatform.isMacOS) &&
+            !GetPlatform.isWeb;
+
     if (usePool) {
+      release();
       try {
         _soundpool = Soundpool.fromOptions(
           options: const SoundpoolOptions(streamType: StreamType.notification),
@@ -117,6 +121,13 @@ class MusicWorker extends DisposableInterface {
     super.onClose();
   }
 
+  Future<void> release() async {
+    await _soundpool?.release();
+    await _voicepool?.release();
+    _pooledSounds.clear();
+    _voiceSounds.clear();
+  }
+
   Future<void> once(String asset) async {
     double volume = _settings.value?.soundVolume ?? 1;
     if (volume > 0) {
@@ -125,7 +136,6 @@ class MusicWorker extends DisposableInterface {
           asset,
           pool: _soundpool!,
           sounds: _pooledSounds,
-          timers: _pooledTimers,
         );
       } else {
         final AudioPlayer player = AudioPlayer();
@@ -145,7 +155,6 @@ class MusicWorker extends DisposableInterface {
           asset,
           pool: _voicepool!,
           sounds: _voiceSounds,
-          timers: _pooledTimers,
         );
       } else {
         final AudioPlayer player = AudioPlayer();
@@ -193,12 +202,8 @@ class MusicWorker extends DisposableInterface {
     }
   }
 
-  Future<int> _playPool(
-    String asset, {
-    required Soundpool pool,
-    required Map<String, int> sounds,
-    required Map<String, Timer> timers,
-  }) async {
+  Future<int> _playPool(String asset,
+      {required Soundpool pool, required Map<String, int> sounds}) async {
     int stream;
 
     if (sounds.containsKey(asset)) {
@@ -208,15 +213,6 @@ class MusicWorker extends DisposableInterface {
       sounds[asset] = await pool.load(await rootBundle.load('assets/$asset'));
       stream = await pool.play(sounds[asset]!);
     }
-
-    timers[asset]?.cancel();
-    timers[asset] = Timer(
-      const Duration(minutes: 1),
-      () {
-        // Release the unused sound?
-        // soundpool.unload();
-      },
-    );
 
     return stream;
   }

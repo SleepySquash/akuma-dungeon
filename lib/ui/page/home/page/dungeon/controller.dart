@@ -121,6 +121,8 @@ class DungeonController extends GetxController {
 
   Timer? _enemySlideTimer;
 
+  Timer? _hitTimer;
+
   /// Currently authenticated [Player].
   RxPlayer get player => _playerService.player;
 
@@ -266,12 +268,19 @@ class DungeonController extends GetxController {
     }
 
     _musicWorker.stop(_musicSource);
+    _musicWorker.release();
 
     super.onClose();
   }
 
   void hitEnemy({Offset? at}) {
     if (!gameEnded.value && enemy.value != null) {
+      if (_hitTimer?.isActive == true) {
+        return;
+      }
+
+      _hitTimer = Timer(50.milliseconds, () {});
+
       _enemyAnimation();
 
       int damage = player.damage;

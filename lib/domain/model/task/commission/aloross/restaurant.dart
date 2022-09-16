@@ -161,12 +161,12 @@ class AlorossRestaurantCommission extends AlorossCommission {
               const DungeonStage(
                 enemies: [ChiliEnemy()],
                 multiplier: 2,
-                conditions: [SlayedStageCondition(12)],
+                conditions: [SlayedStageCondition(20)],
               ),
               DungeonStage(
                 enemies: VeggieEnemies.fPlus,
                 multiplier: 2,
-                conditions: const [SlayedStageCondition(1)],
+                conditions: const [SlayedStageCondition(2)],
               ),
             ],
           ),

@@ -57,7 +57,7 @@ class IntroductionController extends GetxController {
       await _player.setLoopMode(LoopMode.one);
       await _player.setVolume(0.4);
       await _player.setAsset('music/MOSAICWAV_she_already_gone.mp3');
-      await _player.play();
+      _player.play();
 
       _novel();
     }

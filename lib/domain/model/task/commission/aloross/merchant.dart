@@ -135,11 +135,11 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(25)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(10)],
+                conditions: const [SlayedStageCondition(20)],
               ),
             ],
           ),
@@ -213,11 +213,11 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(25)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,
-                conditions: const [SlayedStageCondition(3)],
+                conditions: const [SlayedStageCondition(4)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.e,

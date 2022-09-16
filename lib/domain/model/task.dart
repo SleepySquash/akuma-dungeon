@@ -74,7 +74,9 @@ abstract class Task {
       } else if (c is CompletedCriteria) {
         bool met = (isTaskCompleted?.call((c.task ?? this).id) ?? false);
         if (met) {
-          if (c.sinceFirst != null || c.sinceLast != null) {
+          if (c.sinceFirst != null ||
+              c.sinceLast != null ||
+              c.noMoreThan != null) {
             CompletedTask? task = await getCompleted?.call((c.task ?? this).id);
             if (task != null) {
               if (c.sinceFirst != null) {
@@ -83,6 +85,8 @@ abstract class Task {
               } else if (c.sinceLast != null) {
                 met = met &&
                     DateTime.now().difference(task.completedAt) > c.sinceLast!;
+              } else if (c.noMoreThan != null) {
+                met = met && task.count <= c.noMoreThan!;
               }
             } else {
               return false;
@@ -152,7 +156,7 @@ class NovelStep extends TaskStep {
 
 class ExecuteStep extends TaskStep {
   const ExecuteStep(this.function);
-  final FutureOr<void> Function() function;
+  final FutureOr<bool> Function() function;
 }
 
 abstract class TaskCriteria {
@@ -210,8 +214,14 @@ class NotCompletedCriteria extends TaskCriteria {
 /// [MyCommission.updatedAt] difference with [DateTime.now] to exceed the
 /// specified [sinceFirst].
 class CompletedCriteria extends TaskCriteria {
-  const CompletedCriteria({this.task, this.sinceFirst, this.sinceLast});
+  const CompletedCriteria({
+    this.task,
+    this.sinceFirst,
+    this.sinceLast,
+    this.noMoreThan,
+  });
   final Task? task;
   final Duration? sinceFirst;
   final Duration? sinceLast;
+  final int? noMoreThan;
 }

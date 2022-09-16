@@ -49,7 +49,7 @@ abstract class AlorossCommission extends Task with QuestCommission {
 
   @override
   List<Reward> get rewards => const [
-        MoneyReward(12000),
+        MoneyReward(6000),
         ExpReward(250),
         ItemReward(Ruby(20)),
         RankReward(5),
