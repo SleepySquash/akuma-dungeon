@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -198,7 +199,7 @@ class CharacterRepository extends DisposableInterface
   }
 
   @override
-  void addExperience(CharacterId id, int amount) {
+  void addExperience(CharacterId id, Decimal amount) {
     final MyCharacter? stored = _characterHive.get(id);
     if (stored != null) {
       stored.exp += amount;

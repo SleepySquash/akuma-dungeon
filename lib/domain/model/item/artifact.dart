@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/stat.dart';
@@ -22,7 +24,7 @@ class InitiateFeather extends InitiateArtifactSet with Feather {
   String get name => 'Feather of Life';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.atk(1))];
+  List<StatChance> get stat => [StatChance(Stat.atk(Decimal.fromInt(1)))];
 }
 
 class InitiateFlower extends InitiateArtifactSet with Flower {
@@ -35,7 +37,7 @@ class InitiateFlower extends InitiateArtifactSet with Flower {
   String get name => 'Flower of Life';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.hp(1))];
+  List<StatChance> get stat => [StatChance(Stat.hp(Decimal.fromInt(1)))];
 }
 
 abstract class AdventurerArtifactSet extends Artifact {
@@ -61,7 +63,7 @@ class AdventurerFeather extends AdventurerArtifactSet with Feather {
   String get name => 'Adventurer\'s feather';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.atk(2))];
+  List<StatChance> get stat => [StatChance(Stat.atk(Decimal.fromInt(2)))];
 }
 
 class AdventurerFlower extends AdventurerArtifactSet with Flower {
@@ -74,7 +76,7 @@ class AdventurerFlower extends AdventurerArtifactSet with Flower {
   String get name => 'Adventurer\'s flower';
 
   @override
-  List<StatChance> get stat => [StatChance(Stat.hp(2))];
+  List<StatChance> get stat => [StatChance(Stat.hp(Decimal.fromInt(2)))];
 }
 
 class AdventurerWatch extends AdventurerArtifactSet with Watch {
@@ -88,9 +90,9 @@ class AdventurerWatch extends AdventurerArtifactSet with Watch {
 
   @override
   List<StatChance> get stat => [
-        StatChance(Stat.atkPercent(1)),
-        StatChance(Stat.hpPercent(1)),
-        StatChance(Stat.defPercent(1)),
-        StatChance(Stat.ultPercent(1)),
+        StatChance(Stat.atkPercent(Decimal.fromInt(1))),
+        StatChance(Stat.hpPercent(Decimal.fromInt(1))),
+        StatChance(Stat.defPercent(Decimal.fromInt(1))),
+        StatChance(Stat.ultPercent(Decimal.fromInt(1))),
       ];
 }

@@ -138,7 +138,7 @@ class GuildView extends StatelessWidget {
                           child: Obx(() {
                             return BorderedText(
                               child: Text(
-                                c.player.player.value.rank.toRank.name,
+                                c.player.player.value.rank.toRank().name,
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 36,

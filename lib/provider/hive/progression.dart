@@ -30,6 +30,7 @@ class ProgressionHiveProvider extends HiveBaseProvider<GameProgression> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(CharacterIdAdapter());
     Hive.maybeRegisterAdapter(GameProgressionAdapter());
   }

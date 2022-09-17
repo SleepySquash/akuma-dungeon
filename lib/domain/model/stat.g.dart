@@ -18,7 +18,7 @@ class StatAdapter extends TypeAdapter<Stat> {
     };
     return Stat(
       fields[0] as StatType,
-      fields[1] as int,
+      fields[1] as Decimal?,
     );
   }
 

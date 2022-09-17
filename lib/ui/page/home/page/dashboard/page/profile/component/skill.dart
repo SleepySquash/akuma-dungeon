@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class ProfileSkillsTab extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              Get.find<PlayerService>().addExperience(1000);
+              Get.find<PlayerService>().addExperience(Decimal.fromInt(1000));
             },
             child: const Text('+1000 exp'),
           ),

@@ -33,6 +33,7 @@ class LocationHiveProvider extends HiveBaseProvider<MyLocation> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(LocationIdAdapter());
     Hive.maybeRegisterAdapter(MyLocationAdapter());
   }

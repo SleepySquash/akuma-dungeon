@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item/resource.dart';
 import '/domain/model/reward.dart';
 import '/domain/service/flag.dart';
@@ -16,13 +18,13 @@ extension ComputeRewardsExtension on List<Reward> {
       if (r is MoneyReward) {
         itemService?.add(Dogecoin(r.amount));
       } else if (r is ExpReward) {
-        playerService?.addExperience(r.amount);
+        playerService?.addExperience(Decimal.fromInt(r.amount));
       } else if (r is ItemReward) {
         if (r.count != 0) {
-          itemService?.add(r.item, r.count);
+          itemService?.add(r.item, Decimal.fromInt(r.count));
         }
       } else if (r is RankReward) {
-        playerService?.addRank(r.amount);
+        playerService?.addRank(Decimal.fromInt(r.amount));
       } else if (r is ControlReward) {
         locationService?.addControl(r.location, r.amount);
       } else if (r is ReputationReward) {

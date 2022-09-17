@@ -39,4 +39,5 @@ class ModelTypeId {
   static const stat = 17;
   static const commission = 18;
   static const completedTask = 19;
+  static const decimal = 20;
 }

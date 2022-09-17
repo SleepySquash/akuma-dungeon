@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
@@ -31,7 +32,7 @@ abstract class AbstractCharacterRepository {
   void equip(CharacterId id, MyItem item);
   void unequip(CharacterId id, MyItem item);
 
-  void addExperience(CharacterId id, int amount);
+  void addExperience(CharacterId id, Decimal amount);
 }
 
 abstract class RxMyCharacter {
@@ -40,18 +41,18 @@ abstract class RxMyCharacter {
   RxList<Rx<MyItem>> get artifacts;
   RxList<Rx<MyItem>> get weapons;
 
-  List<int> get levels => character.value.character.levels;
+  List<Decimal> get levels => character.value.character.levels;
   int get level => character.value.level;
 
-  List<int> get healths => character.value.character.healths;
-  List<int> get damages => character.value.character.damages;
-  List<int> get defenses => character.value.character.defenses;
-  List<int> get critRates => character.value.character.critRates;
-  List<int> get critDamages => character.value.character.critDamages;
-  List<int> get ultCharges => character.value.character.ultCharges;
+  List<Decimal> get healths => character.value.character.healths;
+  List<Decimal> get damages => character.value.character.damages;
+  List<Decimal> get defenses => character.value.character.defenses;
+  List<Decimal> get critRates => character.value.character.critRates;
+  List<Decimal> get critDamages => character.value.character.critDamages;
+  List<Decimal> get ultCharges => character.value.character.ultCharges;
 
-  int get critDamage {
-    int damage = critRates[level];
+  Decimal get critDamage {
+    Decimal damage = critRates[level];
 
     for (Stat s in stats(StatType.critDamage)) {
       damage += s.amount;
@@ -60,8 +61,8 @@ abstract class RxMyCharacter {
     return damage;
   }
 
-  int get critRate {
-    int rate = critRates[level];
+  Decimal get critRate {
+    Decimal rate = critRates[level];
 
     for (Stat s in stats(StatType.critRate)) {
       rate += s.amount;
@@ -70,8 +71,8 @@ abstract class RxMyCharacter {
     return rate;
   }
 
-  int get damage {
-    int dmg = damages[level];
+  Decimal get damage {
+    Decimal dmg = damages[level];
 
     for (Rx<MyItem> w in weapons) {
       dmg += (w.value as MyWeapon).damage;
@@ -82,53 +83,49 @@ abstract class RxMyCharacter {
     }
 
     for (Stat s in stats(StatType.atkPercent)) {
-      double d = dmg * (1 + (s.amount / 100));
-      dmg = d.floor();
+      dmg *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return dmg;
   }
 
-  int get defense {
-    int def = defenses[level];
+  Decimal get defense {
+    Decimal def = defenses[level];
 
     for (Stat s in stats(StatType.def)) {
       def += s.amount;
     }
 
     for (Stat s in stats(StatType.defPercent)) {
-      double d = def * (1 + (s.amount / 100));
-      def = d.floor();
+      def *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return def;
   }
 
-  int get health {
-    int hp = healths[level];
+  Decimal get health {
+    Decimal hp = healths[level];
 
     for (Stat s in stats(StatType.hp)) {
       hp += s.amount;
     }
 
     for (Stat s in stats(StatType.hpPercent)) {
-      double d = hp * (1 + (s.amount / 100));
-      hp = d.floor();
+      hp *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return hp;
   }
 
-  int get ultCharge {
-    int ult = ultCharges[level];
+  Decimal get ultCharge {
+    Decimal ult = ultCharges[level];
 
     for (Stat s in stats(StatType.ult)) {
       ult += s.amount;
     }
 
     for (Stat s in stats(StatType.ultPercent)) {
-      double d = ult * (1 + (s.amount / 100));
-      ult = d.floor();
+      ult *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return ult;

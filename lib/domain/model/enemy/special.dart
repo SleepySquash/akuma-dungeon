@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/enemy.dart';
 
 abstract class SpecialEnemies {
@@ -43,11 +45,11 @@ class AkumaEnemy extends Enemy {
   String get asset => 'special/$id';
 
   @override
-  int get hp => 99999999999999999;
+  Decimal get hp => Decimal.parse('99999999999999999');
 
   @override
-  int get exp => 100000;
+  Decimal get exp => Decimal.fromInt(100000);
 
   @override
-  double get damage => 999999999;
+  Decimal get damage => Decimal.fromInt(999999999);
 }

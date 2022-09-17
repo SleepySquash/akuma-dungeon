@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '/domain/model/stat.dart';
@@ -16,12 +17,12 @@ class StatsWidget extends StatelessWidget {
     this.stats = const [],
   }) : super(key: key);
 
-  final int? damage;
-  final int? defense;
-  final int? health;
-  final int? critRate;
-  final int? critDamage;
-  final int? ultCharge;
+  final Decimal? damage;
+  final Decimal? defense;
+  final Decimal? health;
+  final Decimal? critRate;
+  final Decimal? critDamage;
+  final Decimal? ultCharge;
   final Stat? stat;
   final List<Stat> stats;
 

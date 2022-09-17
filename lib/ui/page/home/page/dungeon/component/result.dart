@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '/domain/model/reward.dart';
@@ -98,7 +99,7 @@ class ResultModal extends StatelessWidget {
           children: [
             const ListTile(title: Text('Damage dealt:')),
             ...c.damages.entries.map((e) {
-              int total = c.damages.values.max;
+              Decimal total = c.damages.values.max;
 
               String? text;
               if (e.key == null) {
@@ -118,7 +119,7 @@ class ResultModal extends StatelessWidget {
                 leading: const Icon(Icons.flaky),
                 title: Text(text ?? '...'),
                 subtitle: LinearProgressIndicator(
-                  value: e.value / total,
+                  value: (e.value / total).toDouble(),
                 ),
                 trailing: Text('${e.value}'),
               );

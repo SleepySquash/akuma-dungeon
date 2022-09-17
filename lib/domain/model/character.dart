@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/util/extensions.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:hive/hive.dart';
 
@@ -50,18 +52,21 @@ abstract class Character {
   /// [Skill]s this [Character] possess.
   List<Skill> get skills => [];
 
-  List<int> get levels =>
-      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
 
-  List<int> get critDamages =>
-      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).floor());
-  List<int> get critRates =>
-      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).floor());
-  List<int> get damages => List.generate(maxLevel, (i) => 5 * (i + 1) + i * 2);
-  List<int> get defenses => List.generate(maxLevel, (i) => 1 * (i + 1));
-  List<int> get healths => List.generate(maxLevel, (i) => 10 * (i + 1));
-  List<int> get ultCharges =>
-      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
+  List<Decimal> get critDamages =>
+      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).toDecimal());
+  List<Decimal> get critRates =>
+      List.generate(maxLevel, (i) => (1 * (i + 1) / 10).toDecimal());
+  List<Decimal> get damages =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(5 * (i + 1) + i * 2));
+  List<Decimal> get defenses =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(i + 1));
+  List<Decimal> get healths =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(10 * (i + 1)));
+  List<Decimal> get ultCharges =>
+      List.generate(maxLevel, (i) => ((i + 1) / 10).toDecimal());
 }
 
 @HiveType(typeId: ModelTypeId.characterId)
@@ -76,8 +81,9 @@ class MyCharacter {
     List<ItemId>? weapons,
     List<MySkill>? skills,
     this.affinity = 0,
-    this.exp = 0,
-  })  : id = CharacterId(character.id),
+    Decimal? exp,
+  })  : exp = exp ?? Decimal.zero,
+        id = CharacterId(character.id),
         artifacts = artifacts ?? List.empty(growable: true),
         weapons = weapons ?? List.empty(growable: true),
         skills = skills ?? character.skills.map((e) => MySkill(e)).toList();
@@ -99,16 +105,16 @@ class MyCharacter {
   /// Integer representation of how much this [character] loves or respects you.
   int affinity;
 
-  int exp;
+  Decimal exp;
 
-  int get currentExp {
+  Decimal get currentExp {
     if (level > 1) {
       return exp - levels[level - 1];
     }
     return exp;
   }
 
-  int? get nextExp {
+  Decimal? get nextExp {
     if (level <= Character.maxLevel) {
       if (level > 1) {
         return levels[level] - levels[level - 1];
@@ -121,7 +127,7 @@ class MyCharacter {
   }
 
   int get level => levels.indexWhere((e) => exp < e);
-  List<int> get levels => character.levels;
+  List<Decimal> get levels => character.levels;
 }
 
 /// Role a certain [Character] has in the battle.

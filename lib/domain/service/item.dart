@@ -17,6 +17,7 @@
 import 'dart:math';
 
 import 'package:akuma/domain/model/stat.dart';
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
@@ -30,12 +31,12 @@ class ItemService extends DisposableInterface {
 
   RxObsMap<ItemId, Rx<MyItem>> get items => _itemRepository.items;
 
-  void add(Item item, [int amount = 1]) => _itemRepository.add(item, amount);
+  void add(Item item, [Decimal? amount]) => _itemRepository.add(item, amount);
   void update(MyItem item) => _itemRepository.update(item);
-  void take(ItemId id, [int amount = 1]) => _itemRepository.take(id, amount);
-  int amount(Item item) => _itemRepository.amount(item);
+  void take(ItemId id, [Decimal? amount]) => _itemRepository.take(id, amount);
+  Decimal amount(Item item) => _itemRepository.amount(item);
 
-  EnhanceResult? enhance(MyItem item, int exp) {
+  EnhanceResult? enhance(MyItem item, Decimal exp) {
     Rx<MyItem>? myItem = items[item.id];
 
     if (myItem != null) {

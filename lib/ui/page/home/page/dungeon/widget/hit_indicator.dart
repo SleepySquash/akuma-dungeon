@@ -69,7 +69,7 @@ class NumberIndicator extends StatefulWidget {
   }) : super(key: key);
 
   final Offset? position;
-  final int number;
+  final String number;
 
   final Color? color;
   final double? fontSize;

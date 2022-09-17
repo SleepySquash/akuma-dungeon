@@ -33,6 +33,7 @@ class TaskHiveProvider extends HiveBaseProvider<MyTask> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(MyTaskAdapter());
   }
 

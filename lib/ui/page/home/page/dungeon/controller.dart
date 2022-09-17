@@ -18,6 +18,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -81,15 +82,15 @@ class DungeonController extends GetxController {
 
   final List<OverlayEntry> entries = [];
 
-  late final RxDouble hp;
-  final RxDouble sp = RxDouble(0);
-  late final RxDouble mp;
+  late final Rx<Decimal> hp;
+  late final Rx<Decimal> sp;
+  late final Rx<Decimal> mp;
 
   late final List<PartyMember> party;
 
   final RxMap<String, Widget> effects = RxMap();
 
-  final Map<String?, int> damages = {};
+  final Map<String?, Decimal> damages = {};
 
   Rx<Duration> enemySlideDuration = Rx(const Duration(milliseconds: 150));
   Rx<Offset> enemySlideOffset = Rx(Offset.zero);
@@ -128,8 +129,9 @@ class DungeonController extends GetxController {
 
   @override
   void onInit() {
-    hp = RxDouble(player.health.toDouble());
-    mp = RxDouble(10);
+    hp = Rx(player.health);
+    sp = Rx(Decimal.zero);
+    mp = Rx(Decimal.ten);
 
     party = player.party.map((e) {
       GlobalKey key = GlobalKey();
@@ -150,7 +152,8 @@ class DungeonController extends GetxController {
             }
 
             damages[e.character.value.id.val] =
-                (damages[e.character.value.id.val] ?? 0) + hit.damage;
+                (damages[e.character.value.id.val] ?? Decimal.zero) +
+                    hit.damage;
 
             final String id = const Uuid().v4();
             Rect? bounds = key.globalPaintBounds;
@@ -160,14 +163,17 @@ class DungeonController extends GetxController {
                 (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
                 (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
               ),
-              number: hit.damage,
+              number: hit.damage.toString(),
               onEnd: () => effects.remove(id),
             );
           }
         },
         onPlayerHeal: (health) {
           hp.value += health;
-          hp.value = hp.value.clamp(0, player.health).toDouble();
+
+          if (hp.value < Decimal.zero) {
+            hp.value = Decimal.zero;
+          }
 
           Rect? bounds = key.globalPaintBounds;
 
@@ -178,7 +184,7 @@ class DungeonController extends GetxController {
               (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
               (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
             ),
-            number: health,
+            number: health.toString(),
             color: Colors.green,
             onEnd: () => effects.remove(id),
           );
@@ -186,18 +192,22 @@ class DungeonController extends GetxController {
         onShield: (defense) {
           sp.value += defense;
 
-          int maxDefense = party
+          Decimal maxDefense = party
               .map((e) => e.character.character.value.skills)
               .expand((e) => e)
-              .map<int>((e) {
+              .map<Decimal>((e) {
             Skill skill = e.skill;
             if (skill is ShieldSkill) {
               return skill.shields[e.level];
             }
-            return 0;
-          }).fold<int>(0, (p, e) => p + e);
+            return Decimal.zero;
+          }).fold<Decimal>(Decimal.zero, (p, e) => p + e);
 
-          sp.value = sp.value.clamp(0, maxDefense.toDouble());
+          if (sp.value < Decimal.zero) {
+            sp.value = Decimal.zero;
+          } else if (sp.value > maxDefense) {
+            sp.value = maxDefense;
+          }
 
           final String id = const Uuid().v4();
           Rect? bounds = key.globalPaintBounds;
@@ -207,7 +217,7 @@ class DungeonController extends GetxController {
               (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
               (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
             ),
-            number: defense,
+            number: defense.toString(),
             color: const Color(0xFFDDDDDD),
             onEnd: () => effects.remove(id),
           );
@@ -283,12 +293,12 @@ class DungeonController extends GetxController {
 
       _enemyAnimation();
 
-      int damage = player.damage;
+      Decimal damage = player.damage;
       bool isCrit = false;
 
-      int chance = Random().nextInt(100);
+      Decimal chance = Decimal.fromInt(Random().nextInt(100));
       if (chance < player.critRate) {
-        damage = damage + damage * player.critRate ~/ 100;
+        damage = damage + damage * player.critRate * Decimal.parse('0.01');
         isCrit = true;
       }
 
@@ -302,7 +312,7 @@ class DungeonController extends GetxController {
         _slayEnemy();
       }
 
-      damages[null] = (damages[null] ?? 0) + damage;
+      damages[null] = (damages[null] ?? Decimal.zero) + damage;
 
       final String id = const Uuid().v4();
       effects[id] = NumberIndicator(
@@ -312,7 +322,7 @@ class DungeonController extends GetxController {
               MediaQuery.of(router.context!).size.height / 2,
             ),
         offsetMultiplier: 2,
-        number: damage,
+        number: damage.toString(),
         color: isCrit ? Colors.yellow : null,
         fontSize: isCrit ? 48 : null,
         onEnd: () => effects.remove(id),
@@ -335,7 +345,7 @@ class DungeonController extends GetxController {
     });
   }
 
-  void _hitPlayer(double amount) {
+  void _hitPlayer(Decimal amount) {
     if (!gameEnded.value) {
       PartyMember? target = party.firstWhereOrNull((e) {
         if (e.isAlive) {
@@ -350,7 +360,7 @@ class DungeonController extends GetxController {
 
       if (target != null) {
         target.hp.value -= amount;
-        if (target.hp.value <= 0) {
+        if (target.hp.value <= Decimal.zero) {
           target.dispose();
         }
 
@@ -362,23 +372,22 @@ class DungeonController extends GetxController {
             (bounds?.left ?? 0) + (bounds?.width ?? 0) / 2,
             (bounds?.top ?? 0) + (bounds?.height ?? 0) / 3,
           ),
-          number: amount.toInt(),
+          number: amount.toString(),
           color: Colors.orange,
           onEnd: () => effects.remove(id),
         );
       } else {
-        final int defense = max(player.defense, 1);
-        final double damage = max(amount - (defense / 9), 0.05);
+        final Decimal damage = amount - (player.defense * Decimal.parse('0.1'));
 
-        if (sp.value > 0) {
+        if (sp.value > Decimal.zero) {
           sp.value -= damage;
-          if (sp.value < 0) {
-            sp.value = 0;
+          if (sp.value < Decimal.zero) {
+            sp.value = Decimal.zero;
           }
         } else {
           hp.value -= damage;
-          if (hp.value <= 0) {
-            hp.value = 0;
+          if (hp.value <= Decimal.zero) {
+            hp.value = Decimal.zero;
             _loseGame();
           }
         }
@@ -390,7 +399,7 @@ class DungeonController extends GetxController {
             MediaQuery.of(router.context!).size.height * 0.9,
           ),
           direction: HitIndicatorFlowDirection.up,
-          number: damage.toInt(),
+          number: damage.toString(),
           color: Colors.orange,
           onEnd: () => effects.remove(id),
         );
@@ -408,7 +417,7 @@ class DungeonController extends GetxController {
         ? null
         : MyEnemy(
             sample,
-            multiplier: stage.value?.multiplier ?? 1,
+            multiplier: stage.value?.multiplier ?? Decimal.one,
           );
 
     enemy.value = next;
@@ -421,7 +430,7 @@ class DungeonController extends GetxController {
         Duration(milliseconds: milliseconds),
         () {
           if (!gameEnded.value) {
-            if (next.damage != 0) {
+            if (next.damage != Decimal.zero) {
               _hitPlayer(next.damage);
               _enemyTimer = Timer.periodic(next.enemy.interval, (t) {
                 if (!gameEnded.value) {
@@ -443,8 +452,10 @@ class DungeonController extends GetxController {
     _enemyTimer?.cancel();
     _enemyTimer = null;
 
-    int exp = enemy.value!.exp ~/ (player.party.length + 1);
-    if (exp > 0) {
+    Decimal exp = (enemy.value!.exp / Decimal.fromInt(player.party.length + 1))
+        .toDecimal();
+
+    if (exp > Decimal.zero) {
       _playerService.addExperience(exp);
 
       for (RxMyCharacter p in player.party) {
@@ -452,15 +463,15 @@ class DungeonController extends GetxController {
       }
     }
 
-    if (enemy.value!.money > 0) {
-      _itemService.add(Dogecoin(enemy.value!.money));
+    if (enemy.value!.money > Decimal.zero) {
+      _itemService.add(const Dogecoin(1), enemy.value!.money);
     }
 
     if (enemy.value!.enemy.drops.isNotEmpty) {
       for (Reward r in enemy.value!.enemy.drops) {
         if (r is ItemReward) {
           if (r.count > 0) {
-            _itemService.add(r.item, r.count);
+            _itemService.add(r.item, Decimal.fromInt(r.count));
 
             final Rect? bounds = enemy.value!.globalKey.globalPaintBounds;
             final String id2 = const Uuid().v4();
@@ -603,7 +614,7 @@ class HitResult {
     this.isSlayed = false,
   });
 
-  final int damage;
+  final Decimal damage;
   final bool isCrit;
   final bool isSlayed;
 }
@@ -617,20 +628,20 @@ class PartyMember {
     this.onShield,
     this.onSkill,
   })  : key = key ?? GlobalKey(),
-        hp = RxDouble(character.health.toDouble()) {
+        hp = Rx(character.health) {
     init();
   }
 
   final GlobalKey key;
 
   final RxMyCharacter character;
-  final RxDouble hp;
+  final Rx<Decimal> hp;
 
-  bool get isAlive => hp.value > 0;
+  bool get isAlive => hp.value > Decimal.zero;
 
   final void Function(HitResult hit)? onEnemyHit;
-  final void Function(int health)? onPlayerHeal;
-  final void Function(int shield)? onShield;
+  final void Function(Decimal health)? onPlayerHeal;
+  final void Function(Decimal shield)? onShield;
   final void Function(Skill)? onSkill;
 
   final List<Timer> _primary = [];
@@ -653,10 +664,10 @@ class PartyMember {
                       Timer(
                         Duration(milliseconds: i * 200),
                         () {
-                          double damage = character.damage *
-                              (cooldown.damages[s.level] / 100);
-                          onEnemyHit
-                              ?.call(HitResult(damage: max(damage.toInt(), 1)));
+                          Decimal damage = character.damage *
+                              (cooldown.damages[s.level] *
+                                  Decimal.parse('0.01'));
+                          onEnemyHit?.call(HitResult(damage: damage));
                         },
                       ),
                     );
@@ -693,7 +704,7 @@ class PartyMember {
 
   void afterStage() {
     if (!isAlive) {
-      hp.value = character.health.toDouble() / 2;
+      hp.value = character.health * Decimal.parse('0.5');
 
       for (Timer t in _primary) {
         t.cancel();
@@ -718,9 +729,9 @@ class PartyMember {
           Timer(Duration(milliseconds: milliseconds), () {
             _primary.add(
               Timer.periodic(skill.periods[s.level], (t) {
-                double damage =
-                    character.damage * (skill.damages[s.level] / 100);
-                onEnemyHit?.call(HitResult(damage: max(damage.toInt(), 1)));
+                Decimal damage = character.damage *
+                    (skill.damages[s.level] * Decimal.parse('0.01'));
+                onEnemyHit?.call(HitResult(damage: damage));
               }),
             );
           }),

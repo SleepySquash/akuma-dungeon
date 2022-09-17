@@ -27,6 +27,7 @@ class CompletedTaskHiveProvider extends HiveLazyProvider<CompletedTask> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(CompletedTaskAdapter());
   }
 

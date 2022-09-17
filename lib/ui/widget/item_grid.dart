@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -219,8 +220,8 @@ class ItemGridState extends State<ItemGrid> {
                                       alignment: Alignment.topLeft,
                                       child: WidgetButton(
                                         onPressed: () {
-                                          item.count--;
-                                          if (item.count <= 0) {
+                                          item.count -= Decimal.one;
+                                          if (item.count <= Decimal.zero) {
                                             selected.remove(item);
                                           }
 
@@ -284,7 +285,7 @@ class ItemGridState extends State<ItemGrid> {
 
             if (item != null) {
               if (item.count < e.value.count) {
-                ++item.count;
+                item.count += Decimal.one;
                 widget.onSelected?.call(selected);
               }
             } else {
@@ -410,5 +411,5 @@ class ItemGridState extends State<ItemGrid> {
 class SelectedItem {
   SelectedItem(this.item);
   final Rx<MyItem> item;
-  int count = 1;
+  Decimal count = Decimal.one;
 }

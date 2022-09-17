@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '../slime.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -6,13 +8,13 @@ abstract class ESlime extends Slime {
   const ESlime();
 
   @override
-  int get hp => 100;
+  Decimal get hp => Decimal.fromInt(100);
 
   @override
-  int get exp => 3;
+  Decimal get exp => Decimal.fromInt(3);
 
   @override
-  double get damage => 10;
+  Decimal get damage => Decimal.fromInt(10);
 
   @override
   List<Reward> get drops => [
@@ -27,7 +29,7 @@ class ChickenSlime extends ESlime {
   String get id => 'Chicken Slime';
 
   @override
-  int get hp => super.hp + 3;
+  Decimal get hp => super.hp + Decimal.fromInt(3);
 }
 
 class DendroSlime extends ESlime {
@@ -44,7 +46,7 @@ class DirtSlime extends ESlime {
   String get id => 'Dirt Slime';
 
   @override
-  int get hp => super.hp + 1;
+  Decimal get hp => super.hp + Decimal.fromInt(1);
 }
 
 class FireSlime extends ESlime {
@@ -61,7 +63,7 @@ class GemSlime extends ESlime {
   String get id => 'Gem Slime';
 
   @override
-  int get hp => super.hp + 6;
+  Decimal get hp => super.hp + Decimal.fromInt(6);
 }
 
 class GoldSlime extends ESlime {
@@ -71,7 +73,7 @@ class GoldSlime extends ESlime {
   String get id => 'Gold Slime';
 
   @override
-  int get hp => super.hp + 14;
+  Decimal get hp => super.hp + Decimal.fromInt(14);
 }
 
 class GooSlime extends ESlime {
@@ -81,7 +83,7 @@ class GooSlime extends ESlime {
   String get id => 'Goo Slime';
 
   @override
-  int get hp => super.hp + 10;
+  Decimal get hp => super.hp + Decimal.fromInt(10);
 }
 
 class IceSlime extends ESlime {
@@ -91,7 +93,7 @@ class IceSlime extends ESlime {
   String get id => 'Ice Slime';
 
   @override
-  int get hp => super.hp + 2;
+  Decimal get hp => super.hp + Decimal.fromInt(2);
 }
 
 class MoneySlime extends ESlime {
@@ -101,7 +103,7 @@ class MoneySlime extends ESlime {
   String get id => 'Money Slime';
 
   @override
-  int get hp => super.hp + 24;
+  Decimal get hp => super.hp + Decimal.fromInt(24);
 }
 
 class PlanetSlime extends ESlime {
@@ -139,7 +141,7 @@ class OctopusSlime extends ESlime {
   String get id => 'Octopus Slime';
 
   @override
-  int get hp => super.hp + 40;
+  Decimal get hp => super.hp + Decimal.fromInt(40);
 }
 
 class VenomSlime extends ESlime {
@@ -149,5 +151,5 @@ class VenomSlime extends ESlime {
   String get id => 'Venom Slime';
 
   @override
-  int get hp => super.hp + 50;
+  Decimal get hp => super.hp + Decimal.fromInt(50);
 }

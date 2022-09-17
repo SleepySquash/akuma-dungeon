@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/flag.dart';
@@ -42,8 +43,8 @@ class StoreController extends GetxController {
   final LocationService _locationService;
 
   RxPlayer get player => _playerService.player;
-  int get rubies => _itemService.amount(const Ruby());
-  int get heartCards => _itemService.amount(const HeartCard());
+  Decimal get rubies => _itemService.amount(const Ruby());
+  Decimal get heartCards => _itemService.amount(const HeartCard());
   RxObsMap<Flag, bool> get flags => _flagService.flags;
 
   Rx<MyLocation> get location => _locationService.location;

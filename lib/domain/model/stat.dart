@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:akuma/domain/model/rarity.dart';
+import 'package:akuma/util/extensions.dart';
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
@@ -43,68 +45,74 @@ enum StatType {
 
 @HiveType(typeId: ModelTypeId.stat)
 class Stat {
-  Stat(this.type, [this.amount = 1]);
+  Stat(this.type, [Decimal? amount]) : amount = amount ?? Decimal.one;
 
-  factory Stat.atk([int amount = 1]) => Stat(StatType.atk, amount);
-  factory Stat.atkPercent([int amount = 1]) =>
+  factory Stat.atk([Decimal? amount]) => Stat(StatType.atk, amount);
+  factory Stat.atkPercent([Decimal? amount]) =>
       Stat(StatType.atkPercent, amount);
-  factory Stat.critDamage([int amount = 1]) =>
+  factory Stat.critDamage([Decimal? amount]) =>
       Stat(StatType.critDamage, amount);
-  factory Stat.critRate([int amount = 1]) => Stat(StatType.critRate, amount);
-  factory Stat.def([int amount = 1]) => Stat(StatType.def, amount);
-  factory Stat.defPercent([int amount = 1]) =>
+  factory Stat.critRate([Decimal? amount]) => Stat(StatType.critRate, amount);
+  factory Stat.def([Decimal? amount]) => Stat(StatType.def, amount);
+  factory Stat.defPercent([Decimal? amount]) =>
       Stat(StatType.defPercent, amount);
-  factory Stat.hp([int amount = 1]) => Stat(StatType.hp, amount);
-  factory Stat.hpPercent([int amount = 1]) => Stat(StatType.hpPercent, amount);
-  factory Stat.ult([int amount = 1]) => Stat(StatType.ult, amount);
-  factory Stat.ultPercent([int amount = 1]) =>
+  factory Stat.hp([Decimal? amount]) => Stat(StatType.hp, amount);
+  factory Stat.hpPercent([Decimal? amount]) => Stat(StatType.hpPercent, amount);
+  factory Stat.ult([Decimal? amount]) => Stat(StatType.ult, amount);
+  factory Stat.ultPercent([Decimal? amount]) =>
       Stat(StatType.ultPercent, amount);
 
   @HiveField(0)
   final StatType type;
 
   @HiveField(1)
-  int amount;
+  Decimal amount;
 
-  int constrain(int value, int max, Rarity rarity) {
+  Decimal constrain(int value, int max, Rarity rarity) {
     value = value + 1;
 
     switch (type) {
       case StatType.atk:
-        return (1000 * (rarity.index / 2) * (value / max)).toInt();
+        return (1000 * (rarity.index / 2) * (value / max)).toDecimal();
 
       case StatType.atkPercent:
-        return 1 + (40 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (40 * (rarity.index / 3) * (value / max)).toDecimal();
 
       case StatType.critDamage:
-        return 1 + (50 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (50 * (rarity.index / 3) * (value / max)).toDecimal();
 
       case StatType.critRate:
-        return 1 + (50 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (50 * (rarity.index / 3) * (value / max)).toDecimal();
 
       case StatType.def:
-        return (1000 * (rarity.index / 2) * (value / max)).toInt();
+        return (1000 * (rarity.index / 2) * (value / max)).toDecimal();
 
       case StatType.defPercent:
-        return 1 + (40 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (40 * (rarity.index / 3) * (value / max)).toDecimal();
 
       case StatType.hp:
-        return (1000 * (rarity.index / 2) * (value / max)).toInt();
+        return (1000 * (rarity.index / 2) * (value / max)).toDecimal();
 
       case StatType.hpPercent:
-        return 1 + (50 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (50 * (rarity.index / 3) * (value / max)).toDecimal();
 
       case StatType.ult:
-        return (1000 * (rarity.index / 2) * (value / max)).toInt();
+        return (1000 * (rarity.index / 2) * (value / max)).toDecimal();
 
       case StatType.ultPercent:
-        return 1 + (40 * (rarity.index / 3) * (value / max)).toInt();
+        return Decimal.one +
+            (40 * (rarity.index / 3) * (value / max)).toDecimal();
     }
   }
 
-  int improve(Rarity rarity) {
-    int randomized(List<num> list) {
-      return list.map((e) => e * rarity.index * 3).sample(1).first.toInt();
+  Decimal improve(Rarity rarity) {
+    Decimal randomized(List<double> list) {
+      return list.map((e) => e * rarity.index * 3).sample(1).first.toDecimal();
     }
 
     switch (type) {
@@ -153,7 +161,7 @@ class StatTween {
   factory StatTween.unchanged(Stat stat) => StatTween(stat, stat.amount);
 
   final Stat stat;
-  int amount;
+  Decimal amount;
 }
 
 extension ResolveStatChance on List<StatChance> {

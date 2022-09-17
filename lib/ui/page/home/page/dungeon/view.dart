@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -204,7 +205,8 @@ class DungeonView extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             child: LinearProgressIndicator(
                               minHeight: 20,
-                              value: 1 - enemy.hp.value / enemy.maxHp,
+                              value:
+                                  1 - (enemy.hp.value / enemy.maxHp).toDouble(),
                               backgroundColor: Colors.red,
                               color: Colors.grey,
                             ),
@@ -347,7 +349,7 @@ class DungeonView extends StatelessWidget {
                               transitionBuilder: (child, animation) =>
                                   ScaleTransition(
                                       scale: animation, child: child),
-                              child: c.sp.value > 0
+                              child: c.sp.value > Decimal.zero
                                   ? Padding(
                                       padding: const EdgeInsets.only(bottom: 5),
                                       child: Stack(
@@ -360,8 +362,9 @@ class DungeonView extends StatelessWidget {
                                           ),
                                           Positioned.fill(
                                             child: Center(
-                                                child: Text(
-                                                    '${c.sp.value.ceil()}')),
+                                              child:
+                                                  Text('${c.sp.value.ceil()}'),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -370,8 +373,8 @@ class DungeonView extends StatelessWidget {
                             );
                           }),
                           Obx(() {
-                            int hp = c.hp.value.ceil();
-                            int maxHp = c.player.health;
+                            Decimal hp = c.hp.value;
+                            Decimal maxHp = c.player.health;
 
                             return Stack(
                               children: [
@@ -379,7 +382,7 @@ class DungeonView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10),
                                   child: LinearProgressIndicator(
                                     minHeight: 20,
-                                    value: 1 - c.hp.value / maxHp,
+                                    value: 1 - (c.hp.value / maxHp).toDouble(),
                                     backgroundColor: Colors.green,
                                     color: Colors.grey,
                                   ),

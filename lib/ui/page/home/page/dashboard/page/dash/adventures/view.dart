@@ -17,6 +17,7 @@
 import 'package:akuma/domain/model/commission.dart';
 import 'package:akuma/domain/model/item.dart';
 import 'package:akuma/domain/model/item/all.dart';
+import 'package:akuma/domain/model/rank.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -120,7 +121,9 @@ class AdventuresView extends StatelessWidget {
                                     );
                                   }
                                 } else if (e is RankCriteria) {
-                                  if (c.player.player.value.rank <
+                                  if (c.player.player.value.rank
+                                          .toRank()
+                                          .index <
                                       e.rank.index) {
                                     return Text(
                                       'Rank: ${e.rank.name} or higher',

@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/util/obs/obs.dart';
@@ -23,8 +24,8 @@ import '/domain/model/item.dart';
 abstract class AbstractItemRepository {
   RxObsMap<ItemId, Rx<MyItem>> get items;
 
-  void add(Item item, [int? amount]);
+  void add(Item item, [Decimal? amount]);
   void update(MyItem item);
-  void take(ItemId id, [int? amount]);
-  int amount(Item item);
+  void take(ItemId id, [Decimal? amount]);
+  Decimal amount(Item item);
 }

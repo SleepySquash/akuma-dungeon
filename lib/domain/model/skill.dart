@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:hive/hive.dart';
 
 import '/domain/model_type_id.dart';
@@ -34,6 +35,9 @@ abstract class Skill {
 
   /// Sounds to play when this [Skill] is activated.
   List<String>? get sounds => null;
+
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
 }
 
 @HiveType(typeId: ModelTypeId.itemId)
@@ -46,14 +50,16 @@ mixin PrimarySkill on Skill {}
 class MySkill {
   MySkill(
     this.skill, {
-    this.exp = 0,
-  }) : id = SkillId(skill.id);
+    Decimal? exp,
+  })  : exp = exp ?? Decimal.zero,
+        id = SkillId(skill.id);
 
   final Skill skill;
 
-  int exp;
+  Decimal exp;
 
   final SkillId id;
 
-  int get level => exp ~/ 1000;
+  List<Decimal> get levels => skill.levels;
+  int get level => levels.indexWhere((e) => exp < e);
 }

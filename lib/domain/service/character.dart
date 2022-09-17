@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
@@ -68,6 +69,6 @@ class CharacterService extends DisposableInterface {
   void unequip(MyCharacter character, MyItem item) =>
       _characterRepository.unequip(character.id, item);
 
-  void addExperience(MyCharacter character, int amount) =>
+  void addExperience(MyCharacter character, Decimal amount) =>
       _characterRepository.addExperience(character.id, amount);
 }

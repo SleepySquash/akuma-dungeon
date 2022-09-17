@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
@@ -36,6 +37,7 @@ class CharacterHiveProvider extends HiveBaseProvider<MyCharacter> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(CharacterIdAdapter());
     Hive.maybeRegisterAdapter(ItemIdAdapter());
     Hive.maybeRegisterAdapter(MyCharacterAdapter());
@@ -70,7 +72,7 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
     }
 
     final int affinity = reader.read() as int;
-    final int exp = reader.read() as int;
+    final Decimal exp = reader.read() as Decimal;
 
     List<ItemId> artifacts = [];
     final int artifactsLength = reader.read() as int;
@@ -88,7 +90,7 @@ class MyCharacterAdapter extends TypeAdapter<MyCharacter> {
     final int skillsLength = reader.read() as int;
     for (var i = 0; i < skillsLength; ++i) {
       final String sk = reader.read() as String;
-      final int exp = reader.read() as int;
+      final Decimal exp = reader.read() as Decimal;
       final Skill? skill = character.skills.firstWhereOrNull((e) => e.id == sk);
 
       if (skill != null) {

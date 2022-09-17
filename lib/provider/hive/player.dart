@@ -35,6 +35,7 @@ class PlayerHiveProvider extends HiveBaseProvider<Player> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(CharacterIdAdapter());
     Hive.maybeRegisterAdapter(GenderAdapter());
     Hive.maybeRegisterAdapter(ItemIdAdapter());

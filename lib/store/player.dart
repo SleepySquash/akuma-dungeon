@@ -17,6 +17,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 
@@ -173,17 +174,22 @@ class PlayerRepository extends DisposableInterface
   void set(Player player) => _playerLocal.set(player);
 
   @override
-  void addExperience(int amount) {
+  void addExperience(Decimal amount) {
     Player? player = _playerLocal.get();
     if (player != null) {
       player.exp += amount;
-      player.exp = min(player.exp, Player.maxLevel * 1000 - 1);
+
+      Decimal max = player.levels[Player.maxLevel - 1];
+      if (player.exp > max) {
+        player.exp = max;
+      }
+
       _playerLocal.set(player);
     }
   }
 
   @override
-  void addRank(int amount) {
+  void addRank(Decimal amount) {
     Player? player = _playerLocal.get();
     if (player != null) {
       player.rank += amount;

@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
@@ -32,7 +33,7 @@ class ItemWorker extends DisposableInterface {
   final ItemService _itemService;
   final NotificationService _notificationService;
 
-  final Map<ItemId, int> counts = {};
+  final Map<ItemId, Decimal> counts = {};
 
   StreamSubscription? _subscription;
 
@@ -65,8 +66,7 @@ class ItemWorker extends DisposableInterface {
           break;
 
         case OperationKind.updated:
-          int prev = counts[e.key] ?? 0;
-
+          Decimal prev = counts[e.key] ?? Decimal.zero;
           if (prev != e.value?.value.count) {
             counts[e.key!] = e.value!.value.count;
             _notificationService.notify(

@@ -15,6 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
@@ -153,19 +154,19 @@ class AlorossRestaurantCommission extends AlorossCommission {
             music: 'music/juhani-junkala-epic-boss-battle.mp3',
             background: 'akuma',
             stages: [
-              const DungeonStage(
-                enemies: [PotatoEnemy(), CarrotEnemy(), CucumberEnemy()],
-                multiplier: 2,
-                conditions: [SlayedStageCondition(5)],
+              DungeonStage(
+                enemies: const [PotatoEnemy(), CarrotEnemy(), CucumberEnemy()],
+                multiplier: Decimal.fromInt(2),
+                conditions: const [SlayedStageCondition(5)],
               ),
-              const DungeonStage(
-                enemies: [ChiliEnemy()],
-                multiplier: 2,
-                conditions: [SlayedStageCondition(20)],
+              DungeonStage(
+                enemies: const [ChiliEnemy()],
+                multiplier: Decimal.fromInt(2),
+                conditions: const [SlayedStageCondition(20)],
               ),
               DungeonStage(
                 enemies: VeggieEnemies.fPlus,
-                multiplier: 2,
+                multiplier: Decimal.fromInt(2),
                 conditions: const [SlayedStageCondition(2)],
               ),
             ],

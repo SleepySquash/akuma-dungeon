@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 import 'package:novel/novel.dart';
 
@@ -56,7 +57,7 @@ abstract class Task {
       } else if (c is LevelCriteria) {
         return (player?.level ?? 0) >= c.level;
       } else if (c is RankCriteria) {
-        return (player?.rank ?? 0) >= c.rank.index;
+        return (player?.rank ?? Decimal.zero).toRank().index >= c.rank.index;
       } else if (c is WeaponEquippedCriteria) {
         if (c.weapon == null) {
           return player?.weapons.isNotEmpty == true;

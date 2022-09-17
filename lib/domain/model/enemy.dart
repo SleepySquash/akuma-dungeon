@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/widgets.dart' show GlobalKey;
 import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
@@ -34,13 +35,13 @@ abstract class Enemy {
   String get asset => name;
 
   /// Maximum health this [Enemy] has.
-  int get hp => 10;
+  Decimal get hp => Decimal.fromInt(10);
 
   /// Experience to give the [Player] upon slaying this [Enemy].
-  int get exp => 1;
+  Decimal get exp => Decimal.one;
 
   /// Money to give the [Player] upon slaying this [Enemy].
-  int get money => 0;
+  Decimal get money => Decimal.zero;
 
   /// Sounds to play when hitting this [Enemy].
   List<String>? get hitSounds => null;
@@ -53,30 +54,31 @@ abstract class Enemy {
 
   List<Reward> get drops => [];
 
-  double get damage => 0.05;
+  Decimal get damage => Decimal.fromInt(1);
   Duration get interval => const Duration(seconds: 1);
 }
 
 class MyEnemy {
-  MyEnemy(this.enemy, {this.multiplier = 1})
-      : hp = RxInt((enemy.hp * multiplier).toInt());
+  MyEnemy(this.enemy, {Decimal? multiplier})
+      : multiplier = multiplier ?? Decimal.one,
+        hp = Rx(enemy.hp * (multiplier ?? Decimal.one));
 
   final GlobalKey globalKey = GlobalKey();
   final String key = const Uuid().v4();
-  final double multiplier;
+  final Decimal multiplier;
 
   final Enemy enemy;
 
-  final RxInt hp;
+  final Rx<Decimal> hp;
 
-  bool get isDead => hp.value <= 0;
+  bool get isDead => hp.value <= Decimal.zero;
 
-  double get damage => enemy.damage * multiplier;
-  int get money => (enemy.money * multiplier).toInt();
-  int get exp => (enemy.exp * multiplier).toInt();
-  int get maxHp => (enemy.hp * multiplier).toInt();
+  Decimal get damage => enemy.damage * multiplier;
+  Decimal get money => enemy.money * multiplier;
+  Decimal get exp => enemy.exp * multiplier;
+  Decimal get maxHp => enemy.hp * multiplier;
 
-  void hit([int amount = 1]) {
-    hp.value -= amount;
+  void hit([Decimal? amount]) {
+    hp.value -= (amount ?? Decimal.one);
   }
 }

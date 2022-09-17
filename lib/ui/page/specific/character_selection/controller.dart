@@ -19,9 +19,7 @@ class CharacterSelectionController extends GetxController {
   void select() {
     if (selected.value != null) {
       MyCharacter character = _characterService.add(selected.value!);
-      print(character);
       _playerService.addToParty(character);
-      print(_playerService.player.party.length);
     }
   }
 }

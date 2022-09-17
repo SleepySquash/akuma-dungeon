@@ -7,6 +7,7 @@ import 'package:akuma/ui/page/home/widget/wide_button.dart';
 import 'package:akuma/ui/widget/backdrop.dart';
 import 'package:akuma/ui/widget/item_grid.dart';
 import 'package:akuma/util/platform_utils.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -47,19 +48,20 @@ class ItemEnhanceTab extends StatelessWidget {
 
     Widget stats() {
       return Obx(() {
-        int? exp = artifact?.exp ?? weapon?.exp ?? equipable?.exp;
-        int? currentExp =
+        Decimal? exp = artifact?.exp ?? weapon?.exp ?? equipable?.exp;
+        Decimal? currentExp =
             artifact?.currentExp ?? weapon?.currentExp ?? equipable?.currentExp;
-        int? maxExp =
+        Decimal? maxExp =
             weapon?.nextExp ?? equipable?.nextExp ?? artifact?.nextExp;
 
-        int additionalExp = c.selectedItems.exp;
+        Decimal additionalExp = c.selectedItems.exp;
 
-        List<int>? levels =
+        List<Decimal>? levels =
             artifact?.levels ?? weapon?.levels ?? equipable?.levels;
         int level = artifact?.level ?? weapon?.level ?? equipable?.level ?? 0;
-        int nextLevel =
-            (levels?.indexWhere((e) => (exp ?? 0) + additionalExp < e) ?? 0);
+        int nextLevel = (levels?.indexWhere(
+                (e) => (exp ?? Decimal.zero) + additionalExp < e) ??
+            0);
 
         final List<Widget> additional = [];
         final List<StatTween> stats = [];
@@ -119,7 +121,7 @@ class ItemEnhanceTab extends StatelessWidget {
                 else
                   Text('Lv. ${level + 1}'),
                 const Spacer(),
-                Text('${(currentExp ?? 0) + additionalExp}/$maxExp'),
+                Text('${(currentExp ?? Decimal.zero) + additionalExp}/$maxExp'),
               ],
             ),
             const SizedBox(height: 10),
@@ -129,7 +131,9 @@ class ItemEnhanceTab extends StatelessWidget {
                 const SizedBox(width: 5),
                 Expanded(
                   child: LinearProgressIndicator(
-                    value: ((currentExp ?? 0) + additionalExp) / (maxExp ?? 1),
+                    value: (((currentExp ?? Decimal.zero) + additionalExp) /
+                            (maxExp ?? Decimal.one))
+                        .toDouble(),
                   ),
                 ),
               ],
@@ -253,7 +257,8 @@ class ItemEnhanceTab extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 4),
                                         Obx(() {
-                                          int amount = c.selectedItems.money;
+                                          Decimal amount =
+                                              c.selectedItems.money;
                                           return Text(
                                             '$amount',
                                             style: TextStyle(

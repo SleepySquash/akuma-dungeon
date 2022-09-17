@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/stat.dart';
@@ -28,7 +30,7 @@ class HelmetLightBronzeItem extends Equipable with Head {
   String get name => 'Лёгкий бронзовый шлем';
 
   @override
-  int get defense => 5;
+  Decimal get defense => Decimal.fromInt(5);
 }
 
 class ChainmailBronzeItem extends Equipable with Armor {
@@ -41,7 +43,7 @@ class ChainmailBronzeItem extends Equipable with Armor {
   String get name => 'Бронзовая кольчуга';
 
   @override
-  int get defense => 14;
+  Decimal get defense => Decimal.fromInt(14);
 }
 
 class BootItem extends Equipable with Shoes {
@@ -54,5 +56,5 @@ class BootItem extends Equipable with Shoes {
   String get name => 'Лёгкие ботинки';
 
   @override
-  int get defense => 4;
+  Decimal get defense => Decimal.fromInt(4);
 }

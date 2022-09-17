@@ -34,6 +34,7 @@ class CommissionHiveProvider extends HiveBaseProvider<MyCommission> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(MyCommissionAdapter());
   }
 

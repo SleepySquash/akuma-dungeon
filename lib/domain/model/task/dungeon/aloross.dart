@@ -18,6 +18,7 @@ import 'package:akuma/domain/model/enemy.dart';
 import 'package:akuma/domain/model/task/dungeon/special.dart';
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 
 import '/domain/model/commission.dart';
 import '/domain/model/dungeon.dart';
@@ -288,26 +289,26 @@ abstract class AlorossSlimeExtendedMinesDungeon extends AlorossDungeon
               ),
               DungeonStage(
                 background: 'underground_waterfall',
-                multiplier: 2,
+                multiplier: Decimal.fromInt(2),
                 enemies: enemies,
                 conditions: [const SlayedStageCondition(20)],
               ),
               DungeonStage(
                 background: 'underground_waterfall',
-                multiplier: 2,
+                multiplier: Decimal.fromInt(2),
                 enemies: enemies,
                 conditions: [const SlayedStageCondition(20)],
               ),
               DungeonStage(
                 background: 'underground_waterfall',
-                multiplier: 2,
+                multiplier: Decimal.fromInt(2),
                 enemies: enemies,
                 conditions: [const SlayedStageCondition(20)],
               ),
               DungeonStage(
                 background: 'underground_waterfall',
                 enemies: boss,
-                multiplier: 4,
+                multiplier: Decimal.fromInt(4),
                 conditions: [
                   const SlayedStageCondition(1),
                   const TimerStageCondition(Duration(seconds: 30)),

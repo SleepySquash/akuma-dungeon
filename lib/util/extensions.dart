@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 /// Extension adding an ability to lighten a color.
@@ -79,4 +80,8 @@ extension LocalizedDurationExtension on Duration {
 
     return '$hoursPadding$hours:$minutesPadding$minutes:$secondsPadding$seconds';
   }
+}
+
+extension DoubleToDecimal on double {
+  Decimal toDecimal() => Decimal.parse(toString());
 }

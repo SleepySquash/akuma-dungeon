@@ -14,11 +14,14 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:mutex/mutex.dart';
 import 'package:universal_io/io.dart';
+
+import '/domain/model_type_id.dart';
 
 /// Base class for data providers backed by [Hive].
 abstract class HiveBaseProvider<T> extends DisposableInterface {
@@ -231,5 +234,21 @@ extension HiveRegisterAdapter on HiveInterface {
     if (!Hive.isAdapterRegistered(adapter.typeId)) {
       Hive.registerAdapter<A>(adapter);
     }
+  }
+}
+
+class DecimalAdapter extends TypeAdapter<Decimal> {
+  @override
+  int get typeId => ModelTypeId.decimal;
+
+  @override
+  Decimal read(BinaryReader reader) {
+    final String value = reader.read() as String;
+    return Decimal.parse(value);
+  }
+
+  @override
+  void write(BinaryWriter writer, Decimal obj) {
+    writer.write(obj.toString());
   }
 }

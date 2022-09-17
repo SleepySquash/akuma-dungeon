@@ -36,7 +36,7 @@ class ProfileAttributesTab extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: DefaultTextStyle.merge(
                   style: const TextStyle(fontSize: 18),
-                  child: Text(c.player.player.value.rank.toRank.name),
+                  child: Text(c.player.player.value.rank.toRank().name),
                 ),
               ),
             ),

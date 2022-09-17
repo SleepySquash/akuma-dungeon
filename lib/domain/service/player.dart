@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/character.dart';
@@ -30,9 +31,9 @@ class PlayerService extends DisposableInterface {
 
   void set(Player player) => _playerRepository.set(player);
 
-  void addExperience(int amount) => _playerRepository.addExperience(amount);
+  void addExperience(Decimal amount) => _playerRepository.addExperience(amount);
 
-  void addRank(int amount) => _playerRepository.addRank(amount);
+  void addRank(Decimal amount) => _playerRepository.addRank(amount);
 
   void equip(MyItem item) {
     if (item is MyWeapon) {

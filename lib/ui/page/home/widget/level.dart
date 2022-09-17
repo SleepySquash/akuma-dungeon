@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '/ui/widget/backdrop.dart';
@@ -14,8 +15,8 @@ class LevelWidget extends StatelessWidget {
   final int level;
   final int maxLevel;
 
-  final int? exp;
-  final int? maxExp;
+  final Decimal? exp;
+  final Decimal? maxExp;
 
   @override
   Widget build(BuildContext context) {

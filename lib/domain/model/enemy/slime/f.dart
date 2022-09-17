@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '../slime.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -6,13 +8,13 @@ abstract class FSlime extends Slime {
   const FSlime();
 
   @override
-  int get hp => 10;
+  Decimal get hp => Decimal.fromInt(10);
 
   @override
-  int get exp => 1;
+  Decimal get exp => Decimal.one;
 
   @override
-  double get damage => 1;
+  Decimal get damage => Decimal.one;
 
   @override
   List<Reward> get drops => [
@@ -34,7 +36,7 @@ class BlueSlimeEnemy extends FSlime {
   String get id => 'Blue Slime';
 
   @override
-  int get hp => 14;
+  Decimal get hp => Decimal.fromInt(14);
 }
 
 class RedSlimeEnemy extends FSlime {
@@ -44,7 +46,7 @@ class RedSlimeEnemy extends FSlime {
   String get id => 'Red Slime';
 
   @override
-  int get hp => 17;
+  Decimal get hp => Decimal.fromInt(17);
 }
 
 class CatSlimeEnemy extends FSlime {
@@ -54,10 +56,10 @@ class CatSlimeEnemy extends FSlime {
   String get id => 'Cat Slime';
 
   @override
-  int get exp => 2;
+  Decimal get exp => Decimal.fromInt(2);
 
   @override
-  int get hp => 21;
+  Decimal get hp => Decimal.fromInt(21);
 }
 
 class RedLongSlimeEnemy extends FSlime {
@@ -67,8 +69,8 @@ class RedLongSlimeEnemy extends FSlime {
   String get id => 'Red Long Slime';
 
   @override
-  int get exp => 5;
+  Decimal get exp => Decimal.fromInt(5);
 
   @override
-  int get hp => 50;
+  Decimal get hp => Decimal.fromInt(50);
 }

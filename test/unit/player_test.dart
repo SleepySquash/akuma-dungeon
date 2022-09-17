@@ -21,7 +21,7 @@ void main() {
   test('Player levels are correctly scaled', () {
     Player player = Player();
 
-    for (int level = 1; level <= Player.maxLevel; ++level) {
+    for (int level = 1; level < Player.maxLevel; ++level) {
       print(
         '[$level] HP: ${player.healths[level]}, ATK: ${player.damages[level]}, DEF: ${player.defenses[level]}',
       );

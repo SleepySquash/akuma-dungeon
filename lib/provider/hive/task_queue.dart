@@ -35,6 +35,7 @@ class TaskQueueHiveProvider extends HiveBaseProvider<MyTaskQueue> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(MyTaskQueueAdapter());
     Hive.maybeRegisterAdapter(MyTaskAdapter());
   }

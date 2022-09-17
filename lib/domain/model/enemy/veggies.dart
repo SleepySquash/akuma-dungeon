@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/enemy.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -38,10 +40,10 @@ abstract class Veggie extends Enemy {
   String get asset => 'veggies/$id';
 
   @override
-  int get hp => 21;
+  Decimal get hp => Decimal.fromInt(21);
 
   @override
-  int get exp => 2;
+  Decimal get exp => Decimal.fromInt(2);
 
   @override
   List<String>? get hitSounds => [
@@ -61,7 +63,7 @@ abstract class Veggie extends Enemy {
       ];
 
   @override
-  double get damage => 0;
+  Decimal get damage => Decimal.zero;
 }
 
 class BroccoliEnemy extends Veggie {
@@ -120,5 +122,5 @@ class OnionEnemy extends Veggie {
   String get id => 'Onion';
 
   @override
-  int get hp => 140;
+  Decimal get hp => Decimal.fromInt(140);
 }

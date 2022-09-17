@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +34,7 @@ class DungeonsView extends StatelessWidget {
                 subtitle: const Text('Очень холодное и мрачное место...'),
                 trailing: const Icon(Icons.ac_unit),
                 onTap: () async {
-                  List<DungeonStage> stages(double multiplier) {
+                  List<DungeonStage> stages(Decimal multiplier) {
                     const List<NextStageCondition> conditions = [
                       SlayedStageCondition(10),
                       TimerStageCondition(Duration(seconds: 120)),
@@ -78,7 +79,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(10),
                           const RankReward(1),
                         ],
-                        stages: stages(10),
+                        stages: stages(Decimal.fromInt(10)),
                       ),
                     ],
                   );
@@ -108,7 +109,7 @@ class DungeonsView extends StatelessWidget {
                 ),
                 trailing: const Icon(Icons.book),
                 onTap: () async {
-                  List<DungeonStage> stages(double multiplier) {
+                  List<DungeonStage> stages(Decimal multiplier) {
                     const List<NextStageCondition> conditions = [
                       SlayedStageCondition(10),
                       TimerStageCondition(Duration(seconds: 120)),
@@ -164,7 +165,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(10),
                           const RankReward(1),
                         ],
-                        stages: stages(10),
+                        stages: stages(Decimal.fromInt(10)),
                       ),
                       DungeonDifficulty(
                         level: 30,
@@ -177,7 +178,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(20),
                           const RankReward(1),
                         ],
-                        stages: stages(60),
+                        stages: stages(Decimal.fromInt(60)),
                       ),
                       DungeonDifficulty(
                         level: 60,
@@ -191,7 +192,7 @@ class DungeonsView extends StatelessWidget {
                           const ExpReward(50),
                           const RankReward(2),
                         ],
-                        stages: stages(240),
+                        stages: stages(Decimal.fromInt(240)),
                       ),
                     ],
                   );

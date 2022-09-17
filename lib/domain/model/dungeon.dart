@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import 'enemy.dart';
 import 'enemy/slime.dart';
 import 'reward.dart';
@@ -10,7 +12,7 @@ class DungeonStage {
     this.conditions = const [],
     this.background,
     this.music,
-    this.multiplier = 1,
+    this.multiplier,
     this.onPass,
   });
 
@@ -19,7 +21,7 @@ class DungeonStage {
   final List<NextStageCondition> conditions;
   final String? background;
   final String? music;
-  final double multiplier;
+  final Decimal? multiplier;
   final void Function()? onPass;
 }
 
@@ -128,9 +130,16 @@ class InfiniteDungeon extends DungeonSettings {
     ];
   }
 
-  Dungeon _next(int stage, [double multiplier = 1]) {
+  Dungeon _next(int stage, [Decimal? multiplier]) {
+    multiplier ??= Decimal.one;
+
     if (stage >= 16) {
-      return _next(stage % 6, multiplier * 4 * (stage ~/ 6));
+      return _next(
+        stage % 6,
+        multiplier *
+            Decimal.fromInt(4) *
+            (Decimal.fromInt(stage) * Decimal.parse('0.15')),
+      );
     }
 
     List<Enemy> enemies;
@@ -155,13 +164,13 @@ class InfiniteDungeon extends DungeonSettings {
             name: 'Болото - $floor',
             enemies: enemies,
             conditions: _conditions,
-            multiplier: multiplier * 3,
+            multiplier: multiplier * Decimal.fromInt(3),
           ),
           DungeonStage(
             name: 'Болото - Босс Битва - $floor',
             enemies: uniques,
             conditions: _bossConditions,
-            multiplier: multiplier * 3,
+            multiplier: multiplier * Decimal.fromInt(3),
           ),
         ],
       );
@@ -174,13 +183,13 @@ class InfiniteDungeon extends DungeonSettings {
             name: 'Глубь леса - $floor',
             enemies: enemies,
             conditions: _conditions,
-            multiplier: multiplier * 2,
+            multiplier: multiplier * Decimal.fromInt(2),
           ),
           DungeonStage(
             name: 'Глубь леса - Босс Битва - $floor',
             enemies: uniques,
             conditions: _bossConditions,
-            multiplier: multiplier * 2,
+            multiplier: multiplier * Decimal.fromInt(2),
           ),
         ],
       );
@@ -193,13 +202,13 @@ class InfiniteDungeon extends DungeonSettings {
             name: 'Лес - $floor',
             enemies: enemies,
             conditions: _conditions,
-            multiplier: multiplier * 1.5,
+            multiplier: multiplier * Decimal.parse('1.5'),
           ),
           DungeonStage(
             name: 'Лес - Босс Битва - $floor',
             enemies: uniques,
             conditions: _bossConditions,
-            multiplier: multiplier * 1.5,
+            multiplier: multiplier * Decimal.parse('1.5'),
           ),
         ],
       );

@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/util/extensions.dart';
+import 'package:decimal/decimal.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
@@ -30,12 +32,14 @@ class Player {
     this.name = 'Player',
     this.race = Race.ningen,
     this.gender = Gender.female,
-    this.exp = 0,
-    this.rank = 0,
+    Decimal? exp,
+    Decimal? rank,
     List<ItemId>? equipped,
     List<ItemId>? weapons,
     List<CharacterId>? party,
-  })  : equipped = equipped ?? List.empty(growable: true),
+  })  : exp = exp ?? Decimal.zero,
+        rank = rank ?? Decimal.zero,
+        equipped = equipped ?? List.empty(growable: true),
         weapons = weapons ?? List.empty(growable: true),
         party = party ?? List.empty(growable: true);
 
@@ -49,10 +53,10 @@ class Player {
   final Gender gender;
 
   @HiveField(3)
-  int exp;
+  Decimal exp;
 
   @HiveField(4)
-  int rank;
+  Decimal rank;
 
   @HiveField(5)
   List<ItemId> equipped;
@@ -63,14 +67,14 @@ class Player {
   @HiveField(7)
   List<CharacterId> party;
 
-  int get currentExp {
+  Decimal get currentExp {
     if (level > 1) {
       return exp - levels[level - 1];
     }
     return exp;
   }
 
-  int? get nextExp {
+  Decimal? get nextExp {
     if (level <= Player.maxLevel) {
       if (level > 1) {
         return levels[level] - levels[level - 1];
@@ -82,20 +86,25 @@ class Player {
     return null;
   }
 
-  List<int> get levels =>
-      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
   int get level => levels.indexWhere((e) => exp < e);
 
   /// Maximum allowed level for a [Player] to have.
   static const int maxLevel = 100;
 
-  List<int> get critDamages =>
-      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
-  List<int> get critRates =>
-      List.generate(maxLevel, (i) => ((i + 1) / 10).floor());
-  List<int> get damages => List.generate(maxLevel, (i) => 1 * (i + 1) + i * 2);
-  List<int> get defenses => List.generate(maxLevel, (i) => 1 * (i + 1));
-  List<int> get healths => List.generate(maxLevel, (i) => 100 + 50 * i);
-  List<int> get ultCharges =>
-      List.generate(maxLevel, (i) => 4 + (1 * (i + 1) / 10).floor());
+  List<Decimal> get critDamages =>
+      List.generate(maxLevel, (i) => ((i + 1) / 10).toDecimal());
+  List<Decimal> get critRates =>
+      List.generate(maxLevel, (i) => ((i + 1) / 10).toDecimal());
+  List<Decimal> get damages =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(1 * (i + 1) + i * 2));
+  List<Decimal> get defenses =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(1 * (i + 1)));
+  List<Decimal> get healths =>
+      List.generate(maxLevel, (i) => Decimal.fromInt(100 + 50 * i));
+  List<Decimal> get ultCharges => List.generate(
+        maxLevel,
+        (i) => Decimal.fromInt(4) + (1 * (i + 1) / 10).toDecimal(),
+      );
 }

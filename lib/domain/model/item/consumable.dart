@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 
@@ -27,7 +29,7 @@ class AppleGreenItem extends Consumable with Eatable {
   String get name => 'Зелёное яблоко';
 
   @override
-  int get hp => 1;
+  Decimal get hp => Decimal.fromInt(1);
 }
 
 class AppleRedItem extends Consumable with Eatable {
@@ -40,7 +42,7 @@ class AppleRedItem extends Consumable with Eatable {
   String get name => 'Яблоко';
 
   @override
-  int get hp => 1;
+  Decimal get hp => Decimal.fromInt(1);
 }
 
 class BananaItem extends Consumable with Eatable {
@@ -53,7 +55,7 @@ class BananaItem extends Consumable with Eatable {
   String get name => 'Банан';
 
   @override
-  int get hp => 1;
+  Decimal get hp => Decimal.fromInt(1);
 }
 
 class BeefItem extends Consumable with Eatable {
@@ -66,7 +68,7 @@ class BeefItem extends Consumable with Eatable {
   String get name => 'Стейк';
 
   @override
-  int get hp => 5;
+  Decimal get hp => Decimal.fromInt(5);
 }
 
 class ChickenItem extends Consumable with Eatable {
@@ -79,7 +81,7 @@ class ChickenItem extends Consumable with Eatable {
   String get name => 'Курочка';
 
   @override
-  int get hp => 4;
+  Decimal get hp => Decimal.fromInt(4);
 }
 
 class CarrotItem extends Consumable with Eatable {
@@ -92,7 +94,7 @@ class CarrotItem extends Consumable with Eatable {
   String get name => 'Морковка';
 
   @override
-  int get hp => 1;
+  Decimal get hp => Decimal.fromInt(1);
 }
 
 class RedPotionSmallItem extends Consumable with Drinkable {
@@ -105,7 +107,7 @@ class RedPotionSmallItem extends Consumable with Drinkable {
   String get name => 'Малое зелье лечения';
 
   @override
-  int get hp => 10;
+  Decimal get hp => Decimal.fromInt(10);
 
   @override
   Rarity get rarity => Rarity.common;
@@ -121,7 +123,7 @@ class RedPotionMediumItem extends Consumable with Drinkable {
   String get name => 'Среднее зелье лечения';
 
   @override
-  int get hp => 50;
+  Decimal get hp => Decimal.fromInt(50);
 
   @override
   Rarity get rarity => Rarity.useful;
@@ -137,7 +139,7 @@ class RedPotionBigItem extends Consumable with Drinkable {
   String get name => 'Большое зелье лечения';
 
   @override
-  int get hp => 150;
+  Decimal get hp => Decimal.fromInt(150);
 
   @override
   Rarity get rarity => Rarity.rare;

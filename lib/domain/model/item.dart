@@ -16,6 +16,7 @@
 
 import 'dart:math';
 
+import 'package:decimal/decimal.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -28,7 +29,7 @@ part 'item.g.dart';
 
 /// Entity in the [Player]'s inventory.
 abstract class Item {
-  const Item(this.count);
+  const Item([this.count = 1]);
 
   /// Unique [String] identifying this [Item].
   String get id => runtimeType.toString();
@@ -46,7 +47,7 @@ abstract class Item {
   Rarity get rarity => Rarity.common;
 
   /// Maximum amount this [Item] can contain.
-  int? get max => null;
+  Decimal? get max => null;
 
   /// Amount of this [Item].
   final int count;
@@ -89,28 +90,28 @@ abstract class Artifact extends Item {
   ///
   /// These [Stat]s are not constrained, meaning no balancing is possible.
   List<StatChance> get stats => [
-        StatChance(Stat.hp(1), 1),
-        StatChance(Stat.hpPercent(1), 1),
-        StatChance(Stat.def(1), 1),
-        StatChance(Stat.defPercent(1), 1),
-        StatChance(Stat.atk(1), 1),
-        StatChance(Stat.atkPercent(1), 1),
-        StatChance(Stat.critDamage(1), 1),
-        StatChance(Stat.critRate(1), 1),
-        StatChance(Stat.ult(1), 1),
-        StatChance(Stat.ultPercent(1), 1),
+        StatChance(Stat.hp(Decimal.one), 1),
+        StatChance(Stat.hpPercent(Decimal.one), 1),
+        StatChance(Stat.def(Decimal.one), 1),
+        StatChance(Stat.defPercent(Decimal.one), 1),
+        StatChance(Stat.atk(Decimal.one), 1),
+        StatChance(Stat.atkPercent(Decimal.one), 1),
+        StatChance(Stat.critDamage(Decimal.one), 1),
+        StatChance(Stat.critRate(Decimal.one), 1),
+        StatChance(Stat.ult(Decimal.one), 1),
+        StatChance(Stat.ultPercent(Decimal.one), 1),
       ];
 
   @override
-  int? get max => 1;
+  Decimal? get max => Decimal.one;
 
   String? get set => null;
 
   /// Maximum allowed level for an [Artifact] to have.
   static const int maxLevel = 100;
 
-  List<int> get levels =>
-      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
 }
 
 mixin Flower on Artifact {}
@@ -126,19 +127,23 @@ abstract class Equipable extends Item {
   @override
   String get asset => 'equipable/$id';
 
-  int get defense => 1;
+  Decimal get defense => Decimal.one;
 
   List<Stat> get stats => [];
 
   @override
-  int? get max => 1;
+  Decimal? get max => Decimal.one;
 
   /// Maximum allowed level for an [Equipable] to have.
   static const int maxLevel = 100;
 
-  List<int> get levels =>
-      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
-  List<int> get defenses => List.generate(maxLevel, (i) => defense * (i + 1));
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
+
+  List<Decimal> get defenses => List.generate(
+        maxLevel,
+        (i) => defense * (Decimal.fromInt(i) + Decimal.one),
+      );
 }
 
 mixin Head on Equipable {}
@@ -152,19 +157,23 @@ abstract class Weapon extends Item {
   @override
   String get asset => 'weapon/$id';
 
-  int get damage => 1;
+  Decimal get damage => Decimal.one;
 
   List<Stat> get stats => [];
 
   @override
-  int? get max => 1;
+  Decimal? get max => Decimal.one;
 
   /// Maximum allowed level for a [Weapon] to have.
   static const int maxLevel = 100;
 
-  List<int> get levels =>
-      List.generate(maxLevel, (i) => (1000 + i * 2000).floor());
-  List<int> get damages => List.generate(maxLevel, (i) => damage * (i + 1));
+  List<Decimal> get levels =>
+      List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
+
+  List<Decimal> get damages => List.generate(
+        maxLevel,
+        (i) => damage * (Decimal.fromInt(i) + Decimal.one),
+      );
 }
 
 mixin Sword on Weapon {}
@@ -185,48 +194,49 @@ mixin Giftable on Item {}
 /// [Item] edible by the [Player].
 mixin Eatable on Consumable {
   /// Hunger satisfied by consuming this [Item].
-  int get hp => 0;
+  Decimal get hp => Decimal.zero;
 }
 
 /// [Item] drinkable by the [Player].
 mixin Drinkable on Consumable {
   /// Health restored by consuming this [Item].
-  int get hp => 0;
+  Decimal get hp => Decimal.zero;
 }
 
 class MyItem {
   MyItem(
     this.item, {
     ItemId? id,
-    int? count,
-  })  : count = count ?? item.count,
+    Decimal? count,
+  })  : count = count ?? Decimal.fromInt(item.count),
         id = id ??
             (item.max == null ? ItemId(item.id) : ItemId(const Uuid().v4()));
 
   final ItemId id;
   final Item item;
 
-  int count;
+  Decimal count;
 }
 
 // TODO: Store [Stat]s
 class MyEquipable extends MyItem {
   MyEquipable(
     Equipable equipable, {
-    this.exp = 0,
+    Decimal? exp,
     ItemId? id,
-  }) : super(equipable, id: id, count: 1);
+  })  : exp = exp ?? Decimal.zero,
+        super(equipable, id: id, count: Decimal.one);
 
-  int exp;
+  Decimal exp;
 
-  int get currentExp {
+  Decimal get currentExp {
     if (level > 1) {
       return exp - levels[level - 1];
     }
     return exp;
   }
 
-  int? get nextExp {
+  Decimal? get nextExp {
     if (level <= Equipable.maxLevel) {
       if (level > 1) {
         return levels[level] - levels[level - 1];
@@ -240,19 +250,18 @@ class MyEquipable extends MyItem {
 
   int get level => (item as Equipable).levels.indexWhere((e) => exp < e);
 
-  List<int> get defenses => (item as Equipable).defenses;
-  List<int> get levels => (item as Equipable).levels;
+  List<Decimal> get defenses => (item as Equipable).defenses;
+  List<Decimal> get levels => (item as Equipable).levels;
 
-  int get defense {
-    int def = defenses[level];
+  Decimal get defense {
+    Decimal def = defenses[level];
 
     for (Stat s in stats(StatType.def)) {
       def += s.amount;
     }
 
     for (Stat s in stats(StatType.defPercent)) {
-      double d = def * (1 + (s.amount / 100));
-      def = d.floor();
+      def *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return def;
@@ -266,20 +275,21 @@ class MyEquipable extends MyItem {
 class MyWeapon extends MyItem {
   MyWeapon(
     Weapon weapon, {
-    this.exp = 0,
+    Decimal? exp,
     ItemId? id,
-  }) : super(weapon, id: id, count: 1);
+  })  : exp = exp ?? Decimal.zero,
+        super(weapon, id: id, count: Decimal.one);
 
-  int exp;
+  Decimal exp;
 
-  int get currentExp {
+  Decimal get currentExp {
     if (level > 1) {
       return exp - levels[level - 1];
     }
     return exp;
   }
 
-  int? get nextExp {
+  Decimal? get nextExp {
     if (level <= Weapon.maxLevel) {
       if (level > 1) {
         return levels[level] - levels[level - 1];
@@ -293,19 +303,18 @@ class MyWeapon extends MyItem {
 
   int get level => (item as Weapon).levels.indexWhere((e) => exp < e);
 
-  List<int> get damages => (item as Weapon).damages;
-  List<int> get levels => (item as Weapon).levels;
+  List<Decimal> get damages => (item as Weapon).damages;
+  List<Decimal> get levels => (item as Weapon).levels;
 
-  int get damage {
-    int dmg = damages[level];
+  Decimal get damage {
+    Decimal dmg = damages[level];
 
     for (Stat s in stats(StatType.atk)) {
       dmg += s.amount;
     }
 
     for (Stat s in stats(StatType.atkPercent)) {
-      double d = dmg * (1 + (s.amount / 100));
-      dmg = d.floor();
+      dmg *= (Decimal.one + (s.amount * Decimal.parse('0.01')));
     }
 
     return dmg;
@@ -319,11 +328,12 @@ class MyWeapon extends MyItem {
 class MyArtifact extends MyItem {
   MyArtifact(
     Artifact artifact, {
-    this.exp = 0,
+    Decimal? exp,
     Stat? stat,
     List<Stat>? stats,
     ItemId? id,
-  }) : super(artifact, id: id, count: 1) {
+  })  : exp = exp ?? Decimal.zero,
+        super(artifact, id: id, count: Decimal.one) {
     if (stat != null) {
       this.stat = stat;
     } else {
@@ -347,16 +357,16 @@ class MyArtifact extends MyItem {
   late Stat stat;
   late List<Stat> stats;
 
-  int exp;
+  Decimal exp;
 
-  int get currentExp {
+  Decimal get currentExp {
     if (level > 1) {
       return exp - levels[level - 1];
     }
     return exp;
   }
 
-  int? get nextExp {
+  Decimal? get nextExp {
     if (level <= Artifact.maxLevel) {
       if (level > 1) {
         return levels[level] - levels[level - 1];
@@ -370,6 +380,6 @@ class MyArtifact extends MyItem {
 
   int get level => (item as Artifact).levels.indexWhere((e) => exp < e);
 
-  List<int> get levels => (item as Artifact).levels;
+  List<Decimal> get levels => (item as Artifact).levels;
   List<Stat> get allStats => [stat, ...stats];
 }

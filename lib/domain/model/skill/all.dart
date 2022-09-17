@@ -15,15 +15,16 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:collection/collection.dart';
+import 'package:decimal/decimal.dart';
 
 import '/domain/model/skill.dart';
 
 // TODO: Make generator generating `Map`: `{'id': Skill()}`.
 abstract class Skills {
   static List<Skill> get all => [
-        const HealingSkill(),
-        const HittingSkill(),
-        const ShieldSkill(),
+        HealingSkill(),
+        HittingSkill(),
+        ShieldSkill(),
       ];
 
   static Skill? get(String id) => all.firstWhereOrNull((e) => e.id == id);
@@ -41,18 +42,19 @@ abstract class CooldownSkill extends Skill {
 }
 
 class HealingSkill extends Skill with PrimarySkill {
-  const HealingSkill({
-    this.health = 1,
+  HealingSkill({
+    Decimal? health,
     this.period = const Duration(seconds: 1),
-  });
+  }) : health = health ?? Decimal.one;
 
-  final int health;
+  final Decimal health;
   final Duration period;
 
   @override
   String get name => 'Лечение';
 
-  List<int> get healths => List.generate(Skill.maxLevel, (i) => health + i);
+  List<Decimal> get healths =>
+      List.generate(Skill.maxLevel, (i) => health + Decimal.fromInt(i));
   List<Duration> get periods => List.generate(
         Skill.maxLevel,
         (i) => Duration(milliseconds: period.inMilliseconds - i * 5),
@@ -60,18 +62,19 @@ class HealingSkill extends Skill with PrimarySkill {
 }
 
 class HittingSkill extends Skill with PrimarySkill {
-  const HittingSkill({
-    this.damage = 20,
+  HittingSkill({
+    Decimal? damage,
     this.period = const Duration(seconds: 1),
-  });
+  }) : damage = damage ?? Decimal.fromInt(20);
 
-  final int damage;
+  final Decimal damage;
   final Duration period;
 
   @override
   String get name => 'Атака';
 
-  List<int> get damages => List.generate(Skill.maxLevel, (i) => damage + i);
+  List<Decimal> get damages =>
+      List.generate(Skill.maxLevel, (i) => damage + Decimal.fromInt(i));
   List<Duration> get periods => List.generate(
         Skill.maxLevel,
         (i) => Duration(milliseconds: period.inMilliseconds - i * 5),
@@ -79,8 +82,8 @@ class HittingSkill extends Skill with PrimarySkill {
 }
 
 class TankHittingSkill extends HittingSkill with PrimarySkill {
-  const TankHittingSkill({
-    super.damage = 20,
+  TankHittingSkill({
+    super.damage,
     super.period = const Duration(seconds: 1),
   });
 
@@ -91,9 +94,9 @@ class TankHittingSkill extends HittingSkill with PrimarySkill {
   String get asset => 'HittingSkill';
 
   @override
-  List<int> get damages => List.generate(
+  List<Decimal> get damages => List.generate(
         Skill.maxLevel,
-        (i) => damage + (i * 0.5).toInt(),
+        (i) => damage + (Decimal.fromInt(i) * Decimal.parse('0.5')),
       );
 
   @override
@@ -104,14 +107,15 @@ class TankHittingSkill extends HittingSkill with PrimarySkill {
 }
 
 class ShieldSkill extends Skill with PrimarySkill {
-  const ShieldSkill({this.shield = 10});
+  ShieldSkill({Decimal? shield}) : shield = shield ?? Decimal.fromInt(10);
 
-  final int shield;
+  final Decimal shield;
 
   @override
   String get name => 'Защита';
 
-  List<int> get shields => List.generate(Skill.maxLevel, (i) => shield + i);
+  List<Decimal> get shields =>
+      List.generate(Skill.maxLevel, (i) => shield + Decimal.fromInt(i));
 }
 
 class ProvocationSkill extends Skill with PrimarySkill {
@@ -126,13 +130,14 @@ class ProvocationSkill extends Skill with PrimarySkill {
 }
 
 class SilentShotSkill extends CooldownSkill {
-  const SilentShotSkill({
-    this.damage = 100,
+  SilentShotSkill({
+    Decimal? damage,
     this.count = 3,
     Duration cooldown = const Duration(seconds: 15),
-  }) : super(cooldown);
+  })  : damage = damage ?? Decimal.fromInt(100),
+        super(cooldown);
 
-  final int damage;
+  final Decimal damage;
   final int count;
 
   @override
@@ -141,7 +146,8 @@ class SilentShotSkill extends CooldownSkill {
   @override
   List<String>? get sounds => ['voice/Rozzi/skill.wav'];
 
-  List<int> get damages => List.generate(Skill.maxLevel, (i) => damage + i);
+  List<Decimal> get damages =>
+      List.generate(Skill.maxLevel, (i) => damage + Decimal.fromInt(i));
   List<int> get counts =>
       List.generate(Skill.maxLevel, (i) => count + (i * 0.1).toInt());
 }

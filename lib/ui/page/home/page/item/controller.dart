@@ -17,6 +17,7 @@
 import 'package:akuma/domain/model/item/all.dart';
 import 'package:akuma/domain/service/item.dart';
 import 'package:akuma/util/obs/obs.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -50,7 +51,8 @@ class ItemController extends GetxController {
     return _itemService.enhance(myItem.value!, selectedItems.exp);
   }
 
-  bool hasMoney(int amount) => _itemService.amount(const Dogecoin()) >= amount;
+  bool hasMoney(Decimal amount) =>
+      _itemService.amount(const Dogecoin()) >= amount;
 }
 
 class ExchangeItemSettings {
@@ -66,10 +68,10 @@ class ExchangeItemSettings {
 }
 
 extension SelectedItemsExp on List<SelectedItem> {
-  int get exp {
+  Decimal get exp {
     return map(
       (e) {
-        int exp = 0;
+        Decimal exp = Decimal.zero;
         if (e.item.value is MyWeapon) {
           exp = (e.item.value as MyWeapon).exp;
         } else if (e.item.value is MyEquipable) {
@@ -78,15 +80,16 @@ extension SelectedItemsExp on List<SelectedItem> {
           exp = (e.item.value as MyArtifact).exp;
         }
 
-        return exp ~/ 2 + (100 + e.item.value.item.rarity.index * 400);
+        return exp * Decimal.parse('0.5') +
+            Decimal.fromInt(100 + e.item.value.item.rarity.index * 400);
       },
-    ).fold(0, (p, e) => p + e);
+    ).fold(Decimal.zero, (p, e) => p + e);
   }
 
-  int get money {
+  Decimal get money {
     return map(
       (e) {
-        int exp = 0;
+        Decimal exp = Decimal.zero;
         if (e.item.value is MyWeapon) {
           exp = (e.item.value as MyWeapon).exp;
         } else if (e.item.value is MyEquipable) {
@@ -95,8 +98,9 @@ extension SelectedItemsExp on List<SelectedItem> {
           exp = (e.item.value as MyArtifact).exp;
         }
 
-        return exp + (100 + e.item.value.item.rarity.index * 400);
+        return exp +
+            Decimal.fromInt(100 + e.item.value.item.rarity.index * 400);
       },
-    ).fold(0, (p, e) => p + e);
+    ).fold(Decimal.zero, (p, e) => p + e);
   }
 }

@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '/domain/model_type_id.dart';
@@ -34,6 +35,7 @@ class ItemHiveProvider extends HiveBaseProvider<MyItem> {
 
   @override
   void registerAdapters() {
+    Hive.maybeRegisterAdapter(DecimalAdapter());
     Hive.maybeRegisterAdapter(ItemIdAdapter());
     Hive.maybeRegisterAdapter(MyItemAdapter());
     Hive.maybeRegisterAdapter(StatAdapter());
@@ -63,17 +65,17 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
     Item? item = Items.get(itemId);
     if (item == null) {
       Log.print('[$runtimeType] Cannot find `Item` with id: $itemId');
-      return MyItem(const ImpossibleItem(0), count: 0);
+      return MyItem(const ImpossibleItem(0), count: Decimal.zero);
     }
 
     if (type == 'MyWeapon') {
-      final int exp = reader.read() as int;
+      final Decimal exp = reader.read() as Decimal;
       return MyWeapon(item as Weapon, exp: exp, id: id);
     } else if (type == 'MyEquipable') {
-      final int exp = reader.read() as int;
+      final Decimal exp = reader.read() as Decimal;
       return MyEquipable(item as Equipable, exp: exp, id: id);
     } else if (type == 'MyArtifact') {
-      final int exp = reader.read() as int;
+      final Decimal exp = reader.read() as Decimal;
       final Stat stat = reader.read() as Stat;
       final int statsLength = reader.read() as int;
 
@@ -90,7 +92,7 @@ class MyItemAdapter extends TypeAdapter<MyItem> {
         id: id,
       );
     } else {
-      final int count = reader.read() as int;
+      final Decimal count = reader.read() as Decimal;
       return MyItem(item, id: id, count: count);
     }
   }

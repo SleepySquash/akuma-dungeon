@@ -15,22 +15,23 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:akuma/domain/model/stat.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 
 void main() {
   test('StatChance resolves different stats', () {
     List<Stat> equalResolved = [
-      StatChance(Stat.atk(1)),
-      StatChance(Stat.atkPercent(1)),
-      StatChance(Stat.def(1)),
-      StatChance(Stat.defPercent(1)),
-      StatChance(Stat.hp(1)),
-      StatChance(Stat.hpPercent(1)),
-      StatChance(Stat.critDamage(1)),
-      StatChance(Stat.critRate(1)),
-      StatChance(Stat.ult(1)),
-      StatChance(Stat.ultPercent(1)),
+      StatChance(Stat.atk(Decimal.one)),
+      StatChance(Stat.atkPercent(Decimal.one)),
+      StatChance(Stat.def(Decimal.one)),
+      StatChance(Stat.defPercent(Decimal.one)),
+      StatChance(Stat.hp(Decimal.one)),
+      StatChance(Stat.hpPercent(Decimal.one)),
+      StatChance(Stat.critDamage(Decimal.one)),
+      StatChance(Stat.critRate(Decimal.one)),
+      StatChance(Stat.ult(Decimal.one)),
+      StatChance(Stat.ultPercent(Decimal.one)),
     ].resolve(10);
 
     expect(
@@ -41,16 +42,16 @@ void main() {
 
   test('StatChance accounts chances', () {
     List<Stat> hp = [
-      StatChance(Stat.atk(1)),
-      StatChance(Stat.atkPercent(1)),
-      StatChance(Stat.def(1)),
-      StatChance(Stat.defPercent(1)),
-      StatChance(Stat.hp(1), 1000000),
-      StatChance(Stat.hpPercent(1)),
-      StatChance(Stat.critDamage(1)),
-      StatChance(Stat.critRate(1)),
-      StatChance(Stat.ult(1)),
-      StatChance(Stat.ultPercent(1)),
+      StatChance(Stat.atk(Decimal.one)),
+      StatChance(Stat.atkPercent(Decimal.one)),
+      StatChance(Stat.def(Decimal.one)),
+      StatChance(Stat.defPercent(Decimal.one)),
+      StatChance(Stat.hp(Decimal.one), 1000000),
+      StatChance(Stat.hpPercent(Decimal.one)),
+      StatChance(Stat.critDamage(Decimal.one)),
+      StatChance(Stat.critRate(Decimal.one)),
+      StatChance(Stat.ult(Decimal.one)),
+      StatChance(Stat.ultPercent(Decimal.one)),
     ].resolve(1);
 
     expect(
@@ -59,16 +60,16 @@ void main() {
     );
 
     List<Stat> def = [
-      StatChance(Stat.atk(1)),
-      StatChance(Stat.atkPercent(1)),
-      StatChance(Stat.def(1), 1000000),
-      StatChance(Stat.defPercent(1)),
-      StatChance(Stat.hp(1)),
-      StatChance(Stat.hpPercent(1)),
-      StatChance(Stat.critDamage(1)),
-      StatChance(Stat.critRate(1)),
-      StatChance(Stat.ult(1)),
-      StatChance(Stat.ultPercent(1)),
+      StatChance(Stat.atk(Decimal.one)),
+      StatChance(Stat.atkPercent(Decimal.one)),
+      StatChance(Stat.def(Decimal.one), 1000000),
+      StatChance(Stat.defPercent(Decimal.one)),
+      StatChance(Stat.hp(Decimal.one)),
+      StatChance(Stat.hpPercent(Decimal.one)),
+      StatChance(Stat.critDamage(Decimal.one)),
+      StatChance(Stat.critRate(Decimal.one)),
+      StatChance(Stat.ult(Decimal.one)),
+      StatChance(Stat.ultPercent(Decimal.one)),
     ].resolve(1);
 
     expect(
@@ -79,9 +80,10 @@ void main() {
 
   test('StatChance edge cases', () {
     expect(<StatChance>[].resolve(10).length, 0);
-    expect([StatChance(Stat.atk(1))].resolve(10).length, 1);
+    expect([StatChance(Stat.atk(Decimal.one))].resolve(10).length, 1);
     expect(
-      [StatChance(Stat.atk(1))].resolve(10).first.type == StatType.atk,
+      [StatChance(Stat.atk(Decimal.one))].resolve(10).first.type ==
+          StatType.atk,
       true,
     );
   });

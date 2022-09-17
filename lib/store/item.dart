@@ -16,6 +16,7 @@
 
 import 'dart:async';
 
+import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -60,8 +61,8 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void add(Item item, [int? amount]) {
-    int count = (amount ?? 1) * item.count;
+  void add(Item item, [Decimal? amount]) {
+    Decimal count = (amount ?? Decimal.one) * Decimal.fromInt(item.count);
     MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
       existing.count += count;
@@ -95,11 +96,11 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void take(ItemId id, [int? amount]) {
+  void take(ItemId id, [Decimal? amount]) {
     MyItem? existing = _itemHive.get(id);
     if (existing != null) {
       existing.count -= amount ?? existing.count;
-      if (existing.count <= 0) {
+      if (existing.count <= Decimal.zero) {
         _itemHive.remove(id);
       } else {
         _itemHive.put(existing);
@@ -114,9 +115,9 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  int amount(Item item) {
+  Decimal amount(Item item) {
     MyItem? existing = _itemHive.get(ItemId(item.id));
-    return existing?.count ?? 0;
+    return existing?.count ?? Decimal.zero;
   }
 
   Future<void> _initLocalSubscription() async {

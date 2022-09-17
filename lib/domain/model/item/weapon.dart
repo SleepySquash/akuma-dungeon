@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 import '/domain/model/stat.dart';
@@ -28,7 +30,7 @@ class BronzeDaggerItem extends Weapon with Dagger {
   String get name => 'Бронзовый клинок';
 
   @override
-  int get damage => 10;
+  Decimal get damage => Decimal.fromInt(10);
 }
 
 class IronDaggerItem extends Weapon with Dagger {
@@ -44,12 +46,12 @@ class IronDaggerItem extends Weapon with Dagger {
   Rarity get rarity => Rarity.useful;
 
   @override
-  int get damage => 50;
+  Decimal get damage => Decimal.fromInt(50);
 
   @override
   List<Stat> get stats => [
-        Stat.atkPercent(5),
-        Stat.defPercent(5),
+        Stat.atkPercent(Decimal.fromInt(5)),
+        Stat.defPercent(Decimal.fromInt(5)),
       ];
 }
 
@@ -63,7 +65,7 @@ class PracticeOakSwordItem extends Weapon with Sword {
   String get name => 'Деревянный меч';
 
   @override
-  int get damage => 1;
+  Decimal get damage => Decimal.fromInt(1);
 }
 
 class PracticeWillowSwordItem extends Weapon with Sword {
@@ -76,7 +78,7 @@ class PracticeWillowSwordItem extends Weapon with Sword {
   String get name => 'Деревянный меч из ивы';
 
   @override
-  int get damage => 2;
+  Decimal get damage => Decimal.fromInt(2);
 }
 
 class BronzeSwordItem extends Weapon with Sword {
@@ -89,5 +91,5 @@ class BronzeSwordItem extends Weapon with Sword {
   String get name => 'Бронзовый меч';
 
   @override
-  int get damage => 10;
+  Decimal get damage => Decimal.fromInt(10);
 }

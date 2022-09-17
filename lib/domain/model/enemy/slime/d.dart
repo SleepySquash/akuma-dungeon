@@ -1,3 +1,5 @@
+import 'package:decimal/decimal.dart';
+
 import '../slime.dart';
 import '/domain/model/item/all.dart';
 import '/domain/model/reward.dart';
@@ -9,13 +11,13 @@ abstract class DSlime extends Slime {
   String get asset => 'slime/$id';
 
   @override
-  int get hp => 2000;
+  Decimal get hp => Decimal.fromInt(2000);
 
   @override
-  int get exp => 20;
+  Decimal get exp => Decimal.fromInt(20);
 
   @override
-  double get damage => 100;
+  Decimal get damage => Decimal.fromInt(100);
 
   @override
   List<Reward> get drops => [
