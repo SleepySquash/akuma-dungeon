@@ -48,7 +48,7 @@ abstract class ExecutableTask {
       if (step.withEntrance) {
         router.entrance(
           step.settings,
-          location?.asset ?? '',
+          step.entranceFrom ?? location?.asset ?? '',
           onClear: () {
             router.nowhere();
             next();

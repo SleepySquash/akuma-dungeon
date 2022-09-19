@@ -1,4 +1,3 @@
-import 'package:akuma/ui/page/specific/naksiasraass_buy/view.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
@@ -9,7 +8,8 @@ import '/domain/model/flag.dart';
 import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
 import '/router.dart';
-import '../../../../../../ui/page/specific/character_selection/view.dart';
+import '/ui/page/specific/naksiasraass_buy/view.dart';
+import '/ui/page/specific/character_selection/view.dart';
 
 class FirstDungeonTask extends Task {
   const FirstDungeonTask();
@@ -19,7 +19,7 @@ class FirstDungeonTask extends Task {
 
   @override
   List<TaskCriteria> get criteria => const [
-        QuestCommissionsCompletedCriteria(2),
+        QuestCommissionsCompletedCriteria(5),
         WeaponEquippedCriteria(null),
       ];
 

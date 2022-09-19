@@ -73,5 +73,5 @@ class RedLongSlimeEnemy extends FSlime {
   Decimal get exp => Decimal.fromInt(5);
 
   @override
-  Decimal get hp => super.hp + Decimal.fromInt(40);
+  Decimal get hp => super.hp + Decimal.fromInt(170);
 }

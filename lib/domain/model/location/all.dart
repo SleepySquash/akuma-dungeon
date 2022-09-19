@@ -14,13 +14,13 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/commission.dart';
-import 'package:akuma/domain/model/task/commission/aloross.dart';
-import 'package:akuma/domain/model/task/dungeon/aloross.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
 
+import '/domain/model/commission.dart';
 import '/domain/model/location.dart';
+import '/domain/model/task/commission/aloross.dart';
+import '/domain/model/task/dungeon/aloross.dart';
 
 // TODO: Make generator generating `Map`: `{'id': Location()}`.
 abstract class Locations {

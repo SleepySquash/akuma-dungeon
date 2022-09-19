@@ -145,9 +145,15 @@ abstract class TaskStep {
 }
 
 class DungeonStep extends TaskStep {
-  const DungeonStep(this.settings, {this.withEntrance = false});
+  const DungeonStep(
+    this.settings, {
+    this.withEntrance = false,
+    this.entranceFrom,
+  });
+
   final DungeonSettings settings;
   final bool withEntrance;
+  final String? entranceFrom;
 }
 
 class NovelStep extends TaskStep {
