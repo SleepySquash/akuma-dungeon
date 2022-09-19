@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/item/all.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
@@ -23,6 +24,7 @@ import '/domain/model/enemy/slime.dart';
 import '/domain/model/location/all.dart';
 import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
+import '/domain/model/task/queue/main/chapter_1.dart';
 
 class AlorossMerchantForestCommission extends AlorossCommission {
   const AlorossMerchantForestCommission();
@@ -40,6 +42,12 @@ class AlorossMerchantForestCommission extends AlorossCommission {
 
   @override
   IconData get icon => Icons.forest;
+
+  @override
+  List<TaskCriteria> get criteria => const [
+        CompletedCriteria(task: SecondStepsTask()),
+        NotCompletedCriteria(),
+      ];
 
   @override
   List<Reward> get rewards => [
@@ -135,11 +143,11 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(25)],
+                conditions: const [SlayedStageCondition(15)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(10)],
               ),
             ],
           ),

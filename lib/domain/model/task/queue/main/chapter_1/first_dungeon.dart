@@ -19,7 +19,7 @@ class FirstDungeonTask extends Task {
 
   @override
   List<TaskCriteria> get criteria => const [
-        QuestCommissionsCompletedCriteria(2),
+        QuestCommissionsCompletedCriteria(5),
         WeaponEquippedCriteria(null),
       ];
 
@@ -376,6 +376,15 @@ class FirstDungeonTask extends Task {
 
           return false;
         }),
+        NovelStep([
+          const MusicLine('mixkit-beautiful-dream-493.mp3'),
+          BackgroundLine('location/old_house_zombie.jpg'),
+          CharacterLine('Beloukas.webp'),
+          DialogueLine(
+            '...',
+            by: 'Белыйкавказ',
+          ),
+        ]),
         ExecuteStep(() async {
           akuma.Character? character =
               await CharacterSelectionView.show(router.context!);

@@ -8,7 +8,7 @@ abstract class FSlime extends Slime {
   const FSlime();
 
   @override
-  Decimal get hp => Decimal.fromInt(10);
+  Decimal get hp => Decimal.fromInt(32);
 
   @override
   Decimal get exp => Decimal.one;
@@ -19,6 +19,7 @@ abstract class FSlime extends Slime {
   @override
   List<Reward> get drops => [
         ChanceItemReward(const Ruby(), 0.02),
+        ChanceItemReward(const SlimeCondensateItem(), 0.15),
       ];
 }
 
@@ -36,7 +37,7 @@ class BlueSlimeEnemy extends FSlime {
   String get id => 'Blue Slime';
 
   @override
-  Decimal get hp => Decimal.fromInt(14);
+  Decimal get hp => super.hp + Decimal.fromInt(4);
 }
 
 class RedSlimeEnemy extends FSlime {
@@ -46,7 +47,7 @@ class RedSlimeEnemy extends FSlime {
   String get id => 'Red Slime';
 
   @override
-  Decimal get hp => Decimal.fromInt(17);
+  Decimal get hp => super.hp + Decimal.fromInt(7);
 }
 
 class CatSlimeEnemy extends FSlime {
@@ -59,7 +60,7 @@ class CatSlimeEnemy extends FSlime {
   Decimal get exp => Decimal.fromInt(2);
 
   @override
-  Decimal get hp => Decimal.fromInt(21);
+  Decimal get hp => super.hp + Decimal.fromInt(11);
 }
 
 class RedLongSlimeEnemy extends FSlime {
@@ -72,5 +73,5 @@ class RedLongSlimeEnemy extends FSlime {
   Decimal get exp => Decimal.fromInt(5);
 
   @override
-  Decimal get hp => Decimal.fromInt(50);
+  Decimal get hp => super.hp + Decimal.fromInt(40);
 }

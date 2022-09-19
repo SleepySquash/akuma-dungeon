@@ -22,6 +22,8 @@ abstract class DSlime extends Slime {
   @override
   List<Reward> get drops => [
         ChanceItemReward(const Ruby(), 0.08),
+        ChanceItemReward(const SlimeCondensateItem(), 0.3),
+        ChanceItemReward(const SlimeSecretionsItem(), 0.1),
       ];
 }
 

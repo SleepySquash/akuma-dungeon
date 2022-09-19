@@ -98,9 +98,9 @@ class Player {
   List<Decimal> get critRates =>
       List.generate(maxLevel, (i) => ((i + 1) / 10).toDecimal());
   List<Decimal> get damages =>
-      List.generate(maxLevel, (i) => Decimal.fromInt(1 * (i + 1) + i * 2));
+      List.generate(maxLevel, (i) => Decimal.fromInt(i + 1));
   List<Decimal> get defenses =>
-      List.generate(maxLevel, (i) => Decimal.fromInt(1 * (i + 1)));
+      List.generate(maxLevel, (i) => Decimal.fromInt(i + 1));
   List<Decimal> get healths =>
       List.generate(maxLevel, (i) => Decimal.fromInt(100 + 50 * i));
   List<Decimal> get ultCharges => List.generate(

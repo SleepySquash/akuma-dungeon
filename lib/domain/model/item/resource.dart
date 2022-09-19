@@ -14,6 +14,8 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:decimal/decimal.dart';
+
 import '/domain/model/item.dart';
 import '/domain/model/rarity.dart';
 
@@ -28,6 +30,9 @@ class Dogecoin extends Item {
 
   @override
   String get name => 'Dogecoin';
+
+  @override
+  Decimal? get price => null;
 }
 
 class Ruby extends Item {
@@ -48,6 +53,9 @@ class Ruby extends Item {
 
   @override
   Rarity get rarity => Rarity.rare;
+
+  @override
+  Decimal? get price => null;
 }
 
 class HeartCard extends Item {
@@ -67,58 +75,66 @@ class HeartCard extends Item {
 
   @override
   Rarity get rarity => Rarity.superRare;
+
+  @override
+  Decimal? get price => null;
 }
 
-class SwordBookMinor extends Item {
-  const SwordBookMinor([super.count = 1]);
+class SlimeCondensateItem extends Item {
+  const SlimeCondensateItem([super.count = 1]);
 
   @override
-  String get id => 'spell_sword_minor';
+  String get id => 'Slime Condensate';
 
   @override
-  String get asset => 'skill/$id';
+  String get asset => 'resource/$id';
 
   @override
-  String get name => 'Чтиво Меча';
+  String get name => 'Slime Condensate';
 
   @override
   String get description =>
-      'В ней содержится достаточно знаний, чтобы научиться махать мечом.';
+      'A thick coating found on slimes. Most commonly seen material in elemental workshops.';
+
+  @override
+  Rarity get rarity => Rarity.common;
 }
 
-class SwordBookMajor extends Item {
-  const SwordBookMajor([super.count = 1]);
+class SlimeSecretionsItem extends Item {
+  const SlimeSecretionsItem([super.count = 1]);
 
   @override
-  String get id => 'spell_sword_major';
+  String get id => 'Slime Secretions';
 
   @override
-  String get asset => 'skill/$id';
+  String get asset => 'resource/$id';
 
   @override
-  String get name => 'Книга Меча';
+  String get name => 'Slime Secretions';
 
   @override
-  String get description => 'Техники, приёмы, всё об искусстве меча от А до Я.';
+  String get description =>
+      'Mildly purified slime secretions. Harmful to the skin. Please avoid direct exposure.';
 
   @override
   Rarity get rarity => Rarity.useful;
 }
 
-class SwordBookSuperior extends Item {
-  const SwordBookSuperior([super.count = 1]);
+class SlimeConcentrateItem extends Item {
+  const SlimeConcentrateItem([super.count = 1]);
 
   @override
-  String get id => 'spell_sword_superior';
+  String get id => 'Slime Concentrate';
 
   @override
-  String get asset => 'skill/$id';
+  String get asset => 'resource/$id';
 
   @override
-  String get name => 'Мемуары Меча';
+  String get name => 'Slime Concentrate';
 
   @override
-  String get description => 'Стань мечом.';
+  String get description =>
+      'Concentrated slime essence. When left alone, it will begin to move on its own.';
 
   @override
   Rarity get rarity => Rarity.rare;

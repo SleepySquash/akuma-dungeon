@@ -21,6 +21,7 @@ import 'artifact.dart';
 import 'consumable.dart';
 import 'equipable.dart';
 import 'resource.dart';
+import 'skill.dart';
 import 'weapon.dart';
 
 export 'artifact.dart';
@@ -28,6 +29,7 @@ export 'consumable.dart';
 export 'equipable.dart';
 export 'resource.dart';
 export 'weapon.dart';
+export 'skill.dart';
 
 // TODO: Make generator generating `Map`: `{'id': Item()}`.
 abstract class Items {
@@ -69,6 +71,9 @@ abstract class Items {
         Dogecoin(),
         HeartCard(),
         Ruby(),
+        SlimeCondensateItem(),
+        SlimeSecretionsItem(),
+        SlimeConcentrateItem(),
       ];
 
   static List<Item> get skills => const [

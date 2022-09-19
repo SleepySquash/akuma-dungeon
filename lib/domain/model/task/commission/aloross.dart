@@ -20,7 +20,9 @@ import '/domain/model/location/all.dart';
 import '/domain/model/rank.dart';
 import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
+import 'aloross/construction.dart';
 import 'aloross/fields.dart';
+import 'aloross/food_delivery.dart';
 import 'aloross/merchant.dart';
 import 'aloross/restaurant.dart';
 import 'aloross/swamp.dart';
@@ -32,6 +34,8 @@ abstract class AlorossCommissions {
         AlorossMerchantForestCommission(),
         AlorossSlimeSwampCommission(),
         AlorossRestaurantCommission(),
+        AlorossConstructionCommission(),
+        AlorossFoodDeliveryCommission(),
       ];
 }
 
@@ -49,7 +53,7 @@ abstract class AlorossCommission extends Task with QuestCommission {
 
   @override
   List<Reward> get rewards => const [
-        MoneyReward(6000),
+        MoneyReward(2000),
         ExpReward(250),
         ItemReward(Ruby(20)),
         RankReward(5),

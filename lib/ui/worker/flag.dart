@@ -123,7 +123,13 @@ class FlagWorker extends DisposableInterface {
         title = 'Магазины разлокированы';
         icon = Icons.store;
         description =
-            'Теперь ты можешь:\n\n- искать новых персонажей в свою пати;\n- покупать оружие и броню;\n- продавать лут.';
+            'Теперь ты можешь:\n\n- покупать оружие и броню;\n- продавать лут.';
+        break;
+
+      case Flag.gachaUnlocked:
+        title = 'Рекрутинг разлокированы';
+        icon = Icons.store;
+        description = 'Теперь ты можешь искать новых персонажей в свою пати.';
         break;
     }
 

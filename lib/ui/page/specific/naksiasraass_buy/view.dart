@@ -1,13 +1,9 @@
-import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/character/standard.dart';
-import 'package:akuma/router.dart';
-import 'package:akuma/ui/page/home/widget/wide_button.dart';
-import 'package:akuma/ui/widget/backdrop.dart';
-import 'package:akuma/ui/widget/button.dart';
-import 'package:akuma/util/platform_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '/router.dart';
+import '/ui/page/home/widget/wide_button.dart';
+import '/ui/widget/backdrop.dart';
 import 'controller.dart';
 
 class NaksiasraassBuyView extends StatelessWidget {

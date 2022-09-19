@@ -17,8 +17,6 @@
 import 'package:decimal/decimal.dart';
 
 import '/domain/model/item.dart';
-import '/domain/model/rarity.dart';
-import '/domain/model/stat.dart';
 
 class HelmetLightBronzeItem extends Equipable with Head {
   const HelmetLightBronzeItem([super.count = 1]);
@@ -31,6 +29,9 @@ class HelmetLightBronzeItem extends Equipable with Head {
 
   @override
   Decimal get defense => Decimal.fromInt(5);
+
+  @override
+  Decimal? get price => Decimal.fromInt(24000);
 }
 
 class ChainmailBronzeItem extends Equipable with Armor {
@@ -44,6 +45,9 @@ class ChainmailBronzeItem extends Equipable with Armor {
 
   @override
   Decimal get defense => Decimal.fromInt(14);
+
+  @override
+  Decimal? get price => Decimal.fromInt(40000);
 }
 
 class BootItem extends Equipable with Shoes {
@@ -57,4 +61,7 @@ class BootItem extends Equipable with Shoes {
 
   @override
   Decimal get defense => Decimal.fromInt(4);
+
+  @override
+  Decimal? get price => Decimal.fromInt(22000);
 }

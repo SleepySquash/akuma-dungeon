@@ -2,6 +2,7 @@ enum Flag {
   commissionUnlocked,
   dungeonCommissionsUnlocked,
   dungeonsUnlocked,
+  gachaUnlocked,
   goddessTowerUnlocked,
   locationsUnlocked,
   partyUnlocked,
@@ -18,6 +19,7 @@ extension FlagsExtension on Map<Flag, bool> {
   bool get locationsUnlocked => _value(Flag.locationsUnlocked);
   bool get partyUnlocked => _value(Flag.partyUnlocked);
   bool get storeUnlocked => _value(Flag.storeUnlocked);
+  bool get gachaUnlocked => _value(Flag.gachaUnlocked);
 
   bool _value(Flag flag) => this[flag] ?? false;
 }

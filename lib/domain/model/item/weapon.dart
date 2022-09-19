@@ -66,6 +66,9 @@ class PracticeOakSwordItem extends Weapon with Sword {
 
   @override
   Decimal get damage => Decimal.fromInt(1);
+
+  @override
+  Decimal? get price => Decimal.fromInt(1600);
 }
 
 class PracticeWillowSwordItem extends Weapon with Sword {
@@ -79,6 +82,9 @@ class PracticeWillowSwordItem extends Weapon with Sword {
 
   @override
   Decimal get damage => Decimal.fromInt(2);
+
+  @override
+  Decimal? get price => Decimal.fromInt(6000);
 }
 
 class BronzeSwordItem extends Weapon with Sword {
@@ -92,4 +98,7 @@ class BronzeSwordItem extends Weapon with Sword {
 
   @override
   Decimal get damage => Decimal.fromInt(10);
+
+  @override
+  Decimal? get price => Decimal.fromInt(30000);
 }

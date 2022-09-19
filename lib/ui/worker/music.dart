@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:soundpool/soundpool.dart';
 
 import '/router.dart';
@@ -25,7 +25,7 @@ class MusicWorker extends DisposableInterface {
   double? _lastMusicVolume;
   late final Worker _settingsWorker;
 
-  final AudioPlayer _audio = AudioPlayer();
+  final AudioPlayer _audio = AudioPlayer(playerId: 'music');
 
   String? _asset;
 
@@ -89,7 +89,7 @@ class MusicWorker extends DisposableInterface {
             _voicepool?.resume(_voiceStream!);
           }
 
-          _audio.play();
+          _audio.resume();
           break;
 
         case AppLifecycleState.inactive:
@@ -139,10 +139,25 @@ class MusicWorker extends DisposableInterface {
         );
       } else {
         final AudioPlayer player = AudioPlayer();
+
+        StreamSubscription? subscription;
+        subscription = player.onPlayerStateChanged.listen((e) {
+          switch (e) {
+            case PlayerState.playing:
+              // No-op.
+              break;
+
+            case PlayerState.stopped:
+            case PlayerState.paused:
+            case PlayerState.completed:
+              player.dispose();
+              subscription?.cancel();
+              break;
+          }
+        });
+
         await player.setVolume(volume);
-        await player.setAsset('assets/$asset');
-        await player.play();
-        await player.dispose();
+        await player.play(AssetSource(asset));
       }
     }
   }
@@ -158,10 +173,25 @@ class MusicWorker extends DisposableInterface {
         );
       } else {
         final AudioPlayer player = AudioPlayer();
+
+        StreamSubscription? subscription;
+        subscription = player.onPlayerStateChanged.listen((e) {
+          switch (e) {
+            case PlayerState.playing:
+              // No-op.
+              break;
+
+            case PlayerState.stopped:
+            case PlayerState.paused:
+            case PlayerState.completed:
+              player.dispose();
+              subscription?.cancel();
+              break;
+          }
+        });
+
         await player.setVolume(volume);
-        await player.setAsset('assets/$asset');
-        await player.play();
-        await player.dispose();
+        await player.play(AssetSource(asset));
       }
     }
   }
@@ -172,10 +202,9 @@ class MusicWorker extends DisposableInterface {
 
       double volume = _settings.value?.musicVolume ?? 1;
       if (volume > 0) {
-        await _audio.setLoopMode(LoopMode.one);
-        await _audio.setAsset('assets/$asset');
+        await _audio.setReleaseMode(ReleaseMode.loop);
         await _audio.setVolume(volume * _volumeCorrections);
-        _audio.play();
+        await _audio.play(AssetSource(asset));
       }
 
       isPlaying = true;
@@ -187,8 +216,7 @@ class MusicWorker extends DisposableInterface {
       double volume = _settings.value?.musicVolume ?? 1;
       if (volume > 0) {
         await _audio.setVolume(volume * _volumeCorrections);
-        await _audio.setAsset('assets/$_asset');
-        _audio.play();
+        _audio.play(AssetSource(_asset!));
       }
 
       isPlaying = true;

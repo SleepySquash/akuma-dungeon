@@ -129,7 +129,7 @@ class SettingsView extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       FlagService s = Get.find<FlagService>();
-                      s.set(Flag.storeUnlocked, true);
+                      s.set(Flag.gachaUnlocked, true);
                       s.set(Flag.goddessTowerUnlocked, true);
                       s.set(Flag.locationsUnlocked, true);
                       s.set(Flag.dungeonsUnlocked, true);
@@ -139,7 +139,7 @@ class SettingsView extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       FlagService s = Get.find<FlagService>();
-                      s.set(Flag.storeUnlocked, false);
+                      s.set(Flag.gachaUnlocked, false);
                       s.set(Flag.goddessTowerUnlocked, false);
                       s.set(Flag.locationsUnlocked, false);
                       s.set(Flag.dungeonsUnlocked, false);

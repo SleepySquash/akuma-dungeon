@@ -18,11 +18,13 @@ import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';
 import 'chapter_1/first_dungeon.dart';
 import 'chapter_1/introduction.dart';
-import 'chapter_1/shop_unlocked.dart';
+import 'chapter_1/first_steps.dart';
+import 'chapter_1/second_steps.dart';
 
 export 'chapter_1/first_dungeon.dart';
 export 'chapter_1/introduction.dart';
-export 'chapter_1/shop_unlocked.dart';
+export 'chapter_1/first_steps.dart';
+export 'chapter_1/second_steps.dart';
 
 abstract class ChapterOneTasks {
   static List<Task> get tasks => [
@@ -46,7 +48,8 @@ class ChapterOne extends TaskQueue {
   @override
   List<Task> get tasks => const [
         IntroductionTask(),
+        FirstStepsTask(),
+        SecondStepsTask(),
         FirstDungeonTask(),
-        ShopUnlockedTask(),
       ];
 }

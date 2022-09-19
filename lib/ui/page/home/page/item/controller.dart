@@ -40,15 +40,22 @@ class ItemController extends GetxController {
   final ExchangeItemSettings? exchangeItemSettings;
 
   final RxList<SelectedItem> selectedItems = RxList();
-
-  Rx<UniqueKey> enhanceKey = Rx(UniqueKey());
+  final Rx<UniqueKey> itemsKey = Rx(UniqueKey());
 
   final ItemService _itemService;
 
   RxObsMap<ItemId, Rx<MyItem>> get items => _itemService.items;
 
   EnhanceResult? enhance() {
-    return _itemService.enhance(myItem.value!, selectedItems.exp);
+    Decimal exp = selectedItems.exp;
+
+    for (SelectedItem item in selectedItems) {
+      _itemService.take(
+        item.item.value.id,
+        item.count,
+      );
+    }
+    return _itemService.enhance(myItem.value!, exp);
   }
 
   bool hasMoney(Decimal amount) =>

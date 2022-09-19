@@ -40,7 +40,7 @@ abstract class Veggie extends Enemy {
   String get asset => 'veggies/$id';
 
   @override
-  Decimal get hp => Decimal.fromInt(21);
+  Decimal get hp => Decimal.fromInt(10);
 
   @override
   Decimal get exp => Decimal.fromInt(2);

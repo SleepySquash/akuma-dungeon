@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/domain/model/location/all.dart';
 import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +44,12 @@ class AlorossRestaurantCommission extends AlorossCommission {
   IconData get icon => Icons.restaurant;
 
   @override
-  List<Reward> get rewards => [
-        ...super.rewards,
-        ItemReward(Items.consumable.sample(1).first),
+  List<Reward> get rewards => const [
+        MoneyReward(1600),
+        ExpReward(250),
+        ItemReward(Ruby(5)),
+        RankReward(2),
+        ReputationReward(AlorossLocation(), 1),
       ];
 
   @override
@@ -167,7 +171,7 @@ class AlorossRestaurantCommission extends AlorossCommission {
               DungeonStage(
                 enemies: VeggieEnemies.fPlus,
                 multiplier: Decimal.fromInt(2),
-                conditions: const [SlayedStageCondition(2)],
+                conditions: const [SlayedStageCondition(1)],
               ),
             ],
           ),

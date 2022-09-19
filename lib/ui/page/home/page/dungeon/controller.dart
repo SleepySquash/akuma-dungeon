@@ -492,6 +492,11 @@ class DungeonController extends GetxController {
       }
     }
 
+    String? sound = enemy.value?.enemy.slayedSounds?.sample(1).firstOrNull;
+    if (sound != null) {
+      _musicWorker.once(sound);
+    }
+
     enemy.value = null;
     ++slayedEnemies.value;
 

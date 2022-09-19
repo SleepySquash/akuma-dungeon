@@ -49,6 +49,8 @@ abstract class Item {
   /// Maximum amount this [Item] can contain.
   Decimal? get max => null;
 
+  Decimal? get price => Decimal.fromInt(100);
+
   /// Amount of this [Item].
   final int count;
 }

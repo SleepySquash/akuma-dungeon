@@ -33,6 +33,7 @@ abstract class Enemy {
 
   /// Path to the asset representing this [Enemy].
   String get asset => name;
+  String get ext => '.png';
 
   /// Maximum health this [Enemy] has.
   Decimal get hp => Decimal.fromInt(10);

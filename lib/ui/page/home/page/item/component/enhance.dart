@@ -160,7 +160,7 @@ class ItemEnhanceTab extends StatelessWidget {
     Widget grid() {
       return Obx(() {
         return ItemGrid(
-          key: c.enhanceKey.value,
+          key: c.itemsKey.value,
           type: ItemSelectionType.selection,
           heroPrefix: 'enhance',
           items: c.items.values.where((e) => e.value.id != c.myItem.value?.id),
@@ -288,7 +288,7 @@ class ItemEnhanceTab extends StatelessWidget {
                                     );
 
                                     c.selectedItems.clear();
-                                    c.enhanceKey.value = UniqueKey();
+                                    c.itemsKey.value = UniqueKey();
                                   }
                                 : null,
                             child: const Text('Enhance'),

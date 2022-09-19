@@ -14,10 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:flutter/foundation.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:novel/novel.dart';
 
 import '/domain/model/gender.dart';
@@ -48,19 +47,19 @@ class IntroductionController extends GetxController {
 
   @override
   Future<void> onReady() async {
-    if (kDebugMode) {
-      name.text = 'Test';
-      race.value = Race.usagi;
-      gender.value = Gender.female;
-      _register();
-    } else {
-      await _player.setLoopMode(LoopMode.one);
-      await _player.setVolume(0.4);
-      await _player.setAsset('music/MOSAICWAV_she_already_gone.mp3');
-      _player.play();
+    // if (kDebugMode) {
+    //   name.text = 'Test';
+    //   race.value = Race.usagi;
+    //   gender.value = Gender.female;
+    //   _register();
+    // } else {
+    // await _player.setLoopMode(LoopMode.one);
+    // await _player.setVolume(0.4);
+    // await _player.setAsset('music/MOSAICWAV_she_already_gone.mp3');
+    // _player.play();
 
-      _novel();
-    }
+    _novel();
+    // }
 
     super.onReady();
   }
@@ -94,6 +93,67 @@ class IntroductionController extends GetxController {
     await Novel.show(
       context: router.context!,
       scenario: [
+        const MusicLine('mixkit-lost-in-dreams-26.mp3'),
+        BackgroundLine('location/mediterranean_town.jpg'),
+        DialogueLine(
+            'Ты хватаешься за голову, осматриваешь себя на предмет каких-либо травм.'),
+        DialogueLine('Так, а откуда они должны были взяться?'),
+        DialogueLine('Где ты?'),
+        DialogueLine(
+            'Мгновением позже ты понимаешь, что ты не можешь ответить даже на более примитивный вопрос: кто ты?'),
+        DialogueLine(
+            'Осмотревшись, ты понимаешь, что стоишь у дороги, отсюда открывается вид на какой-то город.'),
+        DialogueLine('На спине рюкзак, в карманах деньги и... телефон!'),
+        DialogueLine(
+            'Ты судорожно достаёшь свой телефон из кармана, пароля нет, разблокируешь его.'),
+        DialogueLine('Симка есть, Интернет ловит, отлично.'),
+        DialogueLine(
+            'Ты открываешь галерею - пусто, смотришь контакты - пусто.'),
+        DialogueLine(
+            'Ты недоволен собой за то, что не оставил никаких заметок себе на случай таких ситуаций, кем бы ты ни был.'),
+        DialogueLine(
+            'Наконец, в заметках ты находишь единственную: в ней листовка с рекламой гильдии путешественников города Алоросс.'),
+        DialogueLine(
+            'Зацепка? Едва ли. Ты открываешь историю браузера, но в ней только простые запросы.'),
+        DialogueLine(
+            '"Лесбийский хентай с эльфиечками и кошкодевочками", "Порно с дворфами смешное", "Алоросс".'),
+        DialogueLine('Видимо, ты был человеком культуры.'),
+        DialogueLine('Но почему ты ничего не помнишь?'),
+        DialogueLine(
+            'Погода стояла дикая, солнце палило твою голову - стал ли солнечный удар причиной отшиба?'),
+        DialogueLine(
+            'Вокруг никого, ты решаешь идти вперёд в город перед тобой.'),
+        DialogueLine(
+            'По пути ты безуспешно пытаешься связать имеющуюся у тебя информацию в клубок, чтобы распутать его.'),
+        DialogueLine(
+            'Современность, какой ты её знаешь, состоит из передовых технологий - телефоны, компьютеры, космос.'),
+        DialogueLine(
+            'Около пятисот лет назад появились подземелья или данжи - порталы в измерение монстров.'),
+        DialogueLine(
+            'С тех пор человечество тратит огромное количество усилий на борьбу с монстрами.'),
+        DialogueLine(
+            'Но жизнь продолжается. Кроме того, вышедшие из данжей более слабые расы спокойно прижились в нашем измерении.'),
+        DialogueLine(
+            'Кроме людей, наш мир обитаем дварфами, эльфами, всеми типами ушастых, вампирами.'),
+        DialogueLine(
+            'Изначально, конечно, люди объявили этим расам войну - так началась Священная Война на религиозной почве.'),
+        DialogueLine(
+            'К счастью, довольно скоро эта война кончилась и теперь люди сосуществуют с существами из измерения Акумы.'),
+        DialogueLine(
+            'Акума - это титул, который присваивается сильнейшему дьяволу, что управляет монстрами.'),
+        DialogueLine(
+            'Судя по рассказам ушастых, в измерении Акумы лютая тирания, поэтому многие нашли мир в наших землях.'),
+        BackgroundLine('location/town.jpg'),
+        DialogueLine('"Алоросс" - вывеска у врат на входе.'),
+        DialogueLine(
+            'Возможно, твои заметки всё-таки связаны с разгадкой этой ситуации.'),
+        DialogueLine(
+            'Ты решаешь обойти город, чтобы триггернуть какие-либо воспоминания.'),
+        DialogueLine('Но к твоему сожалению никто тебя не узнаёт.'),
+        DialogueLine(
+            'Не имея альтернатив, ты отправляешься в гильдию путешественников.'),
+        DialogueLine(
+            'В конце концов, именно она является твоей единственной зацепкой.'),
         BackgroundLine('location/guild.jpg'),
         CharacterLine('Arda.png'),
         DialogueLine(
@@ -107,19 +167,37 @@ class IntroductionController extends GetxController {
           voice: 'intro/2.m4a',
         ),
         DialogueLine(
-          'Итак, ты хочешь вступить в ряды путешественников?',
-          by: 'Мастер',
-          voice: 'intro/3.mp3',
-        ),
-        DialogueLine(
-          'Что-ж, меня зовут Никита.',
-          by: 'Мастер',
-          voice: 'intro/4.mp3',
-        ),
-        DialogueLine(
           'Я временно заменяю гильдмастера, она... будет позже.',
           by: 'Мастер',
           voice: 'intro/5.m4a',
+        ),
+        DialogueLine('Ты объясняешь ситуацию гильдмастеру.'),
+        DialogueLine(
+          'Ага, понятно. К сожалению, я тоже вижу тебя впервые.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
+          'Но у меня есть идея - ты можешь стать путешественником.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
+          'Выполняя поручения, ты постоянно будешь путешествовать и тем самым обязательно найдёшь кого-нибудь, кто тебя помнит.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
+          'Маловероятно, что ты потерял память внезапно тут и здесь, что-то должно связывать тебя с Алороссом.',
+          by: 'Мастер',
+        ),
+        DialogueLine('У тебя нет ни малейшей идеи, куда идти и куда податься.'),
+        DialogueLine(
+            'Наличных в твоём кармане надолго не хватит, а путешествовия действительно могут тебе помочь.'),
+        DialogueLine('Ты соглашаешься.'),
+        DialogueLine(
+            'Твоя цель - найти себя, путешествуя по миру, тебе больше ничего не остаётся.'),
+        DialogueLine(
+          'Итак, ты хочешь вступить в ряды путешественников?',
+          by: 'Мастер',
+          voice: 'intro/3.mp3',
         ),
         DialogueLine(
           'Наш Алоросс - городок небольшой, но поручений тут не меньше, чем в каком-нибудь крупном граде.',
@@ -139,6 +217,10 @@ class IntroductionController extends GetxController {
       ],
     );
     await Future.delayed(200.milliseconds);
+
+    await _player.setReleaseMode(ReleaseMode.loop);
+    await _player.setVolume(0.4);
+    _player.play(AssetSource('music/MOSAICWAV_she_already_gone.mp3'));
 
     stage.value = IntroductionStage.character;
   }
@@ -161,31 +243,17 @@ class IntroductionController extends GetxController {
           voice: 'intro/32.m4a',
         ),
         HideCharacterLine('Arda.png'),
+        DialogueLine('Ты ждёшь пару минут, пока гильдмастер заполняет бумаги.'),
         DialogueLine(
-          'Ты ждёшь пару минут, пока гильдмастер заполняет бумаги.',
-        ),
-        DialogueLine(
-          'Несмотря на удалённость от центра, городок вполне себе технологичный.',
-        ),
-        DialogueLine(
-          'Гильдмастер достаёт ноутбук, на котором увлечённо что-то делает около минуты.',
-        ),
+            'Гильдмастер достаёт ноутбук, на котором увлечённо что-то делает около минуты.'),
         CharacterLine('Arda.png'),
-        DialogueLine(
-          'Готово!',
-          by: 'Мастер',
-          voice: 'intro/9.m4a',
-        ),
+        DialogueLine('Готово!', by: 'Мастер', voice: 'intro/9.m4a'),
         DialogueLine(
           'Ну что, поздравляю, теперь ты настоящий путешественник!',
           by: 'Мастер',
           voice: 'intro/10.m4a',
         ),
-        DialogueLine(
-          'Твой ранг, как и у всех начинающих, D!',
-          by: 'Мастер',
-          voice: 'intro/11.m4a',
-        ),
+        DialogueLine('Твой ранг, как и у всех начинающих, F!', by: 'Мастер'),
         DialogueLine(
           'Но ты буквально в шаге от получения SSS титула, я прям вижу по тебе.',
           by: 'Мастер',
@@ -217,32 +285,30 @@ class IntroductionController extends GetxController {
           voice: 'intro/17.m4a',
         ),
         DialogueLine(
+          'По поводу того, где тебе остановиться, есть одна идея.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
+          'Гильдия владеет имуществом, которое город даёт ей для временного размещения путешественников в случае экстренной ситуации.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
+          'Я готов предоставить тебе свободную квартирку, но признаюсь сразу: состояние у неё не ахти.',
+          by: 'Мастер',
+        ),
+        DialogueLine(
           'Пойдём покажу тебе твои апартаменты.',
           by: 'Мастер',
           voice: 'intro/18.m4a',
         ),
         HideCharacterLine('Arda.png'),
         BackgroundLine('location/town.jpg'),
-        DialogueLine(
-          'Пока вы идёте, ты замечаешь вокруг множество незнакомых взглядов на себе.',
-        ),
-        DialogueLine(
-          'Некоторые из них улыбаются и машут тебе, ты неловко машешь в ответ.',
-        ),
-        DialogueLine(
-          '...хотя, возможно, они приветствовали и не тебя, а гильдмастера, но эти мысли пришли уже позже.',
-        ),
         BackgroundLine('room/renovation.jpg'),
         CharacterLine('Arda.png'),
         DialogueLine(
           'Н-да, удачи тебе тут жить, конечно!',
           by: 'Мастер',
           voice: 'intro/19.m4a',
-        ),
-        DialogueLine(
-          'Ой, то есть, это единственное, к сожалению, что наш городок сейчас может предоставить.',
-          by: 'Мастер',
-          voice: 'intro/20.m4a',
         ),
         DialogueLine(
           'Из-за постоянно открывающихся данжей и отсутствия лишних рук, чтобы с ними сражаться преждевременно...',

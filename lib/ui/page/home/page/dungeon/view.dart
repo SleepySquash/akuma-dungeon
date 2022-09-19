@@ -156,7 +156,7 @@ class DungeonView extends StatelessWidget {
                         curve: Curves.ease,
                         key: enemy.globalKey,
                         child: Image.asset(
-                          'assets/monster/${enemy.enemy.asset}.png',
+                          'assets/monster/${enemy.enemy.asset}${enemy.enemy.ext}',
                           fit: BoxFit.fitHeight,
                         ),
                       ),

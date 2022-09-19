@@ -40,7 +40,7 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
   @override
   List<TaskCriteria> get criteria => const [
         NotCompletedCriteria(),
-        CompletedCriteria(task: FirstDungeonTask()),
+        CompletedCriteria(task: SecondStepsTask()),
       ];
 
   @override
@@ -142,11 +142,11 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(25)],
+                conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.e,
-                conditions: const [SlayedStageCondition(2)],
+                conditions: const [SlayedStageCondition(1)],
               ),
             ],
           ),

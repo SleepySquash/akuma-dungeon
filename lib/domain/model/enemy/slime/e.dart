@@ -8,7 +8,7 @@ abstract class ESlime extends Slime {
   const ESlime();
 
   @override
-  Decimal get hp => Decimal.fromInt(100);
+  Decimal get hp => Decimal.fromInt(150);
 
   @override
   Decimal get exp => Decimal.fromInt(3);
@@ -19,6 +19,7 @@ abstract class ESlime extends Slime {
   @override
   List<Reward> get drops => [
         ChanceItemReward(const Ruby(), 0.04),
+        ChanceItemReward(const SlimeCondensateItem(), 0.2),
       ];
 }
 
