@@ -20,7 +20,7 @@ import 'chapter_1/first_dungeon.dart';
 import 'chapter_1/introduction.dart';
 import 'chapter_1/first_steps.dart';
 import 'chapter_1/second_steps.dart';
-import 'chapter_1/sweet_dreams.dart';
+import 'chapter_1/unexpected_encounter.dart';
 
 export 'chapter_1/first_dungeon.dart';
 export 'chapter_1/introduction.dart';
@@ -52,6 +52,6 @@ class ChapterOne extends TaskQueue {
         FirstStepsTask(),
         SecondStepsTask(),
         FirstDungeonTask(),
-        SweetDreamsTask(),
+        UnexpectedEncounterTask(),
       ];
 }

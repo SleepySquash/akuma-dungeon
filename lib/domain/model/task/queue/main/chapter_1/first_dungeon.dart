@@ -21,10 +21,10 @@ class FirstDungeonTask extends Task {
       ];
 
   @override
-  String get name => 'Первый данж';
+  String get name => 'Первое подземелье';
 
   @override
-  String? get subtitle => 'Поручения сделаны, что дальше?';
+  String? get subtitle => 'Ты продолжаешь выполнять поручения';
 
   @override
   IconData get icon => Icons.dangerous_rounded;
@@ -189,7 +189,7 @@ class FirstDungeonTask extends Task {
           DialogueLine(
               'По ту сторону ничего не видно, картинка слишком искажена.'),
           DialogueLine('Из портала веет холодом.'),
-          DialogueLine('тем не менее, ты решительно делаешь шаг вперёд...'),
+          DialogueLine('Тем не менее, ты решительно делаешь шаг вперёд...'),
         ]),
         DungeonStep(
           Dungeon(
