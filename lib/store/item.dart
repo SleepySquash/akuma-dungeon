@@ -61,7 +61,7 @@ class ItemRepository extends DisposableInterface
   }
 
   @override
-  void add(Item item, [Decimal? amount]) {
+  MyItem add(Item item, [Decimal? amount]) {
     Decimal count = (amount ?? Decimal.one) * Decimal.fromInt(item.count);
     MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
@@ -72,18 +72,27 @@ class ItemRepository extends DisposableInterface
         items[existing.id],
       ));
 
+      items[existing.id]?.value = existing;
       _itemHive.put(existing);
     } else {
       if (item is Weapon) {
-        _itemHive.put(MyWeapon(item));
+        existing = MyWeapon(item);
+        _itemHive.put(existing);
       } else if (item is Equipable) {
-        _itemHive.put(MyEquipable(item));
+        existing = MyEquipable(item);
+        _itemHive.put(existing);
       } else if (item is Artifact) {
-        _itemHive.put(MyArtifact(item));
+        existing = MyArtifact(item);
+        _itemHive.put(existing);
       } else {
-        _itemHive.put(MyItem(item, count: count));
+        existing = MyItem(item, count: count);
+        _itemHive.put(existing);
       }
+
+      items[existing.id] = Rx(existing);
     }
+
+    return existing;
   }
 
   @override

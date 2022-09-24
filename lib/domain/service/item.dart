@@ -31,7 +31,7 @@ class ItemService extends DisposableInterface {
 
   RxObsMap<ItemId, Rx<MyItem>> get items => _itemRepository.items;
 
-  void add(Item item, [Decimal? amount]) => _itemRepository.add(item, amount);
+  MyItem add(Item item, [Decimal? amount]) => _itemRepository.add(item, amount);
   void update(MyItem item) => _itemRepository.update(item);
   void take(ItemId id, [Decimal? amount]) => _itemRepository.take(id, amount);
   Decimal amount(Item item) => _itemRepository.amount(item);

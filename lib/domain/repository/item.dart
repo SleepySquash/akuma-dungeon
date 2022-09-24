@@ -24,7 +24,7 @@ import '/domain/model/item.dart';
 abstract class AbstractItemRepository {
   RxObsMap<ItemId, Rx<MyItem>> get items;
 
-  void add(Item item, [Decimal? amount]);
+  MyItem add(Item item, [Decimal? amount]);
   void update(MyItem item);
   void take(ItemId id, [Decimal? amount]);
   Decimal amount(Item item);

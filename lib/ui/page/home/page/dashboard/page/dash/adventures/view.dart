@@ -18,6 +18,7 @@ import 'package:akuma/domain/model/commission.dart';
 import 'package:akuma/domain/model/item.dart';
 import 'package:akuma/domain/model/item/all.dart';
 import 'package:akuma/domain/model/rank.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +27,7 @@ import '/domain/model/task.dart';
 import '/ui/widget/locked.dart';
 import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
+import 'developer/view.dart';
 
 class AdventuresView extends StatelessWidget {
   const AdventuresView({Key? key}) : super(key: key);
@@ -53,6 +55,12 @@ class AdventuresView extends StatelessWidget {
             return ListView(
               shrinkWrap: true,
               children: [
+                if (kDebugMode)
+                  ListTile(
+                    leading: const Icon(Icons.developer_mode),
+                    title: const Text('Developer'),
+                    onTap: () => AllQueuesView.show(context),
+                  ),
                 if (c.queues.isEmpty && tasks.isEmpty)
                   const ListTile(
                     title: Center(

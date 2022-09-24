@@ -3,7 +3,6 @@ import 'package:novel/novel.dart';
 
 import '/domain/model/dungeon.dart';
 import '/domain/model/enemy/slime.dart';
-import '/domain/model/flag.dart';
 import '/domain/model/reward.dart';
 import '/domain/model/task.dart';
 
@@ -18,7 +17,7 @@ class UnexpectedEncounterTask extends Task {
       const [DungeonCommissionsCompletedCriteria(3)];
 
   @override
-  String get name => 'Неожиданная встреча';
+  String get name => 'Судьбоносная встреча';
 
   @override
   String? get subtitle => 'У гильдии есть необычная для тебя просьба';
@@ -30,7 +29,6 @@ class UnexpectedEncounterTask extends Task {
   List<Reward> get rewards => const [
         ExpReward(200),
         RankReward(5),
-        FlagReward(Flag.partyUnlocked),
       ];
 
   @override
@@ -204,7 +202,7 @@ class UnexpectedEncounterTask extends Task {
           DialogueLine(
               'Закинув меч за спину, ты бежишь к той куче камней, на которых сидит девушка.'),
           DialogueLine(
-              'Ты говорит, что разобрался со слаймами и теперь можно спускаться.'),
+              'Ты говоришь, что разобрался со слаймами и теперь можно спускаться.'),
           DialogueLine(
               'Она аккуратно еле-еле, шажок за шажком, начинает спуск.'),
           DialogueLine(
@@ -220,23 +218,23 @@ class UnexpectedEncounterTask extends Task {
           DialogueLine(
               'Ну, на тебе, конечно, ты бы тоже не сказал, что доспехи дракона, но всё же.'),
           DialogueLine(
-            'С-спасибо!',
+            'Божечки-кошечки, с-спасибо!',
             by: '???',
           ),
           DialogueLine(
-            'Я сильная и могла бы справиться сама, но он съел мой меч!',
+            'Он съел мой меч!',
             by: '???',
           ),
           DialogueLine(
-            'Такое впервые случилось, я не знала, что делать.',
+            'Такое впервые случилось, я не знала, что делать, я с-совсем растерялась.',
             by: '???',
           ),
           DialogueLine(
-            'Они липкие и скользкие, оставляют за собой эту слизь, на которой сложно передвигаться.',
+            'Они липкие и скользкие, оставляют за собой эту слизь, фу.',
             by: '???',
           ),
           DialogueLine(
-            'Ты спа-а-ас меня-я!',
+            'И ты спас меня-я, божечки-и!',
             by: '???',
           ),
           DialogueLine('Ты пытаешься успокоить её.'),
@@ -413,7 +411,7 @@ class UnexpectedEncounterTask extends Task {
             by: 'Мастер',
           ),
           DialogueLine(
-            'Вокруг города патрулит полиция.',
+            'Вокруг города патрулит полиция, она обезопасит население, если что.',
             by: 'Мастер',
           ),
           DialogueLine('Девушка замолкла, ты тоже не знаешь, что сказать.'),
@@ -421,6 +419,9 @@ class UnexpectedEncounterTask extends Task {
               'Судя по выражению лица, она явно опечалена таким решением гильдмастера.'),
           DialogueLine(
               'Ты вспоминаешь всё, что она сказала, и понимаешь, о чём она может сейчас думать.'),
+          DialogueLine(
+              'Ведь какая разница, будет ли Алоросс чувствовать себя безопасно, если вокруг города тысячи жизней?'),
+          DialogueLine('Тысячи жизней, что ждут своей ужасной участи?'),
           HideCharacterLine('Arda.png'),
           const MusicLine('mixkit-beautiful-dream-493.mp3'),
           BackgroundLine('location/town.jpg'),
@@ -455,7 +456,7 @@ class UnexpectedEncounterTask extends Task {
             by: 'Киару',
           ),
           DialogueLine(
-            'Давай тогда я добавлю тебя твой контакт.',
+            'Давай тогда я добавлю тебя в контакты.',
             by: 'Киару',
           ),
           DialogueLine('Вы обмениваетесь контактами.'),

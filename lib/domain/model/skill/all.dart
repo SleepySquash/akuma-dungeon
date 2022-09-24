@@ -65,7 +65,7 @@ class HittingSkill extends Skill with PrimarySkill {
   HittingSkill({
     Decimal? damage,
     this.period = const Duration(seconds: 1),
-  }) : damage = damage ?? Decimal.fromInt(20);
+  }) : damage = damage ?? Decimal.fromInt(30);
 
   final Decimal damage;
   final Duration period;

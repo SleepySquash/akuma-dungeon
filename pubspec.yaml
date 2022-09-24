@@ -24,10 +24,10 @@ dependencies:
   js: ^0.6.4
   mutex: ^3.0.0
   novel:
-    # path: ../novel
-    git:
-      url: https://github.com/SleepySquash/novel.dart.git
-      ref: improve-implementation
+    path: ../novel
+    # git:
+    #   url: https://github.com/SleepySquash/novel.dart.git
+    #   ref: improve-implementation
   page_transition: ^2.0.5
   path_provider: ^2.0.10
   sliding_up_panel2: ^3.2.2

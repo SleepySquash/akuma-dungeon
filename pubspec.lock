@@ -462,11 +462,9 @@ packages:
   novel:
     dependency: "direct main"
     description:
-      path: "."
-      ref: improve-implementation
-      resolved-ref: "0a80cb0b58ecea01186670327d922c4c1bd94948"
-      url: "https://github.com/SleepySquash/novel.dart.git"
-    source: git
+      path: "../novel"
+      relative: true
+    source: path
     version: "0.0.1"
   package_config:
     dependency: transitive

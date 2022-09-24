@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:novel/novel.dart';
 
 import '/domain/model/task_queue.dart';
 import '/domain/model/task.dart';

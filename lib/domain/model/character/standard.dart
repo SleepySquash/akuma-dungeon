@@ -27,10 +27,11 @@ abstract class StandardCharacters {
         DrNadja(),
         DrThomas(),
         Jan(),
+        Kyaru(),
         Magnus(),
         Rio(),
-        Zahir(),
         Rozzi(),
+        Zahir(),
       ];
 }
 
@@ -43,7 +44,7 @@ abstract class DpsCharacter extends Character {
   @override
   List<Skill> get skills => [
         HittingSkill(
-          damage: Decimal.fromInt(20),
+          damage: Decimal.fromInt(30),
           period: const Duration(seconds: 1),
         )
       ];
@@ -179,4 +180,14 @@ class Rozzi extends DpsCharacter {
         ...super.skills,
         SilentShotSkill(),
       ];
+}
+
+class Kyaru extends DpsCharacter {
+  const Kyaru();
+
+  @override
+  String get id => 'Kyaru';
+
+  @override
+  Rarity get rarity => Rarity.common;
 }
