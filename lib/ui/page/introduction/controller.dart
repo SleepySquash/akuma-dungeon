@@ -303,6 +303,7 @@ class IntroductionController extends GetxController {
         ),
         HideCharacterLine('Arda.png'),
         BackgroundLine('location/town.jpg'),
+        DialogueLine('Вы бодро шагаете в сторону твоего временного жилья'),
         BackgroundLine('room/renovation.jpg'),
         CharacterLine('Arda.png'),
         DialogueLine(

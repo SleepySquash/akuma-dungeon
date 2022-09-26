@@ -114,15 +114,11 @@ abstract class AlorossSlimeMinesDungeon extends AlorossDungeon with Slimes {
             stages: [
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                enemies: enemies,
-                conditions: [const SlayedStageCondition(30)],
+                conditions: [const SlayedStageCondition(15)],
               ),
               DungeonStage(
                 enemies: boss,
@@ -195,15 +191,11 @@ abstract class AlorossIceCaveDungeon extends AlorossDungeon with Slimes {
             stages: [
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(5)],
               ),
               DungeonStage(
                 enemies: boss,
@@ -277,38 +269,20 @@ abstract class AlorossSlimeExtendedMinesDungeon extends AlorossDungeon
             stages: [
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(5)],
               ),
               DungeonStage(
                 background: 'underground_waterfall',
-                multiplier: Decimal.fromInt(2),
                 enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                background: 'underground_waterfall',
-                multiplier: Decimal.fromInt(2),
-                enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                background: 'underground_waterfall',
-                multiplier: Decimal.fromInt(2),
-                enemies: enemies,
-                conditions: [const SlayedStageCondition(20)],
+                conditions: [const SlayedStageCondition(10)],
               ),
               DungeonStage(
                 background: 'underground_waterfall',
                 enemies: boss,
-                multiplier: Decimal.fromInt(4),
                 conditions: [
                   const SlayedStageCondition(1),
                   const TimerStageCondition(Duration(seconds: 30)),

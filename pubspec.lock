@@ -32,16 +32,20 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/audioplayers"
+      ref: HEAD
+      resolved-ref: "70a37afb6ce4fbb8b8c680ca9b6804b005012446"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "1.0.1"
   audioplayers_android:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: audioplayers_android
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/audioplayers_android"
+      ref: HEAD
+      resolved-ref: "70a37afb6ce4fbb8b8c680ca9b6804b005012446"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "1.0.1"
   audioplayers_darwin:
     dependency: transitive
@@ -51,25 +55,31 @@ packages:
     source: hosted
     version: "1.0.1"
   audioplayers_linux:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: audioplayers_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/audioplayers_linux"
+      ref: HEAD
+      resolved-ref: "70a37afb6ce4fbb8b8c680ca9b6804b005012446"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "1.0.0"
   audioplayers_platform_interface:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: audioplayers_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/audioplayers_platform_interface"
+      ref: HEAD
+      resolved-ref: "70a37afb6ce4fbb8b8c680ca9b6804b005012446"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "1.0.0"
   audioplayers_web:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: audioplayers_web
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/audioplayers_web"
+      ref: HEAD
+      resolved-ref: "70a37afb6ce4fbb8b8c680ca9b6804b005012446"
+      url: "https://github.com/bluefireteam/audioplayers.git"
+    source: git
     version: "1.0.0"
   audioplayers_windows:
     dependency: transitive
@@ -462,9 +472,11 @@ packages:
   novel:
     dependency: "direct main"
     description:
-      path: "../novel"
-      relative: true
-    source: path
+      path: "."
+      ref: improve-implementation
+      resolved-ref: "2b0bf47da5a125aba3ff8c088865d2e2474e3b08"
+      url: "https://github.com/SleepySquash/novel.dart.git"
+    source: git
     version: "0.0.1"
   package_config:
     dependency: transitive

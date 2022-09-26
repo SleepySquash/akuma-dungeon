@@ -14,7 +14,7 @@ class UnexpectedEncounterTask extends Task {
 
   @override
   List<TaskCriteria> get criteria =>
-      const [DungeonCommissionsCompletedCriteria(3)];
+      const [DungeonCommissionsCompletedCriteria(1)];
 
   @override
   String get name => 'Судьбоносная встреча';
@@ -27,7 +27,7 @@ class UnexpectedEncounterTask extends Task {
 
   @override
   List<Reward> get rewards => const [
-        ExpReward(200),
+        ExpReward(300),
         RankReward(5),
       ];
 
@@ -113,7 +113,7 @@ class UnexpectedEncounterTask extends Task {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(10)],
+                conditions: const [SlayedStageCondition(6)],
               ),
             ],
           ),
@@ -172,21 +172,21 @@ class UnexpectedEncounterTask extends Task {
               DungeonStage(
                 enemies: SlimeEnemies.f,
                 conditions: const [
-                  SlayedStageCondition(30),
+                  SlayedStageCondition(10),
                   TimerStageCondition(Duration(seconds: 120)),
                 ],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
                 conditions: const [
-                  SlayedStageCondition(20),
+                  SlayedStageCondition(5),
                   TimerStageCondition(Duration(seconds: 90)),
                 ],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,
                 conditions: const [
-                  SlayedStageCondition(2),
+                  SlayedStageCondition(1),
                   TimerStageCondition(Duration(seconds: 45)),
                 ],
               ),

@@ -124,38 +124,6 @@ class AlorossFoodDeliveryCommission extends AlorossCommission {
                 name: 'Сброка',
                 enemies: DeliveryEnemies.places,
                 conditions: const [
-                  SlayedStageCondition(6),
-                  TimerStageCondition(Duration(minutes: 2)),
-                ],
-              ),
-              DungeonStage(
-                name: 'Доставка',
-                enemies: DeliveryEnemies.mans,
-                conditions: const [
-                  SlayedStageCondition(12),
-                  TimerStageCondition(Duration(minutes: 2)),
-                ],
-              ),
-              DungeonStage(
-                name: 'Сброка',
-                enemies: DeliveryEnemies.places,
-                conditions: const [
-                  SlayedStageCondition(4),
-                  TimerStageCondition(Duration(minutes: 2)),
-                ],
-              ),
-              DungeonStage(
-                name: 'Доставка',
-                enemies: DeliveryEnemies.mans,
-                conditions: const [
-                  SlayedStageCondition(9),
-                  TimerStageCondition(Duration(minutes: 2)),
-                ],
-              ),
-              DungeonStage(
-                name: 'Сброка',
-                enemies: DeliveryEnemies.places,
-                conditions: const [
                   SlayedStageCondition(3),
                   TimerStageCondition(Duration(minutes: 2)),
                 ],
@@ -164,7 +132,39 @@ class AlorossFoodDeliveryCommission extends AlorossCommission {
                 name: 'Доставка',
                 enemies: DeliveryEnemies.mans,
                 conditions: const [
-                  SlayedStageCondition(13),
+                  SlayedStageCondition(6),
+                  TimerStageCondition(Duration(minutes: 2)),
+                ],
+              ),
+              DungeonStage(
+                name: 'Сброка',
+                enemies: DeliveryEnemies.places,
+                conditions: const [
+                  SlayedStageCondition(2),
+                  TimerStageCondition(Duration(minutes: 2)),
+                ],
+              ),
+              DungeonStage(
+                name: 'Доставка',
+                enemies: DeliveryEnemies.mans,
+                conditions: const [
+                  SlayedStageCondition(5),
+                  TimerStageCondition(Duration(minutes: 2)),
+                ],
+              ),
+              DungeonStage(
+                name: 'Сброка',
+                enemies: DeliveryEnemies.places,
+                conditions: const [
+                  SlayedStageCondition(1),
+                  TimerStageCondition(Duration(minutes: 2)),
+                ],
+              ),
+              DungeonStage(
+                name: 'Доставка',
+                enemies: DeliveryEnemies.mans,
+                conditions: const [
+                  SlayedStageCondition(5),
                   TimerStageCondition(Duration(minutes: 2)),
                 ],
               ),

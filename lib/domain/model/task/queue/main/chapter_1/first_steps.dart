@@ -22,7 +22,7 @@ class FirstStepsTask extends Task {
 
   @override
   List<TaskCriteria> get criteria => const [
-        QuestCommissionsCompletedCriteria(3),
+        QuestCommissionsCompletedCriteria(1),
       ];
 
   @override

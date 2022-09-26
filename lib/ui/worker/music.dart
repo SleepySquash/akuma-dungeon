@@ -43,7 +43,6 @@ class MusicWorker extends DisposableInterface {
             !GetPlatform.isWeb;
 
     if (usePool) {
-      release();
       try {
         _soundpool = Soundpool.fromOptions(
           options: const SoundpoolOptions(streamType: StreamType.notification),
@@ -133,10 +132,11 @@ class MusicWorker extends DisposableInterface {
     if (volume > 0) {
       if (usePool) {
         _soundStream = await _playPool(
-          asset,
-          pool: _soundpool!,
-          sounds: _pooledSounds,
-        );
+              asset,
+              pool: _soundpool!,
+              sounds: _pooledSounds,
+            ) ??
+            _soundStream;
       } else {
         final AudioPlayer player = AudioPlayer();
 
@@ -167,10 +167,11 @@ class MusicWorker extends DisposableInterface {
     if (volume > 0) {
       if (usePool) {
         _voiceStream = await _playPool(
-          asset,
-          pool: _voicepool!,
-          sounds: _voiceSounds,
-        );
+              asset,
+              pool: _voicepool!,
+              sounds: _voiceSounds,
+            ) ??
+            _voiceStream;
       } else {
         final AudioPlayer player = AudioPlayer();
 
@@ -230,16 +231,29 @@ class MusicWorker extends DisposableInterface {
     }
   }
 
-  Future<int> _playPool(String asset,
-      {required Soundpool pool, required Map<String, int> sounds}) async {
-    int stream;
+  Future<int?> _playPool(
+    String asset, {
+    required Soundpool pool,
+    required Map<String, int> sounds,
+  }) async {
+    int? stream;
 
     if (sounds.containsKey(asset)) {
-      stream = await pool.play(sounds[asset]!);
+      if (sounds[asset] != -1) {
+        try {
+          stream = await pool.play(sounds[asset]!);
+        } catch (_) {
+          return null;
+        }
+      }
     } else {
-      sounds[asset] = -1;
-      sounds[asset] = await pool.load(await rootBundle.load('assets/$asset'));
-      stream = await pool.play(sounds[asset]!);
+      try {
+        sounds[asset] = -1;
+        sounds[asset] = await pool.load(await rootBundle.load('assets/$asset'));
+        stream = await pool.play(sounds[asset]!);
+      } catch (_) {
+        return null;
+      }
     }
 
     return stream;

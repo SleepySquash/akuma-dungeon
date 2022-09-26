@@ -44,7 +44,7 @@ abstract class DpsCharacter extends Character {
   @override
   List<Skill> get skills => [
         HittingSkill(
-          damage: Decimal.fromInt(30),
+          damage: Decimal.fromInt(50),
           period: const Duration(seconds: 1),
         )
       ];

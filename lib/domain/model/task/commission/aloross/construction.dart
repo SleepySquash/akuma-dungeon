@@ -36,7 +36,7 @@ class AlorossConstructionCommission extends AlorossCommission {
 
   @override
   String? get description =>
-      'Нужный крепкий парень, чтобы крепко класть киприч на крипич. Крепкая оплата и крепкий коллектив гарантируются.';
+      'Нужен крепкий парень, чтобы крепко класть киприч на крипич. Крепкая оплата и крепкий коллектив гарантируются.';
 
   @override
   IconData get icon => Icons.construction;
@@ -47,7 +47,7 @@ class AlorossConstructionCommission extends AlorossCommission {
   @override
   List<Reward> get rewards => const [
         MoneyReward(1000),
-        ExpReward(250),
+        ExpReward(300),
         ItemReward(Ruby(5)),
         RankReward(2),
         ReputationReward(AlorossLocation(), 1),
@@ -99,16 +99,12 @@ class AlorossConstructionCommission extends AlorossCommission {
             background: 'town_construction',
             stages: [
               DungeonStage(
-                enemies: ConstructionEnemies.brick,
-                conditions: const [SlayedStageCondition(30)],
-              ),
-              DungeonStage(
                 enemies: ConstructionEnemies.enemies,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(15)],
               ),
               DungeonStage(
                 enemies: ConstructionEnemies.bricks,
-                conditions: const [SlayedStageCondition(15)],
+                conditions: const [SlayedStageCondition(10)],
               ),
             ],
           ),

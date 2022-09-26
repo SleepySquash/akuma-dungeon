@@ -16,7 +16,7 @@ class FirstDungeonTask extends Task {
 
   @override
   List<TaskCriteria> get criteria => const [
-        QuestCommissionsCompletedCriteria(5),
+        QuestCommissionsCompletedCriteria(3),
         WeaponEquippedCriteria(null),
       ];
 
@@ -154,7 +154,7 @@ class FirstDungeonTask extends Task {
           DialogueLine(
               'Когда уже изобретут приложение "Мой Путешественник", где можно будет в AR строить маршрут?'),
           DialogueLine(
-              'Ты негодуешь. Возможно, ты был айтишником. Или неготователем.'),
+              'Ты негодуешь. Возможно, ты был айтишником. Или негодователем.'),
           const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/town.jpg'),
           DialogueLine('Пока ты идёшь по городу, ты осматриваешься вокруг.'),
@@ -198,11 +198,7 @@ class FirstDungeonTask extends Task {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(10)],
+                conditions: const [SlayedStageCondition(5)],
               ),
             ],
           ),
@@ -254,11 +250,7 @@ class FirstDungeonTask extends Task {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(25)],
-              ),
-              DungeonStage(
-                enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(10)],
               ),
             ],
           ),
@@ -289,14 +281,7 @@ class FirstDungeonTask extends Task {
               DungeonStage(
                 enemies: SlimeEnemies.f,
                 conditions: const [
-                  SlayedStageCondition(30),
-                  TimerStageCondition(Duration(seconds: 120)),
-                ],
-              ),
-              DungeonStage(
-                enemies: SlimeEnemies.f,
-                conditions: const [
-                  SlayedStageCondition(20),
+                  SlayedStageCondition(10),
                   TimerStageCondition(Duration(seconds: 90)),
                 ],
               ),
@@ -317,7 +302,7 @@ class FirstDungeonTask extends Task {
               'Уверенным, пусть и истощённым, движением ты разрубаешь слайма пополам.'),
           DialogueLine(
               'Странно, что они прекращают свою жизнидеятельность от этого.'),
-          DialogueLine('Разве слаймы не должны скокоживаться обартно?'),
+          DialogueLine('Разве слаймы не должны скукоживаться обартно?'),
           DialogueLine('Возможно, так делают слаймы более высокого ранга?'),
           DialogueLine(
               'В любом случае, ты больше не слышишь движения рядом, наконец-то можно передохнуть.'),

@@ -44,7 +44,7 @@ class LocationService extends DisposableInterface {
     _populateCommissions();
 
     _fixedUpdate = Timer.periodic(
-      const Duration(minutes: 1),
+      const Duration(seconds: 10),
       (_) => _populateCommissions(),
     );
 

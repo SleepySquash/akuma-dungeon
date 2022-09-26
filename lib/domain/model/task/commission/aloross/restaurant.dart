@@ -55,7 +55,7 @@ class AlorossRestaurantCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/town.jpg'),
           DialogueLine(
               'Ты отправляешься в ресторан в центре Алоросса, где нужна помощь.'),
@@ -111,21 +111,17 @@ class AlorossRestaurantCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: VeggieEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
-              ),
-              DungeonStage(
-                enemies: VeggieEnemies.f,
                 conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
-                enemies: VeggieEnemies.fPlus,
-                conditions: const [SlayedStageCondition(1)],
+                enemies: VeggieEnemies.f,
+                conditions: const [SlayedStageCondition(5)],
               ),
             ],
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/kitchen.jpg'),
           CharacterLine('Emiya_Shirou.webp'),
           DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
@@ -161,23 +157,22 @@ class AlorossRestaurantCommission extends AlorossCommission {
               DungeonStage(
                 enemies: const [PotatoEnemy(), CarrotEnemy(), CucumberEnemy()],
                 multiplier: Decimal.fromInt(2),
-                conditions: const [SlayedStageCondition(5)],
+                conditions: const [SlayedStageCondition(2)],
               ),
               DungeonStage(
                 enemies: const [ChiliEnemy()],
                 multiplier: Decimal.fromInt(2),
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: VeggieEnemies.fPlus,
-                multiplier: Decimal.fromInt(2),
                 conditions: const [SlayedStageCondition(1)],
               ),
             ],
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/kitchen.jpg'),
           CharacterLine('Kotomine_Kirei.webp'),
           DialogueLine('Сойдёт.', by: 'КОТОМИНЕ КИРЭЙ'),

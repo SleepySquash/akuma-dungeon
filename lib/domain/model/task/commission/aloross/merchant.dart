@@ -58,7 +58,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/town.jpg'),
           DialogueLine(
               'Взяв поручение, ты отправляешься в назначенное в записке место.'),
@@ -143,7 +143,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(15)],
+                conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
@@ -153,7 +153,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/fields.jpg'),
           DialogueLine('Наконец, все слаймы были поражены.'),
           CharacterLine('Lawrence.webp'),
@@ -221,11 +221,11 @@ class AlorossMerchantForestCommission extends AlorossCommission {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(25)],
+                conditions: const [SlayedStageCondition(12)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,
-                conditions: const [SlayedStageCondition(4)],
+                conditions: const [SlayedStageCondition(2)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.e,
@@ -235,7 +235,7 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-summer-fun-13.mp3'),
           BackgroundLine('location/fields.jpg'),
           DialogueLine('Наконец, вы прошли через лес.'),
           CharacterLine('Lawrence.webp'),

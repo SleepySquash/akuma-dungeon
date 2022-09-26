@@ -36,7 +36,7 @@ class FriendshipShinesTask extends Task {
 
   @override
   List<Reward> get rewards => const [
-        ExpReward(100),
+        ExpReward(500),
         RankReward(5),
         FlagReward(Flag.partyUnlocked),
       ];
@@ -185,13 +185,10 @@ class FriendshipShinesTask extends Task {
             CharacterService characterService = Get.find<CharacterService>();
             MyCharacter character = characterService.add(const Kyaru());
 
-            print('$character: ${character.weapons.isEmpty}');
             if (character.weapons.isEmpty) {
               MyItem item =
                   Get.find<ItemService>().add(const PracticeOakSwordItem());
-              print('$item');
               characterService.equip(character, item);
-              print('${character.weapons.isEmpty}');
             }
 
             Get.find<PlayerService>().addToParty(character);
@@ -214,7 +211,6 @@ class FriendshipShinesTask extends Task {
               ),
               DungeonStage(
                 enemies: VeggieEnemies.fPlus,
-                multiplier: Decimal.fromInt(2),
                 conditions: const [SlayedStageCondition(1)],
               ),
             ],
@@ -594,11 +590,11 @@ class FriendshipShinesTask extends Task {
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(15)],
+                conditions: const [SlayedStageCondition(5)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,

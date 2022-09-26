@@ -52,7 +52,7 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-just-kidding-11.mp3'),
           BackgroundLine('location/fields.jpg'),
           DialogueLine('Действительно, вокруг города множество слаймов.'),
           DialogueLine(
@@ -66,16 +66,16 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: 'music/MOSAICWAV_she_already_gone.mp3',
+            music: 'music/mixkit-just-kidding-11.mp3',
             background: 'fields',
             stages: [
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
+                conditions: const [SlayedStageCondition(10)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(25)],
+                conditions: const [SlayedStageCondition(5)],
               ),
               DungeonStage(
                 enemies: SlimeEnemies.fPlus,
@@ -85,7 +85,7 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-just-kidding-11.mp3'),
           BackgroundLine('location/fields.jpg'),
           DialogueLine(
               'Слаймы, которых ты вместе с боссом отправил в нокаут, представляют собой низший подвид слаймов.'),
@@ -133,13 +133,9 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
         ]),
         DungeonStep(
           Dungeon(
-            music: 'music/MOSAICWAV_she_already_gone.mp3',
+            music: 'music/mixkit-just-kidding-11.mp3',
             background: 'fields',
             stages: [
-              DungeonStage(
-                enemies: SlimeEnemies.f,
-                conditions: const [SlayedStageCondition(20)],
-              ),
               DungeonStage(
                 enemies: SlimeEnemies.f,
                 conditions: const [SlayedStageCondition(10)],
@@ -152,7 +148,7 @@ class AlorossSlimeFieldsCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
+          const MusicLine('mixkit-just-kidding-11.mp3'),
           BackgroundLine('location/fields.jpg'),
           DialogueLine(
               'Ты добиваешь последнего слайма, из которого аккуратно достаёшь последнюю жертву.'),
