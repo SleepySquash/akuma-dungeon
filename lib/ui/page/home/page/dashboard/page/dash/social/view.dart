@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class SocialView extends StatelessWidget {
-  const SocialView({Key? key}) : super(key: key);
+  const SocialView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const SocialView());

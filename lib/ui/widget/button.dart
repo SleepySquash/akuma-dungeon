@@ -18,10 +18,10 @@ import 'package:flutter/material.dart';
 
 class WidgetButton extends StatelessWidget {
   const WidgetButton({
-    Key? key,
+    super.key,
     required this.child,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final void Function()? onPressed;
@@ -43,10 +43,10 @@ class WidgetButton extends StatelessWidget {
 
 class PreciseButton extends StatefulWidget {
   const PreciseButton({
-    Key? key,
+    super.key,
     required this.child,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final void Function(Offset)? onPressed;

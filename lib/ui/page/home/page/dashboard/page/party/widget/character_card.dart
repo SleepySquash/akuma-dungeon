@@ -9,10 +9,10 @@ import '/util/extensions.dart';
 
 class CharacterCard extends StatelessWidget {
   const CharacterCard({
-    Key? key,
+    super.key,
     this.character,
     this.myCharacter,
-  }) : super(key: key);
+  });
 
   final Character? character;
   final RxMyCharacter? myCharacter;

@@ -19,10 +19,10 @@ class Screen {
 
 class ScreenSwitcher extends StatefulWidget {
   const ScreenSwitcher({
-    Key? key,
+    super.key,
     required this.tabs,
     this.onSwitched,
-  }) : super(key: key);
+  });
 
   final List<Screen> tabs;
   final void Function()? onSwitched;
@@ -81,12 +81,11 @@ class _ScreenSwitcherState extends State<ScreenSwitcher> {
 
 class _SingleTab extends StatelessWidget {
   const _SingleTab({
-    Key? key,
     this.desktop,
     this.mobile,
     this.onTap,
     this.selected = false,
-  }) : super(key: key);
+  });
 
   final Widget? desktop;
   final Widget? mobile;

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'controller.dart';
 
 class CharacterSelectionView extends StatelessWidget {
-  const CharacterSelectionView({Key? key}) : super(key: key);
+  const CharacterSelectionView({super.key});
 
   static Future<T?> show<T extends Object?>(BuildContext context) {
     return Navigator.of(context).push(

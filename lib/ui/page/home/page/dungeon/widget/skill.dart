@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class SlidingSkill extends StatefulWidget {
   const SlidingSkill({
-    Key? key,
+    super.key,
     required this.asset,
     required this.text,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final String asset;
   final String text;

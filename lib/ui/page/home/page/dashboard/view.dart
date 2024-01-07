@@ -28,7 +28,7 @@ import 'page/profile/view.dart';
 import 'page/store/view.dart';
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {

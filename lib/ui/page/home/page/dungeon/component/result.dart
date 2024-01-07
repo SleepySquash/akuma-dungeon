@@ -25,10 +25,10 @@ import '/ui/page/home/page/dungeon/controller.dart';
 class ResultModal extends StatelessWidget {
   const ResultModal(
     this.c, {
-    Key? key,
+    super.key,
     this.won = false,
     this.onDismissed,
-  }) : super(key: key);
+  });
 
   final DungeonController c;
 

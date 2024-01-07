@@ -24,7 +24,7 @@ import '/domain/model/race.dart';
 import 'controller.dart';
 
 class IntroductionView extends StatelessWidget {
-  const IntroductionView({Key? key}) : super(key: key);
+  const IntroductionView({super.key});
 
   @override
   Widget build(BuildContext context) {

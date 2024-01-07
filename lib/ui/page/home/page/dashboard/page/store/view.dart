@@ -31,7 +31,7 @@ import 'controller.dart';
 import 'gacha/view.dart';
 
 class StoreView extends StatefulWidget {
-  const StoreView({Key? key}) : super(key: key);
+  const StoreView({super.key});
 
   @override
   State<StoreView> createState() => _StoreViewState();

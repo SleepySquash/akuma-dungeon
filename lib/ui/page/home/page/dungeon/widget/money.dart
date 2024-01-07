@@ -11,10 +11,10 @@ import '/ui/widget/button.dart';
 class DroppedItem extends StatefulWidget {
   const DroppedItem(
     this.item, {
-    Key? key,
+    super.key,
     required this.from,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final Offset from;
   final Item item;

@@ -7,7 +7,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class GoddessView extends StatelessWidget {
-  const GoddessView({Key? key}) : super(key: key);
+  const GoddessView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const GoddessView());

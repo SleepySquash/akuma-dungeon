@@ -5,10 +5,10 @@ import '/ui/widget/backdrop.dart';
 
 class SkillWidget extends StatelessWidget {
   const SkillWidget({
-    Key? key,
+    super.key,
     this.mySkill,
     this.skill,
-  }) : super(key: key);
+  });
 
   final MySkill? mySkill;
   final Skill? skill;

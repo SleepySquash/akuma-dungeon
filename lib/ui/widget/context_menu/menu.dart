@@ -23,7 +23,7 @@ import 'overlay.dart';
 
 /// Styled context menu of [actions].
 class ContextMenu extends StatelessWidget {
-  const ContextMenu({Key? key, required this.actions}) : super(key: key);
+  const ContextMenu({super.key, required this.actions});
 
   /// List of [ContextMenuButton]s to display in this [ContextMenu].
   final List<ContextMenuButton> actions;
@@ -102,11 +102,11 @@ class ContextMenu extends StatelessWidget {
 /// Styled button used in [ContextMenu].
 class ContextMenuButton extends StatefulWidget {
   const ContextMenuButton({
-    Key? key,
+    super.key,
     required this.label,
     this.leading,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   /// Label of this [ContextMenuButton].
   final String label;

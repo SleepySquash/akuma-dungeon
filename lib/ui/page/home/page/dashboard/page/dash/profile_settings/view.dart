@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class ProfileSettingsView extends StatelessWidget {
-  const ProfileSettingsView({Key? key}) : super(key: key);
+  const ProfileSettingsView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(

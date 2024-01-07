@@ -27,7 +27,7 @@ abstract class Location {
 
 @HiveType(typeId: ModelTypeId.locationId)
 class LocationId extends NewType<String> {
-  const LocationId(String val) : super(val);
+  const LocationId(super.val);
 }
 
 abstract class LocationFeature {

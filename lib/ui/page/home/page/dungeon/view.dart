@@ -32,10 +32,10 @@ import 'controller.dart';
 
 class DungeonView extends StatelessWidget {
   const DungeonView({
-    Key? key,
+    super.key,
     required this.settings,
     this.onClear,
-  }) : super(key: key);
+  });
 
   final DungeonSettings settings;
 

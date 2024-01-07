@@ -31,7 +31,7 @@ import 'controller.dart';
 import 'widget/character_card.dart';
 
 class PartyView extends StatelessWidget {
-  const PartyView({Key? key}) : super(key: key);
+  const PartyView({super.key});
 
   @override
   Widget build(BuildContext context) {

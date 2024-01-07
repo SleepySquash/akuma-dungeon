@@ -30,7 +30,7 @@ import 'controller.dart';
 
 /// View of the [Routes.settings] page.
 class SettingsView extends StatelessWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const SettingsView());

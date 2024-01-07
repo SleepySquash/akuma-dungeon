@@ -23,7 +23,7 @@ import '/util/message_popup.dart';
 import 'controller.dart';
 
 class AuthView extends StatelessWidget {
-  const AuthView({Key? key}) : super(key: key);
+  const AuthView({super.key});
 
   @override
   Widget build(BuildContext context) {

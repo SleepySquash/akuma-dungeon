@@ -22,12 +22,12 @@ import 'package:flutter/material.dart';
 /// [condition].
 class ConditionalBackdropFilter extends StatelessWidget {
   ConditionalBackdropFilter({
-    Key? key,
+    super.key,
     required this.child,
     this.condition = true,
     ImageFilter? filter,
     this.borderRadius,
-  }) : super(key: key) {
+  }) {
     this.filter = filter ?? ImageFilter.blur(sigmaX: 10, sigmaY: 10);
   }
 
@@ -78,13 +78,13 @@ class ConditionalBackdropFilter extends StatelessWidget {
 
 class AnimatedBackdropFilter extends StatefulWidget {
   const AnimatedBackdropFilter({
-    Key? key,
+    super.key,
     this.sigma = 15,
     required this.child,
     this.duration = const Duration(milliseconds: 400),
     this.curve = Curves.linear,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final int sigma;
   final Widget child;

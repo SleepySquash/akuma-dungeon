@@ -38,7 +38,7 @@ import 'room/view.dart';
 import 'social/view.dart';
 
 class DashView extends StatelessWidget {
-  const DashView({Key? key}) : super(key: key);
+  const DashView({super.key});
 
   @override
   Widget build(BuildContext context) {

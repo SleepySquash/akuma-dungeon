@@ -14,7 +14,7 @@ import '/ui/widget/dummy_character.dart';
 import '/util/platform_utils.dart';
 
 class ProfileAttributesTab extends StatelessWidget {
-  const ProfileAttributesTab(this.c, {Key? key}) : super(key: key);
+  const ProfileAttributesTab(this.c, {super.key});
 
   final ProfileController c;
 

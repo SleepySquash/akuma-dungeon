@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class AnimatedTitle extends StatefulWidget {
   const AnimatedTitle({
-    Key? key,
+    super.key,
     required this.title,
     this.color,
     this.fontSize,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final String title;
 

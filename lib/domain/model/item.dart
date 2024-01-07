@@ -57,7 +57,7 @@ abstract class Item {
 
 @HiveType(typeId: ModelTypeId.itemId)
 class ItemId extends NewType<String> {
-  const ItemId(String val) : super(val);
+  const ItemId(super.val);
 }
 
 enum ArtifactType {
@@ -223,11 +223,11 @@ class MyItem {
 // TODO: Store [Stat]s
 class MyEquipable extends MyItem {
   MyEquipable(
-    Equipable equipable, {
+    Equipable super.equipable, {
     Decimal? exp,
-    ItemId? id,
+    super.id,
   })  : exp = exp ?? Decimal.zero,
-        super(equipable, id: id, count: Decimal.one);
+        super(count: Decimal.one);
 
   Decimal exp;
 
@@ -276,11 +276,11 @@ class MyEquipable extends MyItem {
 
 class MyWeapon extends MyItem {
   MyWeapon(
-    Weapon weapon, {
+    Weapon super.weapon, {
     Decimal? exp,
-    ItemId? id,
+    super.id,
   })  : exp = exp ?? Decimal.zero,
-        super(weapon, id: id, count: Decimal.one);
+        super(count: Decimal.one);
 
   Decimal exp;
 

@@ -24,9 +24,9 @@ import 'controller.dart';
 
 class NotificationOverlayView extends StatelessWidget {
   const NotificationOverlayView({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

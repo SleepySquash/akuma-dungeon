@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class AnimatedScaleY extends ImplicitlyAnimatedWidget {
   const AnimatedScaleY({
-    Key? key,
+    super.key,
     required this.scaleY,
-    Duration duration = const Duration(milliseconds: 250),
-    Curve curve = Curves.linear,
-    void Function()? onEnd,
+    super.duration = const Duration(milliseconds: 250),
+    super.curve,
+    super.onEnd,
     required this.child,
-  }) : super(key: key, curve: curve, duration: duration, onEnd: onEnd);
+  });
 
   final double scaleY;
   final Widget child;

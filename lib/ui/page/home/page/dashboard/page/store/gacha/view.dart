@@ -11,10 +11,10 @@ import 'controller.dart';
 
 class GachaView extends StatelessWidget {
   GachaView({
-    Key? key,
+    super.key,
     this.type = GachaType.character,
     this.amount = 1,
-  }) : super(key: key);
+  });
 
   final GachaType type;
   final int amount;

@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class RoomView extends StatelessWidget {
-  const RoomView({Key? key}) : super(key: key);
+  const RoomView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const RoomView());

@@ -27,7 +27,7 @@ import 'controller.dart';
 import 'task/view.dart';
 
 class GuildView extends StatelessWidget {
-  const GuildView({Key? key}) : super(key: key);
+  const GuildView({super.key});
 
   @override
   Widget build(BuildContext context) {

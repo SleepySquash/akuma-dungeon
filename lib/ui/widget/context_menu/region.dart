@@ -24,12 +24,12 @@ import 'overlay.dart';
 /// or a long tap.
 class ContextMenuRegion extends StatefulWidget {
   const ContextMenuRegion({
-    Key? key,
+    super.key,
     required this.child,
     required this.menu,
     this.enabled = true,
     this.preventContextMenu = true,
-  }) : super(key: key);
+  });
 
   /// Widget to wrap this region over.
   final Widget child;

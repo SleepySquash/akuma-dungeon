@@ -40,11 +40,11 @@ class DungeonDifficulty {
 class DungeonPreviewView extends StatelessWidget {
   const DungeonPreviewView(
     this.difficulties, {
-    Key? key,
+    super.key,
     this.name = 'Dungeon',
     this.background,
     this.description,
-  }) : super(key: key);
+  });
 
   final String name;
   final String? background;

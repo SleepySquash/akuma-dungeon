@@ -9,7 +9,7 @@ import '/util/platform_utils.dart';
 import 'controller.dart';
 
 class CityView extends StatelessWidget {
-  const CityView({Key? key}) : super(key: key);
+  const CityView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return Navigator.of(context, rootNavigator: true).push<T>(

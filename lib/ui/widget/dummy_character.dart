@@ -20,12 +20,12 @@ import 'package:flutter/widgets.dart';
 
 class DummyCharacter extends StatelessWidget {
   const DummyCharacter({
-    Key? key,
+    super.key,
     this.race = Race.ningen,
     this.gender = Gender.female,
     this.alignment = Alignment.center,
     this.fit = BoxFit.fitHeight,
-  }) : super(key: key);
+  });
 
   final Race race;
   final Gender gender;

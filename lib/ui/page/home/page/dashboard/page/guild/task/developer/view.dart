@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class AllTasksView extends StatelessWidget {
-  const AllTasksView({Key? key}) : super(key: key);
+  const AllTasksView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(

@@ -7,7 +7,7 @@ import '/ui/widget/backdrop.dart';
 import 'controller.dart';
 
 class NaksiasraassBuyView extends StatelessWidget {
-  const NaksiasraassBuyView({Key? key}) : super(key: key);
+  const NaksiasraassBuyView({super.key});
 
   static Future<T?> show<T extends Object?>(BuildContext context) {
     return Navigator.of(context).push(

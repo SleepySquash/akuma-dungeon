@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 class WideButton extends StatelessWidget {
   const WideButton({
-    Key? key,
+    super.key,
     this.mini = false,
     this.fillColor,
     this.onPressed,
     required this.child,
-  }) : super(key: key);
+  });
 
   factory WideButton.small({
     Key? key,

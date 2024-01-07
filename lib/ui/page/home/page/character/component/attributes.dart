@@ -8,7 +8,7 @@ import '/ui/page/home/widget/level.dart';
 import '/ui/page/home/widget/stats.dart';
 
 class CharacterAttributesTab extends StatelessWidget {
-  const CharacterAttributesTab(this.c, {Key? key}) : super(key: key);
+  const CharacterAttributesTab(this.c, {super.key});
 
   final CharacterController c;
 

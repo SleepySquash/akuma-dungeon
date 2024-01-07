@@ -23,9 +23,9 @@ import 'package:flutter/rendering.dart';
 /// Builds context menu in a [Stack] with a [child] as a first element.
 class ContextMenuOverlay extends StatefulWidget {
   const ContextMenuOverlay({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   /// Overlay's [Stack] first child.
   final Widget child;
@@ -189,10 +189,9 @@ class ContextMenuOverlayState extends State<ContextMenuOverlay> {
 /// [ContextMenuOverlay.of] to show and hide the context menu from widget tree.
 class _InheritedContextMenu extends InheritedWidget {
   const _InheritedContextMenu({
-    Key? key,
-    required Widget child,
+    required super.child,
     required this.state,
-  }) : super(key: key, child: child);
+  });
 
   /// State of the [ContextMenuOverlay].
   final ContextMenuOverlayState state;

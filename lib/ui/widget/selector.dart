@@ -28,7 +28,7 @@ import '/util/platform_utils.dart';
 /// Intended to be displayed with the [show] method.
 class Selector<T> extends StatefulWidget {
   const Selector({
-    Key? key,
+    super.key,
     required this.items,
     required this.itemBuilder,
     this.initial,
@@ -37,7 +37,7 @@ class Selector<T> extends StatefulWidget {
     this.alignment = Alignment.topCenter,
     this.debounce,
     required this.isMobile,
-  }) : super(key: key);
+  });
 
   /// [List] of items to select from.
   final List<T> items;

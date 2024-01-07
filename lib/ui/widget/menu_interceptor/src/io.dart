@@ -22,8 +22,8 @@ class ContextMenuInterceptor extends StatelessWidget {
     required this.child,
     enabled = true,
     debug = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// Widget being wrapped.
   final Widget child;

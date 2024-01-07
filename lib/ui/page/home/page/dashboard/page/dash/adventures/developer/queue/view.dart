@@ -6,7 +6,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class QueueDetailsView extends StatelessWidget {
-  const QueueDetailsView(this.queue, {Key? key}) : super(key: key);
+  const QueueDetailsView(this.queue, {super.key});
 
   final MyTaskQueue queue;
 

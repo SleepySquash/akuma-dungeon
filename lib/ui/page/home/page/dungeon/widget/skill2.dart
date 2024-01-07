@@ -8,13 +8,13 @@ import 'hit_indicator.dart';
 
 class FloatingSkill extends StatefulWidget {
   const FloatingSkill({
-    Key? key,
+    super.key,
     required this.asset,
     required this.text,
     this.position,
     this.direction = HitIndicatorFlowDirection.any,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final String asset;
   final String text;

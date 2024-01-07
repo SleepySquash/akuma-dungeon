@@ -58,7 +58,7 @@ extension HitIndicatorFlowDirectionExtension on HitIndicatorFlowDirection {
 
 class NumberIndicator extends StatefulWidget {
   const NumberIndicator({
-    Key? key,
+    super.key,
     this.position,
     required this.number,
     this.color,
@@ -66,7 +66,7 @@ class NumberIndicator extends StatefulWidget {
     this.direction = HitIndicatorFlowDirection.any,
     this.offsetMultiplier = 1,
     this.onEnd,
-  }) : super(key: key);
+  });
 
   final Offset? position;
   final String number;

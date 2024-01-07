@@ -26,11 +26,11 @@ enum EquipmentTileType {
 
 class EquipmentTile extends StatelessWidget {
   const EquipmentTile({
-    Key? key,
+    super.key,
     this.type = EquipmentTileType.artifact,
     this.onEquipped,
     this.item,
-  }) : super(key: key);
+  });
 
   final EquipmentTileType type;
 

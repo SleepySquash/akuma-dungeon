@@ -28,7 +28,7 @@ import 'controller.dart';
 import 'developer/view.dart';
 
 class TaskView extends StatelessWidget {
-  const TaskView({Key? key}) : super(key: key);
+  const TaskView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const TaskView());

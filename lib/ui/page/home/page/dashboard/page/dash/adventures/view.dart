@@ -30,7 +30,7 @@ import 'controller.dart';
 import 'developer/view.dart';
 
 class AdventuresView extends StatelessWidget {
-  const AdventuresView({Key? key}) : super(key: key);
+  const AdventuresView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const AdventuresView());

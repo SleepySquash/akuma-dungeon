@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class BackdropPlate extends StatelessWidget {
   const BackdropPlate({
-    Key? key,
+    super.key,
     this.width = 240,
     required this.child,
-  }) : super(key: key);
+  });
 
   final double? width;
   final Widget child;

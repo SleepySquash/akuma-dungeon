@@ -11,10 +11,10 @@ import '/util/platform_utils.dart';
 class ItemAttributesTab extends StatelessWidget {
   const ItemAttributesTab(
     this.c, {
-    Key? key,
+    super.key,
     required this.fading,
     required this.fade,
-  }) : super(key: key);
+  });
 
   final ItemController c;
 

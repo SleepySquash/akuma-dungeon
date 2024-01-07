@@ -26,7 +26,7 @@ enum ItemSelectionType {
 
 class ItemGrid extends StatefulWidget {
   const ItemGrid({
-    Key? key,
+    super.key,
     this.category,
     this.items = const [],
     this.filter,
@@ -35,7 +35,7 @@ class ItemGrid extends StatefulWidget {
     this.type = ItemSelectionType.single,
     this.onPressed,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final Iterable<Rx<MyItem>> Function(Iterable<Rx<MyItem>> items)? filter;
 

@@ -6,7 +6,7 @@ import '/ui/widget/backdrop.dart';
 
 class StatsWidget extends StatelessWidget {
   const StatsWidget({
-    Key? key,
+    super.key,
     this.damage,
     this.defense,
     this.health,
@@ -15,7 +15,7 @@ class StatsWidget extends StatelessWidget {
     this.ultCharge,
     this.stat,
     this.stats = const [],
-  }) : super(key: key);
+  });
 
   final Decimal? damage;
   final Decimal? defense;

@@ -5,7 +5,7 @@ import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/skill.dart';
 
 class CharacterSkillsTab extends StatelessWidget {
-  const CharacterSkillsTab(this.c, {Key? key}) : super(key: key);
+  const CharacterSkillsTab(this.c, {super.key});
 
   final CharacterController c;
 

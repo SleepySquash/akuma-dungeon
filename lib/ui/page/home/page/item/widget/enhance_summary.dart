@@ -11,8 +11,8 @@ class EnhanceSummary extends StatelessWidget {
   const EnhanceSummary(
     this.item,
     this.result, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final MyItem item;
   final EnhanceResult? result;

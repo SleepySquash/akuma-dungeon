@@ -32,11 +32,11 @@ import 'controller.dart';
 
 class CharacterView extends StatefulWidget {
   const CharacterView({
-    Key? key,
+    super.key,
     this.bounds,
     this.character,
     this.myCharacter,
-  }) : super(key: key);
+  });
 
   final Rect? bounds;
   final Character? character;

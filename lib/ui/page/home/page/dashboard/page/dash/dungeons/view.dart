@@ -11,7 +11,7 @@ import 'controller.dart';
 import 'dungeon_preview/view.dart';
 
 class DungeonsView extends StatelessWidget {
-  const DungeonsView({Key? key}) : super(key: key);
+  const DungeonsView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const DungeonsView());

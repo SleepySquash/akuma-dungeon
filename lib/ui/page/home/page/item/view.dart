@@ -33,12 +33,12 @@ import 'controller.dart';
 
 class ItemView extends StatefulWidget {
   const ItemView({
-    Key? key,
+    super.key,
     this.item,
     this.myItem,
     this.hero,
     this.exchangeItemSettings,
-  }) : super(key: key);
+  });
 
   final ExchangeItemSettings? exchangeItemSettings;
   final Item? item;

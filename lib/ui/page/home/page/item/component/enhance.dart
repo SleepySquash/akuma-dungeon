@@ -15,10 +15,10 @@ import '../controller.dart';
 class ItemEnhanceTab extends StatelessWidget {
   const ItemEnhanceTab(
     this.c, {
-    Key? key,
+    super.key,
     required this.fading,
     required this.fade,
-  }) : super(key: key);
+  });
 
   final ItemController c;
 

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class LockedWidget extends StatelessWidget {
   const LockedWidget({
-    Key? key,
+    super.key,
     this.locked = true,
     this.borderRadius,
     this.additional = const [],
     required this.child,
-  }) : super(key: key);
+  });
 
   final bool locked;
 

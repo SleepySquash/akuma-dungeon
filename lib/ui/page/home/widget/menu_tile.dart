@@ -5,13 +5,13 @@ import '/ui/widget/locked.dart';
 
 class MenuTile extends StatelessWidget {
   const MenuTile({
-    Key? key,
+    super.key,
     this.locked = false,
     this.lockedReason = const [],
     this.onPressed,
     this.badge,
     this.child,
-  }) : super(key: key);
+  });
 
   final bool locked;
   final List<Widget> lockedReason;

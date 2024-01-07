@@ -5,12 +5,12 @@ import '/ui/widget/backdrop.dart';
 
 class LevelWidget extends StatelessWidget {
   const LevelWidget({
-    Key? key,
+    super.key,
     this.exp,
     this.maxExp,
     required this.level,
     required this.maxLevel,
-  }) : super(key: key);
+  });
 
   final int level;
   final int maxLevel;

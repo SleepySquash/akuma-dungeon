@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../controller.dart';
 
 class ItemUpgradeTab extends StatelessWidget {
-  const ItemUpgradeTab(this.c, {Key? key}) : super(key: key);
+  const ItemUpgradeTab(this.c, {super.key});
 
   final ItemController c;
 

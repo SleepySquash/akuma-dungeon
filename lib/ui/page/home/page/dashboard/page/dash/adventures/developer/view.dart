@@ -6,7 +6,7 @@ import 'controller.dart';
 import 'queue/view.dart';
 
 class AllQueuesView extends StatelessWidget {
-  const AllQueuesView({Key? key}) : super(key: key);
+  const AllQueuesView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(

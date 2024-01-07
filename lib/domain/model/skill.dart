@@ -42,7 +42,7 @@ abstract class Skill {
 
 @HiveType(typeId: ModelTypeId.itemId)
 class SkillId extends NewType<String> {
-  const SkillId(String val) : super(val);
+  const SkillId(super.val);
 }
 
 mixin PrimarySkill on Skill {}

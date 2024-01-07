@@ -19,11 +19,11 @@ import 'controller.dart';
 
 class CommissionPreviewView extends StatelessWidget {
   const CommissionPreviewView({
-    Key? key,
+    super.key,
     required this.commission,
     this.onAccept,
     this.onComplete,
-  }) : super(key: key);
+  });
 
   final MyCommission commission;
   final void Function()? onAccept;

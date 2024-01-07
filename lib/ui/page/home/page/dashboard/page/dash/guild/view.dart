@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class GuildView extends StatelessWidget {
-  const GuildView({Key? key}) : super(key: key);
+  const GuildView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const GuildView());

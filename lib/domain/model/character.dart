@@ -71,7 +71,7 @@ abstract class Character {
 
 @HiveType(typeId: ModelTypeId.characterId)
 class CharacterId extends NewType<String> {
-  const CharacterId(String val) : super(val);
+  const CharacterId(super.val);
 }
 
 class MyCharacter {

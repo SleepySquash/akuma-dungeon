@@ -12,11 +12,11 @@ import 'package:page_transition/page_transition.dart';
 
 class DungeonEntranceView extends StatefulWidget {
   const DungeonEntranceView({
-    Key? key,
+    super.key,
     required this.settings,
     required this.asset,
     this.onClear,
-  }) : super(key: key);
+  });
 
   final FutureOr<void> Function()? onClear;
   final DungeonSettings settings;

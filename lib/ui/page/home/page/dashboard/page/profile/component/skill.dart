@@ -6,7 +6,7 @@ import '../controller.dart';
 import '/domain/service/player.dart';
 
 class ProfileSkillsTab extends StatelessWidget {
-  const ProfileSkillsTab(this.c, {Key? key}) : super(key: key);
+  const ProfileSkillsTab(this.c, {super.key});
 
   final ProfileController c;
 

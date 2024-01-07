@@ -6,7 +6,7 @@ import '/ui/widget/item_grid.dart';
 import '/util/platform_utils.dart';
 
 class ProfileInventoryTab extends StatelessWidget {
-  const ProfileInventoryTab(this.c, {Key? key}) : super(key: key);
+  const ProfileInventoryTab(this.c, {super.key});
 
   final ProfileController c;
 

@@ -5,7 +5,7 @@ import '/ui/widget/modal_popup.dart';
 import 'controller.dart';
 
 class BattlePassView extends StatelessWidget {
-  const BattlePassView({Key? key}) : super(key: key);
+  const BattlePassView({super.key});
 
   static Future<T?> show<T>(BuildContext context) {
     return ModalPopup.show(context: context, child: const BattlePassView());

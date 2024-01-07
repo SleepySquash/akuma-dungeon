@@ -25,11 +25,11 @@ import 'controller.dart';
 
 class ItemSelector extends StatefulWidget {
   const ItemSelector({
-    Key? key,
+    super.key,
     this.category,
     this.filter,
     this.empty,
-  }) : super(key: key);
+  });
 
   final InventoryCategory? category;
   final Iterable<Rx<MyItem>> Function(Iterable<Rx<MyItem>> items)? filter;
