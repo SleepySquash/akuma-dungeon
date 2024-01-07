@@ -6,7 +6,6 @@ import '/domain/model/character.dart';
 import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/level.dart';
 import '/ui/page/home/widget/stats.dart';
-import '/util/platform_utils.dart';
 
 class CharacterAttributesTab extends StatelessWidget {
   const CharacterAttributesTab(this.c, {Key? key}) : super(key: key);
@@ -67,7 +66,6 @@ class CharacterAttributesTab extends StatelessWidget {
                     );
                   }),
                 ],
-                if (!context.isMobile) const Spacer(),
               ],
             ),
             const Spacer(),

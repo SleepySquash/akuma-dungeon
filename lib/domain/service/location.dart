@@ -208,7 +208,7 @@ class LocationService extends DisposableInterface {
         return location.commissions
                     .firstWhereOrNull((m) => m.task.id == e.id) ==
                 null &&
-            e.rank == _playerService.player.rank.toRank;
+            e.rank == _playerService.player.rank.toRank();
       }).toList();
 
       Task? random;

@@ -107,11 +107,11 @@ class _ItemViewState extends State<ItemView>
 
   @override
   Widget build(BuildContext context) {
-    Animation<double> fade =
-        Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-      parent: _fading,
-      curve: const Interval(0, 0.3, curve: Curves.ease),
-    ));
+    // Animation<double> fade =
+    //     Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    //   parent: _fading,
+    //   curve: const Interval(0, 0.3, curve: Curves.ease),
+    // ));
 
     return GetBuilder(
       init: ItemController(

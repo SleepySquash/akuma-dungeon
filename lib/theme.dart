@@ -23,7 +23,6 @@ class Themes {
   static ThemeData light() {
     ThemeData theme = ThemeData.light();
     return theme.copyWith(
-      useMaterial3: true,
       textTheme: GoogleFonts.balsamiqSansTextTheme(),
       // colorScheme: theme.colorScheme.copyWith(
       //   primary: const Color(0xFFEEEEEE),
@@ -48,7 +47,6 @@ class Themes {
   static ThemeData dark() {
     ThemeData theme = ThemeData.dark();
     return theme.copyWith(
-      useMaterial3: true,
       textTheme: GoogleFonts.balsamiqSansTextTheme(),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

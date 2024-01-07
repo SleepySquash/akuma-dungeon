@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:akuma/util/audio_utils.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/item.dart';
@@ -44,7 +45,7 @@ class ProfileController extends GetxController {
 
   void equip(MyItem item) {
     _playerService.equip(item);
-    _musicWorker.once('sound/shu-shu-equip.m4a');
+    _musicWorker.once(AudioSource.asset('assets/sound/shu-shu-equip.m4a'));
   }
 
   void unequip(MyItem item) => _playerService.unequip(item);

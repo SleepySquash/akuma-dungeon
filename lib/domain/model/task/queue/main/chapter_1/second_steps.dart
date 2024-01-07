@@ -24,57 +24,57 @@ class SecondStepsTask extends Task {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Отлично!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Теперь ты сможешь мутузить хотя бы слаймов, замечательно.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ну, в таком случае, хочу попросить тебя привыкнуть к сражению со слаймами, выполнив 1-2 поручения.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И тогда я буду уверен, что могу рекомендовать тебя в пати для зачистки данжей.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Кстати, как твоя, ну, амнезия?',
             by: 'Мастер',
           ),
-          DialogueLine('Действительно, как твоя амнезия?'),
-          DialogueLine(
+          const DialogueLine('Действительно, как твоя амнезия?'),
+          const DialogueLine(
               'Прошло уже несколько дней с тех пор, как ты стал путешественником.'),
-          DialogueLine(
+          const DialogueLine(
               'Выполнение поручений выматывает, но в то же время дают тебе опыт.'),
-          DialogueLine('Ты не приблизился к разгадке своих мыслей.'),
-          DialogueLine(
+          const DialogueLine('Ты не приблизился к разгадке своих мыслей.'),
+          const DialogueLine(
             'Ага, понятно.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я буду надеяться, что репутация поможет кому-нибудь узнать тебя.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Напоминаю, что квесты - это прямой путь завоевать репутацию среди населения.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Успешное закрытие данжей и повышение контроля в городе тоже гарантирует распространение приятных слухов о тебе.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Чем больше люди говорят о тебе, тем вероятнее, что мы найдём кого-нибудь из твоих друзей или родных.',
             by: 'Мастер',
           ),
-          DialogueLine('Гильдмастер прав, так работают люди.'),
-          DialogueLine(
+          const DialogueLine('Гильдмастер прав, так работают люди.'),
+          const DialogueLine(
               'С этими мыслями ты отправился смотреть доску поручений.'),
         ]),
       ];

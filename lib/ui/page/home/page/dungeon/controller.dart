@@ -17,6 +17,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:akuma/util/audio_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class DungeonController extends GetxController {
   /// [Timer] updating every second (fixed interval of time).
   Timer? _fixedTimer;
 
-  String? _musicSource;
+  AudioSource? _musicSource;
 
   Timer? _initTimer;
 
@@ -142,7 +143,7 @@ class DungeonController extends GetxController {
           if (!gameEnded.value && enemy.value != null) {
             String? sound = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
             if (sound != null) {
-              _musicWorker.once(sound);
+              _musicWorker.once(AudioSource.asset('assets/$sound'));
             }
 
             _enemyAnimation();
@@ -225,7 +226,7 @@ class DungeonController extends GetxController {
         onSkill: (Skill skill) {
           String? sound = skill.sounds?.sample(1).firstOrNull;
           if (sound != null) {
-            _musicWorker.voice(sound);
+            _musicWorker.voice(AudioSource.asset('assets/$sound'));
           }
 
           final String id = const Uuid().v4();
@@ -278,7 +279,6 @@ class DungeonController extends GetxController {
     }
 
     _musicWorker.stop(_musicSource);
-    _musicWorker.release();
 
     super.onClose();
   }
@@ -304,7 +304,7 @@ class DungeonController extends GetxController {
 
       String? hit = enemy.value?.enemy.hitSounds?.sample(1).firstOrNull;
       if (hit != null) {
-        _musicWorker.once(hit);
+        _musicWorker.once(AudioSource.asset('assets/$hit'));
       }
 
       enemy.value?.hit(damage);
@@ -453,7 +453,7 @@ class DungeonController extends GetxController {
     _enemyTimer = null;
 
     Decimal exp = (enemy.value!.exp / Decimal.fromInt(player.party.length + 1))
-        .toDecimal();
+        .toDecimal(scaleOnInfinitePrecision: 10);
 
     if (exp > Decimal.zero) {
       _playerService.addExperience(exp);
@@ -494,7 +494,7 @@ class DungeonController extends GetxController {
 
     String? sound = enemy.value?.enemy.slayedSounds?.sample(1).firstOrNull;
     if (sound != null) {
-      _musicWorker.once(sound);
+      _musicWorker.once(AudioSource.asset('assets/$sound'));
     }
 
     enemy.value = null;
@@ -535,7 +535,7 @@ class DungeonController extends GetxController {
 
       String? source = stage.value?.music ?? settings.music;
       if (source != null) {
-        _musicSource = source;
+        _musicSource = AudioSource.asset('assets/$source');
         _musicWorker.play(_musicSource!);
       } else if (_musicSource != null) {
         _musicWorker.stop(_musicSource);

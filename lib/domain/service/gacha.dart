@@ -8,6 +8,7 @@ import 'package:akuma/domain/model/rarity.dart';
 import 'package:akuma/util/message_popup.dart';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import 'package:log_me/log_me.dart';
 
 import '/domain/service/character.dart';
 import '/domain/service/item.dart';
@@ -74,13 +75,13 @@ class GachaService extends DisposableInterface {
       if (reward is Character) {
         loot.add(reward);
         _characterService.add(reward);
-        print('ROLLED [Character] ${reward.name}, ${reward.rarity}');
+        Log.debug('ROLLED [Character] ${reward.name}, ${reward.rarity}');
       } else if (reward is Item) {
         loot.add(reward);
         _itemService.add(reward);
-        print('ROLLED [Item] ${reward.name}, ${reward.rarity}');
+        Log.debug('ROLLED [Item] ${reward.name}, ${reward.rarity}');
       } else {
-        print('Rolled nothing :(');
+        Log.debug('Rolled nothing :(');
       }
     }
 

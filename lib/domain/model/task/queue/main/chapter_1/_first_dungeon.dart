@@ -1,3 +1,4 @@
+import 'package:akuma/util/novel.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
@@ -42,331 +43,338 @@ class FirstDungeonTask extends Task {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Жители уже вовсю обсуждают тебя и твой вклад в Алоросс!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Благодарю тебя, путешественник!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Продолжай выполнять квесты, чтобы получать репутацию среди населения.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Что ж, давай поговорим про данжи.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'К сожалению, именно данжей вокруг Алоросса полно.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И некоторые поручения, связанные с монстрами, - результат отсутствия путешественников, которые закрыли бы данжи вовремя.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Надеюсь, ты готов морально отправиться в путешествие в один из таких данжей.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Но одного тебя я не отпущу, ещё бы не хватало потерять нашего нового путешественника.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Твоя первая задача - отправиться в таверну и найти себе напарника!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Таверна прямо напротив гильдии, так уж исторически сложилось.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Давай, удачи.',
             by: 'Мастер',
           ),
-          HideCharacterLine('Arda.png'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine('Ты покидаешь гильдию путешественников.'),
-          DialogueLine('Прямо напротив неё, действительно, стояла таверна.'),
-          DialogueLine(
+          HideImageLine.asset('Arda.png'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine('Ты покидаешь гильдию путешественников.'),
+          const DialogueLine(
+              'Прямо напротив неё, действительно, стояла таверна.'),
+          const DialogueLine(
               'Видимо, ты был слишком занят, чтобы разглядеть её раньше.'),
-          DialogueLine('Уверенно ты входишь внутрь.'),
-          BackgroundLine('location/living_room_pink.jpg'),
-          DialogueLine('Вау, вот это роскошь!'),
-          DialogueLine(
+          const DialogueLine('Уверенно ты входишь внутрь.'),
+          BackgroundLine.asset('location/living_room_pink.jpg'),
+          const DialogueLine('Вау, вот это роскошь!'),
+          const DialogueLine(
               'Ладно, шучу, на самом деле бэкграунда под таверну тоже пока нет, поэтому представь её себе, пожалуйста.'),
-          DialogueLine(
+          const DialogueLine(
               'В заведении ты наблюдаешь в основном простых работяг, зашедших сюда отдохнуть.'),
-          DialogueLine(
+          const DialogueLine(
               'И у окна, в самом углу таверны, сидела пара ребят, чьи мечи опасно блестели на свету.'),
-          DialogueLine('Набравшись решительности, ты подходишь к их столику.'),
-          DialogueLine(
+          const DialogueLine(
+              'Набравшись решительности, ты подходишь к их столику.'),
+          const DialogueLine(
               'Ты пристствуешь странников и спрашиваешь, насколько возможно присоединиться к кому-нибудь в пати.'),
-          DialogueLine(
+          const DialogueLine(
               'Ребята, судя по выражениям лиц, крайне угрюмо отреагировали на твои слова.'),
-          CharacterLine('Bernice.png'),
-          DialogueLine(
+          ImageLine.asset('Bernice.png'),
+          const DialogueLine(
             'Парень, ты тут явно новый и чего-то не понимаешь.',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Гильдию здесь не уважают и путешествовать с тобой никто не будет.',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
             'C твоим рангом, твоим снаряжением и характером ты тут просто никто.',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты спрашиваешь, в чём дело и почему никто не закрывает подземелья.'),
-          DialogueLine(
+          const DialogueLine(
             'А там что, деньги какие-то есть?',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Парень, деньги берутся у богатых, а не у монстров.',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
             'А богатые получают свой бюджет из политики, не из гильдии.',
             by: 'Бернис',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Почитай свиттер, что ли, честное слово.',
             by: 'Бернис',
           ),
-          HideCharacterLine('Bernice.png'),
-          DialogueLine('Кое-что начинает проясняться.'),
-          const MusicLine('mixkit-beautiful-dream-493.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          HideImageLine.asset('Bernice.png'),
+          const DialogueLine('Кое-что начинает проясняться.'),
+          MusicLine.asset('mixkit-beautiful-dream-493.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Ты обошёл ещё несколько заведений, везде о путешественниках отзываются негативно.'),
-          DialogueLine(
+          const DialogueLine(
               'Значит, какая картина: в Алороссе те, кто могут сражаться, в основном разбойничают и грабят.'),
-          DialogueLine('И проблема в том, что администрация знает об этом.'),
-          DialogueLine(
+          const DialogueLine(
+              'И проблема в том, что администрация знает об этом.'),
+          const DialogueLine(
               'Кто-то построил свою империю в Алороссе и легализирует преступность.'),
-          DialogueLine('Ты ведь vengence, ты не можешь это так оставить.'),
-          DialogueLine(
+          const DialogueLine(
+              'Ты ведь vengence, ты не можешь это так оставить.'),
+          const DialogueLine(
               'Но, к сожалению, без сопартийца тебе действительно будет тяжко.'),
-          DialogueLine(
+          const DialogueLine(
               'Данжи не ограничиваются парой слаймов, это орды - тебе не хватит выносливости.'),
-          BackgroundLine('location/ghetto.jpg'),
-          DialogueLine('Ты забрёл в некие трущобы под городом.'),
-          DialogueLine('Кажется, что они заброшены и здесь никто не живёт.'),
-          DialogueLine(
+          BackgroundLine.asset('location/ghetto.jpg'),
+          const DialogueLine('Ты забрёл в некие трущобы под городом.'),
+          const DialogueLine(
+              'Кажется, что они заброшены и здесь никто не живёт.'),
+          const DialogueLine(
               'Но тебе всего лишь кажется - тут и там торчат чьи-то уши, смотрят чьи-то глаза, пристально кто-то наблюдает.'),
-          DialogueLine('В этих домиках живут люди. Или не совсем люди?'),
-          DialogueLine(
+          const DialogueLine('В этих домиках живут люди. Или не совсем люди?'),
+          const DialogueLine(
               'Присмотревшись, ты действительно отмечаешь, что это место - присталище ушастых антропоморфов.'),
-          DialogueLine('Они не доверяют тебе, они настроены враждебно.'),
-          DialogueLine(
+          const DialogueLine('Они не доверяют тебе, они настроены враждебно.'),
+          const DialogueLine(
               'Атмосфера явно неприятная и из тебя прёт желанием исправить ситуацию.'),
-          DialogueLine(
+          const DialogueLine(
               'Возможно, тебя обзовут агентом. Может, это даже не будет далеким от правды.'),
-          DialogueLine('Но ты добьёшься правосудия.'),
-          DialogueLine(
+          const DialogueLine('Но ты добьёшься правосудия.'),
+          const DialogueLine(
               'В своих размышлениях ты постепенно переходишь на фазу принятия того факта, что ты никого не найдёшь и тут.'),
-          DialogueLine(
+          const DialogueLine(
               'Банально будет неправильно, даже если втереться кому-то в доверие, вести этих бедных существ на убой.'),
-          DialogueLine(
+          const DialogueLine(
               'Хилые, голодные, лишённые смысла жизни и запуганные системой, истощённые людским отношением.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты решил уйти, но уйти ненадолго - ты обязательно вернёшься с едой, когда закроешь этот данж.'),
-          DialogueLine(
+          const DialogueLine(
               'Закрывать подземелья и убивать монстров - пока одна из немногих вещей, которую ты можешь делать, чтобы изменить такой устой.'),
-          DialogueLine(
+          const DialogueLine(
               'И когда ты уже развернулся и начал идти в сторону города, твой путь преградил мужчина.'),
-          CharacterLine('Beloukas.webp'),
-          DialogueLine('Ты ищешь сопартийца?', by: 'Белыйкавказ'),
-          DialogueLine('А? Откуда я знаю?', by: 'Белыйкавказ'),
-          DialogueLine(
+          ImageLine.asset('Beloukas.webp'),
+          const DialogueLine('Ты ищешь сопартийца?', by: 'Белыйкавказ'),
+          const DialogueLine('А? Откуда я знаю?', by: 'Белыйкавказ'),
+          const DialogueLine(
             'Всё, что происходит в Алороссе, проходит через меня.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Меня зовут Белыйкавказ, и я могу помочь тебе за символическую плату.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Есть категория, мм, граждан, готовая за еду выполнять твои поручения.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Нет-нет, не подумай, я не работорговец, я глава приюта бездомных.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Как ты мог заметить, огромное количество ушастых живёт здесь.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я, можно сказать, иногда присматриваю за ними и даю возможность выбраться отсюда.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Идея такая: у людей при деньгах часто нет времени на домашние дела.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Они платят мне, я общаюсь с ушастыми и предлагаю им контракт.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ушастый выполняет домашние дела, в обмен его кормят.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это бизнес, но бизнес осторожный - пусть у нас тут и разруха, никакое насилие мной не одобряется.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я слежу за тем, чтобы никто не пострадал в ходе такой работы.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Некоторым ушастым предлагают ночлег - я соглашаюсь только при согласии самого ушастого на такую сделку.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Поверь, благодаря мне свой дом нашли множество питомцев.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты проглатываешь тот факт, что он называет разумных антропомофров питомцами.'),
-          DialogueLine(
+          const DialogueLine(
             'Пройдём внутрь.',
             by: 'Белыйкавказ',
           ),
-          HideCharacterLine('Beloukas.webp'),
-          DialogueLine('Ты следуешь за дедом.'),
-          BackgroundLine('location/old_house_zombie.jpg'),
-          CharacterLine('Beloukas.webp'),
-          DialogueLine(
+          HideImageLine.asset('Beloukas.webp'),
+          const DialogueLine('Ты следуешь за дедом.'),
+          BackgroundLine.asset('location/old_house_zombie.jpg'),
+          ImageLine.asset('Beloukas.webp'),
+          const DialogueLine(
             'На руку зомби не смотри - это декорация.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ну, я немножко шутник, обожаю устраивать стендапы.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Эта рука - один из панчлайнов очень смешной шутки, кстати, заходи как-нибудь, расскажу обязательно.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я содержу этот приют уже больше 20-ти лет.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Те, кто теряют средства на существование или даже семью, приходят сюда.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Всё добровольно, мой товар должен быть надлежащего качества, да и я не монстр какой-нибудь.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Монстров ты, путешественник, с моей помощью будешь уничтожать позже.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Часто мы заключаем договор об опекунстве.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Наверное, именно в таком ты и будешь заинтересован.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Как опекун, ты будешь обязан полностью содержать своего ушастого, но очевидный плюс - получишь сопартийца.',
             by: 'Белыйкавказ',
           ),
-          HideCharacterLine('Beloukas.webp'),
-          DialogueLine('Вы проходите в одну из комнат приюта.'),
-          DialogueLine('Внутри сидели ребята абсолютно разных рас.'),
-          DialogueLine(
+          HideImageLine.asset('Beloukas.webp'),
+          const DialogueLine('Вы проходите в одну из комнат приюта.'),
+          const DialogueLine('Внутри сидели ребята абсолютно разных рас.'),
+          const DialogueLine(
               'Список их активностей явно ограничен парой книг и несколькими игрушками.'),
-          DialogueLine('Что примечательно, людей среди них действительно нет.'),
-          DialogueLine(
+          const DialogueLine(
+              'Что примечательно, людей среди них действительно нет.'),
+          const DialogueLine(
               'Та прислуга, которую ты видел ранее - вероятно, она вся отсюда и именно Белыйкавказ за этим наблюдает.'),
-          DialogueLine('Ты осматриваешь ребят, все осматривают тебя.'),
-          DialogueLine(
+          const DialogueLine('Ты осматриваешь ребят, все осматривают тебя.'),
+          const DialogueLine(
               'Ты не можешь в любом случае никого из них взять к себе, ты не можешь подвергать их жизнь опасности.'),
-          DialogueLine(
+          const DialogueLine(
               'Все те мысли, что думались чуть ранее, исходили из сердца.'),
-          DialogueLine(
+          const DialogueLine(
               'И если верить хозяину, здесь о них думают и дают крышу над головой.'),
-          DialogueLine('Пусть и относятся как к животным.'),
-          CharacterLine('Beloukas.webp'),
-          DialogueLine(
+          const DialogueLine('Пусть и относятся как к животным.'),
+          ImageLine.asset('Beloukas.webp'),
+          const DialogueLine(
             'Все конкретно в этом приюте готовы к тому, чтобы их забрали в любую передрягу.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это те, кому уже нечего терять, а жить такую жизнь им надоело.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ну, ты согласен? Плата будет чисто символической.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты говоришь, что не готов подвергать никого здесь опасности, твоя цель наоборот защитить все эти глазки.'),
-          DialogueLine('Белыйкавказ не сильно расстроился.'),
-          DialogueLine(
+          const DialogueLine('Белыйкавказ не сильно расстроился.'),
+          const DialogueLine(
             'Что ж, рано или поздно мои услуги тебе пригодятся, поэтому я всегда здесь.',
             by: 'Белыйкавказ',
           ),
-          HideCharacterLine('Beloukas.webp'),
-          DialogueLine(
+          HideImageLine.asset('Beloukas.webp'),
+          const DialogueLine(
               'Ты благодаришь его за заботу о бездомных и собираешься уходить, но в твои глаза бросается девочка в углу комнаты.'),
-          CharacterLine('Naksiasraass.png'),
-          DialogueLine(
+          ImageLine.asset('Naksiasraass.png'),
+          const DialogueLine(
               'Совсем исхудавшая, она забилась в углу и безжизненно смотрела в пустоту, изредка взрагивая.'),
-          DialogueLine(
+          const DialogueLine(
             'А, Накси?',
             by: 'Белыйкавказ',
           ),
-          DialogueLine('Ты спрашиваешь, что с ней.'),
-          DialogueLine(
+          const DialogueLine('Ты спрашиваешь, что с ней.'),
+          const DialogueLine(
             'Едва ли она будет полезна в твоих приключениях.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine('Ты напоминаешь, что не рассматриваешь никого в пати.'),
-          DialogueLine(
+          const DialogueLine(
+              'Ты напоминаешь, что не рассматриваешь никого в пати.'),
+          const DialogueLine(
             'Да-да, Накси родилась здесь, родители уже скончались, с тех пор чем-то постоянно болеет, ни ест, ни пьёт почти.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Таких здесь много, не смотри на меня, я ничего не могу поделать.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Большинству не до друзей тут, сам понимаешь.',
             by: 'Белыйкавказ',
           ),
-          HideCharacterLine('Naksiasraass.webp'),
-          DialogueLine('Ты решаешь отвести её к врачу.'),
-          CharacterLine('Beloukas.webp'),
-          DialogueLine(
+          HideImageLine.asset('Naksiasraass.webp'),
+          const DialogueLine('Ты решаешь отвести её к врачу.'),
+          ImageLine.asset('Beloukas.webp'),
+          const DialogueLine(
             'Не так быстро, сначала плата.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ты запросто можешь забрать её и убежать куда-нибудь, так не пойдёт.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Какой бы обузой она не была, напоминаю, это всё ещё бизнес.',
             by: 'Белыйкавказ',
           ),
-          DialogueLine('Придётся платить.'),
+          const DialogueLine('Придётся платить.'),
         ]),
         ExecuteStep(() async {
           bool? result = await NaksiasraassBuyView.show(router.context!);
@@ -377,10 +385,10 @@ class FirstDungeonTask extends Task {
           return false;
         }),
         NovelStep([
-          const MusicLine('mixkit-beautiful-dream-493.mp3'),
-          BackgroundLine('location/old_house_zombie.jpg'),
-          CharacterLine('Beloukas.webp'),
-          DialogueLine(
+          MusicLine.asset('mixkit-beautiful-dream-493.mp3'),
+          BackgroundLine.asset('location/old_house_zombie.jpg'),
+          ImageLine.asset('Beloukas.webp'),
+          const DialogueLine(
             '...',
             by: 'Белыйкавказ',
           ),
@@ -394,12 +402,14 @@ class FirstDungeonTask extends Task {
 
           await Novel.show(
             context: router.context!,
+            options: NovelExtension.options(),
             scenario: [
-              const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-              BackgroundLine('location/living_room_pink.jpg'),
+              MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+              BackgroundLine.asset('location/living_room_pink.jpg'),
               DialogueLine('Ты уверенно подходишь к ${character.name}.'),
-              CharacterLine('${character.asset}.png'),
-              DialogueLine('Ты говоришь, что хотел бы побыть вместе в пати.'),
+              ImageLine.asset('${character.asset}.png'),
+              const DialogueLine(
+                  'Ты говоришь, что хотел бы побыть вместе в пати.'),
               if (character.id == 'Rio') ...[
                 DialogueLine(
                   'Безусловно, я согласна.',
@@ -435,48 +445,48 @@ class FirstDungeonTask extends Task {
                   'Ещё ни один мужчина так резко не предлагал мне свои руку и сердце...',
                   by: character.name,
                 ),
-                DialogueLine('Кажется, она что-то неправильно поняла.'),
-                DialogueLine('Или всё так?'),
+                const DialogueLine('Кажется, она что-то неправильно поняла.'),
+                const DialogueLine('Или всё так?'),
               ],
-              HideCharacterLine('${character.asset}.png'),
+              HideImageLine.asset('${character.asset}.png'),
               DialogueLine(
                 'Вместе с ${character.name} ты отправляешься в гильдию.',
               ),
-              BackgroundLine('location/guild.jpg'),
-              CharacterLine('Arda.png'),
-              DialogueLine(
+              BackgroundLine.asset('location/guild.jpg'),
+              ImageLine.asset('Arda.png'),
+              const DialogueLine(
                 'Вот это ты пикапер!',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Честно, не ожидал, что ты кого-то вообще найдёшь!',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'М-да, это ты молодец, это что-то я искал своего первого сопартийца 5 лет...',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'И им оказался двухметровый качок...',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Так, это, да, тогда я даю тебе поручение.',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Рядом с городом открылся данж F ранга два дня назад.',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Вот-вот монстры выйдут наружу и снова будут нападать на город.',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Судя по оценке, там внутри слабенькие слаймы, поэтому как раз то, что нужно для первого данжа.',
                 by: 'Мастер',
               ),
-              DialogueLine(
+              const DialogueLine(
                 'Вперёд, ребята, не умирайте!',
                 by: 'Мастер',
               ),
@@ -513,26 +523,26 @@ class FirstDungeonTask extends Task {
           withEntrance: true,
         ),
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Отлично, путешественник!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я горжусь тобой!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'С твоей помощью мы сможем очистить Алоросс от монстров!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Продолжай выполнять поручения на зачистку данжей, чтобы повысить контроль в городе.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вперёд, герой!',
             by: 'Мастер',
           ),

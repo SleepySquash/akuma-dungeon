@@ -14,7 +14,9 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:akuma/ui/worker/music.dart';
+import 'package:akuma/util/audio_utils.dart';
+import 'package:akuma/util/novel.dart';
 import 'package:flutter/widgets.dart' show TextEditingController;
 import 'package:get/get.dart';
 import 'package:novel/novel.dart';
@@ -32,7 +34,7 @@ enum IntroductionStage {
 }
 
 class IntroductionController extends GetxController {
-  IntroductionController(this._authService);
+  IntroductionController(this._authService, this._musicWorker);
 
   final Rx<IntroductionStage> stage = Rx(IntroductionStage.novel);
 
@@ -43,7 +45,10 @@ class IntroductionController extends GetxController {
   final Rx<Race> race = Rx(Race.ningen);
 
   final AuthService _authService;
-  final AudioPlayer _player = AudioPlayer();
+  final MusicWorker _musicWorker;
+
+  final AudioSource _source =
+      AudioSource.asset('assets/music/MOSAICWAV_she_already_gone.mp3');
 
   @override
   Future<void> onReady() async {
@@ -66,7 +71,7 @@ class IntroductionController extends GetxController {
 
   @override
   void onClose() {
-    _player.dispose();
+    _musicWorker.stop(_source);
     super.onClose();
   }
 
@@ -92,135 +97,140 @@ class IntroductionController extends GetxController {
     await Future.delayed(200.milliseconds);
     await Novel.show(
       context: router.context!,
+      options: NovelExtension.options(),
       scenario: [
-        const MusicLine('mixkit-lost-in-dreams-26.mp3'),
-        BackgroundLine('location/mediterranean_town.jpg'),
-        DialogueLine(
-            'Ты хватаешься за голову, осматриваешь себя на предмет каких-либо травм.'),
-        DialogueLine('Так, а откуда они должны были взяться?'),
-        DialogueLine('Где ты?'),
-        DialogueLine(
-            'Мгновением позже ты понимаешь, что ты не можешь ответить даже на более примитивный вопрос: кто ты?'),
-        DialogueLine(
-            'Осмотревшись, ты понимаешь, что стоишь у дороги, отсюда открывается вид на какой-то город.'),
-        DialogueLine('На спине рюкзак, в карманах деньги и... телефон!'),
-        DialogueLine(
-            'Ты судорожно достаёшь свой телефон из кармана, пароля нет, разблокируешь его.'),
-        DialogueLine('Симка есть, Интернет ловит, отлично.'),
-        DialogueLine(
-            'Ты открываешь галерею - пусто, смотришь контакты - пусто.'),
-        DialogueLine(
+        MusicLine.asset('mixkit-lost-in-dreams-26.mp3'),
+        BackgroundLine.asset('location/mediterranean_town.jpg'),
+        const DialogueLine(
+          'Ты хватаешься за голову, осматриваешь себя на предмет каких-либо травм.',
+        ),
+        const DialogueLine('Так, а откуда они должны были взяться?'),
+        const DialogueLine('Где ты?'),
+        const DialogueLine(
+          'Мгновением позже ты понимаешь, что ты не можешь ответить даже на более примитивный вопрос: кто ты?',
+        ),
+        const DialogueLine(
+          'Осмотревшись, ты понимаешь, что стоишь у дороги, отсюда открывается вид на какой-то город.',
+        ),
+        const DialogueLine('На спине рюкзак, в карманах деньги и... телефон!'),
+        const DialogueLine(
+          'Ты судорожно достаёшь свой телефон из кармана, пароля нет, разблокируешь его.',
+        ),
+        const DialogueLine('Симка есть, Интернет ловит, отлично.'),
+        const DialogueLine(
+          'Ты открываешь галерею - пусто, смотришь контакты - пусто.',
+        ),
+        const DialogueLine(
             'Ты недоволен собой за то, что не оставил никаких заметок себе на случай таких ситуаций, кем бы ты ни был.'),
-        DialogueLine(
+        const DialogueLine(
             'Наконец, в заметках ты находишь единственную: в ней листовка с рекламой гильдии путешественников города Алоросс.'),
-        DialogueLine(
+        const DialogueLine(
             'Зацепка? Едва ли. Ты открываешь историю браузера, но в ней только простые запросы.'),
-        DialogueLine(
+        const DialogueLine(
             '"Лесбийский хентай с эльфиечками и кошкодевочками", "Порно с дворфами смешное", "Алоросс".'),
-        DialogueLine('Видимо, ты был человеком культуры.'),
-        DialogueLine('Но почему ты ничего не помнишь?'),
-        DialogueLine(
+        const DialogueLine('Видимо, ты был человеком культуры.'),
+        const DialogueLine('Но почему ты ничего не помнишь?'),
+        const DialogueLine(
             'Погода стояла дикая, солнце палило твою голову - стал ли солнечный удар причиной отшиба?'),
-        DialogueLine(
+        const DialogueLine(
             'Вокруг никого, ты решаешь идти вперёд в город перед тобой.'),
-        DialogueLine(
+        const DialogueLine(
             'По пути ты безуспешно пытаешься связать имеющуюся у тебя информацию в клубок, чтобы распутать его.'),
-        DialogueLine(
+        const DialogueLine(
             'Современность, какой ты её знаешь, состоит из передовых технологий - телефоны, компьютеры, космос.'),
-        DialogueLine(
+        const DialogueLine(
             'Около пятисот лет назад появились подземелья или данжи - порталы в измерение монстров.'),
-        DialogueLine(
+        const DialogueLine(
             'С тех пор человечество тратит огромное количество усилий на борьбу с монстрами.'),
-        DialogueLine(
+        const DialogueLine(
             'Но жизнь продолжается. Кроме того, вышедшие из данжей более слабые расы спокойно прижились в нашем измерении.'),
-        DialogueLine(
+        const DialogueLine(
             'Кроме людей, наш мир обитаем дварфами, эльфами, всеми типами ушастых, вампирами.'),
-        DialogueLine(
+        const DialogueLine(
             'Изначально, конечно, люди объявили этим расам войну - так началась Священная Война на религиозной почве.'),
-        DialogueLine(
+        const DialogueLine(
             'К счастью, довольно скоро эта война кончилась и теперь люди сосуществуют с существами из измерения Акумы.'),
-        DialogueLine(
+        const DialogueLine(
             'Акума - это титул, который присваивается сильнейшему дьяволу, что управляет монстрами.'),
-        DialogueLine(
+        const DialogueLine(
             'Судя по рассказам ушастых, в измерении Акумы лютая тирания, поэтому многие нашли мир в наших землях.'),
-        BackgroundLine('location/town.jpg'),
-        DialogueLine('"Алоросс" - вывеска у врат на входе.'),
-        DialogueLine(
+        BackgroundLine.asset('location/town.jpg'),
+        const DialogueLine('"Алоросс" - вывеска у врат на входе.'),
+        const DialogueLine(
             'Возможно, твои заметки всё-таки связаны с разгадкой этой ситуации.'),
-        DialogueLine(
+        const DialogueLine(
             'Ты решаешь обойти город, чтобы триггернуть какие-либо воспоминания.'),
-        DialogueLine('Но к твоему сожалению никто тебя не узнаёт.'),
-        DialogueLine(
+        const DialogueLine('Но к твоему сожалению никто тебя не узнаёт.'),
+        const DialogueLine(
             'Не имея альтернатив, ты отправляешься в гильдию путешественников.'),
-        DialogueLine(
+        const DialogueLine(
             'В конце концов, именно она является твоей единственной зацепкой.'),
-        BackgroundLine('location/guild.jpg'),
-        CharacterLine('Arda.png'),
-        DialogueLine(
+        BackgroundLine.asset('location/guild.jpg'),
+        HideImageLine.asset('Arda.png'),
+        const DialogueLine(
           'Добрый день!',
           by: 'Мастер',
-          voice: 'intro/1.mp3',
+          voice: FromAsset('intro/1.mp3'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Добро пожаловать в гильдию путешественников города Алоросс!',
           by: 'Мастер',
-          voice: 'intro/2.m4a',
+          voice: FromAsset('intro/2.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Я временно заменяю гильдмастера, она... будет позже.',
           by: 'Мастер',
-          voice: 'intro/5.m4a',
+          voice: FromAsset('intro/5.m4a'),
         ),
-        DialogueLine('Ты объясняешь ситуацию гильдмастеру.'),
-        DialogueLine(
+        const DialogueLine('Ты объясняешь ситуацию гильдмастеру.'),
+        const DialogueLine(
           'Ага, понятно. К сожалению, я тоже вижу тебя впервые.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Но у меня есть идея - ты можешь стать путешественником.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Выполняя поручения, ты постоянно будешь путешествовать и тем самым обязательно найдёшь кого-нибудь, кто тебя помнит.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Маловероятно, что ты потерял память внезапно тут и здесь, что-то должно связывать тебя с Алороссом.',
           by: 'Мастер',
         ),
-        DialogueLine('У тебя нет ни малейшей идеи, куда идти и куда податься.'),
-        DialogueLine(
+        const DialogueLine(
+            'У тебя нет ни малейшей идеи, куда идти и куда податься.'),
+        const DialogueLine(
             'Наличных в твоём кармане надолго не хватит, а путешествовия действительно могут тебе помочь.'),
-        DialogueLine('Ты соглашаешься.'),
-        DialogueLine(
+        const DialogueLine('Ты соглашаешься.'),
+        const DialogueLine(
             'Твоя цель - найти себя, путешествуя по миру, тебе больше ничего не остаётся.'),
-        DialogueLine(
+        const DialogueLine(
           'Итак, ты хочешь вступить в ряды путешественников?',
           by: 'Мастер',
-          voice: 'intro/3.mp3',
+          voice: FromAsset('intro/3.mp3'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Наш Алоросс - городок небольшой, но поручений тут не меньше, чем в каком-нибудь крупном граде.',
           by: 'Мастер',
-          voice: 'intro/6.m4a',
+          voice: FromAsset('intro/6.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Тебя ждут приключения, слава и гарем эльфиечек, кхм, но не факт.',
           by: 'Мастер',
-          voice: 'intro/7.m4a',
+          voice: FromAsset('intro/7.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Ну, успеешь со всем познакомиться позже, а пока заполни, пожалуйста, вот эту анкету.',
           by: 'Мастер',
-          voice: 'intro/8.m4a',
+          voice: FromAsset('intro/8.m4a'),
         ),
       ],
     );
     await Future.delayed(200.milliseconds);
 
-    await _player.setReleaseMode(ReleaseMode.loop);
-    await _player.setVolume(0.4);
-    _player.play(AssetSource('music/MOSAICWAV_she_already_gone.mp3'));
+    _musicWorker.play(_source, volume: 0.4);
 
     stage.value = IntroductionStage.character;
   }
@@ -229,139 +239,150 @@ class IntroductionController extends GetxController {
     await Future.delayed(200.milliseconds);
     await Novel.show(
       context: router.context!,
+      options: NovelExtension.options(),
       scenario: [
-        BackgroundLine('location/guild.jpg'),
-        CharacterLine('Arda.png'),
-        DialogueLine(
+        BackgroundLine.asset('location/guild.jpg'),
+        ImageLine.asset('Arda.png'),
+        const DialogueLine(
           'Всё отлично, благодарю за анкетку.',
           by: 'Мастер',
-          voice: 'intro/31.m4a',
+          voice: FromAsset('intro/31.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Дай мне пару минут...',
           by: 'Мастер',
-          voice: 'intro/32.m4a',
+          voice: FromAsset('intro/32.m4a'),
         ),
-        HideCharacterLine('Arda.png'),
-        DialogueLine('Ты ждёшь пару минут, пока гильдмастер заполняет бумаги.'),
-        DialogueLine(
+        HideImageLine.asset('Arda.png'),
+        const DialogueLine(
+            'Ты ждёшь пару минут, пока гильдмастер заполняет бумаги.'),
+        const DialogueLine(
             'Гильдмастер достаёт ноутбук, на котором увлечённо что-то делает около минуты.'),
-        CharacterLine('Arda.png'),
-        DialogueLine('Готово!', by: 'Мастер', voice: 'intro/9.m4a'),
-        DialogueLine(
+        ImageLine.asset('Arda.png'),
+        const DialogueLine(
+          'Готово!',
+          by: 'Мастер',
+          voice: FromAsset('intro/9.m4a'),
+        ),
+        const DialogueLine(
           'Ну что, поздравляю, теперь ты настоящий путешественник!',
           by: 'Мастер',
-          voice: 'intro/10.m4a',
+          voice: FromAsset('intro/10.m4a'),
         ),
-        DialogueLine('Твой ранг, как и у всех начинающих, F!', by: 'Мастер'),
-        DialogueLine(
+        const DialogueLine(
+          'Твой ранг, как и у всех начинающих, F!',
+          by: 'Мастер',
+        ),
+        const DialogueLine(
           'Но ты буквально в шаге от получения SSS титула, я прям вижу по тебе.',
           by: 'Мастер',
-          voice: 'intro/12.m4a',
+          voice: FromAsset('intro/12.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Приходи в гильдию, чтобы брать поручения и задания по закрытию данжей.',
           by: 'Мастер',
-          voice: 'intro/13.m4a',
+          voice: FromAsset('intro/13.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'У каждого поручения своя сложность, но и своя награда.',
           by: 'Мастер',
-          voice: 'intro/14.m4a',
+          voice: FromAsset('intro/14.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Помни, что в твоих приключениях немаловажную роль играют твои навыки, экипировка и класс.',
           by: 'Мастер',
-          voice: 'intro/15.m4a',
+          voice: FromAsset('intro/15.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'И не забывай, что иногда важно полагаться на свою пати.',
           by: 'Мастер',
-          voice: 'intro/16.m4a',
+          voice: FromAsset('intro/16.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Она будет прикрывать твою спину, брать на себя урон или, наоборот, наносить его.',
           by: 'Мастер',
-          voice: 'intro/17.m4a',
+          voice: FromAsset('intro/17.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'По поводу того, где тебе остановиться, есть одна идея.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Гильдия владеет имуществом, которое город даёт ей для временного размещения путешественников в случае экстренной ситуации.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Я готов предоставить тебе свободную квартирку, но признаюсь сразу: состояние у неё не ахти.',
           by: 'Мастер',
         ),
-        DialogueLine(
+        const DialogueLine(
           'Пойдём покажу тебе твои апартаменты.',
           by: 'Мастер',
-          voice: 'intro/18.m4a',
+          voice: FromAsset('intro/18.m4a'),
         ),
-        HideCharacterLine('Arda.png'),
-        BackgroundLine('location/town.jpg'),
-        DialogueLine('Вы бодро шагаете в сторону твоего временного жилья'),
-        BackgroundLine('room/renovation.jpg'),
-        CharacterLine('Arda.png'),
-        DialogueLine(
+        HideImageLine.asset('Arda.png'),
+        BackgroundLine.asset('location/town.jpg'),
+        const DialogueLine(
+          'Вы бодро шагаете в сторону твоего временного жилья',
+        ),
+        BackgroundLine.asset('room/renovation.jpg'),
+        ImageLine.asset('Arda.png'),
+        const DialogueLine(
           'Н-да, удачи тебе тут жить, конечно!',
           by: 'Мастер',
-          voice: 'intro/19.m4a',
+          voice: FromAsset('intro/19.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Из-за постоянно открывающихся данжей и отсутствия лишних рук, чтобы с ними сражаться преждевременно...',
           by: 'Мастер',
-          voice: 'intro/21.m4a',
+          voice: FromAsset('intro/21.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           '...у нас, как ты видишь, проблемы и с жильём, и с продовольствием, и не только.',
           by: 'Мастер',
-          voice: 'intro/22.m4a',
+          voice: FromAsset('intro/22.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Когда открывается данж, у нас есть около нескольких дней, чтобы успеть его закрыть.',
           by: 'Мастер',
-          voice: 'intro/23.m4a',
+          voice: FromAsset('intro/23.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Иначе из данжа выходят монстры и атакуют население.',
           by: 'Мастер',
-          voice: 'intro/24.m4a',
+          voice: FromAsset('intro/24.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Стража справляется с теми, кто подходит близко к границам города.',
           by: 'Мастер',
-          voice: 'intro/25.m4a',
+          voice: FromAsset('intro/25.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Но за их пределами торговцы, молодёжь и путешественники становятся...',
           by: 'Мастер',
-          voice: 'intro/26.m4a',
+          voice: FromAsset('intro/26.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Кхм, путешественник! Я имел в виду, успевают сбежать и спастись в нашем городе, конечно же!',
           by: 'Мастер',
-          voice: 'intro/27.m4a',
+          voice: FromAsset('intro/27.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Ну, вообще, так и есть, это я троллю тебя так, это была сверх-мета-пост-ирония.',
           by: 'Мастер',
-          voice: 'intro/28.m4a',
+          voice: FromAsset('intro/28.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Обустраивайся тут, знакомься с окружением.',
           by: 'Мастер',
-          voice: 'intro/29.m4a',
+          voice: FromAsset('intro/29.m4a'),
         ),
-        DialogueLine(
+        const DialogueLine(
           'Когда будешь готов, я жду тебя в гильдии.',
           by: 'Мастер',
-          voice: 'intro/30.m4a',
+          voice: FromAsset('intro/30.m4a'),
         ),
-        HideCharacterLine('Arda.png')
+        HideImageLine.asset('Arda.png')
       ],
     );
     await Future.delayed(200.milliseconds);

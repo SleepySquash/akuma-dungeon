@@ -56,39 +56,41 @@ class AlorossConstructionCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-just-kidding-11.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
-              'Ты отправляешься на стройку, где платят крепким парням.'),
-          DialogueLine(
-              'Это лучше, чем ничего, конечно, но лучше бы ты сражался с монстрами, как и подобает путешественнику.'),
-          BackgroundLine('location/town_construction.jpg'),
-          CharacterLine('Chads.png'),
-          DialogueLine(
+          MusicLine.asset('mixkit-just-kidding-11.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
+            'Ты отправляешься на стройку, где платят крепким парням.',
+          ),
+          const DialogueLine(
+            'Это лучше, чем ничего, конечно, но лучше бы ты сражался с монстрами, как и подобает путешественнику.',
+          ),
+          BackgroundLine.asset('location/town_construction.jpg'),
+          ImageLine.asset('Chads.png'),
+          const DialogueLine(
             'Вай, дарагой, наконец-то к нам прислали крепкий мужчина.',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я так рад видеть крепкий мужчина, что хотеть стать крепче!!!',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Дыа, брат мой, крепче!',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Крепкий мужчина, пойдём класть крепкий кирпич.',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Твоя работа - класть крепкий кирпич крепко, чтобы ничто не упало.',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Давай, сладенький, за работу.',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Только не забудь снять футболочку, она тебе тут не нужна.',
             by: 'Гига Чад',
           ),
@@ -110,27 +112,27 @@ class AlorossConstructionCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-just-kidding-11.mp3'),
-          BackgroundLine('location/town_construction.jpg'),
-          CharacterLine('Chads.png'),
-          DialogueLine(
+          MusicLine.asset('mixkit-just-kidding-11.mp3'),
+          BackgroundLine.asset('location/town_construction.jpg'),
+          ImageLine.asset('Chads.png'),
+          const DialogueLine(
             'Вай, мы благодарить крепкий мужчина.',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вроде, крепко получилось!',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Да, крепко, вай как крепко!',
             by: 'Гига Чад',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Твоя награда ждать тебя, мой крепыш.',
             by: 'Гига Чад',
           ),
-          HideCharacterLine('Chads.png'),
-          DialogueLine('Ты устал и хочешь домой.'),
+          HideImageLine.asset('Chads.png'),
+          const DialogueLine('Ты устал и хочешь домой.'),
         ]),
       ];
 }

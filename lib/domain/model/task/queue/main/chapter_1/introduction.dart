@@ -29,143 +29,145 @@ class IntroductionTask extends Task {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Ты просыпаешься в тех же апартаментах, что любезно предоставила тебе гильдия.'),
-          DialogueLine(
+          const DialogueLine(
               'Как-то слишком приветливо, я бы не стал доверять так незнакомцам.'),
-          DialogueLine(
+          const DialogueLine(
               'В таком жилье трудно думать мысли, поэтому ты наконец решаешь пройтись вокруг.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты довольно бодро записался в гильдию, так ли часто сюда приходят путешественники?'),
-          DialogueLine(
+          const DialogueLine(
               'Гильдмастер неоднократно повторял, что рук здесь не хватает.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты знал это и раньше, Алоросс - небольшой городок на границе.'),
-          DialogueLine(
+          const DialogueLine(
               'В городе есть школа, церковь, гильдия, несколько магазинов и ресторанов.'),
-          DialogueLine('Есть всё, что нужно для комфортной современной жизни.'),
-          DialogueLine(
+          const DialogueLine(
+              'Есть всё, что нужно для комфортной современной жизни.'),
+          const DialogueLine(
               'Сам город получает деньги из шахт, что расположены надалеко, плюс есть несколько полей с посевами.'),
-          DialogueLine(
+          const DialogueLine(
               'Так-то в целом и неудивительно, что рук не хватает - монстрам есть, где покуробесить.'),
-          BackgroundLine('location/mediterranean_town.jpg'),
-          DialogueLine(
+          BackgroundLine.asset('location/mediterranean_town.jpg'),
+          const DialogueLine(
               'Неспешно ты вышел за пределы города, откуда ты и начал.'),
-          DialogueLine(
+          const DialogueLine(
               'Дорога из города проходит через лес, а лес - отличная флора для укрытия монстров.'),
-          DialogueLine('Монстры без проблем прыгают на любой вид транспорта.'),
-          DialogueLine(
+          const DialogueLine(
+              'Монстры без проблем прыгают на любой вид транспорта.'),
+          const DialogueLine(
               'Если ты в машине, то одного слайма на скорости 50 км/ч достаточно для того, чтобы у тебя больше не было лобового стекла.'),
-          DialogueLine(
+          const DialogueLine(
               'Поэтому незакрытые данжи представляют серьёзную угрозу даже для современного мира.'),
-          DialogueLine('Не говоря уже и о более опасных формах жизни.'),
-          DialogueLine(
+          const DialogueLine('Не говоря уже и о более опасных формах жизни.'),
+          const DialogueLine(
               'Ты понимаешь, что проблема с поиском себя займёт некоторое время, поэтому решаешь отдать себя приключениям.'),
-          DialogueLine(
+          const DialogueLine(
               'И помощь людям, и заработок средств - вин-вин ситуэйшин.'),
-          DialogueLine('С этими мыслями ты готов начать свою карьеру.'),
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          const DialogueLine('С этими мыслями ты готов начать свою карьеру.'),
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Ага, уже разобрался чуть-чуть со всем?',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Отлично. Тогда давай начнём твою карьеру путешественника!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Каждый день гильдия вывешивает список поручений, за выполнение которых полагается награда.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Поручения бывают двух типов: квесты и данжи.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Квесты - это просьбы, которые заказчики оплачивают самостоятельно.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Например, помочь торговцу пройти через наш лес, зачистить дом от слаймов и так далее.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Гильдия гарантирует, что поручение будет выполнено или возврат средств, если что не так, - выступает посредником, другими словами.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Такие поручения кроме того, что хорошо оплачиваются, дают репутацию - признательность граждан.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'С достаточным уровнем репутации ты сможешь получать скидки, жильё и даже подцепить тяночек.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'С другой стороны данжи.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Их вывешивает гильдия, оплата за зачистку идёт из казны города и иногда финансируется бизнесом.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Подземелья появляются довольно часто в абсолютно случайных локациях.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Точнее, появляется портал в данж, гейт, врата или как хочешь можешь называть это.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Если за два дня не закрыть этот портал, то из него выйдут монстры и будут атаковать граждан.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Сила вышедших монстров зависит от ранга данжа.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Порталы связывают наше измерение с измерением Акумы - лорда тёмных сил, который и создаёт данжи.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'К слову, именно победа над Акумой считается главной целью всех путешественников.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Считается, что если мы его победим, то все данжи пропадут и человечество будет спать спокойно.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Почему так неуверенно? Да потому что я не знаю, никто не знает.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это предстоит выяснить тебе, путешественник!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'За закрытие порталов увеличивается контроль в городе.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Чем выше контроль, тем обильнее полки с товарами, тем больше награды за поручения и данжи.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Просмотри на список поручений, которые не связаны с опасностями, и подходи ко мне.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я запишу это поручение на тебя и ты сможешь приступить к его выполнению.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Когда закончишь, не забудь отчитаться и сдать эти поручения, чтобы получить награду!',
             by: 'Мастер',
           ),

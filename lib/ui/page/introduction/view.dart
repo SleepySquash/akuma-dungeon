@@ -29,7 +29,7 @@ class IntroductionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: IntroductionController(Get.find()),
+      init: IntroductionController(Get.find(), Get.find()),
       builder: (IntroductionController c) {
         return Obx(() {
           Widget body;
@@ -52,7 +52,7 @@ class IntroductionView extends StatelessWidget {
                           'Как зовут Вашего персонажа?',
                           style: Theme.of(context)
                               .textTheme
-                              .headline3
+                              .displaySmall
                               ?.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
@@ -84,7 +84,8 @@ class IntroductionView extends StatelessWidget {
                               color: Colors.white,
                             ),
                             style: ElevatedButton.styleFrom(
-                                primary: Colors.lightBlue),
+                              backgroundColor: Colors.lightBlue,
+                            ),
                             label: const Text(
                               'Назад',
                               style: TextStyle(color: Colors.white),
@@ -95,7 +96,7 @@ class IntroductionView extends StatelessWidget {
                             onPressed: c.nameIsEmpty.value ? null : c.accept,
                             icon: const Icon(Icons.done, color: Colors.white),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.lightGreen,
+                              backgroundColor: Colors.lightGreen,
                             ),
                             label: const Text(
                               'Вот так!',
@@ -111,7 +112,7 @@ class IntroductionView extends StatelessWidget {
               break;
 
             case IntroductionStage.character:
-              Widget _layout({Key? key, List<Widget> children = const []}) {
+              Widget layout({Key? key, List<Widget> children = const []}) {
                 return LayoutBuilder(builder: (context, constraints) {
                   if (constraints.maxWidth < 800) {
                     return Column(children: children);
@@ -123,7 +124,7 @@ class IntroductionView extends StatelessWidget {
 
               body = Padding(
                 padding: const EdgeInsets.all(8),
-                child: _layout(
+                child: layout(
                   key: Key('${c.stage.value}'),
                   children: [
                     Expanded(
@@ -294,7 +295,8 @@ class IntroductionView extends StatelessWidget {
                           icon: const Icon(Icons.arrow_forward,
                               color: Colors.white),
                           style: ElevatedButton.styleFrom(
-                              primary: Colors.lightBlue),
+                            backgroundColor: Colors.lightBlue,
+                          ),
                           label: const Text(
                             'Далее!',
                             style: TextStyle(color: Colors.white),

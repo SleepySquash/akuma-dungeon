@@ -90,11 +90,11 @@ class HeaderDelegate extends SliverPersistentHeaderDelegate {
               style: TextStyle.lerp(
                 Theme.of(context)
                     .textTheme
-                    .headline4
+                    .headlineMedium
                     ?.copyWith(color: Colors.white),
                 Theme.of(context)
                     .textTheme
-                    .headline6
+                    .titleLarge
                     ?.copyWith(color: Colors.white),
                 progress,
               ),

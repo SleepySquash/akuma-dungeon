@@ -31,7 +31,7 @@ class AllTasksController extends GetxController {
     super.onInit();
   }
 
-  Future<void> criteriaMet(Task task) => task.criteriaMet(
+  Future<bool> criteriaMet(Task task) => task.criteriaMet(
         player: _playerService.player,
         progression: _progressionService.progression.value,
         isTaskCompleted: _taskService.isCompleted,

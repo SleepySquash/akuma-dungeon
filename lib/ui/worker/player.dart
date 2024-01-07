@@ -16,6 +16,7 @@
 
 import 'dart:math';
 
+import 'package:akuma/util/audio_utils.dart';
 import 'package:get/get.dart';
 
 import '/domain/model/player.dart';
@@ -53,7 +54,10 @@ class PlayerWorker extends DisposableInterface {
         if (newLevel != oldLevel) {
           oldLevel = newLevel;
 
-          _musicWorker.once('voice/sfx/newlevel_$_levelUpSound.m4a');
+          _musicWorker.once(
+            AudioSource.asset('assets/voice/sfx/newlevel_$_levelUpSound.m4a'),
+          );
+
           ++_levelUpSound;
           if (_levelUpSound > 3) {
             _levelUpSound = 1;

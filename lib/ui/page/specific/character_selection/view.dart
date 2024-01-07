@@ -1,5 +1,4 @@
 import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/character/standard.dart';
 import 'package:akuma/ui/page/home/widget/wide_button.dart';
 import 'package:akuma/ui/widget/button.dart';
 import 'package:akuma/util/platform_utils.dart';

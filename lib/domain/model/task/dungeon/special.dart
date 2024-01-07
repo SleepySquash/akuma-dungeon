@@ -8,7 +8,7 @@ import '/domain/model/task.dart';
 abstract class AkumaDungeon {
   static List<TaskStep> steps() {
     return [
-      NovelStep([
+      const NovelStep([
         DialogueLine(
           'Стоя напротив портала, ты чувствуешь что-то неладное...',
         ),
@@ -40,7 +40,7 @@ abstract class RedDungeon {
     Rank rank = Rank.S,
   }) {
     return [
-      NovelStep([
+      const NovelStep([
         DialogueLine(
           'Стоя напротив портала, ты чувствуешь что-то неладное...',
         ),

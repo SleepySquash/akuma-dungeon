@@ -51,7 +51,7 @@ class SettingsView extends StatelessWidget {
               ),
               onTap: () async {
                 final TextStyle? thin =
-                    context.textTheme.caption?.copyWith(color: Colors.black);
+                    context.textTheme.bodySmall?.copyWith(color: Colors.black);
                 await Selector.show<Language>(
                   context: context,
                   buttonKey: c.languageKey,
@@ -133,6 +133,7 @@ class SettingsView extends StatelessWidget {
                       s.set(Flag.goddessTowerUnlocked, true);
                       s.set(Flag.locationsUnlocked, true);
                       s.set(Flag.dungeonsUnlocked, true);
+                      s.set(Flag.partyUnlocked, true);
                     },
                     child: const Text('Unlock everything'),
                   ),

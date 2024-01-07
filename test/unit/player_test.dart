@@ -16,13 +16,14 @@
 
 import 'package:akuma/domain/model/player.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:log_me/log_me.dart';
 
 void main() {
   test('Player levels are correctly scaled', () {
     Player player = Player();
 
     for (int level = 1; level < Player.maxLevel; ++level) {
-      print(
+      Log.info(
         '[$level] HP: ${player.healths[level]}, ATK: ${player.damages[level]}, DEF: ${player.defenses[level]}',
       );
     }

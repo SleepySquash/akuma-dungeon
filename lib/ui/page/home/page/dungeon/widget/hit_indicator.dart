@@ -190,7 +190,7 @@ class _NumberIndicatorState extends State<NumberIndicator>
               translation: const Offset(-0.5, -0.5),
               child: BorderedText(
                 child: Text(
-                  '${widget.number}',
+                  widget.number,
                   style: TextStyle(
                     color: widget.color ?? Colors.red,
                     fontSize: widget.fontSize ?? 36,

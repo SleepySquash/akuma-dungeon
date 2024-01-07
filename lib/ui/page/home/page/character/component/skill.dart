@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../controller.dart';
 import '/ui/page/home/widget/backdrop_plate.dart';
 import '/ui/page/home/widget/skill.dart';
-import '/util/platform_utils.dart';
 
 class CharacterSkillsTab extends StatelessWidget {
   const CharacterSkillsTab(this.c, {Key? key}) : super(key: key);
@@ -44,7 +43,6 @@ class CharacterSkillsTab extends StatelessWidget {
                       child: SkillWidget(skill: e),
                     ),
                   ),
-                if (!context.isMobile) const Spacer(),
               ],
             ),
             const Spacer(),

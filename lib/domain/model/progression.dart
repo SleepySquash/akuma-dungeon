@@ -1,5 +1,4 @@
 import 'package:akuma/domain/model/character.dart';
-import 'package:akuma/domain/model/location.dart';
 import 'package:akuma/domain/model_type_id.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

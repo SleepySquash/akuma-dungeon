@@ -32,6 +32,8 @@ class FlagWorker extends DisposableInterface {
   );
 
   final FlagService _flagService;
+
+  // ignore: unused_field
   final NotificationService _notificationService;
 
   final Map<Flag, bool> _values = {};

@@ -58,7 +58,7 @@ class MyCommissionAdapter extends TypeAdapter<MyCommission> {
 
   @override
   MyCommission read(BinaryReader reader) {
-    final String id = reader.read() as String;
+    /*final String id = */ reader.read() as String;
     final String taskId = reader.read() as String;
     final DateTime appearedAt = reader.read() as DateTime;
     final bool accepted = reader.read() as bool;

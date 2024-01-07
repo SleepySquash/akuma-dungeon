@@ -17,11 +17,12 @@
 import 'package:akuma/domain/model/rarity.dart';
 import 'package:akuma/domain/model/stat.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:log_me/log_me.dart';
 
 void main() {
   void checkStat(StatType type) {
-    Stat stat = Stat(type);
-    print(stat.improve(Rarity.common));
+    final Stat stat = Stat(type);
+    Log.info(stat.improve(Rarity.common));
   }
 
   test('ATK', () => checkStat(StatType.atk));

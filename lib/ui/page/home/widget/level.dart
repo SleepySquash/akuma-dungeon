@@ -50,7 +50,7 @@ class LevelWidget extends StatelessWidget {
                     children: [
                       const Text('Exp.'),
                       const Spacer(),
-                      Text('$exp'),
+                      Text('${exp?.toStringAsFixed(0)}'),
                       if (maxExp != null) Text('/$maxExp'),
                     ],
                   ),

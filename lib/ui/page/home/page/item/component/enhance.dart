@@ -2,7 +2,6 @@ import 'package:akuma/domain/model/item.dart';
 import 'package:akuma/domain/model/stat.dart';
 import 'package:akuma/router.dart';
 import 'package:akuma/ui/page/home/page/item/widget/enhance_summary.dart';
-import 'package:akuma/ui/page/home/widget/backdrop_plate.dart';
 import 'package:akuma/ui/page/home/widget/wide_button.dart';
 import 'package:akuma/ui/widget/backdrop.dart';
 import 'package:akuma/ui/widget/item_grid.dart';

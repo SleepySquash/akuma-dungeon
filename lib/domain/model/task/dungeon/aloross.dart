@@ -18,7 +18,6 @@ import 'package:akuma/domain/model/enemy.dart';
 import 'package:akuma/domain/model/task/dungeon/special.dart';
 
 import 'package:collection/collection.dart';
-import 'package:decimal/decimal.dart';
 
 import '/domain/model/commission.dart';
 import '/domain/model/dungeon.dart';

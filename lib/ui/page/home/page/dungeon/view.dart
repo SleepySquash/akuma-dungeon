@@ -295,14 +295,14 @@ class DungeonView extends StatelessWidget {
   }
 
   Widget _middle(DungeonController c, BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
-          children: const [Text('Skills...')],
+          children: [Text('Skills...')],
         ),
-        const Spacer(),
+        Spacer(),
       ],
     );
   }

@@ -34,77 +34,78 @@ class UnexpectedEncounterTask extends Task {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Судя по отчётам, благодаря тебе Алоросс наконец-то начинает выходить на положительный КПД по закрытию данжей.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это не может не радовать, у тебя в одиночку получается так бодро их закрывать.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Просто поразительно, ты молодец.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Не хочу забегать вперёд, но по правилам ильдия может подарить тебе квартиру, в которой ты сейчас обустроился.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это произойдёт, опять же, как награда за достаточно высокий уровень контроля.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И я хочу сегодня попросить тебя о кое-какой услуге.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Дело в том, что я утром передал поручение на зачистку данжа одному путешественнику.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Прошло уже 5 часов, а путешественник не вернулся.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Телефон недоступен, связаться с ним я никак не могу.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я боюсь, что могло случиться ужасное.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Данж обычный, ранг минимальный, красным не оказался.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Красным называется данж, который внешне выглядит как один ранг, а внутри оказывается сильно сложнее.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Посмотри, пожалуйста, что там.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Дело серьёзное, ты незамедлительно соглашаешься и отправляешься напрямую к подземелью.'),
-          HideCharacterLine('Arda.png'),
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine('Довольно бодро ты покидаешь гильдию.'),
-          BackgroundLine('location/mediterranean_town.jpg'),
-          DialogueLine('И вот ты уже рядом с порталом.'),
-          DialogueLine('А что, если путешественник мёртв?'),
-          DialogueLine('Ты не хочешь думать об этом.'),
-          DialogueLine(
+          HideImageLine.asset('Arda.png'),
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine('Довольно бодро ты покидаешь гильдию.'),
+          BackgroundLine.asset('location/mediterranean_town.jpg'),
+          const DialogueLine('И вот ты уже рядом с порталом.'),
+          const DialogueLine('А что, если путешественник мёртв?'),
+          const DialogueLine('Ты не хочешь думать об этом.'),
+          const DialogueLine(
               'Сцена, которую ты представляешь увидеть, вызывает мурашки по всему телу.'),
-          DialogueLine('Ты начинаешь привыкать к данжам, к монстрам внутри.'),
-          DialogueLine('Но этот раз ты колеблешься.'),
-          DialogueLine('Не время валять дурака, человек в опасности.'),
-          DialogueLine('Ты прыгаешь в портал.'),
+          const DialogueLine(
+              'Ты начинаешь привыкать к данжам, к монстрам внутри.'),
+          const DialogueLine('Но этот раз ты колеблешься.'),
+          const DialogueLine('Не время валять дурака, человек в опасности.'),
+          const DialogueLine('Ты прыгаешь в портал.'),
         ]),
         DungeonStep(
           Dungeon(
@@ -121,48 +122,51 @@ class UnexpectedEncounterTask extends Task {
           entranceFrom: 'location/mediterranean_town',
         ),
         NovelStep([
-          const MusicLine('mixkit-fright-night-871.mp3'),
-          BackgroundLine('location/mines.jpg'),
-          DialogueLine('Уже на входе тебя встречают слаймы.'),
-          DialogueLine('Плохо дело, ведь почему они тут, у самого входа?'),
-          DialogueLine(
+          MusicLine.asset('mixkit-fright-night-871.mp3'),
+          BackgroundLine.asset('location/mines.jpg'),
+          const DialogueLine('Уже на входе тебя встречают слаймы.'),
+          const DialogueLine(
+              'Плохо дело, ведь почему они тут, у самого входа?'),
+          const DialogueLine(
               'Ты осматриваешься - видишь чёткие, пусть и очень маленькие, шажки вглубь пещеры.'),
-          DialogueLine(
+          const DialogueLine(
               'Рядом слизь - видимо, эти слаймы пришли сюда уже после того, как путешественник прошёл дальше.'),
-          DialogueLine('Но если они здесь, то что же с путешественником?!'),
-          DialogueLine('Ты аккуратно, но не сильно осторожно, спешишь дальше.'),
-          DialogueLine('Завернув за угол...'),
-          BackgroundLine('location/underground_waterfall.jpg'),
-          DialogueLine('Слаймы, много слаймов.'),
-          DialogueLine(
+          const DialogueLine(
+              'Но если они здесь, то что же с путешественником?!'),
+          const DialogueLine(
+              'Ты аккуратно, но не сильно осторожно, спешишь дальше.'),
+          const DialogueLine('Завернув за угол...'),
+          BackgroundLine.asset('location/underground_waterfall.jpg'),
+          const DialogueLine('Слаймы, много слаймов.'),
+          const DialogueLine(
               'Они скачут по всей пещере, своим хлюпаньем сводят с ума.'),
-          DialogueLine('И внутри одного из слаймов чей-то меч!'),
-          DialogueLine('Слайм проглотил оружие путешественника?'),
-          DialogueLine('Где же сам путешественник?'),
-          DialogueLine(
+          const DialogueLine('И внутри одного из слаймов чей-то меч!'),
+          const DialogueLine('Слайм проглотил оружие путешественника?'),
+          const DialogueLine('Где же сам путешественник?'),
+          const DialogueLine(
               'Ты осматриваешься внимательно в поисках хоть каких-то знаков.'),
-          DialogueLine(
+          const DialogueLine(
             'Эй!',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
             'На помощь! Я тут, наверху!',
             by: '???',
           ),
-          DialogueLine('Ты смотришь наверх.'),
-          DialogueLine(
+          const DialogueLine('Ты смотришь наверх.'),
+          const DialogueLine(
             'Они забрали мой меч, помоги!',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
               'На камнях у самого потолка пещеры сидела маленькая женская фигура.'),
-          DialogueLine(
+          const DialogueLine(
               'Обхватив себя за ноги, она дрожала - то ли от холода, то ли от страха.'),
-          DialogueLine('Ага, картина резко обрела смысл.'),
-          DialogueLine('Путешественник жив, ты вздохнул с облегчением.'),
-          DialogueLine(
+          const DialogueLine('Ага, картина резко обрела смысл.'),
+          const DialogueLine('Путешественник жив, ты вздохнул с облегчением.'),
+          const DialogueLine(
               '...но этого вздоха было достаточно, чтобы слаймы заметили тебя и начали двигаться в твою сторону.'),
-          DialogueLine('Никак вы, блять, не научитесь.'),
+          const DialogueLine('Никак вы, блять, не научитесь.'),
         ]),
         DungeonStep(
           Dungeon(
@@ -194,294 +198,301 @@ class UnexpectedEncounterTask extends Task {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-fright-night-871.mp3'),
-          BackgroundLine('location/underground_waterfall.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-fright-night-871.mp3'),
+          BackgroundLine.asset('location/underground_waterfall.jpg'),
+          const DialogueLine(
               'Ты рубишь последнего, после чего всю пещеру окутывает слабое светлое свечение.'),
-          DialogueLine('Это был босс.'),
-          DialogueLine(
+          const DialogueLine('Это был босс.'),
+          const DialogueLine(
               'Закинув меч за спину, ты бежишь к той куче камней, на которых сидит девушка.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты говоришь, что разобрался со слаймами и теперь можно спускаться.'),
-          DialogueLine(
+          const DialogueLine(
               'Она аккуратно еле-еле, шажок за шажком, начинает спуск.'),
-          DialogueLine(
+          const DialogueLine(
               'Всё ещё дрожит, поэтому ты стараешься, если что, подловить её, мало ли что.'),
-          DialogueLine('И вот звук касания обуви о камни на полу пещеры.'),
-          CharacterLine('Kyaru.webp'),
-          DialogueLine('Она оборачивается к тебе, готовая расплакаться.'),
-          DialogueLine('Ты успеваешь осмотреть её получше вблизи.'),
-          DialogueLine(
+          const DialogueLine(
+              'И вот звук касания обуви о камни на полу пещеры.'),
+          ImageLine.asset('Kyaru.webp'),
+          const DialogueLine('Она оборачивается к тебе, готовая расплакаться.'),
+          const DialogueLine('Ты успеваешь осмотреть её получше вблизи.'),
+          const DialogueLine(
               'Это антропоморф, кошачьи ушки, хвост, длинные тёмные волосы и большие-большие глаза.'),
-          DialogueLine(
+          const DialogueLine(
               'Девушка, хотя скорее девочка, невысокая, на ней даже брони нет!'),
-          DialogueLine(
+          const DialogueLine(
               'Ну, на тебе, конечно, ты бы тоже не сказал, что доспехи дракона, но всё же.'),
-          DialogueLine(
+          const DialogueLine(
             'Божечки-кошечки, с-спасибо!',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Он съел мой меч!',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Такое впервые случилось, я не знала, что делать, я с-совсем растерялась.',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Они липкие и скользкие, оставляют за собой эту слизь, фу.',
             by: '???',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И ты спас меня-я, божечки-и!',
             by: '???',
           ),
-          DialogueLine('Ты пытаешься успокоить её.'),
-          DialogueLine(
+          const DialogueLine('Ты пытаешься успокоить её.'),
+          const DialogueLine(
               'Подбордив и сказав, что теперь всё хорошо, ты предлагаешь скорее выйти отсюда на свежий воздух.'),
-          const MusicLine('mixkit-beautiful-dream-493.mp3'),
-          BackgroundLine('location/mediterranean_town_dawn.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-beautiful-dream-493.mp3'),
+          BackgroundLine.asset('location/mediterranean_town_dawn.jpg'),
+          const DialogueLine(
             'Я Киару.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты спрашиваешь у Киару, почему она вообще решила стать путешественником.'),
-          DialogueLine(
+          const DialogueLine(
             'А мне... Ну, я родилась в деревне недалеко, и на нас постоянно нападали монстры.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Однажды открылся данж высокого ранга, они и... того.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Он был далеко от нас, но его не успели закрыть.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Почему-то монстры пришли именно в нашу деревню.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я помню их шаги, их дыхание, это были минотавры.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Помню эти жуткие картины перед глазами, когда я пряталась под кроватью в надежде, что меня не найдут.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И меня не тронули, из Алоросса пришли путешественники и спасли меня.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Но прошло столько времени, они сильно опоздали...',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Крики на улице, крики родителей... Всё это до сих пор стоит в ушах.',
             by: 'Киару',
           ),
-          DialogueLine('...'),
-          HideCharacterLine('Kyaru.webp'),
-          DialogueLine('В этой беготне ты и забыл, что мир - жестокое место.'),
-          DialogueLine(
+          const DialogueLine('...'),
+          HideImageLine.asset('Kyaru.webp'),
+          const DialogueLine(
+              'В этой беготне ты и забыл, что мир - жестокое место.'),
+          const DialogueLine(
               'Твои проблемы просто ничтожны по сравнению с ужасом, происходящим каждый день в неимоверных масштабах.'),
-          DialogueLine('А если прямо сейчас где-то кого-то съедают заживо?'),
-          DialogueLine('Нет, так и есть. Прямо сейчас где-то кто-то умирает.'),
-          DialogueLine('Где-то кого-то насилуют, избивают.'),
-          DialogueLine('Ты испытываешь смешанные эмоции.'),
-          DialogueLine('Может, ты просто забыл всё это?'),
-          DialogueLine(
+          const DialogueLine(
+              'А если прямо сейчас где-то кого-то съедают заживо?'),
+          const DialogueLine(
+              'Нет, так и есть. Прямо сейчас где-то кто-то умирает.'),
+          const DialogueLine('Где-то кого-то насилуют, избивают.'),
+          const DialogueLine('Ты испытываешь смешанные эмоции.'),
+          const DialogueLine('Может, ты просто забыл всё это?'),
+          const DialogueLine(
               'В городе настолько спокойно, что об этих вещах и не думаешь.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты винишь себя за то, что до сих пор бьёшь каких-то там слаймов.'),
-          DialogueLine('Путешественниками становятся не от жизни хорошей?'),
-          DialogueLine('Сколько ещё таких ужасных историй ты услышишь?'),
-          DialogueLine('Сколько ещё ужаса произойдёт?'),
-          DialogueLine('Ты должен работать лучше и больше.'),
-          DialogueLine('Ты должен.'),
-          CharacterLine('Kyaru.webp'),
-          DialogueLine(
+          const DialogueLine(
+              'Путешественниками становятся не от жизни хорошей?'),
+          const DialogueLine('Сколько ещё таких ужасных историй ты услышишь?'),
+          const DialogueLine('Сколько ещё ужаса произойдёт?'),
+          const DialogueLine('Ты должен работать лучше и больше.'),
+          const DialogueLine('Ты должен.'),
+          ImageLine.asset('Kyaru.webp'),
+          const DialogueLine(
             'Мне дали комнатку в общижитии, с тех пор я учусь.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я не могу сидеть и делать вид, что всё хорошо.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ведь что, если бы путешественников было бы больше?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Что, если данжи закрывались бы быстрее?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Тогда тот данж закрыли бы раньше, тогда все были бы живы...',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'В подземелья мне разрешили ходить совсем недавно, это моё третье.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я безумно рада, что могу помогать их закрывать.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И буду делать всё, чего бы мне это не стоило, чтобы стать сильнее.',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Чтобы Акума перестал существовать.',
             by: 'Киару',
           ),
-          DialogueLine('...'),
-          DialogueLine('Ты просишь прощения за вопрос.'),
-          DialogueLine(
+          const DialogueLine('...'),
+          const DialogueLine('Ты просишь прощения за вопрос.'),
+          const DialogueLine(
             'Это нормально, такая жизнь.',
             by: 'Киару',
           ),
-          DialogueLine('Отвечает тебе эта кошечка с улыбкой на лице.'),
-          DialogueLine('Сколько боли в этой улыбке?'),
-          HideCharacterLine('Kyaru.webp'),
-          DialogueLine('Путь до гильдии вы держите молча.'),
-          DialogueLine(
+          const DialogueLine('Отвечает тебе эта кошечка с улыбкой на лице.'),
+          const DialogueLine('Сколько боли в этой улыбке?'),
+          HideImageLine.asset('Kyaru.webp'),
+          const DialogueLine('Путь до гильдии вы держите молча.'),
+          const DialogueLine(
               'Лишь изредко обмениваетесь взглядами, словно ты хочешь что-то сказать, дополнить, обнадёжить.'),
-          DialogueLine('Но понимаешь, что не имеешь права.'),
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          const DialogueLine('Но понимаешь, что не имеешь права.'),
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Киару, путешественник!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Уф, как я рад вас видеть!',
             by: 'Мастер',
           ),
-          DialogueLine('Почему здесь всегда играет такая весёлая музыка?'),
-          DialogueLine(
+          const DialogueLine(
+              'Почему здесь всегда играет такая весёлая музыка?'),
+          const DialogueLine(
             'Я люблю весёлую музыку, она успокаивает.',
             by: 'Мастер',
           ),
-          DialogueLine('Киару рассказывает всё, что произошло.'),
-          DialogueLine(
+          const DialogueLine('Киару рассказывает всё, что произошло.'),
+          const DialogueLine(
             'Боже правый, это же ужасно!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Нет-нет-нет, с этого дня я запрещаю сольные данжи новичкам.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Девушка сразу начинает спорить и убеждать гильдмастера, что это единичный случай.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты тоже напрягся, ведь без сопартийца ты не сможешь ходить в данжи.'),
-          DialogueLine(
+          const DialogueLine(
             'Я знаю, что у нас не хватает рук.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Но я не могу подвергать имеющиеся руки опасности.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Это сложное решение, очень сложное.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Данжей слишком много, даже по одиночке мы не успеваем с ними справляться.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'В гильдии много путешественников ходят в одиночку, но за большинство я могу быть спокойным.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Но даже безобидные слаймы могут запросто убить!',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И из двух зол я бы всё-таки выбрал безопасность путешественников.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вокруг города патрулит полиция, она обезопасит население, если что.',
             by: 'Мастер',
           ),
-          DialogueLine('Девушка замолкла, ты тоже не знаешь, что сказать.'),
-          DialogueLine(
+          const DialogueLine(
+              'Девушка замолкла, ты тоже не знаешь, что сказать.'),
+          const DialogueLine(
               'Судя по выражению лица, она явно опечалена таким решением гильдмастера.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты вспоминаешь всё, что она сказала, и понимаешь, о чём она может сейчас думать.'),
-          DialogueLine(
+          const DialogueLine(
               'Ведь какая разница, будет ли Алоросс чувствовать себя безопасно, если вокруг города тысячи жизней?'),
-          DialogueLine('Тысячи жизней, что ждут своей ужасной участи?'),
-          HideCharacterLine('Arda.png'),
-          const MusicLine('mixkit-beautiful-dream-493.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine('Вы выходите из гильдии.'),
-          DialogueLine('У тебя словно ком в горле.'),
-          CharacterLine('Kyaru.webp'),
-          DialogueLine(
+          const DialogueLine('Тысячи жизней, что ждут своей ужасной участи?'),
+          HideImageLine.asset('Arda.png'),
+          MusicLine.asset('mixkit-beautiful-dream-493.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine('Вы выходите из гильдии.'),
+          const DialogueLine('У тебя словно ком в горле.'),
+          ImageLine.asset('Kyaru.webp'),
+          const DialogueLine(
             'А т-ты не против объединиться?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Н-ну, может, будем вместе, в одной пати?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ты не п-против?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты наблюдаешь, как девушка, пытаясь сдержать в себе эмоции, выдавливает слово за словом.'),
-          DialogueLine(
+          const DialogueLine(
               'И понимаешь, что вот она, прямо перед тобой, - кто-то, кого ты хочешь спасти от ужасов этого мира.'),
-          DialogueLine('И ты можешь это сделать.'),
-          DialogueLine(
+          const DialogueLine('И ты можешь это сделать.'),
+          const DialogueLine(
               'Поэтому ты улыбаешься и говоришь, что конечно, ты был бы очень рад.'),
-          DialogueLine(
+          const DialogueLine(
             'Правда?',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Спасибо!',
             by: 'Киару',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Давай тогда я добавлю тебя в контакты.',
             by: 'Киару',
           ),
-          DialogueLine('Вы обмениваетесь контактами.'),
-          DialogueLine('Ты предлагаешь провести её.'),
-          DialogueLine(
+          const DialogueLine('Вы обмениваетесь контактами.'),
+          const DialogueLine('Ты предлагаешь провести её.'),
+          const DialogueLine(
             'А... П-прости, не стоит, давай завтра?',
             by: 'Киару',
           ),
-          DialogueLine('Ты понимаешь, что настаивать не стоит.'),
-          HideCharacterLine('Kyaru.webp'),
-          DialogueLine('Вы потихоньку расходитесь кто куда.'),
-          DialogueLine('What a day, huh?'),
-          DialogueLine('Тем не менее, ты очень рад сегодняшней встрече.'),
-          DialogueLine(
+          const DialogueLine('Ты понимаешь, что настаивать не стоит.'),
+          HideImageLine.asset('Kyaru.webp'),
+          const DialogueLine('Вы потихоньку расходитесь кто куда.'),
+          const DialogueLine('What a day, huh?'),
+          const DialogueLine('Тем не менее, ты очень рад сегодняшней встрече.'),
+          const DialogueLine(
               'Киару открыла тебе глаза на то, что мир не такой забавный и безобидный, каким ты успел его посчитать.'),
-          DialogueLine(
+          const DialogueLine(
               'И это милое создание само предложило объединиться в пати.'),
-          DialogueLine('Ты не знаешь, из-за нового ли правила гильдии.'),
-          DialogueLine('Поэтому свои надежды не поднимаешь.'),
-          DialogueLine(
+          const DialogueLine('Ты не знаешь, из-за нового ли правила гильдии.'),
+          const DialogueLine('Поэтому свои надежды не поднимаешь.'),
+          const DialogueLine(
               'Но в глубине души ты счастлив, что можешь кого-то защищать хотя бы таким образом.'),
-          DialogueLine(
+          const DialogueLine(
               'И ещё больше уверен в том, что обязательно изменишь этот мир.'),
-          DialogueLine('Теперь это твоя цель.'),
-          DialogueLine(
+          const DialogueLine('Теперь это твоя цель.'),
+          const DialogueLine(
               'С такими мыслями ты возвращаешься домой и сразу ложишься спать.'),
         ]),
       ];

@@ -47,7 +47,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('ATK'),
                       const Spacer(),
-                      Text('${damage ?? 0}'),
+                      Text('${damage?.toStringAsFixed(1) ?? 0}'),
                     ],
                   ),
                 if (defense != null)
@@ -55,7 +55,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('DEF'),
                       const Spacer(),
-                      Text('${defense ?? 0}'),
+                      Text('${defense?.toStringAsFixed(1) ?? 0}'),
                     ],
                   ),
                 if (health != null)
@@ -63,7 +63,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('HP'),
                       const Spacer(),
-                      Text('${health ?? 0}'),
+                      Text('${health?.toStringAsFixed(1) ?? 0}'),
                     ],
                   ),
                 if (critDamage != null)
@@ -71,7 +71,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('CRIT DMG'),
                       const Spacer(),
-                      Text('${critDamage ?? 0}%'),
+                      Text('${critDamage?.toStringAsFixed(1) ?? 0}%'),
                     ],
                   ),
                 if (critRate != null)
@@ -79,7 +79,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('CRIT Rate'),
                       const Spacer(),
-                      Text('${critRate ?? 0}%'),
+                      Text('${critRate?.toStringAsFixed(1) ?? 0}%'),
                     ],
                   ),
                 if (ultCharge != null)
@@ -87,7 +87,7 @@ class StatsWidget extends StatelessWidget {
                     children: [
                       const Text('ULT Rate'),
                       const Spacer(),
-                      Text('${ultCharge ?? 0}'),
+                      Text('${ultCharge?.toStringAsFixed(1) ?? '0'}%'),
                     ],
                   ),
                 if (stat != null) _stat(stat!),

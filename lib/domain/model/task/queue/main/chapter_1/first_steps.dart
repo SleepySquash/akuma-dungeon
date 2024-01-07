@@ -31,125 +31,129 @@ class FirstStepsTask extends Task {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Сказать, что ты представлял жизнь путешественника немного иначе, - значит ничего не сказать.'),
-          DialogueLine('По ощущениям ты пока разнорабочий, плюс-минус.'),
-          DialogueLine(
+          const DialogueLine('По ощущениям ты пока разнорабочий, плюс-минус.'),
+          const DialogueLine(
               'Так сказать, человек с неопределённой рабочей ориентацией.'),
-          DialogueLine('Ты задумываешься, что сервис так-то удобный.'),
-          DialogueLine(
+          const DialogueLine('Ты задумываешься, что сервис так-то удобный.'),
+          const DialogueLine(
               'В каждом городе есть гильдия путешественников, которая гарантирует выполнение любой услуги.'),
-          DialogueLine(
+          const DialogueLine(
               'А ты, как работодатель, ставишь свою цену и ждёшь выполнения задания.'),
-          DialogueLine('Фриланс, не иначе.'),
-          DialogueLine(
+          const DialogueLine('Фриланс, не иначе.'),
+          const DialogueLine(
               'Тем не менее, ты действительно ощущал, что уже внёс какой-то вклад в развитие города.'),
-          DialogueLine('И денюжка в кармане имеется - мелочь, а приятно.'),
-          DialogueLine(
+          const DialogueLine(
+              'И денюжка в кармане имеется - мелочь, а приятно.'),
+          const DialogueLine(
               'Зарабатывать деньги чудесно, но с доступом к взрослым средствам твои первые мысли - это заказать в дом несколько дакимакур и фигурок.'),
-          DialogueLine('Ох, не к добру ведь это.'),
-          DialogueLine(
+          const DialogueLine('Ох, не к добру ведь это.'),
+          const DialogueLine(
               'Совесть пока не позволяет использовать предоставленную гильдией квартиру как тебе хочется.'),
-          DialogueLine('С этими мыслями ты двигался в сторону библиотеки.'),
-          BackgroundLine('location/library.jpg'),
-          DialogueLine(
+          const DialogueLine(
+              'С этими мыслями ты двигался в сторону библиотеки.'),
+          BackgroundLine.asset('location/library.jpg'),
+          const DialogueLine(
               'Как и всегда, в библиотеке тихо, спокойно и приятно пахнет книгами.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты знаешь этот запах, значит ты неоднократно бывал в библиотеках.'),
-          DialogueLine('Или эти чувства уже передаются в генах по наследству?'),
-          DialogueLine('Про эволюцию всегда интересно поразмышлять.'),
-          DialogueLine(
+          const DialogueLine(
+              'Или эти чувства уже передаются в генах по наследству?'),
+          const DialogueLine('Про эволюцию всегда интересно поразмышлять.'),
+          const DialogueLine(
               'Ты вспоминаешь, как видел ролик на ютубе, в котором парень создал собственной экосистему в террариуме.'),
-          DialogueLine(
+          const DialogueLine(
               'Амнезия проходит? А, нет, ты смотрел этот ролик вчера перед сном. Видимо, ровно наоборот.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты решил зайти в библиотеку, чтобы изучить флору и фауну известного об измернии Акумы.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты проходишь в специализированный отдел и в ходе недолго поиска находишь какую-то энциклопедию.'),
-          DialogueLine(
+          const DialogueLine(
               'Заняв недалеко столик, ты начинаешь пролистывать книгу страница за страницей.'),
-          DialogueLine('Слаймы - одна из низших форм монстров.'),
-          DialogueLine(
+          const DialogueLine('Слаймы - одна из низших форм монстров.'),
+          const DialogueLine(
               'Слабыми считаются также гоблины, но они в разы опасней из-за способности использовать оружие.'),
-          DialogueLine(
+          const DialogueLine(
               'И самое примечательное - они хитрые, боязливые и всегда ходят кучкой.'),
-          DialogueLine(
+          const DialogueLine(
               'Орки и огры, нежить и зомби, вампиры, тёмные эльфы - картинка за картинкой мелькает перед твоими глазами.'),
-          DialogueLine(
+          const DialogueLine(
               'Есть и милые создания, вроде определённых рас кошкодевочек, которые остались в измерении и продолжают сражаться с людьми.'),
-          DialogueLine(
+          const DialogueLine(
               'Призраки и приведения способны вселяться в тела своих жертв.'),
-          DialogueLine('Тут даже драконы есть.'),
-          DialogueLine(
+          const DialogueLine('Тут даже драконы есть.'),
+          const DialogueLine(
               'Но самой интересной страницей тебе кажется самая неинформативная - статья об Акуме.'),
-          DialogueLine(
+          const DialogueLine(
               'К сожалению, кроме пары слов о том, что им считается всемогущий властитель тёмных сил, в энциклопедии больше ни слова.'),
-          DialogueLine('А какой мировой устрой в том измерении?'),
-          DialogueLine('Они построили социализм или хотя бы коммунизм?'),
-          DialogueLine('Интересно жуть, а информации ноль.'),
-          DialogueLine(
+          const DialogueLine('А какой мировой устрой в том измерении?'),
+          const DialogueLine('Они построили социализм или хотя бы коммунизм?'),
+          const DialogueLine('Интересно жуть, а информации ноль.'),
+          const DialogueLine(
               'Возможно, дело в библиотеке - всё-таки ты в городке, где людям совсем не до тайн мироздания.'),
-          DialogueLine(
+          const DialogueLine(
               'Так и не уталив свою любознательность, ты кладёшь книгу на полку и отправляешься в гильдию.'),
-          const MusicLine('MOSAICWAV_she_already_gone.mp3'),
-          BackgroundLine('location/guild.jpg'),
-          CharacterLine('Arda.png'),
-          DialogueLine(
+          MusicLine.asset('MOSAICWAV_she_already_gone.mp3'),
+          BackgroundLine.asset('location/guild.jpg'),
+          ImageLine.asset('Arda.png'),
+          const DialogueLine(
             'Угу-м, благодарю, минутку...',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты передал гильдмастеру бланк с печатью об успешно выполненном поручении.'),
-          DialogueLine(
+          const DialogueLine(
               'Он потыкал что-то в ноутбуке, сравнил печать с чем-то на мониторе, отсканировал.'),
-          DialogueLine(
+          const DialogueLine(
             'Да, всё замечательно! И того очередное поручение выполнено, ты молодец.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Судя по твоему взгляду, тебе не терпится заняться чем-то более полезным?',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Что-ж, такое тогда тебе задание: сходи к Майе в магазин снаряжения и возьми себе меч.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Её магазинчик недалеко от гильдии, поворот направо, два квартала впердёд и вот уже и он.',
             by: 'Мастер',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Давай, придёшь с мечом, и я дам доступ к опасным поручениям.',
             by: 'Мастер',
           ),
-          HideCharacterLine('Arda.png'),
-          DialogueLine('Ты отправился за снаряжением.'),
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          HideImageLine.asset('Arda.png'),
+          const DialogueLine('Ты отправился за снаряжением.'),
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Действительно, пройдя всего два квартала, перед тобой красовалась витрина с базовым снаряжением.'),
-          DialogueLine('Бронза, железо, клинки, мечи, лук - всё так сверкало.'),
-          DialogueLine('Ты решаешься зайти внутрь.'),
+          const DialogueLine(
+              'Бронза, железо, клинки, мечи, лук - всё так сверкало.'),
+          const DialogueLine('Ты решаешься зайти внутрь.'),
 
           //
-          BackgroundLine('location/library.jpg'),
-          DialogueLine('Добро пожаловать в Шота-у-Майи!', by: 'Майя'),
-          CharacterLine('Mai.png'),
-          DialogueLine(
+          BackgroundLine.asset('location/library.jpg'),
+          const DialogueLine('Добро пожаловать в Шота-у-Майи!', by: 'Майя'),
+          ImageLine.asset('Mai.png'),
+          const DialogueLine(
               'За прилавком бодро стояла девушка, явно заинтересовавшаяся в тебе.'),
-          DialogueLine(
+          const DialogueLine(
             'Я тебя раньше не видела, ты новенький? Ты путешественник? Или просто любишь ролевые игры?',
             by: 'Майя',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты объясняешь ситуацию и просишь дать какой-нибудь меч.'),
-          DialogueLine(
+          const DialogueLine(
             'Ты бы сразу так и сказал, дорогуша.',
             by: 'Майя',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Проходи, смотри, вот что у меня пока есть.',
             by: 'Майя',
           ),

@@ -15,7 +15,6 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:akuma/domain/model/location/all.dart';
-import 'package:collection/collection.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
@@ -55,51 +54,54 @@ class AlorossRestaurantCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Ты отправляешься в ресторан в центре Алоросса, где нужна помощь.'),
-          DialogueLine(
+          const DialogueLine(
               'Ты ведь путешественник, а не официант или повар, что же может пойти не так?'),
-          BackgroundLine('location/chinese_restaurant.jpg'),
-          DialogueLine('Внутри довольно оживлённо.'),
-          DialogueLine(
+          BackgroundLine.asset('location/chinese_restaurant.jpg'),
+          const DialogueLine('Внутри довольно оживлённо.'),
+          const DialogueLine(
               'На удивление, людей в ресторане полно, но что-то уже явно не так.'),
-          DialogueLine('Ни у кого не столе нет еды!'),
-          DialogueLine(
+          const DialogueLine('Ни у кого не столе нет еды!'),
+          const DialogueLine(
               'Люди негодуют от отсутствия пищи, слышны раздражённые разговоры.'),
-          DialogueLine('Ты забегаешь за стойку на кухню, а там...'),
-          BackgroundLine('location/kitchen.jpg'),
-          CharacterLine('Emiya_Shirou.webp'),
-          DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
-          DialogueLine('УАУАААААХХХХ ХДЫЫЫЩЩЩ АААААА!!', by: 'Эмия'),
-          DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД, Я СКАЗАЛ!!!!!!', by: 'Эмия'),
-          DialogueLine('Какой-то школьник стоял и что-то мямлил себе под нос.'),
-          DialogueLine('Ты подходишь и спрашиваешь, что случилось с поваром.'),
-          DialogueLine('Я и есть повар!', by: 'Эмия'),
-          DialogueLine(
+          const DialogueLine('Ты забегаешь за стойку на кухню, а там...'),
+          BackgroundLine.asset('location/kitchen.jpg'),
+          ImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
+          const DialogueLine('УАУАААААХХХХ ХДЫЫЫЩЩЩ АААААА!!', by: 'Эмия'),
+          const DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД, Я СКАЗАЛ!!!!!!',
+              by: 'Эмия'),
+          const DialogueLine(
+              'Какой-то школьник стоял и что-то мямлил себе под нос.'),
+          const DialogueLine(
+              'Ты подходишь и спрашиваешь, что случилось с поваром.'),
+          const DialogueLine('Я и есть повар!', by: 'Эмия'),
+          const DialogueLine(
             'Но у меня не получается справиться с продуктами, сегодня не стоит моя БОН ОФ ЗЕ СОРД...',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Она не встаёт!! Я не знаю, что делать!',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты спрашиваешь, всегда ли она не вставала или только сегодня.'),
-          DialogueLine(
+          const DialogueLine(
             'Нет, обычно встаёт, и я могу готовить своей БОН ОФ ЗЕ СОРД без проблем.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'А сегодня... Я не знаю, что не так, но мне нужно, чтобы ты помог мне!',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Нам нужна смешная нарезка продуктов.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вперёд!!! АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!!!!',
             by: 'Эмия',
           ),
@@ -121,33 +123,33 @@ class AlorossRestaurantCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/kitchen.jpg'),
-          CharacterLine('Emiya_Shirou.webp'),
-          DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
-          DialogueLine('Отлично, у нас получается!!', by: 'Эмия'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/kitchen.jpg'),
+          ImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
+          const DialogueLine('Отлично, у нас получается!!', by: 'Эмия'),
+          const DialogueLine(
               'Всё это время Эмия стоял и пытался поднять свою БОН ОФ ЗЕ СОРД.'),
-          DialogueLine('ДААААА ЫЫЫЫЫ!!', by: 'Эмия'),
-          DialogueLine(
+          const DialogueLine('ДААААА ЫЫЫЫЫ!!', by: 'Эмия'),
+          const DialogueLine(
               'Кажется, ему нравилось наблюдать за тем, как ты рубишь овощи.'),
-          DialogueLine(
+          const DialogueLine(
               'Параллельно при этом он просто накидывал в тарелки нарезанные тобой овощи и разносил посетителям.'),
-          DialogueLine(
+          const DialogueLine(
             'Мы смогли, путешественник, мы всем приготовили блюда.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я думаю, это успех...',
             by: 'Эмия',
           ),
-          HideCharacterLine('Emiya_Shirou.webp'),
-          CharacterLine('Kotomine_Kirei.webp'),
-          DialogueLine('Не так быстро, господа.', by: 'КОТОМИНЕ КИРЭЙ'),
-          DialogueLine('Я.', by: 'КОТОМИНЕ КИРЭЙ'),
-          DialogueLine('Хочу.', by: 'КОТОМИНЕ КИРЭЙ'),
-          DialogueLine('Карри.', by: 'КОТОМИНЕ КИРЭЙ'),
-          DialogueLine('Кажется, сейчас будет босс батл.'),
+          HideImageLine.asset('Emiya_Shirou.webp'),
+          ImageLine.asset('Kotomine_Kirei.webp'),
+          const DialogueLine('Не так быстро, господа.', by: 'КОТОМИНЕ КИРЭЙ'),
+          const DialogueLine('Я.', by: 'КОТОМИНЕ КИРЭЙ'),
+          const DialogueLine('Хочу.', by: 'КОТОМИНЕ КИРЭЙ'),
+          const DialogueLine('Карри.', by: 'КОТОМИНЕ КИРЭЙ'),
+          const DialogueLine('Кажется, сейчас будет босс батл.'),
         ]),
         DungeonStep(
           Dungeon(
@@ -172,30 +174,32 @@ class AlorossRestaurantCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/kitchen.jpg'),
-          CharacterLine('Kotomine_Kirei.webp'),
-          DialogueLine('Сойдёт.', by: 'КОТОМИНЕ КИРЭЙ'),
-          HideCharacterLine('Kotomine_Kirei.webp'),
-          CharacterLine('Emiya_Shirou.webp'),
-          DialogueLine('ДААААА ЫЫЫЫ!!', by: 'Эмия'),
-          DialogueLine('С твоей помощью Эмия смог приготовить людям свою еду.'),
-          DialogueLine('Приходи снова! Обязательно приходи!', by: 'Эмия'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/kitchen.jpg'),
+          ImageLine.asset('Kotomine_Kirei.webp'),
+          const DialogueLine('Сойдёт.', by: 'КОТОМИНЕ КИРЭЙ'),
+          HideImageLine.asset('Kotomine_Kirei.webp'),
+          ImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine('ДААААА ЫЫЫЫ!!', by: 'Эмия'),
+          const DialogueLine(
+              'С твоей помощью Эмия смог приготовить людям свою еду.'),
+          const DialogueLine('Приходи снова! Обязательно приходи!', by: 'Эмия'),
+          const DialogueLine(
             'Кажется, моя БОН ОФ ЗЕ СОРД чуть-чуть увеличиалсь, когда я смотрел на то, как ты работаешь...',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Возможно, ты - моё лекарство, путешественник!!',
             by: 'Эмия',
           ),
-          HideCharacterLine('Emiya_Shirou.webp'),
-          DialogueLine(
+          HideImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine(
             'Ты сделал вид, что ты смотрел фейт и знаешь, что ничего пошлого тут нет, ну не встаёт БОН у человека.',
           ),
-          DialogueLine('Вполне себе нормальное явление.'),
-          DialogueLine('Perfectly sized BONE OF THE SWORD, как говорится.'),
-          DialogueLine('С этими мыслями ты покинул ресторан.'),
+          const DialogueLine('Вполне себе нормальное явление.'),
+          const DialogueLine(
+              'Perfectly sized BONE OF THE SWORD, как говорится.'),
+          const DialogueLine('С этими мыслями ты покинул ресторан.'),
         ]),
       ];
 }

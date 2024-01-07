@@ -54,7 +54,7 @@ class ConditionalBackdropFilter extends StatelessWidget {
     if (condition) {
       if (borderRadius != null) {
         return ClipRRect(
-          borderRadius: borderRadius,
+          borderRadius: borderRadius ?? BorderRadius.zero,
           child: BackdropFilter(
             filter: filter,
             blendMode: BlendMode.src,

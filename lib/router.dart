@@ -228,12 +228,11 @@ class AppRouteInformationParser
   SynchronousFuture<RouteConfiguration> parseRouteInformation(
     RouteInformation routeInformation,
   ) =>
-      SynchronousFuture(RouteConfiguration(routeInformation.location!));
+      SynchronousFuture(RouteConfiguration(routeInformation.uri.path));
 
   @override
   RouteInformation restoreRouteInformation(RouteConfiguration configuration) {
-    String route = configuration.route;
-    return RouteInformation(location: route);
+    return RouteInformation(uri: Uri.parse(configuration.route));
   }
 }
 

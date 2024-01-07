@@ -21,7 +21,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     show NotificationResponse;
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:novel/novel.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
 
@@ -35,8 +35,7 @@ import 'util/web/web.dart';
 
 /// Entry point of this application.
 void main() async {
-  Novel.backgrounds = 'assets/background';
-  Novel.characters = 'assets/character';
+  MediaKit.ensureInitialized();
 
   await _initHive();
 

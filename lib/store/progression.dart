@@ -38,6 +38,8 @@ class ProgressionRepository extends DisposableInterface
   );
 
   final ProgressionHiveProvider _progressHive;
+
+  // ignore: unused_field
   final LocationHiveProvider _locationHive;
 
   final CharacterRepository _characterRepository;

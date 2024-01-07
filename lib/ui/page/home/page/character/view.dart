@@ -245,7 +245,12 @@ class _CharacterViewState extends State<CharacterView>
           Screen(
             desktop: const Text('Equipment'),
             mobile: const Icon(Icons.inventory),
-            child: CharacterEquipmentTab(c),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 900),
+                child: CharacterEquipmentTab(c),
+              ),
+            ),
           ),
         Screen(
           desktop: const Text('Skills'),

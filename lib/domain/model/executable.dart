@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:akuma/util/novel.dart';
 import 'package:novel/novel.dart';
 
 import '/router.dart';
@@ -42,8 +43,11 @@ abstract class ExecutableTask {
     TaskStep step = task.steps[i];
     if (step is NovelStep) {
       router.nowhere();
-      Novel.show(context: router.context!, scenario: step.scenario)
-          .then((_) => next());
+      Novel.show(
+        context: router.context!,
+        options: NovelExtension.options(),
+        scenario: step.scenario,
+      ).then((r) => r == false ? router.home() : next());
     } else if (step is DungeonStep) {
       if (step.withEntrance) {
         router.entrance(

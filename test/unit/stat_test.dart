@@ -17,20 +17,22 @@
 import 'package:akuma/domain/model/rarity.dart';
 import 'package:akuma/domain/model/stat.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:log_me/log_me.dart';
 
 void main() {
   void checkStat(StatType type) {
     const int first = 0;
     const int last = 100;
 
-    Stat stat = Stat(type);
-    int pad = stat.constrain(last, last, Rarity.values.last).toString().length;
+    final Stat stat = Stat(type);
+    final int pad =
+        stat.constrain(last, last, Rarity.values.last).toString().length;
     for (Rarity rarity in Rarity.values) {
-      String min = stat.constrain(first, last, rarity).toString();
-      String minNext = stat.constrain(first + 1, last, rarity).toString();
-      String maxPrev = stat.constrain(last - 1, last, rarity).toString();
-      String max = stat.constrain(last, last, rarity).toString();
-      print(
+      final String min = stat.constrain(first, last, rarity).toString();
+      final String minNext = stat.constrain(first + 1, last, rarity).toString();
+      final String maxPrev = stat.constrain(last - 1, last, rarity).toString();
+      final String max = stat.constrain(last, last, rarity).toString();
+      Log.info(
         '[${type.name}][${rarity.name.padRight(9)}] ${min.padLeft(pad)}, ${minNext.padLeft(pad)} -> ${maxPrev.padLeft(pad)}, $max',
       );
     }

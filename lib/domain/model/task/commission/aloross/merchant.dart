@@ -14,7 +14,6 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:akuma/domain/model/item/all.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
@@ -58,83 +57,84 @@ class AlorossMerchantForestCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Взяв поручение, ты отправляешься в назначенное в записке место.'),
-          CharacterLine('Lawrence.webp'),
-          DialogueLine(
+          ImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
               'Наконец, ты замечаешь старого деда вдалеке рядом с повозкой.'),
-          DialogueLine(
+          const DialogueLine(
               'Приблизившись, ты спрашиваешь у деда, он ли торговец из записки.'),
-          DialogueLine(
+          const DialogueLine(
             'Чел, мне 25.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И да, я торговец.',
             by: 'Лоуренс',
           ),
-          DialogueLine('Он сразу понимает, что ты пришёл по делу.'),
-          DialogueLine(
+          const DialogueLine('Он сразу понимает, что ты пришёл по делу.'),
+          const DialogueLine(
             'Готов отправляться?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты кивнул, а торговец бодро запряг лошадь и прыгнул на повозку, приглашая тебя.'),
-          HideCharacterLine('Lawrence.webp'),
-          DialogueLine(
+          HideImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
               'Ты садишься рядом, Лоуренс даёт команду, и вот вы уже отправились в сторону леса.'),
           const WaitLine(Duration(seconds: 1)),
-          BackgroundLine('location/fields.jpg'),
-          CharacterLine('Lawrence.webp'),
-          DialogueLine(
+          BackgroundLine.asset('location/fields.jpg'),
+          ImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
             'Можно задам личный вопрос, пока едем?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Как ты думаешь, если твоя вайфу не человек, это делает тебя зоофилом?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ну, то есть, она как бы человек, но с приколом.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И прикол не только в штанах - допустим, у неё есть уши и вообще она превращается в ВОЛЧАРУ огромного.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Как бы с одной стороны это ВОЛЧАРА огромный, а не тян, а с другой - как бы вроде и человек.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вот сколько не путешествую, никак не могу понять.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Кстати о путешествиях, ты любишь путешествовать?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ты ведь путешественник, а я торговец.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Не находишь некой особой связи между нами?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ты не хочешь быть м-моим телохранителем?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ну, если ты не против, что у меня фетиш на ВОЛЧАР огромных?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты снимаешь наушники и спрашиваешь, о чём говорил Лоуренс.'),
-          DialogueLine('Однако он не успевает ответить, на вас напали слаймы!'),
+          const DialogueLine(
+              'Однако он не успевает ответить, на вас напали слаймы!'),
         ]),
         DungeonStep(
           Dungeon(
@@ -153,65 +153,66 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/fields.jpg'),
-          DialogueLine('Наконец, все слаймы были поражены.'),
-          CharacterLine('Lawrence.webp'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/fields.jpg'),
+          const DialogueLine('Наконец, все слаймы были поражены.'),
+          ImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
             'Мы ещё до леса даже не добрались, а они сразу напрыгнули...',
             by: 'Лоуренс',
           ),
-          HideCharacterLine('Lawrence.webp'),
-          DialogueLine('Вы продолжили свой путь до леса.'),
-          DialogueLine(
+          HideImageLine.asset('Lawrence.webp'),
+          const DialogueLine('Вы продолжили свой путь до леса.'),
+          const DialogueLine(
               'Оставалось немного, но ты не переставал думать о том, являеется ли вайфу ВОЛЧАРА зоофилией...'),
-          DialogueLine('Может, бросить приклюения и стать ВОЛЧАРОЙ?'),
-          DialogueLine('Безумно можно быть первым?'),
-          BackgroundLine('location/forest.jpg'),
-          const MusicLine('mixkit-forest-treasure-138.mp3'),
-          DialogueLine('Наконец, вы въезжаете в лес.'),
-          DialogueLine('В кустах тут и там то и дело, что шастает кто-то.'),
-          CharacterLine('Lawrence.webp'),
-          DialogueLine(
+          const DialogueLine('Может, бросить приклюения и стать ВОЛЧАРОЙ?'),
+          const DialogueLine('Безумно можно быть первым?'),
+          BackgroundLine.asset('location/forest.jpg'),
+          MusicLine.asset('mixkit-forest-treasure-138.mp3'),
+          const DialogueLine('Наконец, вы въезжаете в лес.'),
+          const DialogueLine(
+              'В кустах тут и там то и дело, что шастает кто-то.'),
+          ImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
             'Алоросс - единственный лес, в котором такое безумное количество монстров.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Они тут создали свою биосферу и живут как обычные животные.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Даже странно осознавать, что существа из другого измерения смогли адаптироваться в такую необычную для них жизнь.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И такую ли необычную? Я, вот, не знаю, что находится по ту сторону врат.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Вдруг там живут девочки, способные превращаться в ВОЛЧАР огромных?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Если это так, то я был бы первым, кто прыгнул бы в данж.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Ты ведь уже был там, каково это?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты рассказываешь, что данжах в основном закрытые помещения.'),
-          DialogueLine('Но сказать, почему, ты не можешь.'),
-          DialogueLine(
+          const DialogueLine('Но сказать, почему, ты не можешь.'),
+          const DialogueLine(
             'Эльфиечки-то родом из того измерения, значит, и волкодевочки реальны.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'И если половые акты с эльфиечками не считаются зоофилией, то и с ВОЛЧАРОЙ не будет, правда?',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ваши разговоры о высокой культуре прерывает массивная группировка слаймов.'),
         ]),
         DungeonStep(
@@ -235,28 +236,28 @@ class AlorossMerchantForestCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-summer-fun-13.mp3'),
-          BackgroundLine('location/fields.jpg'),
-          DialogueLine('Наконец, вы прошли через лес.'),
-          CharacterLine('Lawrence.webp'),
-          DialogueLine(
+          MusicLine.asset('mixkit-summer-fun-13.mp3'),
+          BackgroundLine.asset('location/fields.jpg'),
+          const DialogueLine('Наконец, вы прошли через лес.'),
+          ImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
             'Уф, и так каждый раз...',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Что ж, ты меня сильно выручил!',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Спасибо большое за помощь, дальше уже безопасно, в этих краях уже спокойно.',
             by: 'Лоуренс',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Удачи тебе вернуться.',
             by: 'Лоуренс',
           ),
-          HideCharacterLine('Lawrence.webp'),
-          DialogueLine(
+          HideImageLine.asset('Lawrence.webp'),
+          const DialogueLine(
               'Лоренц отправился дальше, а ты возвращаешься обратно через лес в Алоросс.'),
         ]),
       ];

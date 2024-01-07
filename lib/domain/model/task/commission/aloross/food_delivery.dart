@@ -18,13 +18,11 @@ import 'package:akuma/domain/model/enemy/delivery.dart';
 import 'package:akuma/domain/model/item/all.dart';
 import 'package:akuma/domain/model/location/all.dart';
 import 'package:akuma/domain/model/reward.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:novel/novel.dart';
 
 import '../aloross.dart';
 import '/domain/model/dungeon.dart';
-import '/domain/model/enemy/veggies.dart';
 import '/domain/model/task.dart';
 import 'restaurant.dart';
 
@@ -62,55 +60,56 @@ class AlorossFoodDeliveryCommission extends AlorossCommission {
   @override
   List<TaskStep> get steps => [
         NovelStep([
-          const MusicLine('mixkit-just-kidding-11.mp3'),
-          BackgroundLine('location/town.jpg'),
-          DialogueLine(
+          MusicLine.asset('mixkit-just-kidding-11.mp3'),
+          BackgroundLine.asset('location/town.jpg'),
+          const DialogueLine(
               'Ты снова отправляешься в ресторан в центре Алоросса, где нужна помощь.'),
-          DialogueLine('Поручение, достойное твоего внимания.'),
-          BackgroundLine('location/chinese_restaurant.jpg'),
-          DialogueLine('Внутри ноль людей, вообще никого.'),
-          DialogueLine('Казалось бы, что не так?'),
-          DialogueLine(
+          const DialogueLine('Поручение, достойное твоего внимания.'),
+          BackgroundLine.asset('location/chinese_restaurant.jpg'),
+          const DialogueLine('Внутри ноль людей, вообще никого.'),
+          const DialogueLine('Казалось бы, что не так?'),
+          const DialogueLine(
               'Ведь напротив кухни стойками стоят разные блюда в упаковках!'),
-          DialogueLine('Ты забегаешь за стойку на кухню, а там...'),
-          BackgroundLine('location/kitchen.jpg'),
-          CharacterLine('Emiya_Shirou.webp'),
-          DialogueLine('УАУАААААХХХХ ХДЫЫЫЩЩЩ АААААА!!', by: 'Эмия'),
-          DialogueLine('ВСЕ ОБЛЕНИЛИСЬ И СТАЛИ БРАТЬ ДОСТАВКИ!', by: 'Эмия'),
-          DialogueLine(
+          const DialogueLine('Ты забегаешь за стойку на кухню, а там...'),
+          BackgroundLine.asset('location/kitchen.jpg'),
+          ImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine('УАУАААААХХХХ ХДЫЫЫЩЩЩ АААААА!!', by: 'Эмия'),
+          const DialogueLine('ВСЕ ОБЛЕНИЛИСЬ И СТАЛИ БРАТЬ ДОСТАВКИ!',
+              by: 'Эмия'),
+          const DialogueLine(
               'Всё тот же школьник стоял и что-то мямлил себе под нос.'),
-          DialogueLine('Ты подходишь и спрашиваешь, что случилось.'),
-          DialogueLine(
+          const DialogueLine('Ты подходишь и спрашиваешь, что случилось.'),
+          const DialogueLine(
             'Я не могу одновременно готовить и развозить еду.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Мне нужна помощь, кто-то должен развозить еду, пока я её тут готовлю.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Мысли о тебе заставляют мою БОН ОФ ЗЕ СОРД подниматься и готовить чудесные блюда.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Но кто их будет есть, если никто не приходит?',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
             'Я открыл сервис доставки, заказов просто СОТНИ!',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты спрашиваешь, зачем он открыл сервис доставки, если у него нет доставщика.'),
-          DialogueLine(
+          const DialogueLine(
             'Я хотел увидеть тебя, мой герой.',
             by: 'Эмия',
           ),
-          DialogueLine(
+          const DialogueLine(
               'Ты игнорируешь его и подбираешь удобно лежащую рядом сумку доставщика.'),
-          DialogueLine(
+          const DialogueLine(
               'Наполнив её едой, ты отправляешься относить людям их еду.'),
-          DialogueLine(
+          const DialogueLine(
             'Вперёд!!! АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!!!!',
             by: 'Эмия',
           ),
@@ -172,14 +171,14 @@ class AlorossFoodDeliveryCommission extends AlorossCommission {
           ),
         ),
         NovelStep([
-          const MusicLine('mixkit-just-kidding-11.mp3'),
-          BackgroundLine('location/kitchen.jpg'),
-          CharacterLine('Emiya_Shirou.webp'),
-          DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
-          DialogueLine('Отлично, у нас снова получилось!!', by: 'Эмия'),
-          DialogueLine('ДААААА ЫЫЫЫЫ!!', by: 'Эмия'),
-          DialogueLine('Приходи снова! Обязательно приходи!', by: 'Эмия'),
-          DialogueLine('Ты покинул ресторан.'),
+          MusicLine.asset('mixkit-just-kidding-11.mp3'),
+          BackgroundLine.asset('location/kitchen.jpg'),
+          ImageLine.asset('Emiya_Shirou.webp'),
+          const DialogueLine('АЙ ЭМ ЗЕ БОН ОФ МАЙ СОРД!!', by: 'Эмия'),
+          const DialogueLine('Отлично, у нас снова получилось!!', by: 'Эмия'),
+          const DialogueLine('ДААААА ЫЫЫЫЫ!!', by: 'Эмия'),
+          const DialogueLine('Приходи снова! Обязательно приходи!', by: 'Эмия'),
+          const DialogueLine('Ты покинул ресторан.'),
         ]),
       ];
 }
