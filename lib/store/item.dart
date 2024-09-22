@@ -39,14 +39,18 @@ class ItemRepository extends DisposableInterface
 
   @override
   void onInit() {
-    for (MyItem item in _itemHive.items) {
+    for (MyItem item in _itemHive.items.toList(growable: false)) {
       if (item.item is Impossible) {
         _itemHive.remove(item.id);
       }
     }
 
     items = RxObsMap(
-      Map.fromEntries(_itemHive.items.map((e) => MapEntry(e.id, Rx(e)))),
+      Map.fromEntries(
+        _itemHive.items
+            .toList(growable: false)
+            .map((e) => MapEntry(e.id, Rx(e))),
+      ),
     );
 
     _initLocalSubscription();

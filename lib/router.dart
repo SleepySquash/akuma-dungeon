@@ -300,6 +300,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
               SettingsRepository(Get.find()),
             );
 
+            Get.find<MusicWorker>().bind(settingsRepository);
+
             // Should be initialized before any [L10n]-dependant entities as
             // it sets the stored [Language] from the [SettingsRepository].
             await deps.put(SettingsWorker(settingsRepository)).init();
@@ -375,9 +377,8 @@ class AppRouterDelegate extends RouterDelegate<RouteConfiguration>
               ),
             );
 
-            MusicWorker musicWorker = deps.put(MusicWorker(settingsRepository));
             deps.put(TaskWorker(taskService, Get.find()));
-            deps.put(PlayerWorker(playerService, Get.find(), musicWorker));
+            deps.put(PlayerWorker(playerService, Get.find(), Get.find()));
             deps.put(ItemWorker(itemService, Get.find()));
             deps.put(FlagWorker(flagService, Get.find()));
 

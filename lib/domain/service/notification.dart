@@ -137,7 +137,7 @@ class NotificationService extends DisposableInterface {
       const NotificationDetails(
         android: AndroidNotificationDetails('com.sleepysquash.akuma', 'akuma'),
       ),
-      androidAllowWhileIdle: false,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );

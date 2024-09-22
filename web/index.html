@@ -18,6 +18,7 @@
 -->
 
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -36,7 +37,7 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Rogue-like dungeon clicker game.">
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,32 +46,134 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-  <title>akuma</title>
+  <title>Akuma Dungeon</title>
   <link rel="manifest" href="manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+  <style type="text/css">
+    body {
+      background-color: #222222;
+      /* Цвет фона веб-страницы */
+    }
+
+    .content {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .loader {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 6rem;
+      margin-top: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .loader:before,
+    .loader:after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      animation: pulsOut 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 1rem rgba(255, 255, 255, 0.75));
+    }
+
+    .loader:before {
+      width: 100%;
+      padding-bottom: 100%;
+      box-shadow: inset 0 0 0 1rem #fff;
+      animation-name: pulsIn;
+    }
+
+    .loader:after {
+      width: calc(100% - 2rem);
+      padding-bottom: calc(100% - 2rem);
+      box-shadow: 0 0 0 0 #fff;
+    }
+
+    @keyframes pulsIn {
+      0% {
+        box-shadow: inset 0 0 0 1rem #fff;
+        opacity: 1;
+      }
+
+      50%,
+      100% {
+        box-shadow: inset 0 0 0 0 #fff;
+        opacity: 0;
+      }
+    }
+
+    @keyframes pulsOut {
+
+      0%,
+      50% {
+        box-shadow: 0 0 0 0 #fff;
+        opacity: 0;
+      }
+
+      100% {
+        box-shadow: 0 0 0 1rem #fff;
+        opacity: 1;
+      }
+    }
+
+    /* HTML: <div class="loader"></div> */
+    .loading {
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 21px;
+      display: inline-flex;
+    }
+
+    .loading::before {
+      content: "Loadi";
+      animation: l27 2s infinite;
+    }
+
+    .loading::after {
+      content: "ng...";
+      animation: l27 2s infinite 1s;
+    }
+
+    @keyframes l27 {
+
+      50%,
+      100% {
+        transform: rotate(1turn)
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <script>
-    window.addEventListener('load', function(ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
-      });
-    });
-  </script>
+  <div id="loader" class="container content">
+    <div style="vertical-align: middle;">
+      <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+        <div
+          style="color:#888888; text-align: center; font-weight: 300; font-size:27pt; font-weight: bold; font-family: Noto Sans Display, system-ui;">
+          Lapuske Team
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 24px;"> <span class="loader"></span></div>
+
+      <div style="display: flex; justify-content: center; margin-top: 24px;">
+        <div class="col-auto h4 shimmer"
+          style="color:#888888; font-weight: 300; font-size:13pt; font-family: Noto Sans Display, system-ui;">
+          <div class="loading"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
 </body>
+
 </html>

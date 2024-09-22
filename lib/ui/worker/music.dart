@@ -29,10 +29,10 @@ class MusicWorker extends DisposableInterface {
 
   bool isPlaying = false;
 
-  final AbstractSettingsRepository _settingsRepository;
+  AbstractSettingsRepository? _settingsRepository;
 
   double? _lastMusicVolume;
-  late final Worker _settingsWorker;
+  Worker? _settingsWorker;
 
   AudioPlayback? _music;
 
@@ -43,10 +43,43 @@ class MusicWorker extends DisposableInterface {
   late final Worker _lifecycleWorker;
 
   Rx<ApplicationSettings?> get _settings =>
-      _settingsRepository.applicationSettings;
+      _settingsRepository?.applicationSettings ?? Rx(null);
 
   @override
-  void onInit() {
+  void onReady() {
+    if (GetPlatform.isMobile) {
+      _lifecycleWorker =
+          ever(router.lifecycle, (AppLifecycleState state) async {
+        switch (state) {
+          case AppLifecycleState.resumed:
+            _music?.resume();
+            break;
+
+          case AppLifecycleState.hidden:
+          case AppLifecycleState.inactive:
+          case AppLifecycleState.paused:
+          case AppLifecycleState.detached:
+            await _music?.pause();
+            break;
+        }
+      });
+    }
+
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    _music?.cancel();
+    _lifecycleWorker.dispose();
+    _settingsWorker?.dispose();
+    super.onClose();
+  }
+
+  void bind(AbstractSettingsRepository settings) {
+    _settingsRepository = settings;
+
+    _settingsWorker?.dispose();
     _settingsWorker = ever(_settings, (ApplicationSettings? settings) async {
       double musicVolume = _settings.value?.musicVolume ?? 1;
       if (_lastMusicVolume != musicVolume) {
@@ -67,34 +100,6 @@ class MusicWorker extends DisposableInterface {
         _lastMusicVolume = musicVolume;
       }
     });
-
-    if (GetPlatform.isMobile) {
-      _lifecycleWorker =
-          ever(router.lifecycle, (AppLifecycleState state) async {
-        switch (state) {
-          case AppLifecycleState.resumed:
-            _music?.resume();
-            break;
-
-          case AppLifecycleState.hidden:
-          case AppLifecycleState.inactive:
-          case AppLifecycleState.paused:
-          case AppLifecycleState.detached:
-            await _music?.pause();
-            break;
-        }
-      });
-    }
-
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    _music?.cancel();
-    _settingsWorker.dispose();
-    _lifecycleWorker.dispose();
-    super.onClose();
   }
 
   void once(AudioSource source, {double? volume}) {

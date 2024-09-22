@@ -95,7 +95,7 @@ class PartyView extends StatelessWidget {
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
         child: DragTarget<_AddToParty>(
-          onAccept: (d) => c.addToParty(d.character),
+          onAcceptWithDetails: (d) => c.addToParty(d.data.character),
           builder: (context, candidates, rejected) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -181,7 +181,7 @@ class PartyView extends StatelessWidget {
 
     Widget characters(Iterable<Character> filter) {
       return DragTarget<_RemoveFromParty>(
-        onAccept: (d) => c.removeFromParty(d.character),
+        onAcceptWithDetails: (d) => c.removeFromParty(d.data.character),
         builder: (context, candidates, rejected) {
           return Container(
             margin: const EdgeInsets.all(2),

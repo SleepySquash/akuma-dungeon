@@ -21,6 +21,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     show NotificationResponse;
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:log_me/log_me.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_io/io.dart';
@@ -31,16 +32,20 @@ import 'l10n/l10n.dart';
 import 'provider/hive/credentials.dart';
 import 'router.dart';
 import 'theme.dart';
+import 'ui/worker/music.dart';
 import 'util/web/web.dart';
 
 /// Entry point of this application.
 void main() async {
+  Log.options = const LogOptions(level: LogLevel.all);
+
   MediaKit.ensureInitialized();
 
   await _initHive();
 
   Get.put(NotificationService())
       .init(onNotificationResponse: onNotificationResponse);
+  Get.put(MusicWorker(null));
 
   var authService = Get.put(AuthService(Get.find()));
   await authService.init();
