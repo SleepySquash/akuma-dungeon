@@ -17,7 +17,7 @@
 import 'dart:math';
 
 import 'package:decimal/decimal.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:uuid/uuid.dart';
 
 import '/domain/model_type_id.dart';
@@ -60,13 +60,7 @@ class ItemId extends NewType<String> {
   const ItemId(super.val);
 }
 
-enum ArtifactType {
-  flower,
-  feather,
-  watch,
-  goblet,
-  hat,
-}
+enum ArtifactType { flower, feather, watch, goblet, hat }
 
 abstract class Artifact extends Item {
   const Artifact(super.count);
@@ -92,17 +86,17 @@ abstract class Artifact extends Item {
   ///
   /// These [Stat]s are not constrained, meaning no balancing is possible.
   List<StatChance> get stats => [
-        StatChance(Stat.hp(Decimal.one), 1),
-        StatChance(Stat.hpPercent(Decimal.one), 1),
-        StatChance(Stat.def(Decimal.one), 1),
-        StatChance(Stat.defPercent(Decimal.one), 1),
-        StatChance(Stat.atk(Decimal.one), 1),
-        StatChance(Stat.atkPercent(Decimal.one), 1),
-        StatChance(Stat.critDamage(Decimal.one), 1),
-        StatChance(Stat.critRate(Decimal.one), 1),
-        StatChance(Stat.ult(Decimal.one), 1),
-        StatChance(Stat.ultPercent(Decimal.one), 1),
-      ];
+    StatChance(Stat.hp(Decimal.one), 1),
+    StatChance(Stat.hpPercent(Decimal.one), 1),
+    StatChance(Stat.def(Decimal.one), 1),
+    StatChance(Stat.defPercent(Decimal.one), 1),
+    StatChance(Stat.atk(Decimal.one), 1),
+    StatChance(Stat.atkPercent(Decimal.one), 1),
+    StatChance(Stat.critDamage(Decimal.one), 1),
+    StatChance(Stat.critRate(Decimal.one), 1),
+    StatChance(Stat.ult(Decimal.one), 1),
+    StatChance(Stat.ultPercent(Decimal.one), 1),
+  ];
 
   @override
   Decimal? get max => Decimal.one;
@@ -143,9 +137,9 @@ abstract class Equipable extends Item {
       List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
 
   List<Decimal> get defenses => List.generate(
-        maxLevel,
-        (i) => defense * (Decimal.fromInt(i) + Decimal.one),
-      );
+    maxLevel,
+    (i) => defense * (Decimal.fromInt(i) + Decimal.one),
+  );
 }
 
 mixin Head on Equipable {}
@@ -173,9 +167,9 @@ abstract class Weapon extends Item {
       List.generate(maxLevel, (i) => (1000 + i * 2000).toDecimal());
 
   List<Decimal> get damages => List.generate(
-        maxLevel,
-        (i) => damage * (Decimal.fromInt(i) + Decimal.one),
-      );
+    maxLevel,
+    (i) => damage * (Decimal.fromInt(i) + Decimal.one),
+  );
 }
 
 mixin Sword on Weapon {}
@@ -206,13 +200,11 @@ mixin Drinkable on Consumable {
 }
 
 class MyItem {
-  MyItem(
-    this.item, {
-    ItemId? id,
-    Decimal? count,
-  })  : count = count ?? Decimal.fromInt(item.count),
-        id = id ??
-            (item.max == null ? ItemId(item.id) : ItemId(const Uuid().v4()));
+  MyItem(this.item, {ItemId? id, Decimal? count})
+    : count = count ?? Decimal.fromInt(item.count),
+      id =
+          id ??
+          (item.max == null ? ItemId(item.id) : ItemId(const Uuid().v4()));
 
   final ItemId id;
   final Item item;
@@ -222,12 +214,9 @@ class MyItem {
 
 // TODO: Store [Stat]s
 class MyEquipable extends MyItem {
-  MyEquipable(
-    Equipable super.equipable, {
-    Decimal? exp,
-    super.id,
-  })  : exp = exp ?? Decimal.zero,
-        super(count: Decimal.one);
+  MyEquipable(Equipable super.equipable, {Decimal? exp, super.id})
+    : exp = exp ?? Decimal.zero,
+      super(count: Decimal.one);
 
   Decimal exp;
 
@@ -275,12 +264,9 @@ class MyEquipable extends MyItem {
 }
 
 class MyWeapon extends MyItem {
-  MyWeapon(
-    Weapon super.weapon, {
-    Decimal? exp,
-    super.id,
-  })  : exp = exp ?? Decimal.zero,
-        super(count: Decimal.one);
+  MyWeapon(Weapon super.weapon, {Decimal? exp, super.id})
+    : exp = exp ?? Decimal.zero,
+      super(count: Decimal.one);
 
   Decimal exp;
 
@@ -334,16 +320,19 @@ class MyArtifact extends MyItem {
     Stat? stat,
     List<Stat>? stats,
     ItemId? id,
-  })  : exp = exp ?? Decimal.zero,
-        super(artifact, id: id, count: Decimal.one) {
+  }) : exp = exp ?? Decimal.zero,
+       super(artifact, id: id, count: Decimal.one) {
     if (stat != null) {
       this.stat = stat;
     } else {
       this.stat = artifact.stat.resolve(1).first;
     }
 
-    this.stat.amount =
-        this.stat.constrain(level, Artifact.maxLevel, artifact.rarity);
+    this.stat.amount = this.stat.constrain(
+      level,
+      Artifact.maxLevel,
+      artifact.rarity,
+    );
 
     if (stats != null) {
       this.stats = stats;

@@ -18,7 +18,7 @@ import 'dart:async';
 
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/item.dart';
@@ -69,7 +69,8 @@ class PlayerRepository extends DisposableInterface
           party.add(character);
         } else {
           Log.print(
-              '[$runtimeType] Cannot find owned `MyCharacter` with id: $a');
+            '[$runtimeType] Cannot find owned `MyCharacter` with id: $a',
+          );
           stored.party.remove(a);
         }
       }
@@ -80,7 +81,8 @@ class PlayerRepository extends DisposableInterface
           equipped.add(item!);
         } else {
           Log.print(
-              '[$runtimeType] Cannot find owned `MyEquipable` with id: $w');
+            '[$runtimeType] Cannot find owned `MyEquipable` with id: $w',
+          );
           stored.equipped.remove(w);
         }
       }
@@ -136,8 +138,9 @@ class PlayerRepository extends DisposableInterface
       }
     });
 
-    _charactersSubscription =
-        _characterRepository.characters.changes.listen((e) {
+    _charactersSubscription = _characterRepository.characters.changes.listen((
+      e,
+    ) {
       switch (e.op) {
         case OperationKind.removed:
           CharacterId? id = e.value?.character.value.id;
@@ -276,9 +279,9 @@ class HiveRxPlayer extends RxPlayer {
     List<RxMyCharacter> party = const [],
     List<Rx<MyItem>> weapons = const [],
     List<Rx<MyItem>> equipped = const [],
-  })  : party = RxList(party),
-        weapons = RxList(weapons),
-        equipped = RxList(equipped);
+  }) : party = RxList(party),
+       weapons = RxList(weapons),
+       equipped = RxList(equipped);
 
   @override
   final Rx<Player> player;

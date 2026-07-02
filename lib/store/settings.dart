@@ -17,7 +17,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/application_settings.dart';
 import '/domain/repository/settings.dart';

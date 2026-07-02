@@ -17,7 +17,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/progression.dart';
@@ -74,8 +74,9 @@ class ProgressionRepository extends DisposableInterface
 
     progression = Rx(stored ?? GameProgression());
 
-    _charactersSubscription =
-        _characterRepository.characters.changes.listen((e) {
+    _charactersSubscription = _characterRepository.characters.changes.listen((
+      e,
+    ) {
       switch (e.op) {
         case OperationKind.removed:
           CharacterId? id = e.value?.character.value.id;

@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     show NotificationResponse;
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:log_me/log_me.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,8 +43,9 @@ void main() async {
 
   await _initHive();
 
-  Get.put(NotificationService())
-      .init(onNotificationResponse: onNotificationResponse);
+  Get.put(
+    NotificationService(),
+  ).init(onNotificationResponse: onNotificationResponse);
   Get.put(MusicWorker(null));
 
   var authService = Get.put(AuthService(Get.find()));
@@ -86,7 +87,7 @@ class App extends StatelessWidget {
 /// Initializes a [Hive] storage and registers a [CredentialsHiveProvider] in
 /// the [Get]'s context.
 Future<void> _initHive() async {
-  await Hive.initFlutter('hive');
+  Hive.init('hive');
   await Get.put(CredentialsHiveProvider()).init();
 }
 

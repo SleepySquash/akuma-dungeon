@@ -17,7 +17,7 @@
 import 'package:akuma/util/extensions.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart' show IconData, Icons;
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import '/util/new_type.dart';
@@ -82,11 +82,11 @@ class MyCharacter {
     List<MySkill>? skills,
     this.affinity = 0,
     Decimal? exp,
-  })  : exp = exp ?? Decimal.zero,
-        id = CharacterId(character.id),
-        artifacts = artifacts ?? List.empty(growable: true),
-        weapons = weapons ?? List.empty(growable: true),
-        skills = skills ?? character.skills.map((e) => MySkill(e)).toList();
+  }) : exp = exp ?? Decimal.zero,
+       id = CharacterId(character.id),
+       artifacts = artifacts ?? List.empty(growable: true),
+       weapons = weapons ?? List.empty(growable: true),
+       skills = skills ?? character.skills.map((e) => MySkill(e)).toList();
 
   final CharacterId id;
 

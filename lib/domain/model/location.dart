@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' show IconData, Icons;
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import '/util/new_type.dart';
@@ -55,8 +55,8 @@ class MyLocation {
     this.control = 0,
     this.reputation = 0,
     List<MyCommission>? commissions,
-  })  : id = LocationId(location.id),
-        commissions = commissions ?? List.empty(growable: true);
+  }) : id = LocationId(location.id),
+       commissions = commissions ?? List.empty(growable: true);
 
   final Location location;
   final LocationId id;

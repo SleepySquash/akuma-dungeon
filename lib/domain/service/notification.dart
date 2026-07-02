@@ -53,7 +53,7 @@ class NotificationService extends DisposableInterface {
   Future<void> init({
     void Function(NotificationResponse)? onNotificationResponse,
     void Function(int, String?, String?, String?)?
-        onDidReceiveLocalNotification,
+    onDidReceiveLocalNotification,
   }) async {
     if (GetPlatform.isWeb) {
       // Permission request is happening in `index.html` via a script tag due to
@@ -66,14 +66,13 @@ class NotificationService extends DisposableInterface {
 
         _plugin = FlutterLocalNotificationsPlugin();
         await _plugin!.initialize(
-          InitializationSettings(
+          settings: InitializationSettings(
             android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
-            iOS: DarwinInitializationSettings(
-              onDidReceiveLocalNotification: onDidReceiveLocalNotification,
-            ),
+            iOS: const DarwinInitializationSettings(),
             macOS: const DarwinInitializationSettings(),
-            linux:
-                const LinuxInitializationSettings(defaultActionName: 'click'),
+            linux: const LinuxInitializationSettings(
+              defaultActionName: 'click',
+            ),
           ),
           onDidReceiveNotificationResponse: onNotificationResponse,
           onDidReceiveBackgroundNotificationResponse: onNotificationResponse,
@@ -106,15 +105,17 @@ class NotificationService extends DisposableInterface {
         body: body,
         lang: payload,
         icon: icon,
-      ).onError((_, __) => false);
+      ).onError((_, _) => false);
     } else {
       await _plugin?.show(
-        Random().nextInt(1 << 31),
-        title,
-        body,
-        const NotificationDetails(
-          android:
-              AndroidNotificationDetails('com.sleepysquash.akuma', 'akuma'),
+        id: Random().nextInt(1 << 31),
+        title: title,
+        body: body,
+        notificationDetails: const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'com.sleepysquash.akuma',
+            'akuma',
+          ),
         ),
         payload: payload,
       );
@@ -130,21 +131,19 @@ class NotificationService extends DisposableInterface {
     String? icon,
   }) async {
     await _plugin?.zonedSchedule(
-      id,
-      title,
-      body,
-      tz.TZDateTime.now(tz.local).add(at),
-      const NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: tz.TZDateTime.now(tz.local).add(at),
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails('com.sleepysquash.akuma', 'akuma'),
       ),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
   Future<void> cancel(int id) async {
-    await _plugin?.cancel(id);
+    await _plugin?.cancel(id: id);
   }
 
   void notify(LocalNotification notification) {
@@ -180,11 +179,7 @@ class NotificationService extends DisposableInterface {
   }
 }
 
-enum LocalNotificationType {
-  common,
-  centered,
-  addition,
-}
+enum LocalNotificationType { common, centered, addition }
 
 class LocalNotification {
   const LocalNotification({

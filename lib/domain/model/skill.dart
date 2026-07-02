@@ -15,7 +15,7 @@
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
 import 'package:decimal/decimal.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import '/util/new_type.dart';
@@ -48,11 +48,9 @@ class SkillId extends NewType<String> {
 mixin PrimarySkill on Skill {}
 
 class MySkill {
-  MySkill(
-    this.skill, {
-    Decimal? exp,
-  })  : exp = exp ?? Decimal.zero,
-        id = SkillId(skill.id);
+  MySkill(this.skill, {Decimal? exp})
+    : exp = exp ?? Decimal.zero,
+      id = SkillId(skill.id);
 
   final Skill skill;
 

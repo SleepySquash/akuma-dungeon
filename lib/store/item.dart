@@ -18,7 +18,7 @@ import 'dart:async';
 
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/impossible.dart';
 import '/domain/model/item.dart';
@@ -70,11 +70,13 @@ class ItemRepository extends DisposableInterface
     MyItem? existing = _itemHive.get(ItemId(item.id));
     if (existing != null) {
       existing.count += count;
-      items.emit(MapChangeNotification.updated(
-        existing.id,
-        existing.id,
-        items[existing.id],
-      ));
+      items.emit(
+        MapChangeNotification.updated(
+          existing.id,
+          existing.id,
+          items[existing.id],
+        ),
+      );
 
       items[existing.id]?.value = existing;
       _itemHive.put(existing);
@@ -102,8 +104,11 @@ class ItemRepository extends DisposableInterface
   @override
   void update(MyItem item) {
     if (item is MyArtifact) {
-      item.stat.amount =
-          item.stat.constrain(item.level, Artifact.maxLevel, item.item.rarity);
+      item.stat.amount = item.stat.constrain(
+        item.level,
+        Artifact.maxLevel,
+        item.item.rarity,
+      );
     }
     _itemHive.put(item);
   }
@@ -119,11 +124,13 @@ class ItemRepository extends DisposableInterface
         _itemHive.put(existing);
       }
 
-      items.emit(MapChangeNotification.updated(
-        existing.id,
-        existing.id,
-        items[existing.id],
-      ));
+      items.emit(
+        MapChangeNotification.updated(
+          existing.id,
+          existing.id,
+          items[existing.id],
+        ),
+      );
     }
   }
 

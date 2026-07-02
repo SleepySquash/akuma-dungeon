@@ -14,7 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import '/domain/model/commission.dart';
@@ -93,12 +93,14 @@ class MyLocationAdapter extends TypeAdapter<MyLocation> {
       if (task == null) {
         Log.print('[$runtimeType] Cannot find `Task` with id: $taskId');
       } else {
-        commissions.add(MyCommission(
-          task: task,
-          appearedAt: appearedAt,
-          progress: progress,
-          accepted: accepted,
-        ));
+        commissions.add(
+          MyCommission(
+            task: task,
+            appearedAt: appearedAt,
+            progress: progress,
+            accepted: accepted,
+          ),
+        );
       }
     }
 

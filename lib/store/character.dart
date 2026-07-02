@@ -18,7 +18,7 @@ import 'dart:async';
 
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/character.dart';
 import '/domain/model/impossible.dart';
@@ -53,42 +53,38 @@ class CharacterRepository extends DisposableInterface
 
     characters = RxObsMap(
       Map.fromEntries(
-        _characterHive.items.map(
-          (e) {
-            List<Rx<MyItem>> artifacts = [];
-            for (ItemId a in List.from(e.artifacts, growable: false)) {
-              Rx<MyItem>? item = _itemRepository.items[a];
-              if (item?.value is MyArtifact) {
-                artifacts.add(item!);
-              } else {
-                Log.print(
-                    '[$runtimeType] Cannot find owned `MyArtifact` with id: $a');
-                e.artifacts.remove(a);
-              }
+        _characterHive.items.map((e) {
+          List<Rx<MyItem>> artifacts = [];
+          for (ItemId a in List.from(e.artifacts, growable: false)) {
+            Rx<MyItem>? item = _itemRepository.items[a];
+            if (item?.value is MyArtifact) {
+              artifacts.add(item!);
+            } else {
+              Log.print(
+                '[$runtimeType] Cannot find owned `MyArtifact` with id: $a',
+              );
+              e.artifacts.remove(a);
             }
+          }
 
-            List<Rx<MyItem>> weapons = [];
-            for (ItemId w in List.from(e.weapons, growable: false)) {
-              Rx<MyItem>? item = _itemRepository.items[w];
-              if (item?.value is MyWeapon) {
-                weapons.add(item!);
-              } else {
-                Log.print(
-                    '[$runtimeType] Cannot find owned `MyWeapon` with id: $w');
-                e.weapons.remove(w);
-              }
+          List<Rx<MyItem>> weapons = [];
+          for (ItemId w in List.from(e.weapons, growable: false)) {
+            Rx<MyItem>? item = _itemRepository.items[w];
+            if (item?.value is MyWeapon) {
+              weapons.add(item!);
+            } else {
+              Log.print(
+                '[$runtimeType] Cannot find owned `MyWeapon` with id: $w',
+              );
+              e.weapons.remove(w);
             }
+          }
 
-            return MapEntry(
-              e.id,
-              HiveRxMyCharacter(
-                e,
-                weapons: weapons,
-                artifacts: artifacts,
-              ),
-            );
-          },
-        ),
+          return MapEntry(
+            e.id,
+            HiveRxMyCharacter(e, weapons: weapons, artifacts: artifacts),
+          );
+        }),
       ),
     );
 
@@ -231,9 +227,9 @@ class HiveRxMyCharacter extends RxMyCharacter {
     MyCharacter character, {
     List<Rx<MyItem>> artifacts = const [],
     List<Rx<MyItem>> weapons = const [],
-  })  : character = Rx(character),
-        artifacts = RxList(artifacts),
-        weapons = RxList(weapons);
+  }) : character = Rx(character),
+       artifacts = RxList(artifacts),
+       weapons = RxList(weapons);
 
   @override
   final Rx<MyCharacter> character;

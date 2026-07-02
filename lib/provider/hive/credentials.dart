@@ -14,7 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '../../domain/model/credentials.dart';
 import 'base.dart';

@@ -14,7 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import '/domain/model/commission.dart';
@@ -58,7 +58,8 @@ class MyCommissionAdapter extends TypeAdapter<MyCommission> {
 
   @override
   MyCommission read(BinaryReader reader) {
-    /*final String id = */ reader.read() as String;
+    /*final String id = */
+    reader.read() as String;
     final String taskId = reader.read() as String;
     final DateTime appearedAt = reader.read() as DateTime;
     final bool accepted = reader.read() as bool;

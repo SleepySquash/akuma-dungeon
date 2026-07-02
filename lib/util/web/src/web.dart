@@ -20,12 +20,10 @@
 library web_utils;
 
 import 'dart:async';
-import 'dart:html' as html;
-import 'dart:js_util';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
-    show NotificationResponse, NotificationResponseType;
+    show NotificationResponse;
 import 'package:js/js.dart';
 
 @JS('indexedDB.databases')
@@ -44,7 +42,8 @@ class WebUtils {
   /// Pushes [title] to browser's window title.
   static void title(String title) =>
       SystemChrome.setApplicationSwitcherDescription(
-          ApplicationSwitcherDescription(label: title));
+        ApplicationSwitcherDescription(label: title),
+      );
 
   /// Shows a notification via "Notification API" of the browser.
   static Future<void> showNotification(
@@ -55,29 +54,32 @@ class WebUtils {
     String? tag,
     String? icon,
   }) async {
-    var notification = html.Notification(
-      title,
-      dir: dir,
-      body: body,
-      lang: lang,
-      tag: tag,
-      icon: icon,
-    );
+    // var notification = html.Notification(
+    //   title,
+    //   dir: dir,
+    //   body: body,
+    //   lang: lang,
+    //   tag: tag,
+    //   icon: icon,
+    // );
 
-    notification.onClick.listen((event) {
-      onSelectNotification?.call(NotificationResponse(
-        notificationResponseType: NotificationResponseType.selectedNotification,
-        payload: notification.lang,
-      ));
-      notification.close();
-    });
+    // notification.onClick.listen((event) {
+    //   onSelectNotification?.call(
+    //     NotificationResponse(
+    //       notificationResponseType:
+    //           NotificationResponseType.selectedNotification,
+    //       payload: notification.lang,
+    //     ),
+    //   );
+    //   notification.close();
+    // });
   }
 
   /// Clears the browser's `IndexedDB`.
   static Future<void> cleanIndexedDb() async {
-    var qs = await promiseToFuture(databases());
-    for (int i = 0; i < qs.length; i++) {
-      deleteDatabase(qs[i].name);
-    }
+    // var qs = await promiseToFuture(databases());
+    // for (int i = 0; i < qs.length; i++) {
+    //   deleteDatabase(qs[i].name);
+    // }
   }
 }

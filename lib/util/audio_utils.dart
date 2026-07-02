@@ -54,11 +54,7 @@ class AudioUtilsImpl {
   }
 
   /// Plays the provided [sound] once.
-  AudioPlayback once(
-    AudioSource sound, {
-    double? volume,
-    bool voice = false,
-  }) {
+  AudioPlayback once(AudioSource sound, {double? volume, bool voice = false}) {
     ensureInitialized();
 
     StreamController? controller;
@@ -265,10 +261,11 @@ extension AudioSourceMedia on AudioSource {
   Media get media {
     return switch (kind) {
       AudioSourceKind.asset => Media(
-          'asset:///${kIsWeb ? 'assets/' : ''}${(this as AssetAudioSource).asset}',
-        ),
-      AudioSourceKind.file =>
-        Media('file:///${(this as FileAudioSource).file}'),
+        'asset:///${kIsWeb ? 'assets/' : ''}${(this as AssetAudioSource).asset}',
+      ),
+      AudioSourceKind.file => Media(
+        'file:///${(this as FileAudioSource).file}',
+      ),
       AudioSourceKind.url => Media((this as UrlAudioSource).url),
     };
   }

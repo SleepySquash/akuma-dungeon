@@ -79,12 +79,13 @@ class DashboardView extends StatelessWidget {
                                       return NavigationRailDestination(
                                         selectedIcon: Obx(() {
                                           int commissions = c
-                                              .location.value.commissions
+                                              .location
+                                              .value
+                                              .commissions
                                               .where((e) => e.isCompleted)
                                               .length;
 
                                           return Badge(
-                                            toAnimate: false,
                                             showBadge: commissions != 0,
                                             badgeContent: Text(
                                               '$commissions',
@@ -97,12 +98,13 @@ class DashboardView extends StatelessWidget {
                                         }),
                                         icon: Obx(() {
                                           int commissions = c
-                                              .location.value.commissions
+                                              .location
+                                              .value
+                                              .commissions
                                               .where((e) => e.isCompleted)
                                               .length;
 
                                           return Badge(
-                                            toAnimate: false,
                                             showBadge: commissions != 0,
                                             badgeContent: Text(
                                               '$commissions',
@@ -198,12 +200,13 @@ class DashboardView extends StatelessWidget {
                                 return NavigationDestination(
                                   selectedIcon: Obx(() {
                                     int commissions = c
-                                        .location.value.commissions
+                                        .location
+                                        .value
+                                        .commissions
                                         .where((e) => e.isCompleted)
                                         .length;
 
                                     return Badge(
-                                      toAnimate: false,
                                       showBadge: commissions != 0,
                                       badgeContent: Text(
                                         '$commissions',
@@ -216,12 +219,13 @@ class DashboardView extends StatelessWidget {
                                   }),
                                   icon: Obx(() {
                                     int commissions = c
-                                        .location.value.commissions
+                                        .location
+                                        .value
+                                        .commissions
                                         .where((e) => e.isCompleted)
                                         .length;
 
                                     return Badge(
-                                      toAnimate: false,
                                       showBadge: commissions != 0,
                                       badgeContent: Text(
                                         '$commissions',
@@ -229,9 +233,7 @@ class DashboardView extends StatelessWidget {
                                           color: Colors.white,
                                         ),
                                       ),
-                                      child: const Icon(
-                                        Icons.church_outlined,
-                                      ),
+                                      child: const Icon(Icons.church_outlined),
                                     );
                                   }),
                                   label: 'Guild',
@@ -257,7 +259,7 @@ class DashboardView extends StatelessWidget {
                     }),
                 ],
               ),
-            )
+            ),
           ],
         );
       },

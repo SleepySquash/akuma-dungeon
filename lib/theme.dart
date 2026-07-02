@@ -14,6 +14,7 @@
 // along with this program. If not, see
 // <https://www.gnu.org/licenses/agpl-3.0.html>.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -69,7 +70,7 @@ class CustomBoxShadow extends BoxShadow {
     super.offset,
     super.blurRadius,
     BlurStyle blurStyle = BlurStyle.normal,
-  })  : _blurStyle = blurStyle;
+  }) : _blurStyle = blurStyle;
 
   /// Style to use for blur in [MaskFilter] object.
   final BlurStyle _blurStyle;

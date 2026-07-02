@@ -22,7 +22,7 @@ import 'package:akuma/domain/model/impossible.dart';
 import 'package:akuma/domain/model/task.dart';
 import 'package:akuma/provider/hive/completed_task.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/location.dart';
 import '/domain/model/location/all.dart';
@@ -53,8 +53,10 @@ class LocationRepository extends DisposableInterface
     MyLocation? my = id == null ? null : _locationsHive.get(id);
 
     if (my != null) {
-      for (MyCommission commission
-          in List.from(my.commissions, growable: false)) {
+      for (MyCommission commission in List.from(
+        my.commissions,
+        growable: false,
+      )) {
         if (commission.task is Impossible) {
           my.commissions.remove(commission);
         }
@@ -171,8 +173,10 @@ class LocationRepository extends DisposableInterface
     MyLocation? my = _locationsHive.get(id);
 
     if (my != null) {
-      for (MyCommission commission
-          in List.from(my.commissions, growable: false)) {
+      for (MyCommission commission in List.from(
+        my.commissions,
+        growable: false,
+      )) {
         if (commission.task is Impossible) {
           my.commissions.remove(commission);
         }

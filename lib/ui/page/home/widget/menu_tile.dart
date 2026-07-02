@@ -33,11 +33,9 @@ class MenuTile extends StatelessWidget {
             child: badge ?? Container(),
           ),
         ),
-        shape: BadgeShape.circle,
         position: BadgePosition.topEnd(top: 0, end: 10),
         showBadge: badge != null,
         ignorePointer: true,
-        toAnimate: false,
         child: LockedWidget(
           locked: locked,
           additional: lockedReason,
@@ -48,21 +46,19 @@ class MenuTile extends StatelessWidget {
             hoverElevation: 8.0,
             highlightElevation: 6.0,
             enableFeedback: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             fillColor: Theme.of(context).colorScheme.primaryContainer,
-            splashColor: Theme.of(context)
-                .colorScheme
-                .onPrimaryContainer
-                .withOpacity(0.12),
-            focusColor: Theme.of(context)
-                .colorScheme
-                .onPrimaryContainer
-                .withOpacity(0.12),
-            hoverColor: Theme.of(context)
-                .colorScheme
-                .onPrimaryContainer
-                .withOpacity(0.08),
+            splashColor: Theme.of(
+              context,
+            ).colorScheme.onPrimaryContainer.withOpacity(0.12),
+            focusColor: Theme.of(
+              context,
+            ).colorScheme.onPrimaryContainer.withOpacity(0.12),
+            hoverColor: Theme.of(
+              context,
+            ).colorScheme.onPrimaryContainer.withOpacity(0.08),
             onPressed: onPressed,
             child: DefaultTextStyle(
               style: TextStyle(

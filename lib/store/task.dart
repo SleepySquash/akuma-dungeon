@@ -17,7 +17,7 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model/impossible.dart';
 import '/domain/model/task_queue.dart';
@@ -30,11 +30,7 @@ import '/util/obs/obs.dart';
 
 class TaskRepository extends DisposableInterface
     implements AbstractTaskRepository {
-  TaskRepository(
-    this._taskHive,
-    this._queueHive,
-    this._completedTaskHive,
-  );
+  TaskRepository(this._taskHive, this._queueHive, this._completedTaskHive);
 
   @override
   late final RxObsMap<String, Rx<MyTask>> tasks;

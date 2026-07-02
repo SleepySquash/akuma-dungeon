@@ -17,7 +17,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:mutex/mutex.dart';
 import 'package:universal_io/io.dart';
 
@@ -79,24 +79,24 @@ abstract class HiveBaseProvider<T> extends DisposableInterface {
   /// Removes all entries from the [Box].
   @mustCallSuper
   Future<void> clear() => _mutex.protect(() async {
-        if (isReady) {
-          await box.clear();
-        }
-      });
+    if (isReady) {
+      await box.clear();
+    }
+  });
 
   /// Closes the [Box].
   @mustCallSuper
   Future<void> close() => _mutex.protect(() async {
-        if (isReady && box.isOpen) {
-          isReady = false;
+    if (isReady && box.isOpen) {
+      isReady = false;
 
-          try {
-            await box.close();
-          } on FileSystemException {
-            // No-op.
-          }
-        }
-      });
+      try {
+        await box.close();
+      } on FileSystemException {
+        // No-op.
+      }
+    }
+  });
 
   @override
   void onClose() async {
@@ -176,24 +176,24 @@ abstract class HiveLazyProvider<T> extends DisposableInterface {
   /// Removes all entries from the [Box].
   @mustCallSuper
   Future<void> clear() => _mutex.protect(() async {
-        if (isReady) {
-          await box.clear();
-        }
-      });
+    if (isReady) {
+      await box.clear();
+    }
+  });
 
   /// Closes the [Box].
   @mustCallSuper
   Future<void> close() => _mutex.protect(() async {
-        if (isReady && box.isOpen) {
-          isReady = false;
+    if (isReady && box.isOpen) {
+      isReady = false;
 
-          try {
-            await box.close();
-          } on FileSystemException {
-            // No-op.
-          }
-        }
-      });
+      try {
+        await box.close();
+      } on FileSystemException {
+        // No-op.
+      }
+    }
+  });
 
   @override
   void onClose() async {

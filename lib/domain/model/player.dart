@@ -16,7 +16,7 @@
 
 import 'package:akuma/util/extensions.dart';
 import 'package:decimal/decimal.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce/hive_ce.dart';
 
 import '/domain/model_type_id.dart';
 import 'character.dart';
@@ -37,11 +37,11 @@ class Player {
     List<ItemId>? equipped,
     List<ItemId>? weapons,
     List<CharacterId>? party,
-  })  : exp = exp ?? Decimal.zero,
-        rank = rank ?? Decimal.zero,
-        equipped = equipped ?? List.empty(growable: true),
-        weapons = weapons ?? List.empty(growable: true),
-        party = party ?? List.empty(growable: true);
+  }) : exp = exp ?? Decimal.zero,
+       rank = rank ?? Decimal.zero,
+       equipped = equipped ?? List.empty(growable: true),
+       weapons = weapons ?? List.empty(growable: true),
+       party = party ?? List.empty(growable: true);
 
   @HiveField(0)
   final String name;
@@ -104,7 +104,7 @@ class Player {
   List<Decimal> get healths =>
       List.generate(maxLevel, (i) => Decimal.fromInt(100 + 50 * i));
   List<Decimal> get ultCharges => List.generate(
-        maxLevel,
-        (i) => Decimal.fromInt(4) + (1 * (i + 1) / 10).toDecimal(),
-      );
+    maxLevel,
+    (i) => Decimal.fromInt(4) + (1 * (i + 1) / 10).toDecimal(),
+  );
 }
